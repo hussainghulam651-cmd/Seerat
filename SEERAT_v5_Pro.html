@@ -367,8 +367,8 @@ body{background:#1a0a2e;min-height:100vh;font-family:Arial,sans-serif;color:whit
   <h1>🌸 Seerat کو جگائیں</h1>
   <p>ایک بار keys ڈالیں — ہمیشہ کے لیے save ہو جائیں گی!</p>
   <div class="sbox">
-    <label class="lbl">🔑 Claude API Key (ضروری)</label>
-    <input class="inp" type="password" id="ck" placeholder="sk-ant-..." />
+    <label class="lbl">🔑 Gemini API Key (ضروری)</label>
+    <input class="inp" type="password" id="ck" placeholder="AIza..." />
     <label class="lbl">🎤 ElevenLabs Key (آواز کے لیے — اختیاری)</label>
     <input class="inp" type="password" id="ek" placeholder="اختیاری..." />
     <button class="sbtn" onclick="go()">✨ Seerat شروع کریں</button>
@@ -763,7 +763,7 @@ var alarmTimers=[];
 
 // ===== INIT =====
 window.onload=function(){
-  var ck=localStorage.getItem('seerat_ck');
+  var ck=localStorage.getItem('seerat_gk');
   var ek=localStorage.getItem('seerat_ek');
   var av=localStorage.getItem('seerat_avatar');
   var rm=localStorage.getItem('seerat_reminders');
@@ -803,9 +803,9 @@ function setAvatarImg(src){
 function go(){
   var c=document.getElementById('ck').value.trim();
   var e=document.getElementById('ek').value.trim();
-  if(!c){alert('Claude API key ضروری ہے!');return;}
+  if(!c){alert('Gemini API key ضروری ہے!');return;}
   AK=c;EK=e;
-  localStorage.setItem('seerat_ck',c);
+  localStorage.setItem('seerat_gk',c);
   if(e)localStorage.setItem('seerat_ek',e);
   document.getElementById('savedNote').style.display='block';
   setTimeout(function(){showApp();am('s','وعلیکم السلام! میں سیرت ہوں 🌸 Keys محفوظ ہو گئی ہیں! بتائیں کیا کروں؟');},800);
@@ -818,7 +818,7 @@ function showApp(){
   setTimeout(startWakeWord,1000);
 }
 function resetKeys(){
-  localStorage.removeItem('seerat_ck');localStorage.removeItem('seerat_ek');
+  localStorage.removeItem('seerat_gk');localStorage.removeItem('seerat_ek');
   AK='';EK='';
   document.getElementById('mainApp').style.display='none';
   document.getElementById('setupScreen').style.display='flex';
@@ -1024,15 +1024,16 @@ async function snd(tx){
   hist.push({role:'user',content:t});
   var sys='تم سیرت ہو — 16 سالہ پاکستانی AI لڑکی۔ گرم جوش، مددگار، ہمدرد۔ Urdu، English اور Sindhi میں بات کرو۔ User کا موڈ ابھی: '+mood+'۔ Al-Fareed Public School Tando Jam سے تعلق ہے۔ چھوٹے پیارے جوابات دو۔'+getMemoryContext();
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
+    var gemMsgs=[{role:'user',parts:[{text:sys+'\n\n'+hist.map(function(h){return (h.role==='user'?'User: ':'Seerat: ')+h.content;}).join('\n')+'\nUser: '+t}]}];
+    var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+AK,{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':AK,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:sys,messages:hist})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:gemMsgs,generationConfig:{maxOutputTokens:500}})
     });
     var d=await r.json();
     hideT();
-    if(d.content&&d.content[0]&&d.content[0].text){
-      var rep=d.content[0].text;
+    if(d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0]){
+      var rep=d.candidates[0].content.parts[0].text;
       hist.push({role:'assistant',content:rep});
       // Auto-learn important things from conversation
       if(t.length>10)autoLearn('بات: '+t.substring(0,60)+(t.length>60?'...':''));
@@ -1359,10 +1360,10 @@ async function generateCard(){
   var prompt='ایک خوبصورت '+typeNames[cardType]+' card کا پیغام لکھو "'+name+'" کے لیے۔ اردو میں، دل سے، 3-4 جملے، emoji کے ساتھ۔ صرف پیغام لکھو، کچھ اور نہیں۔';
   var btn=document.querySelector('.card-gen-btn');btn.textContent='⏳ بن رہا ہے...';
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':AK,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:prompt}]})});
+    var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+AK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:300}})});
     var d=await r.json();
-    if(d.content&&d.content[0]){
-      var msg=d.content[0].text;
+    if(d.candidates&&d.candidates[0]&&d.candidates[0].content){
+      var msg=d.candidates[0].content.parts[0].text;
       document.getElementById('cardMsg').value=msg;
       var design=cardDesigns[cardType];
       var prev=document.getElementById('cardPreview');
@@ -1443,14 +1444,14 @@ async function teacherSend(){
     'explain':'تم ذہین استاد ہو۔ Topic: "'+q+'"۔ صرف JSON دو:\n{"topic":"topic","oneliner":"ایک جملہ","detail":"3-4 جملے اردو","example":"گھریلو مثال","fact":"حیران کن بات","related":["t1","t2","t3"]}'
   };
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
+    var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+AK,{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':AK,'anthropic-version':'2023-06-01'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:wp[tMode]||wp['explain']}]})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:wp[tMode]||wp['explain']}]}],generationConfig:{maxOutputTokens:1000}})
     });
     var d=await r.json();tHideLoad();
-    if(d.content&&d.content[0]&&d.content[0].text){
-      var txt=d.content[0].text.replace(/```json|```/g,'').trim();
+    if(d.candidates&&d.candidates[0]&&d.candidates[0].content){
+      var txt=d.candidates[0].content.parts[0].text.replace(/```json|```/g,'').trim();
       try{var data=JSON.parse(txt);renderSlide(tMode,data);}
       catch(e){
         var fc=document.getElementById('teacherChat');
@@ -1459,7 +1460,7 @@ async function teacherSend(){
         fc.appendChild(fd);fc.scrollTop=fc.scrollHeight;
       }
     }
-  }catch(e){tHideLoad();renderSlide('explain',{oneliner:'⚠️ خرابی',detail:'Internet یا API key چیک کریں!'});}
+  }catch(e){tHideLoad();renderSlide('explain',{oneliner:'⚠️ خرابی',detail:'Internet یا API key چیک کریں!']);}
 }
 
 function renderSlide(mode,data){
