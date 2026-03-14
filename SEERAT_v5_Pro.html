@@ -551,7 +551,6 @@ body{background:#1a0a2e;min-height:100vh;font-family:Arial,sans-serif;color:whit
       </div>
     </div>
   </div>
-</div>
 
   <!-- TEACHER TAB -->
   <div class="tab-content" id="content-teacher">
@@ -709,6 +708,8 @@ body{background:#1a0a2e;min-height:100vh;font-family:Arial,sans-serif;color:whit
       </div>
     </div>
   </div>
+
+</div><!-- END mainApp -->
 
 <!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="closePanel()"></div>
@@ -1460,7 +1461,7 @@ async function teacherSend(){
         fc.appendChild(fd);fc.scrollTop=fc.scrollHeight;
       }
     }
-  }catch(e){tHideLoad();renderSlide('explain',{oneliner:'⚠️ خرابی',detail:'Internet یا API key چیک کریں!']);}
+  }catch(e){tHideLoad();renderSlide('explain',{oneliner:'⚠️ خرابی',detail:'Internet یا API key چیک کریں!'});}
 }
 
 function renderSlide(mode,data){
