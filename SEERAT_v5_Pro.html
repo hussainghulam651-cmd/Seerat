@@ -1041,6 +1041,8 @@ async function snd(tx){
       am('s',rep);
       document.getElementById('stxt').textContent='آن لائن — بات کریں!';
       EK?spkE(rep):spkB(rep);
+    }else if(d.error){
+      am('s','⚠️ Error: '+d.error.message);
     }else{am('s','⚠️ مسئلہ ہوا — دوبارہ کوشش کریں');}
   }catch(e){hideT();am('s','⚠️ Internet یا API key چیک کریں!');}
 }
