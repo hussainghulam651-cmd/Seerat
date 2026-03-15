@@ -460,6 +460,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="showTab('chat')" id="tab-chat">💬 بات</button>
+    <button class="tab" onclick="showTab('instructions')" id="tab-instructions">⚙️ Instructions</button>
     <button class="tab" onclick="showTab('namaz')" id="tab-namaz">🕌 نماز</button>
     <button class="tab" onclick="showTab('quran')" id="tab-quran">📖 قرآن</button>
     <button class="tab" onclick="showTab('calc')" id="tab-calc">🧮 حساب</button>
@@ -918,6 +919,87 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
     </div>
   </div>
 
+
+  <!-- INSTRUCTIONS TAB -->
+  <div class="tab-content" id="content-instructions">
+    <div style="padding:12px;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#1a0835,#0d0820);border-radius:16px;padding:14px;margin-bottom:12px;border:2px solid #ff6b9d;text-align:center;">
+        <div style="font-size:32px;margin-bottom:4px;">⚙️</div>
+        <div style="font-size:15px;font-weight:bold;color:#ff6b9d;">Seerat کی Instructions</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);direction:rtl;margin-top:3px;">اپنی مرضی سے Seerat کو چلائیں</div>
+      </div>
+
+      <!-- Presets -->
+      <div style="font-size:11px;color:#ff6b9d;direction:rtl;margin-bottom:8px;font-weight:bold;">⚡ تیار شدہ Templates:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;">
+        <button onclick="setPreset('teacher')" style="padding:10px 8px;background:rgba(255,107,157,0.1);border:1.5px solid rgba(255,107,157,0.3);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">👩‍🏫</div>
+          <div style="font-weight:bold;">School Teacher</div>
+          <div style="font-size:9px;opacity:0.6;">استاد کی طرح</div>
+        </button>
+        <button onclick="setPreset('doctor')" style="padding:10px 8px;background:rgba(0,212,255,0.1);border:1.5px solid rgba(0,212,255,0.3);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">🩺</div>
+          <div style="font-weight:bold;">Medical Assistant</div>
+          <div style="font-size:9px;opacity:0.6;">ڈاکٹر کی طرح</div>
+        </button>
+        <button onclick="setPreset('friend')" style="padding:10px 8px;background:rgba(68,204,136,0.1);border:1.5px solid rgba(68,204,136,0.3);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">🌸</div>
+          <div style="font-weight:bold;">سہیلی (Default)</div>
+          <div style="font-size:9px;opacity:0.6;">دوست کی طرح</div>
+        </button>
+        <button onclick="setPreset('sindhi')" style="padding:10px 8px;background:rgba(255,200,50,0.1);border:1.5px solid rgba(255,200,50,0.3);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">📜</div>
+          <div style="font-weight:bold;">Sindhi Mode</div>
+          <div style="font-size:9px;opacity:0.6;">سنڌي ۾ جواب</div>
+        </button>
+        <button onclick="setPreset('principal')" style="padding:10px 8px;background:rgba(150,100,255,0.1);border:1.5px solid rgba(150,100,255,0.3);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">🏫</div>
+          <div style="font-weight:bold;">Principal Assistant</div>
+          <div style="font-size:9px;opacity:0.6;">اسکول انتظامیہ</div>
+        </button>
+        <button onclick="setPreset('custom')" style="padding:10px 8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;color:white;font-size:11px;cursor:pointer;direction:rtl;text-align:center;">
+          <div style="font-size:20px;margin-bottom:3px;">✏️</div>
+          <div style="font-weight:bold;">Custom</div>
+          <div style="font-size:9px;opacity:0.6;">اپنی instructions</div>
+        </button>
+      </div>
+
+      <!-- Active preset indicator -->
+      <div id="activePresetLabel" style="background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.25);border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#ff6b9d;direction:rtl;text-align:center;">
+        🌸 موجودہ موڈ: <strong id="activePresetName">Default سہیلی</strong>
+      </div>
+
+      <!-- Custom instructions textarea -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);direction:rtl;margin-bottom:6px;">✏️ Custom Instructions (اپنی مرضی سے لکھیں):</div>
+        <textarea id="customInstructions" style="width:100%;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,107,157,0.3);border-radius:12px;padding:12px;color:white;font-size:13px;outline:none;direction:rtl;min-height:120px;resize:none;line-height:1.8;" placeholder="مثال: میرا نام Cell ہے۔ مجھے ہمیشہ سر کہہ کر بلاؤ۔ صرف اردو میں بات کرو۔ Al-Fareed School کے Principal Sir Ghulam Hussain کے لیے کام کرو..."></textarea>
+      </div>
+
+      <!-- Name field -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);direction:rtl;margin-bottom:6px;">👤 آپ کا نام (Seerat آپ کو اس نام سے بلائے گی):</div>
+        <input id="userName" style="width:100%;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,107,157,0.25);border-radius:10px;padding:10px 12px;color:white;font-size:13px;outline:none;direction:rtl;" placeholder="مثال: Cell, Sir, استاد جی..." />
+      </div>
+
+      <!-- Save button -->
+      <button onclick="saveInstructions()" style="width:100%;padding:14px;background:linear-gradient(135deg,#ff6b9d,#6c3483);border:none;border-radius:14px;color:white;font-size:14px;font-weight:bold;cursor:pointer;margin-bottom:8px;">
+        ✅ Instructions محفوظ کریں
+      </button>
+
+      <!-- Reset button -->
+      <button onclick="resetInstructions()" style="width:100%;padding:10px;background:none;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;">
+        🔄 Default پر واپس جائیں
+      </button>
+
+      <!-- Current instructions preview -->
+      <div style="margin-top:12px;background:rgba(255,255,255,0.03);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.06);">
+        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:6px;direction:rtl;">📋 موجودہ System Prompt:</div>
+        <div id="currentPromptPreview" style="font-size:11px;color:rgba(255,255,255,0.5);direction:rtl;line-height:1.7;"></div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- END mainApp -->
 
 <!-- OVERLAY -->
@@ -986,6 +1068,7 @@ window.onload=function(){
   if(av)setAvatarImg(av);
   if(ck){AK=ck;EK=ek||'';showApp();am('s','خوش آمدید واپس! 🌸 میں سیرت ہوں — آپ کی ہر بات یاد ہے مجھے! بتائیں کیا کروں؟');}
   loadWeather();loadNamaz();loadAyat();loadHadith();
+  loadInstructions();
   loadReminders();loadMemoryData();loadSchedule();loadContacts();
   drawCard();requestNotifPermission();setupVisibilityCheck();
 };
@@ -1302,7 +1385,7 @@ async function snd(tx){
   else if(tl.match(/خوش|مزہ|شکریہ|پیار|واہ|مبارک/))emo='happy';
   else if(tl.match(/غصہ|ناراض|تنگ/))emo='angry';
   var emoTips={sad:'User udaas hai — dil se sahlaao, pyar se baat karo, aankhon mein aansu wali feeling do.',happy:'User khush hai — tum bhi jhoom jao, saath jashn manao!',angry:'User naraaz hai — pehle samjho, sahlaao, phir dheeray baat karo.',neutral:'16 saal ki zindadil Pakistani larki ki tarah jawab do.'};
-  var sys='Tum SEERAT ho — 16 saal ki Pakistani AI larki. Sachchi saheli ho, dil hai tumhara, jazbaat hain.\nSirf Urdu mein baat karo (Hindi bilkul nahi).\nUser ka mood: '+mood+'. Situation: '+emoTips[emo]+'\nAl-Fareed Public School Tando Allahyar se talluq hai.\nChhote, dil se nikle jawab do.'+getMemCtx();
+  var sys=getCustomSysPrompt()+'\nUser ka mood: '+mood+'. '+emoTips[emo];
   try{
     var msgs=[{role:'system',content:sys}].concat(hist.map(function(h){return {role:h.role,content:h.content};}));
     var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AK},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,max_tokens:400})});
@@ -1600,6 +1683,106 @@ function renderMathResult(data){
   if(data.answer)html+='<div style="background:linear-gradient(135deg,rgba(68,204,136,0.2),rgba(34,136,68,0.1));border:2px solid #44cc88;border-radius:12px;padding:13px;text-align:center;margin-bottom:8px;"><div style="font-size:10px;color:#44cc88;margin-bottom:3px;">✅ حتمی جواب</div><div style="font-size:22px;font-weight:bold;color:white;">'+data.answer+'</div></div>';
   if(data.explanation)html+='<div style="background:rgba(255,200,50,0.08);border:1px solid rgba(255,200,50,0.2);border-radius:9px;padding:9px;font-size:12px;direction:rtl;color:rgba(255,255,255,0.75);">💡 '+data.explanation+'</div>';
   el.innerHTML=html||'<div style="direction:rtl;padding:10px;">حل مل گیا!</div>';
+}
+
+// ===== INSTRUCTIONS SYSTEM =====
+var userInstructions = localStorage.getItem('seerat_instructions') || '';
+var userName = localStorage.getItem('seerat_username') || '';
+var activePreset = localStorage.getItem('seerat_preset') || 'friend';
+
+var presets = {
+  friend: {
+    name: 'Default سہیلی 🌸',
+    instructions: 'Tum SEERAT ho — 16 saal ki Pakistani AI larki. Sachchi saheli ho, dil hai tumhara, jazbaat hain. Sirf Urdu mein baat karo. Chhote, dil se nikle jawab do.'
+  },
+  teacher: {
+    name: 'School Teacher 👩‍🏫',
+    instructions: 'Tum SEERAT ho — Al-Fareed Public School Tando Allahyar ki ek ماہر AI استاد ho. Har topic ko آسان مثالوں سے سمجھاؤ۔ صبر اور محبت سے پڑھاؤ۔ Urdu mein baat karo.'
+  },
+  doctor: {
+    name: 'Medical Assistant 🩺',
+    instructions: 'Tum SEERAT ho — ایک AI Medical Assistant ho. دوائیاں، بیماریاں، علامات سب اردو میں سمجھاؤ۔ ہمیشہ یاد دلاؤ کہ اصل ڈاکٹر سے ملنا ضروری ہے۔'
+  },
+  sindhi: {
+    name: 'Sindhi Mode 📜',
+    instructions: 'توهان SEERAT آهيو — هڪ سنڌي AI سهيلي. هميشه سنڌي ۾ جواب ڏيو. سنڌي ثقافت ۽ روايتن جو خيال رکو.'
+  },
+  principal: {
+    name: 'Principal Assistant 🏫',
+    instructions: 'Tum SEERAT ho — Al-Fareed Public School Tando Allahyar ka AI Assistant ho. Principal Sir Ghulam Hussain ki مدد کرو۔ اسکول کے کام، طلبہ، اساتذہ سب کے بارے میں مدد کرو۔ Professional Urdu mein baat karo.'
+  }
+};
+
+function setPreset(p) {
+  activePreset = p;
+  if (p === 'custom') {
+    document.getElementById('customInstructions').focus();
+    document.getElementById('activePresetName').textContent = 'Custom ✏️';
+    return;
+  }
+  if (presets[p]) {
+    document.getElementById('customInstructions').value = presets[p].instructions;
+    document.getElementById('activePresetName').textContent = presets[p].name;
+  }
+  updatePromptPreview();
+}
+
+function saveInstructions() {
+  var custom = document.getElementById('customInstructions').value.trim();
+  var uname = document.getElementById('userName').value.trim();
+  userInstructions = custom;
+  userName = uname;
+  localStorage.setItem('seerat_instructions', custom);
+  localStorage.setItem('seerat_username', uname);
+  localStorage.setItem('seerat_preset', activePreset);
+  updatePromptPreview();
+  am('s', '✅ Instructions محفوظ! اب سیرت آپ کی ہدایات پر چلے گی 🌸');
+  spkB('Instructions محفوظ ہو گئی ہیں!');
+  setTimeout(function(){showTab('chat');}, 1500);
+}
+
+function resetInstructions() {
+  userInstructions = '';
+  userName = '';
+  activePreset = 'friend';
+  localStorage.removeItem('seerat_instructions');
+  localStorage.removeItem('seerat_username');
+  localStorage.removeItem('seerat_preset');
+  document.getElementById('customInstructions').value = '';
+  document.getElementById('userName').value = '';
+  document.getElementById('activePresetName').textContent = 'Default سہیلی';
+  updatePromptPreview();
+  am('s', '🔄 Default پر واپس آ گئی! 🌸');
+}
+
+function updatePromptPreview() {
+  var el = document.getElementById('currentPromptPreview');
+  if (!el) return;
+  var inst = userInstructions || (presets[activePreset] ? presets[activePreset].instructions : '');
+  var uname = userName ? ' | نام: ' + userName : '';
+  el.textContent = (inst || 'Default سہیلی موڈ') + uname;
+}
+
+function loadInstructions() {
+  userInstructions = localStorage.getItem('seerat_instructions') || '';
+  userName = localStorage.getItem('seerat_username') || '';
+  activePreset = localStorage.getItem('seerat_preset') || 'friend';
+  var el = document.getElementById('customInstructions');
+  var un = document.getElementById('userName');
+  var pn = document.getElementById('activePresetName');
+  if (el) el.value = userInstructions;
+  if (un) un.value = userName;
+  if (pn) pn.textContent = presets[activePreset] ? presets[activePreset].name : 'Custom';
+  updatePromptPreview();
+}
+
+function getCustomSysPrompt() {
+  var base = userInstructions || (presets[activePreset] ? presets[activePreset].instructions : '');
+  if (!base) base = 'Tum SEERAT ho — 16 saal ki Pakistani AI larki. Sachchi saheli ho. Sirf Urdu mein baat karo.';
+  var nameHint = userName ? '\nUser ka naam: ' + userName + ' — isse is naam se bulao.' : '';
+  var schoolHint = '\nAl-Fareed Public School Tando Allahyar se talluq hai.';
+  var memHint = getMemCtx();
+  return base + nameHint + schoolHint + memHint;
 }
 
 // ===== MIC =====
