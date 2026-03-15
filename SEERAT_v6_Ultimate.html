@@ -432,6 +432,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
         <div class="st"><div class="dot"></div><span class="st-txt" id="stxt">آن لائن</span></div>
       </div>
       <div class="hdr-btns">
+        <button class="resetbtn" onclick="testVoice()">▶ Test</button>
         <button class="resetbtn" onclick="resetKeys()">🔑 Keys</button>
       </div>
     </div>
@@ -447,7 +448,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
     <button class="icard" onclick="showTab('chat')">
       <div class="icard-ico">🌤️</div>
       <div class="icard-val" id="weatherTemp">--°C</div>
-      <div class="icard-lbl" id="weatherCity">Tando Jam</div>
+      <div class="icard-lbl" id="weatherCity">Tando Allahyar</div>
     </button>
     <button class="icard" onclick="showTab('memory')">
       <div class="icard-ico">🧠</div>
@@ -467,7 +468,9 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
     <button class="tab" onclick="showTab('teacher')" id="tab-teacher">👩‍🏫 استاد</button>
     <button class="tab" onclick="showTab('memory')" id="tab-memory">🧠 یادداشت</button>
     <button class="tab" onclick="showTab('schedule')" id="tab-schedule">📅 Schedule</button>
-    <button class="tab" onclick="showTab('doctor')" id="tab-doctor">🩺 ڈاکٹر</button>
+    <button class="tab" onclick="showTab('doctor')" id="tab-doctor">🩺 ڈاکٹر Pro</button>
+    <button class="tab" onclick="showTab('medicheck')" id="tab-medicheck">💊 دوائی</button>
+    <button class="tab" onclick="showTab('mathcam')" id="tab-mathcam">📸 Math Cam</button>
     <button class="tab" onclick="showTab('selflearn')" id="tab-selflearn">🤖 خود سیکھو</button>
     <button class="tab" onclick="showTab('cards')" id="tab-cards">🎴 Cards</button>
   </div>
@@ -492,7 +495,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
         <button class="qb" onclick="openPanel('call')"><span class="qi">📞</span><div><div class="ql">Call کریں</div><div class="qs2">کسی کو بھی</div></div></button>
         <button class="qb" onclick="openPanel('alarm')"><span class="qi">⏰</span><div><div class="ql">Alarm</div><div class="qs2">وقت سیٹ کریں</div></div></button>
         <button class="qb" onclick="showTab('teacher')"><span class="qi">👩‍🏫</span><div><div class="ql">استاد AI</div><div class="qs2">کچھ بھی سیکھیں</div></div></button>
-        <button class="qb" onclick="showTab('namaz')"><span class="qi">🕌</span><div><div class="ql">نماز اوقات</div><div class="qs2">Tando Jam</div></div></button>
+        <button class="qb" onclick="showTab('namaz')"><span class="qi">🕌</span><div><div class="ql">نماز اوقات</div><div class="qs2">Tando Allahyar</div></div></button>
         <button class="qb" onclick="showTab('cards')"><span class="qi">🎴</span><div><div class="ql">Wishing Card</div><div class="qs2">بنائیں بھیجیں</div></div></button>
         <button class="qb" onclick="showTab('memory')"><span class="qi">🧠</span><div><div class="ql">یادداشت</div><div class="qs2">سب یاد ہے مجھے</div></div></button>
         <button class="qb" onclick="showTab('schedule')"><span class="qi">📅</span><div><div class="ql">Schedule</div><div class="qs2">آج کا پلان</div></div></button>
@@ -508,7 +511,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
   <!-- NAMAZ TAB -->
   <div class="tab-content" id="content-namaz">
     <div class="namaz-wrap">
-      <div class="namaz-title">🕌 نماز اوقات — Tando Jam</div>
+      <div class="namaz-title">🕌 نماز اوقات — Tando Allahyar</div>
       <div id="namazCards"></div>
       <div style="text-align:center;font-size:10px;color:rgba(255,255,255,0.25);margin-top:7px;" id="namazDate"></div>
     </div>
@@ -626,7 +629,7 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
   <!-- SCHOOL TAB -->
   <div class="tab-content" id="content-school">
     <div class="school-wrap">
-      <div style="font-size:12px;color:#ff6b9d;direction:rtl;margin-bottom:9px;text-align:center;">🏫 Al-Fareed Public School, Tando Jam</div>
+      <div style="font-size:12px;color:#ff6b9d;direction:rtl;margin-bottom:9px;text-align:center;">🏫 Al-Fareed Public School, Tando Allahyar</div>
       <div class="school-card" onclick="snd('مجھے Physics کا concept سمجھائیں')"><div class="school-card-title">⚛️ Physics</div><div class="school-card-sub">مشکل topics آسان کریں</div></div>
       <div class="school-card" onclick="snd('مجھے Math کا سوال حل کرنے میں مدد کریں')"><div class="school-card-title">🔢 Mathematics</div><div class="school-card-sub">ریاضی کے سوال</div></div>
       <div class="school-card" onclick="snd('مجھے Urdu essay لکھنے میں مدد کریں')"><div class="school-card-title">✍️ Urdu / English</div><div class="school-card-sub">مضمون اور writing</div></div>
@@ -817,6 +820,104 @@ body{background:#0d0820;min-height:100vh;font-family:'Segoe UI',Arial,sans-serif
       <div class="sl-history" id="slHistory"></div>
     </div>
   </div>
+
+  <!-- MEDICINE POWER TAB -->
+  <div class="tab-content" id="content-medicheck">
+    <div style="padding:12px;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#020c12,#031520);border-radius:16px;padding:14px;margin-bottom:12px;border:2px solid #00d4ff;text-align:center;">
+        <div style="font-size:32px;">💊</div>
+        <div style="font-size:15px;font-weight:bold;color:#00d4ff;">Medical Power Tool</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.4);direction:rtl;margin-top:3px;">دوائی، علامات، ٹیسٹ — مکمل طبی معلومات</div>
+        <div style="background:rgba(255,200,50,0.1);border:1px solid rgba(255,200,50,0.3);border-radius:8px;padding:6px 10px;margin-top:8px;font-size:10px;color:#ffd700;direction:rtl;">⚠️ صرف معلوماتی — اصل ڈاکٹر سے ضرور ملیں</div>
+      </div>
+
+      <!-- Mode Selector -->
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px;" id="mediModes">
+        <button onclick="setMediMode('medicine',this)" style="padding:12px 8px;background:linear-gradient(135deg,rgba(0,212,255,0.2),rgba(0,150,200,0.1));border:1.5px solid #00d4ff;border-radius:12px;color:white;font-size:12px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span style="font-size:22px;">💊</span><span>دوائی تلاش</span><span style="font-size:9px;opacity:0.6;">Generic name, formula</span>
+        </button>
+        <button onclick="setMediMode('symptoms',this)" style="padding:12px 8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,100,100,0.3);border-radius:12px;color:white;font-size:12px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span style="font-size:22px;">🤒</span><span>علامات چیک</span><span style="font-size:9px;opacity:0.6;">Symptom checker</span>
+        </button>
+        <button onclick="setMediMode('test',this)" style="padding:12px 8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(68,204,136,0.3);border-radius:12px;color:white;font-size:12px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span style="font-size:22px;">🔬</span><span>Medical Tests</span><span style="font-size:9px;opacity:0.6;">Test معلومات</span>
+        </button>
+        <button onclick="setMediMode('disease',this)" style="padding:12px 8px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(150,100,255,0.3);border-radius:12px;color:white;font-size:12px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <span style="font-size:22px;">📋</span><span>بیماری معلومات</span><span style="font-size:9px;opacity:0.6;">Disease details</span>
+        </button>
+      </div>
+
+      <!-- Mode label -->
+      <div id="mediModeLabel" style="font-size:11px;color:#00d4ff;direction:rtl;margin-bottom:8px;text-align:center;">💊 دوائی کا نام لکھیں — Generic name، formula، استعمال سب بتاؤں گی</div>
+
+      <!-- Input -->
+      <div style="display:flex;gap:7px;margin-bottom:10px;">
+        <input id="mediInp" style="flex:1;background:rgba(255,255,255,0.07);border:1.5px solid rgba(0,212,255,0.3);border-radius:12px;padding:11px 14px;color:white;font-size:13px;outline:none;direction:rtl;" placeholder="دوائی، علامت یا ٹیسٹ لکھیں..." onkeydown="if(event.key==='Enter')mediSearch()" />
+        <button onclick="mediSearch()" style="width:46px;height:46px;background:linear-gradient(135deg,#00d4ff,#0088cc);border:none;border-radius:12px;color:white;font-size:18px;cursor:pointer;">➤</button>
+      </div>
+
+      <!-- Quick buttons -->
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;" id="mediQuick">
+        <button onclick="mediAsk('Paracetamol')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(0,212,255,0.3);background:rgba(0,212,255,0.08);color:white;font-size:10px;cursor:pointer;">💊 Paracetamol</button>
+        <button onclick="mediAsk('Amoxicillin')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(0,212,255,0.3);background:rgba(0,212,255,0.08);color:white;font-size:10px;cursor:pointer;">💊 Amoxicillin</button>
+        <button onclick="mediAsk('بخار کی علامات')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(255,100,100,0.3);background:rgba(255,100,100,0.08);color:white;font-size:10px;cursor:pointer;">🤒 بخار</button>
+        <button onclick="mediAsk('CBC blood test')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(68,204,136,0.3);background:rgba(68,204,136,0.08);color:white;font-size:10px;cursor:pointer;">🔬 CBC Test</button>
+        <button onclick="mediAsk('ذیابیطس')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(150,100,255,0.3);background:rgba(150,100,255,0.08);color:white;font-size:10px;cursor:pointer;">📋 ذیابیطس</button>
+        <button onclick="mediAsk('بلڈ پریشر')" style="padding:5px 11px;border-radius:14px;border:1px solid rgba(150,100,255,0.3);background:rgba(150,100,255,0.08);color:white;font-size:10px;cursor:pointer;">📋 BP</button>
+      </div>
+
+      <!-- Result -->
+      <div id="mediResult" style="background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);border-radius:14px;padding:14px;min-height:100px;direction:rtl;">
+        <div style="text-align:center;color:rgba(255,255,255,0.2);font-size:12px;padding:15px;">💊 دوائی یا علامت لکھیں — مکمل طبی معلومات آئیں گی</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATH CAMERA TAB -->
+  <div class="tab-content" id="content-mathcam">
+    <div style="padding:12px;">
+      <div style="background:linear-gradient(135deg,#020e20,#031830);border-radius:16px;padding:14px;margin-bottom:12px;border:2px solid #4488ff;text-align:center;">
+        <div style="font-size:32px;margin-bottom:4px;">📸</div>
+        <div style="font-size:15px;font-weight:bold;color:#88ccff;">Math & Science Camera</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);direction:rtl;margin-top:3px;">سوال کی تصویر لیں — فوری حل!</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <button onclick="document.getElementById('mathCamInput').click()" style="padding:16px 8px;background:linear-gradient(135deg,#4488ff,#2244cc);border:none;border-radius:14px;color:white;font-size:13px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <span style="font-size:28px;">📷</span><span>Camera</span><span style="font-size:9px;opacity:0.7;">تصویر لیں</span>
+        </button>
+        <button onclick="document.getElementById('mathGalInput').click()" style="padding:16px 8px;background:linear-gradient(135deg,#6c3483,#4a1275);border:none;border-radius:14px;color:white;font-size:13px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;">
+          <span style="font-size:28px;">🖼️</span><span>Gallery</span><span style="font-size:9px;opacity:0.7;">فائل چنیں</span>
+        </button>
+      </div>
+      <input type="file" id="mathCamInput" accept="image/*" capture="environment" style="display:none;" onchange="mathSolveFromImg(event)">
+      <input type="file" id="mathGalInput" accept="image/*" style="display:none;" onchange="mathSolveFromImg(event)">
+      <div id="mathImgPreview" style="display:none;margin-bottom:10px;border-radius:14px;overflow:hidden;border:2px solid rgba(68,136,255,0.4);">
+        <img id="mathPreviewImg" style="width:100%;display:block;max-height:220px;object-fit:contain;background:#000;" />
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:10px;margin-bottom:10px;border:1px solid rgba(68,136,255,0.2);">
+        <div style="font-size:10px;color:#88ccff;direction:rtl;margin-bottom:6px;">✏️ یا سوال لکھیں:</div>
+        <div style="display:flex;gap:7px;">
+          <input id="mathTextInp" style="flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(68,136,255,0.3);border-radius:10px;padding:10px;color:white;font-size:13px;outline:none;direction:rtl;" placeholder="مثال: 2x + 5 = 13" onkeydown="if(event.key==='Enter')mathSolveText()" />
+          <button onclick="mathSolveText()" style="width:44px;height:44px;background:linear-gradient(135deg,#4488ff,#2244cc);border:none;border-radius:10px;color:white;font-size:18px;cursor:pointer;">➤</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="mathSubjBtns">
+        <button onclick="setMathSubj('auto',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid #4488ff;background:rgba(68,136,255,0.2);color:white;font-size:11px;cursor:pointer;">🤖 Auto</button>
+        <button onclick="setMathSubj('algebra',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">📐 Algebra</button>
+        <button onclick="setMathSubj('geometry',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">📏 Geometry</button>
+        <button onclick="setMathSubj('physics',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">⚛️ Physics</button>
+        <button onclick="setMathSubj('chemistry',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">🧪 Chemistry</button>
+        <button onclick="setMathSubj('biology',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">🌿 Biology</button>
+        <button onclick="setMathSubj('urdu',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">✍️ Urdu</button>
+        <button onclick="setMathSubj('sindhi',this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid rgba(68,136,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:11px;cursor:pointer;">📜 Sindhi</button>
+      </div>
+      <div id="mathCamResult" style="background:rgba(68,136,255,0.06);border:1px solid rgba(68,136,255,0.2);border-radius:14px;padding:14px;min-height:80px;direction:rtl;">
+        <div style="text-align:center;color:rgba(255,255,255,0.2);font-size:12px;padding:10px;">📸 تصویر لیں یا سوال لکھیں</div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- END mainApp -->
 
 <!-- OVERLAY -->
@@ -938,7 +1039,7 @@ function setAvatarImg(src){
 // ===== WEATHER =====
 async function loadWeather(){
   try{
-    var r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.42&longitude=68.53&current=temperature_2m,weathercode,windspeed_10m&timezone=Asia/Karachi');
+    var r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.47&longitude=68.72&current=temperature_2m,weathercode,windspeed_10m&timezone=Asia/Karachi');
     var d=await r.json();
     var temp=Math.round(d.current.temperature_2m);
     var code=d.current.weathercode;
@@ -955,6 +1056,7 @@ async function loadWeather(){
       if(la!==alert){
         setTimeout(function(){am('s',alert);sendNotif('🌤️ موسمی الرٹ',alert);spkB(alert);},5000);
         localStorage.setItem('seerat_walert',alert);
+        setTimeout(function(){am('s',alert);sendNotif('🌤️ موسمی الرٹ',alert);spkAlert(alert);},5000);
       }
     }
   }catch(e){}
@@ -965,7 +1067,7 @@ async function loadNamaz(){
   try{
     var today=new Date();
     var dd=today.getDate(),mm=today.getMonth()+1,yy=today.getFullYear();
-    var r=await fetch('https://api.aladhan.com/v1/timingsByCity/'+dd+'-'+mm+'-'+yy+'?city=TandoJam&country=Pakistan&method=1');
+    var r=await fetch('https://api.aladhan.com/v1/timingsByCity/'+dd+'-'+mm+'-'+yy+'?city=TandoAllahyar&country=Pakistan&method=1');
     var d=await r.json();
     var t=d.data.timings;
     var prayers=[{name:'فجر',key:'Fajr',time:t.Fajr},{name:'ظہر',key:'Dhuhr',time:t.Dhuhr},{name:'عصر',key:'Asr',time:t.Asr},{name:'مغرب',key:'Maghrib',time:t.Maghrib},{name:'عشاء',key:'Isha',time:t.Isha}];
@@ -1044,7 +1146,7 @@ function addReminderFn(){
   var rem={id:Date.now(),text:txt,time:tim};
   reminders.push(rem);saveRem();renderReminders();
   document.getElementById('remText').value='';document.getElementById('remTime').value='';
-  if(tim){var diff=new Date(tim)-new Date();if(diff>0)setTimeout(function(){sendNotif('⏰ یاد دہانی!',txt);am('s','⏰ یاد دہانی: '+txt);spkB('یاد دہانی: '+txt);},diff);}
+  if(tim){var diff=new Date(tim)-new Date();if(diff>0)setTimeout(function(){sendNotif('⏰ یاد دہانی!',txt);am('s','⏰ یاد دہانی: '+txt);spkAlert('یاد دہانی: '+txt);},diff);}
   am('s','✅ یاد دہانی لگ گئی: '+txt);
 }
 function delReminder(id){reminders=reminders.filter(function(r){return r.id!==id;});saveRem();renderReminders();}
@@ -1071,7 +1173,7 @@ function addSchedule(){
   schedItems.push(item);schedItems.sort(function(a,b){return a.from.localeCompare(b.from);});
   saveSched();renderSchedule();
   document.getElementById('schedTask').value='';document.getElementById('schedFrom').value='';document.getElementById('schedTo').value='';
-  if(from){var now=new Date();var alarm=new Date();var p=from.split(':');alarm.setHours(parseInt(p[0]),parseInt(p[1]),0,0);if(alarm>now){setTimeout(function(){sendNotif('⏰ وقت آ گیا!',task);am('s','⏰ ابھی کا کام: '+task);spkB(task+' کا وقت ہو گیا');},alarm-now);}}
+  if(from){var now=new Date();var alarm=new Date();var p=from.split(':');alarm.setHours(parseInt(p[0]),parseInt(p[1]),0,0);if(alarm>now){setTimeout(function(){sendNotif('⏰ وقت آ گیا!',task);am('s','⏰ ابھی کا کام: '+task);spkAlert(task+' کا وقت ہو گیا، ابھی کریں');},alarm-now);}}
   autoLearn('Schedule: '+task+(from?' at '+from:''));
   am('s','✅ Schedule میں شامل: '+task);
 }
@@ -1095,7 +1197,7 @@ function checkDailyReminder(){
       var msg='🌅 صبح بخیر! کل آپ نے:\n'+yItems.map(function(s){return (s.done?'✅':'⬜')+' '+(s.from||'')+' '+s.task;}).join('\n');
       am('s',msg.replace(/\n/g,'<br>'));
       sendNotif('🌅 کل کا جائزہ','کل کے '+yItems.length+' کام تھے');
-      spkB('صبح بخیر! کل کا جائزہ سنیں');
+      spkAlert('صبح بخیر! آج کا شیڈول چیک کریں');
     },4000);
   }
 }
@@ -1162,7 +1264,7 @@ function setupVisibilityCheck(){
     var t=JSON.parse(localStorage.getItem('seerat_namaztimes')||'{}');
     var now=new Date();var nowStr=(now.getHours()<10?'0':'')+now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();
     var names={Fajr:'فجر',Dhuhr:'ظہر',Asr:'عصر',Maghrib:'مغرب',Isha:'عشاء'};
-    Object.keys(names).forEach(function(k){if(t[k]===nowStr){sendNotif('🕌 نماز کا وقت',names[k]+' کی نماز!');am('s','🕌 '+names[k]+' کی نماز کا وقت! اللہ قبول فرمائے 🤲');spkB(names[k]+' کی نماز کا وقت ہو گیا');}});
+    Object.keys(names).forEach(function(k){if(t[k]===nowStr){sendNotif('🕌 نماز کا وقت',names[k]+' کی نماز!');am('s','🕌 '+names[k]+' کی نماز کا وقت! اللہ قبول فرمائے 🤲');spkAlert(names[k]+' کی نماز کا وقت ہو گیا');}});
   },60000);
 }
 
@@ -1200,7 +1302,7 @@ async function snd(tx){
   else if(tl.match(/خوش|مزہ|شکریہ|پیار|واہ|مبارک/))emo='happy';
   else if(tl.match(/غصہ|ناراض|تنگ/))emo='angry';
   var emoTips={sad:'User udaas hai — dil se sahlaao, pyar se baat karo, aankhon mein aansu wali feeling do.',happy:'User khush hai — tum bhi jhoom jao, saath jashn manao!',angry:'User naraaz hai — pehle samjho, sahlaao, phir dheeray baat karo.',neutral:'16 saal ki zindadil Pakistani larki ki tarah jawab do.'};
-  var sys='Tum SEERAT ho — 16 saal ki Pakistani AI larki. Sachchi saheli ho, dil hai tumhara, jazbaat hain.\nSirf Urdu mein baat karo (Hindi bilkul nahi).\nUser ka mood: '+mood+'. Situation: '+emoTips[emo]+'\nAl-Fareed Public School Tando Jam se talluq hai.\nChhote, dil se nikle jawab do.'+getMemCtx();
+  var sys='Tum SEERAT ho — 16 saal ki Pakistani AI larki. Sachchi saheli ho, dil hai tumhara, jazbaat hain.\nSirf Urdu mein baat karo (Hindi bilkul nahi).\nUser ka mood: '+mood+'. Situation: '+emoTips[emo]+'\nAl-Fareed Public School Tando Allahyar se talluq hai.\nChhote, dil se nikle jawab do.'+getMemCtx();
   try{
     var msgs=[{role:'system',content:sys}].concat(hist.map(function(h){return {role:h.role,content:h.content};}));
     var r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AK},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:msgs,max_tokens:400})});
@@ -1210,20 +1312,294 @@ async function snd(tx){
       hist.push({role:'assistant',content:rep});
       if(t.length>15)autoLearn('بات: '+t.substring(0,55)+(t.length>55?'...':''));
       am('s',rep);document.getElementById('stxt').textContent='آن لائن';
-      EK?spkE(rep):spkB(rep);
+      spkB(rep);
     }else if(d.error){am('s','⚠️ '+d.error.message);}
     else{am('s','⚠️ مسئلہ ہوا — دوبارہ کوشش کریں');}
   }catch(e){hideT();am('s','⚠️ Internet یا API key چیک کریں!');}
 }
 
-// ===== SPEECH =====
-function spkB(t){if(!window.speechSynthesis)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='ur-PK';u.rate=0.9;u.pitch=1.2;speechSynthesis.speak(u);}
-async function spkE(t){
+// ===== SPEECH ENGINE =====
+function spkB(t){
+  var clean=(t||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,300);
+  if(!clean||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  function go(){
+    var u=new SpeechSynthesisUtterance(clean);
+    u.lang='ur-PK';u.rate=0.82;u.pitch=1.2;u.volume=1;
+    var vs=speechSynthesis.getVoices();
+    var pick=vs.find(function(v){return v.lang==='ur-PK';})
+      ||vs.find(function(v){return v.lang.startsWith('ur');})
+      ||vs.find(function(v){return v.lang.startsWith('hi');});
+    if(pick)u.voice=pick;
+    u.onend=function(){var s=document.getElementById('stxt');if(s)s.textContent='آن لائن';};
+    speechSynthesis.speak(u);
+    setTimeout(function(){if(speechSynthesis.speaking)speechSynthesis.resume();},500);
+  }
+  if(speechSynthesis.getVoices().length===0){speechSynthesis.onvoiceschanged=go;setTimeout(go,400);}else{go();}
+}
+function spkAlert(msg){
+  var clean=(msg||'').replace(/<[^>]*>/g,' ').trim().slice(0,200);
+  if(!clean||!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  function go(){
+    var u=new SpeechSynthesisUtterance(clean);
+    u.lang='ur-PK';u.rate=0.88;u.pitch=1.3;u.volume=1;
+    var vs=speechSynthesis.getVoices();
+    var pick=vs.find(function(v){return v.lang==='ur-PK';})
+      ||vs.find(function(v){return v.lang.startsWith('ur');})
+      ||vs.find(function(v){return v.lang.startsWith('hi');});
+    if(pick)u.voice=pick;
+    speechSynthesis.speak(u);
+    setTimeout(function(){if(speechSynthesis.speaking)speechSynthesis.resume();},300);
+  }
+  if(speechSynthesis.getVoices().length===0){speechSynthesis.onvoiceschanged=go;setTimeout(go,300);}else{go();}
+}
+function testVoice(){am('s','🎙️ آواز چیک...');spkB('السلام علیکم! میں سیرت ہوں!');}
+async function spkE(t){spkB(t);}
+
+// ===== MEDICINE POWER TOOL =====
+var mediMode='medicine';
+var mediLabels={
+  medicine:'💊 دوائی کا نام لکھیں — Generic name، formula، uses سب بتاؤں گی',
+  symptoms:'🤒 علامات لکھیں — کون سی بیماری ہو سکتی ہے بتاؤں گی',
+  test:'🔬 Medical test کا نام لکھیں — کیا ہوتا ہے، کیوں کراتے ہیں',
+  disease:'📋 بیماری کا نام لکھیں — مکمل معلومات دوں گی'
+};
+function setMediMode(m,btn){
+  mediMode=m;
+  document.querySelectorAll('#mediModes button').forEach(function(b){
+    b.style.background='rgba(255,255,255,0.05)';
+  });
+  btn.style.background='linear-gradient(135deg,rgba(0,212,255,0.3),rgba(0,150,200,0.2))';
+  document.getElementById('mediModeLabel').textContent=mediLabels[m]||'';
+}
+function mediAsk(q){document.getElementById('mediInp').value=q;mediSearch();}
+async function mediSearch(){
+  var q=document.getElementById('mediInp').value.trim();
+  if(!q)return;
+  if(!AK){document.getElementById('mediResult').innerHTML='<div style="color:#ff8888;text-align:center;padding:12px;direction:rtl;">⚠️ API key ضروری ہے!</div>';return;}
+  var el=document.getElementById('mediResult');
+  el.innerHTML='<div style="text-align:center;padding:20px;"><div style="font-size:30px;animation:float 1s infinite;">🔬</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px;direction:rtl;">تلاش ہو رہی ہے...</div></div>';
+  var prompts={
+    medicine:'آپ ایک ماہر ڈاکٹر اور فارماسسٹ ہیں۔ دوائی "'+q+'" کے بارے میں مکمل معلومات اردو میں دیں۔ JSON format: {"name":"دوائی کا نام","generic":"Generic name","formula":"Chemical formula","category":"دوائی کی قسم","uses":["use1","use2"],"dosage":"خوراک","sideEffects":["side1","side2"],"warnings":["warning1"],"alternatives":["متبادل1"],"howWorks":"یہ کیسے کام کرتی ہے"}',
+    symptoms:'آپ ماہر ڈاکٹر ہیں۔ علامات "'+q+'" کی بنیاد پر ممکنہ بیماریاں اردو میں بتائیں۔ JSON: {"symptoms":"علامات","possibleDiseases":[{"name":"بیماری","probability":"زیادہ/درمیانہ/کم","description":"وضاحت"}],"urgency":"فوری/معمول/انتظار","firstAid":"ابتدائی علاج","whenToSeeDoctor":"کب ڈاکٹر کے پاس جائیں"}',
+    test:'آپ طبی ماہر ہیں۔ Medical test "'+q+'" کے بارے میں اردو میں بتائیں۔ JSON: {"testName":"ٹیسٹ نام","purpose":"مقصد","normalRange":"نارمل حد","abnormalMeans":"غیر نارمل کا مطلب","preparation":"تیاری","procedure":"طریقہ","cost":"تخمینہ لاگت PKR"}',
+    disease:'آپ ماہر ڈاکٹر ہیں۔ بیماری "'+q+'" کے بارے میں مکمل اردو معلومات دیں۔ JSON: {"disease":"بیماری","description":"وضاحت","symptoms":["علامت1"],"causes":["وجہ1"],"treatment":{"homeopathic":["دوائی1"],"allopathic":["دوائی1"]},"diet":"غذا","prevention":["احتیاط1"],"complications":"پیچیدگیاں"}'
+  };
   try{
-    var r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM',{method:'POST',headers:{'xi-api-key':EK,'Content-Type':'application/json'},body:JSON.stringify({text:t,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.4,similarity_boost:0.85,style:0.3,use_speaker_boost:true}})});
-    if(!r.ok){spkB(t);return;}
-    var bl=await r.blob();new Audio(URL.createObjectURL(bl)).play();
-  }catch(e){spkB(t);}
+    var res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+AK},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:prompts[mediMode]}],max_tokens:1200})
+    });
+    var d=await res.json();
+    if(d.choices&&d.choices[0]){
+      var txt=d.choices[0].message.content.replace(/```json|```/g,'').trim();
+      try{renderMediResult(mediMode,JSON.parse(txt));}
+      catch(e){el.innerHTML='<div style="font-size:13px;direction:rtl;line-height:1.9;padding:8px;">'+txt.replace(/\n/g,'<br>')+'</div>';}
+    }
+  }catch(e){el.innerHTML='<div style="color:#ff8888;text-align:center;padding:12px;direction:rtl;">⚠️ دوبارہ کوشش کریں</div>';}
+}
+function renderMediResult(mode,data){
+  var el=document.getElementById('mediResult');
+  var html='';
+  if(mode==='medicine'){
+    html='<div style="background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,150,200,0.08));border:2px solid #00d4ff;border-radius:14px;padding:14px;margin-bottom:10px;">'
+      +'<div style="font-size:18px;font-weight:bold;color:#00d4ff;direction:rtl;margin-bottom:4px;">💊 '+(data.name||'')+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">'
+      +'<span style="background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.3);border-radius:8px;padding:3px 9px;font-size:11px;color:#00d4ff;">Generic: '+(data.generic||'')+'</span>'
+      +'<span style="background:rgba(150,100,255,0.15);border:1px solid rgba(150,100,255,0.3);border-radius:8px;padding:3px 9px;font-size:11px;color:#cc88ff;">Formula: '+(data.formula||'')+'</span>'
+      +'<span style="background:rgba(68,204,136,0.15);border:1px solid rgba(68,204,136,0.3);border-radius:8px;padding:3px 9px;font-size:11px;color:#44cc88;">'+(data.category||'')+'</span>'
+      +'</div></div>';
+    if(data.uses&&data.uses.length){
+      html+='<div style="background:rgba(68,204,136,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #44cc88;">'
+        +'<div style="font-size:10px;color:#44cc88;font-weight:bold;margin-bottom:5px;direction:rtl;">✅ استعمال</div>'
+        +data.uses.map(function(u){return '<div style="font-size:12px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.85);">• '+u+'</div>';}).join('')+'</div>';
+    }
+    if(data.dosage){
+      html+='<div style="background:rgba(255,200,50,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #ffd700;">'
+        +'<div style="font-size:10px;color:#ffd700;font-weight:bold;margin-bottom:4px;direction:rtl;">💉 خوراک</div>'
+        +'<div style="font-size:12px;direction:rtl;color:rgba(255,255,255,0.85);">'+data.dosage+'</div></div>';
+    }
+    if(data.howWorks){
+      html+='<div style="background:rgba(100,150,255,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #88aaff;">'
+        +'<div style="font-size:10px;color:#88aaff;font-weight:bold;margin-bottom:4px;direction:rtl;">🔬 کیسے کام کرتی ہے</div>'
+        +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);">'+data.howWorks+'</div></div>';
+    }
+    if(data.sideEffects&&data.sideEffects.length){
+      html+='<div style="background:rgba(255,100,100,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #ff6666;">'
+        +'<div style="font-size:10px;color:#ff8888;font-weight:bold;margin-bottom:5px;direction:rtl;">⚠️ ضمنی اثرات</div>'
+        +data.sideEffects.map(function(s){return '<div style="font-size:11px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.7);">• '+s+'</div>';}).join('')+'</div>';
+    }
+    if(data.alternatives&&data.alternatives.length){
+      html+='<div style="background:rgba(150,100,255,0.08);border-radius:10px;padding:8px 10px;margin-bottom:8px;">'
+        +'<div style="font-size:10px;color:#cc88ff;font-weight:bold;margin-bottom:4px;direction:rtl;">🔄 متبادل دوائیاں</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:5px;">'
+        +data.alternatives.map(function(a){return '<span style="background:rgba(150,100,255,0.15);border:1px solid rgba(150,100,255,0.3);border-radius:8px;padding:3px 9px;font-size:11px;color:#cc88ff;">'+a+'</span>';}).join('')
+        +'</div></div>';
+    }
+  } else if(mode==='symptoms'){
+    html='<div style="background:rgba(255,100,100,0.1);border:1.5px solid rgba(255,100,100,0.3);border-radius:12px;padding:12px;margin-bottom:10px;">'
+      +'<div style="font-size:13px;font-weight:bold;color:#ff8888;direction:rtl;margin-bottom:6px;">🤒 علامات: '+(data.symptoms||'')+'</div>'
+      +'<div style="display:flex;align-items:center;gap:6px;">'
+      +'<span style="font-size:10px;color:rgba(255,255,255,0.5);">فوریت:</span>'
+      +'<span style="background:'+(data.urgency==='فوری'?'rgba(255,50,50,0.3)':data.urgency==='معمول'?'rgba(255,150,50,0.3)':'rgba(68,204,136,0.3)')+';border-radius:8px;padding:3px 10px;font-size:11px;font-weight:bold;color:white;">'+(data.urgency||'')+'</span>'
+      +'</div></div>';
+    if(data.possibleDiseases&&data.possibleDiseases.length){
+      html+='<div style="margin-bottom:10px;"><div style="font-size:11px;color:#ffd700;direction:rtl;margin-bottom:6px;font-weight:bold;">📋 ممکنہ بیماریاں:</div>';
+      data.possibleDiseases.forEach(function(d){
+        var color=d.probability==='زیادہ'?'#ff8888':d.probability==='درمیانہ'?'#ffd700':'#44cc88';
+        html+='<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:10px;margin-bottom:6px;border-right:3px solid '+color+';">'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+          +'<span style="font-size:13px;font-weight:bold;color:'+color+';direction:rtl;">'+d.name+'</span>'
+          +'<span style="font-size:10px;background:rgba(255,255,255,0.1);border-radius:6px;padding:2px 7px;">'+d.probability+'</span>'
+          +'</div><div style="font-size:12px;direction:rtl;color:rgba(255,255,255,0.7);line-height:1.7;">'+d.description+'</div></div>';
+      });
+      html+='</div>';
+    }
+    if(data.firstAid){
+      html+='<div style="background:rgba(68,204,136,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #44cc88;">'
+        +'<div style="font-size:10px;color:#44cc88;font-weight:bold;direction:rtl;margin-bottom:4px;">🩹 ابتدائی علاج</div>'
+        +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);">'+data.firstAid+'</div></div>';
+    }
+    if(data.whenToSeeDoctor){
+      html+='<div style="background:rgba(255,100,100,0.08);border-radius:10px;padding:10px;border-right:3px solid #ff6666;">'
+        +'<div style="font-size:10px;color:#ff8888;font-weight:bold;direction:rtl;margin-bottom:4px;">🏥 ڈاکٹر کے پاس کب جائیں</div>'
+        +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);">'+data.whenToSeeDoctor+'</div></div>';
+    }
+  } else if(mode==='test'){
+    html='<div style="background:rgba(68,204,136,0.1);border:2px solid rgba(68,204,136,0.3);border-radius:14px;padding:14px;margin-bottom:10px;">'
+      +'<div style="font-size:16px;font-weight:bold;color:#44cc88;direction:rtl;margin-bottom:8px;">🔬 '+(data.testName||'')+'</div>'
+      +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);margin-bottom:8px;">'+( data.purpose||'')+'</div>';
+    if(data.normalRange){
+      html+='<div style="background:rgba(68,204,136,0.1);border-radius:8px;padding:8px 10px;margin-bottom:6px;">'
+        +'<span style="font-size:10px;color:#44cc88;font-weight:bold;">نارمل حد: </span>'
+        +'<span style="font-size:12px;color:white;">'+data.normalRange+'</span></div>';
+    }
+    if(data.abnormalMeans){
+      html+='<div style="background:rgba(255,100,100,0.08);border-radius:8px;padding:8px 10px;margin-bottom:6px;">'
+        +'<div style="font-size:10px;color:#ff8888;font-weight:bold;direction:rtl;margin-bottom:3px;">غیر نارمل کا مطلب:</div>'
+        +'<div style="font-size:12px;direction:rtl;color:rgba(255,255,255,0.8);">'+data.abnormalMeans+'</div></div>';
+    }
+    if(data.preparation){
+      html+='<div style="background:rgba(255,200,50,0.08);border-radius:8px;padding:8px 10px;margin-bottom:6px;">'
+        +'<div style="font-size:10px;color:#ffd700;font-weight:bold;direction:rtl;margin-bottom:3px;">تیاری:</div>'
+        +'<div style="font-size:12px;direction:rtl;color:rgba(255,255,255,0.8);">'+data.preparation+'</div></div>';
+    }
+    if(data.cost){
+      html+='<div style="background:rgba(150,100,255,0.1);border-radius:8px;padding:8px 10px;">'
+        +'<span style="font-size:10px;color:#cc88ff;font-weight:bold;">تخمینہ لاگت: </span>'
+        +'<span style="font-size:12px;color:white;">'+data.cost+'</span></div>';
+    }
+    html+='</div>';
+  } else if(mode==='disease'){
+    html='<div style="background:rgba(150,100,255,0.1);border:2px solid rgba(150,100,255,0.3);border-radius:14px;padding:14px;margin-bottom:10px;">'
+      +'<div style="font-size:16px;font-weight:bold;color:#cc88ff;direction:rtl;margin-bottom:6px;">📋 '+(data.disease||'')+'</div>'
+      +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);">'+( data.description||'')+'</div></div>';
+    if(data.symptoms&&data.symptoms.length){
+      html+='<div style="background:rgba(255,100,100,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #ff6666;">'
+        +'<div style="font-size:10px;color:#ff8888;font-weight:bold;margin-bottom:5px;direction:rtl;">🤒 علامات</div>'
+        +data.symptoms.map(function(s){return '<div style="font-size:12px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.85);">• '+s+'</div>';}).join('')+'</div>';
+    }
+    if(data.treatment){
+      if(data.treatment.allopathic&&data.treatment.allopathic.length){
+        html+='<div style="background:rgba(0,212,255,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #00d4ff;">'
+          +'<div style="font-size:10px;color:#00d4ff;font-weight:bold;margin-bottom:5px;direction:rtl;">💊 Allopathic علاج</div>'
+          +data.treatment.allopathic.map(function(m){return '<div style="font-size:12px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.85);">• '+m+'</div>';}).join('')+'</div>';
+      }
+      if(data.treatment.homeopathic&&data.treatment.homeopathic.length){
+        html+='<div style="background:rgba(68,204,136,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #44cc88;">'
+          +'<div style="font-size:10px;color:#44cc88;font-weight:bold;margin-bottom:5px;direction:rtl;">🌿 Homeopathic علاج</div>'
+          +data.treatment.homeopathic.map(function(m){return '<div style="font-size:12px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.85);">• '+m+'</div>';}).join('')+'</div>';
+      }
+    }
+    if(data.prevention&&data.prevention.length){
+      html+='<div style="background:rgba(255,200,50,0.08);border-radius:10px;padding:10px;margin-bottom:8px;border-right:3px solid #ffd700;">'
+        +'<div style="font-size:10px;color:#ffd700;font-weight:bold;margin-bottom:5px;direction:rtl;">🛡️ احتیاط</div>'
+        +data.prevention.map(function(p){return '<div style="font-size:12px;direction:rtl;padding:2px 0;color:rgba(255,255,255,0.85);">• '+p+'</div>';}).join('')+'</div>';
+    }
+    if(data.diet){
+      html+='<div style="background:rgba(68,136,255,0.08);border-radius:10px;padding:10px;border-right:3px solid #4488ff;">'
+        +'<div style="font-size:10px;color:#88aaff;font-weight:bold;direction:rtl;margin-bottom:4px;">🥗 غذا</div>'
+        +'<div style="font-size:12px;direction:rtl;line-height:1.8;color:rgba(255,255,255,0.85);">'+data.diet+'</div></div>';
+    }
+  }
+  el.innerHTML=html||'<div style="direction:rtl;padding:10px;font-size:13px;">معلومات مل گئی!</div>';
+}
+
+// ===== MATH CAMERA =====
+var mathSubj='auto';
+function setMathSubj(s,btn){
+  mathSubj=s;
+  document.querySelectorAll('#mathSubjBtns button').forEach(function(b){
+    b.style.background='rgba(255,255,255,0.05)';b.style.borderColor='rgba(68,136,255,0.3)';
+  });
+  btn.style.background='rgba(68,136,255,0.2)';btn.style.borderColor='#4488ff';
+}
+async function mathSolveFromImg(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){document.getElementById('mathPreviewImg').src=ev.target.result;document.getElementById('mathImgPreview').style.display='block';};
+  reader.readAsDataURL(file);
+  var b64reader=new FileReader();
+  b64reader.onload=async function(ev){await mathSolveWithImage(ev.target.result.split(',')[1],file.type);};
+  b64reader.readAsDataURL(file);
+}
+async function mathSolveWithImage(base64,mimeType){
+  if(!AK){document.getElementById('mathCamResult').innerHTML='<div style="color:#ff8888;direction:rtl;text-align:center;padding:12px;">⚠️ API key ضروری!</div>';return;}
+  var el=document.getElementById('mathCamResult');
+  el.innerHTML='<div style="text-align:center;padding:20px;"><div style="font-size:30px;animation:float 1s infinite;">🤔</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px;direction:rtl;">حل نکال رہی ہوں...</div></div>';
+  var subj=mathSubj==='auto'?'':' Subject: '+mathSubj;
+  try{
+    var res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AK},
+      body:JSON.stringify({model:'meta-llama/llama-4-scout-17b-16e-instruct',messages:[{role:'user',content:[
+        {type:'image_url',image_url:{url:'data:'+mimeType+';base64,'+base64}},
+        {type:'text',text:'تصویر میں سوال حل کریں step by step اردو میں۔'+subj+' JSON: {"question":"سوال","steps":["step1","step2"],"answer":"جواب","explanation":"وضاحت"}'}
+      ]}],max_tokens:1000})
+    });
+    var d=await res.json();
+    if(d.choices&&d.choices[0]){
+      var txt=d.choices[0].message.content.replace(/```json|```/g,'').trim();
+      try{renderMathResult(JSON.parse(txt));}
+      catch(e){el.innerHTML='<div style="font-size:13px;direction:rtl;line-height:1.9;padding:8px;">'+txt.replace(/\n/g,'<br>')+'</div>';}
+    }
+  }catch(e){el.innerHTML='<div style="color:#ff8888;direction:rtl;text-align:center;padding:12px;">⚠️ دوبارہ کوشش</div>';}
+}
+async function mathSolveText(){
+  var q=document.getElementById('mathTextInp').value.trim();
+  if(!q||!AK)return;
+  var el=document.getElementById('mathCamResult');
+  el.innerHTML='<div style="text-align:center;padding:20px;"><div style="font-size:30px;animation:float 1s infinite;">🤔</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:8px;direction:rtl;">حل نکال رہی ہوں...</div></div>';
+  var subjMap={algebra:'الجبرا',geometry:'جیومیٹری',physics:'فزکس',chemistry:'کیمسٹری',biology:'حیاتیات',urdu:'اردو زبان',sindhi:'سندھی زبان',auto:''};
+  var subjHint=mathSubj!=='auto'?' ('+subjMap[mathSubj]+')':'';
+  try{
+    var res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AK},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'user',content:'سوال'+subjHint+' حل کریں step by step اردو میں: "'+q+'" — JSON: {"question":"سوال","steps":["step1","step2"],"answer":"جواب","explanation":"وضاحت"}'}],max_tokens:1000})
+    });
+    var d=await res.json();
+    if(d.choices&&d.choices[0]){
+      var txt=d.choices[0].message.content.replace(/```json|```/g,'').trim();
+      try{renderMathResult(JSON.parse(txt));}
+      catch(e){el.innerHTML='<div style="font-size:13px;direction:rtl;line-height:1.9;padding:8px;">'+txt.replace(/\n/g,'<br>')+'</div>';}
+    }
+  }catch(e){el.innerHTML='<div style="color:#ff8888;direction:rtl;text-align:center;padding:12px;">⚠️ خرابی</div>';}
+}
+function renderMathResult(data){
+  var el=document.getElementById('mathCamResult');
+  var html='';
+  if(data.question)html+='<div style="background:rgba(68,136,255,0.12);border:1px solid rgba(68,136,255,0.3);border-radius:10px;padding:10px;margin-bottom:10px;font-size:14px;font-weight:bold;color:#aaccff;">📝 '+data.question+'</div>';
+  if(data.steps&&data.steps.length){
+    html+='<div style="margin-bottom:10px;">';
+    data.steps.forEach(function(s,i){
+      html+='<div style="display:flex;gap:8px;margin-bottom:6px;direction:rtl;align-items:flex-start;"><div style="min-width:24px;height:24px;background:linear-gradient(135deg,#4488ff,#2244cc);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;flex-shrink:0;">'+(i+1)+'</div><div style="flex:1;font-size:13px;line-height:1.7;padding:6px 9px;background:rgba(255,255,255,0.04);border-radius:8px;">'+s+'</div></div>';
+    });
+    html+='</div>';
+  }
+  if(data.answer)html+='<div style="background:linear-gradient(135deg,rgba(68,204,136,0.2),rgba(34,136,68,0.1));border:2px solid #44cc88;border-radius:12px;padding:13px;text-align:center;margin-bottom:8px;"><div style="font-size:10px;color:#44cc88;margin-bottom:3px;">✅ حتمی جواب</div><div style="font-size:22px;font-weight:bold;color:white;">'+data.answer+'</div></div>';
+  if(data.explanation)html+='<div style="background:rgba(255,200,50,0.08);border:1px solid rgba(255,200,50,0.2);border-radius:9px;padding:9px;font-size:12px;direction:rtl;color:rgba(255,255,255,0.75);">💡 '+data.explanation+'</div>';
+  el.innerHTML=html||'<div style="direction:rtl;padding:10px;">حل مل گیا!</div>';
 }
 
 // ===== MIC =====
@@ -1435,7 +1811,7 @@ function sendCardWA(){
   var num=document.getElementById('cardWaNum').value.trim().replace(/\s/g,'').replace(/\+/g,'');
   if(!num){alert('WhatsApp نمبر ڈالیں!');return;}
   var types={'birthday':'🎂 سالگرہ مبارک','eid':'🌙 عید مبارک','notice':'📢 School Notice','custom':'✨ خاص پیغام'};
-  var fullMsg=types[cardType]+'\n\n'+(msg||name+' کے لیے دعائیں! 🌸')+'\n\n— Al-Fareed Public School, Tando Jam';
+  var fullMsg=types[cardType]+'\n\n'+(msg||name+' کے لیے دعائیں! 🌸')+'\n\n— Al-Fareed Public School, Tando Allahyar';
   window.open('https://wa.me/'+num+'?text='+encodeURIComponent(fullMsg),'_blank');
   am('s','✅ Card بھیجا جا رہا ہے! 💬');
 }
