@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice - Al-Fareed Public School</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Serif+4:wght@400;600&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f0e8; font-family:'Source Serif 4',Georgia,serif; padding:20px; display:flex; flex-direction:column; align-items:center; }
+  .top-bar { background:#1a7a3c; color:white; padding:10px 20px; border-radius:8px; margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; width:100%; max-width:650px; }
+  .top-bar button { background:white; color:#1a7a3c; border:none; padding:8px 18px; border-radius:6px; font-weight:bold; cursor:pointer; }
+  .notice { background:white; width:100%; max-width:650px; border:3px solid #1a7a3c; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.12); }
+  .notice-header { background:#1a7a3c; color:white; padding:20px; text-align:center; display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap; }
+  .monogram-wrap { width:55px; height:55px; border-radius:50%; border:2px solid #f0c040; overflow:hidden; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); flex-shrink:0; }
+  .monogram-wrap img { width:100%; height:100%; object-fit:cover; }
+  .mono-def .af { color:#f0d700; font-size:16px; font-weight:bold; text-align:center; }
+  .mono-def .sm { color:#f0c040; font-size:5px; text-align:center; line-height:1.4; }
+  .header-text h2 { font-size:11px; letter-spacing:2px; opacity:0.85; }
+  .header-text h1 { font-family:'Playfair Display',serif; font-size:20px; margin-top:4px; }
+  .notice-body { padding:30px 35px; }
+  .notice-meta { display:flex; justify-content:space-between; margin-bottom:20px; font-size:14px; color:#666; border-bottom:1px solid #eee; padding-bottom:12px; }
+  .notice-type { padding:3px 12px; border-radius:15px; font-size:12px; font-weight:bold; }
+  .type-urgent { background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+  .type-general { background:#e8f5e9; color:#2e7d32; border:1px solid #4caf50; }
+  .type-info { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+  .notice-title { font-family:'Playfair Display',serif; font-size:24px; color:#1a1a1a; margin-bottom:20px; line-height:1.3; }
+  .notice-content { font-size:16px; line-height:1.9; color:#444; white-space:pre-wrap; }
+  .notice-footer { margin-top:30px; padding-top:15px; border-top:1px dashed #ccc; display:flex; justify-content:space-between; font-size:13px; color:#888; }
+  .sig-area { margin-top:25px; }
+  .sig-row { display:flex; justify-content:space-between; }
+  .sig-box { text-align:center; width:42%; }
+  .sig-img { max-height:40px; max-width:120px; object-fit:contain; display:block; margin:0 auto 2px; }
+  .sig-line { border-top:1.5px solid #333; margin-bottom:5px; }
+  .sig-text { font-size:13px; color:#555; }
+  .sig-name-sm { font-size:11px; font-weight:bold; color:#333; }
+  @media print { body{background:white; padding:0;} .top-bar{display:none!important;} .notice{box-shadow:none; max-width:100%;} }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <span style="font-size:15px; align-self:center;">📢 Notice Ready</span>
+  <button onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button onclick="window.close()">✖ Close</button>
+</div>
+<div class="notice">
+  <div class="notice-header">
+    <div class="monogram-wrap" id="mWrap">
+      <div class="mono-def" id="mDef"><div class="af">AF</div><div class="sm">AL-FAREED<br>PUBLIC SCHOOL</div></div>
+      <img id="mImg" src="" style="display:none" alt="Monogram">
+    </div>
+    <div class="header-text">
+      <h2>AL-FAREED PUBLIC SCHOOL • TANDO JAM</h2>
+      <h1>Official Notice</h1>
+    </div>
+  </div>
+  <div class="notice-body">
+    <div class="notice-meta">
+      <div>Date: <strong id="noticeDate"></strong></div>
+      <div id="typeBadge"></div>
+    </div>
+    <div class="notice-title" id="noticeTitle">Notice Title</div>
+    <div class="notice-content" id="noticeContent">Notice content here...</div>
+    <div class="sig-area">
+      <div class="sig-row">
+        <div class="sig-box">
+          <img id="tSigImg" class="sig-img" src="" style="display:none" alt="Teacher Sig">
+          <div class="sig-line"></div>
+          <div class="sig-text">Class Teacher</div>
+          <div class="sig-name-sm" id="tSigName"></div>
+        </div>
+        <div class="sig-box">
+          <div class="sig-line"></div>
+          <div class="sig-text">Principal</div>
+          <div class="sig-name-sm">Sir Ghulam Hussain</div>
+        </div>
+      </div>
+    </div>
+    <div class="notice-footer">
+      <span>🏫 Al-Fareed Public School, Tando Jam</span>
+      <span>Ref #<span id="refNo"></span></span>
+    </div>
+  </div>
+</div>
+<script>
+  const saved = localStorage.getItem('alfMonogramImage');
+  if (saved) { document.getElementById('mDef').style.display='none'; const i=document.getElementById('mImg'); i.src=saved; i.style.display='block'; }
+  const tSig = localStorage.getItem('alfTeacherSignature');
+  if (tSig) { const si=document.getElementById('tSigImg'); si.src=tSig; si.style.display='block'; }
+  const tName = localStorage.getItem('alfTeacherSigName');
+  if (tName) document.getElementById('tSigName').textContent = tName;
+  const p = new URLSearchParams(window.location.search);
+  document.getElementById('noticeTitle').textContent = p.get('title') || 'Notice';
+  document.getElementById('noticeContent').textContent = p.get('content') || '';
+  document.getElementById('noticeDate').textContent = p.get('date') || new Date().toLocaleDateString();
+  document.getElementById('refNo').textContent = p.get('ref') || Math.floor(Math.random()*9000+1000);
+  const type = p.get('type') || 'General';
+  const typeMap = {'Urgent':{cls:'type-urgent',icon:'🚨'},'General':{cls:'type-general',icon:'📋'},'Info':{cls:'type-info',icon:'ℹ️'}};
+  const t = typeMap[type] || typeMap['General'];
+  document.getElementById('typeBadge').innerHTML = `<span class="notice-type ${t.cls}">${t.icon} ${type}</span>`;
+  if (p.get('print') === '1') setTimeout(() => window.print(), 800);
+</script>
+</body>
+</html>

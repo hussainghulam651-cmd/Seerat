@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Card - Al-Fareed Public School</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f0e8; font-family:'Source Serif 4',Georgia,serif; padding:20px; display:flex; flex-direction:column; align-items:center; }
+  .top-bar { background:#1a7a3c; color:white; padding:10px 20px; border-radius:8px; margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; width:100%; max-width:680px; }
+  .top-bar button { background:white; color:#1a7a3c; border:none; padding:8px 18px; border-radius:6px; font-weight:bold; cursor:pointer; }
+  .card { background:white; width:100%; max-width:680px; border:3px solid #1a7a3c; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.12); }
+  .card-header { background:#1a7a3c; color:white; padding:20px; text-align:center; display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap; }
+  .monogram-wrap { width:60px; height:60px; border-radius:50%; border:2px solid #f0c040; overflow:hidden; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.15); flex-shrink:0; }
+  .monogram-wrap img { width:100%; height:100%; object-fit:cover; }
+  .mono-def { display:flex; flex-direction:column; align-items:center; }
+  .mono-def .af { color:#f0d700; font-size:18px; font-weight:bold; }
+  .mono-def .sm { color:#f0c040; font-size:5px; text-align:center; line-height:1.4; }
+  .header-text h2 { font-size:11px; letter-spacing:2px; opacity:0.85; }
+  .header-text h1 { font-family:'Playfair Display',serif; font-size:20px; margin-top:4px; }
+  .student-info { padding:15px 20px; background:#f0f9f4; display:flex; flex-wrap:wrap; gap:10px; border-bottom:2px solid #1a7a3c; }
+  .info-item { flex:1; min-width:140px; }
+  .info-item label { font-size:11px; text-transform:uppercase; color:#888; letter-spacing:1px; }
+  .info-item p { font-weight:600; color:#1a1a1a; font-size:15px; }
+  table { width:100%; border-collapse:collapse; }
+  th { background:#1a7a3c; color:white; padding:10px 12px; font-size:13px; text-align:left; }
+  th:last-child, td:last-child { text-align:center; }
+  td { padding:10px 12px; border-bottom:1px solid #eee; font-size:14px; }
+  tr:nth-child(even) td { background:#f9f9f9; }
+  .grade-A { color:#2e7d32; font-weight:bold; }
+  .grade-B { color:#1565c0; font-weight:bold; }
+  .grade-C { color:#e65100; font-weight:bold; }
+  .grade-F { color:#c62828; font-weight:bold; }
+  .summary { padding:15px 20px; display:flex; justify-content:space-around; flex-wrap:wrap; gap:10px; border-top:2px solid #1a7a3c; background:#f0f9f4; }
+  .summary-item { text-align:center; }
+  .summary-item .val { font-family:'Playfair Display',serif; font-size:24px; color:#1a7a3c; font-weight:700; }
+  .summary-item .lbl { font-size:12px; color:#666; }
+  .result-badge { padding:4px 16px; border-radius:20px; font-weight:bold; font-size:14px; }
+  .pass { background:#e8f5e9; color:#2e7d32; border:1px solid #4caf50; }
+  .fail { background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+  .sig-section { display:flex; justify-content:space-between; padding:15px 25px; border-top:1px dashed #ccc; }
+  .sig-box { text-align:center; width:40%; }
+  .sig-line { border-top:1.5px solid #333; margin-bottom:5px; }
+  .sig-label { font-size:12px; color:#666; }
+  .sig-name { font-size:11px; font-weight:bold; color:#333; }
+  .sig-img { max-height:42px; max-width:130px; object-fit:contain; display:block; margin:0 auto 2px; }
+  @media print { body{background:white; padding:0;} .top-bar{display:none!important;} .card{box-shadow:none; max-width:100%;} }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <span style="font-size:15px; align-self:center;">📊 Result Card Ready</span>
+  <button onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button onclick="window.close()">✖ Close</button>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="monogram-wrap" id="mWrap">
+      <div class="mono-def" id="mDef"><div class="af">AF</div><div class="sm">AL-FAREED<br>PUBLIC SCHOOL</div></div>
+      <img id="mImg" src="" style="display:none" alt="Monogram">
+    </div>
+    <div class="header-text">
+      <h2>AL-FAREED PUBLIC SCHOOL • TANDO JAM</h2>
+      <h1>Student Result Card</h1>
+    </div>
+  </div>
+  <div class="student-info">
+    <div class="info-item"><label>Student Name</label><p id="sName">-</p></div>
+    <div class="info-item"><label>Class</label><p id="sClass">-</p></div>
+    <div class="info-item"><label>Exam</label><p id="sExam">-</p></div>
+    <div class="info-item"><label>Year</label><p id="sYear">-</p></div>
+  </div>
+  <table>
+    <thead><tr><th>Subject</th><th>Total Marks</th><th>Obtained</th><th>%</th><th>Grade</th></tr></thead>
+    <tbody id="marksTable"></tbody>
+  </table>
+  <div class="summary">
+    <div class="summary-item"><div class="val" id="totalObt">0</div><div class="lbl">Total Obtained</div></div>
+    <div class="summary-item"><div class="val" id="totalMax">0</div><div class="lbl">Total Marks</div></div>
+    <div class="summary-item"><div class="val" id="percentage">0%</div><div class="lbl">Percentage</div></div>
+    <div class="summary-item"><div id="resultBadge"></div><div class="lbl" style="margin-top:4px;">Result</div></div>
+  </div>
+  <div class="sig-section">
+    <div class="sig-box">
+      <img id="tSigImg" class="sig-img" src="" style="display:none" alt="Teacher Signature">
+      <div class="sig-line"></div>
+      <div class="sig-label">Class Teacher</div>
+      <div class="sig-name" id="tSigName"></div>
+    </div>
+    <div class="sig-box"><div class="sig-line"></div><div class="sig-label">Principal</div><div class="sig-name">Sir Ghulam Hussain</div></div>
+  </div>
+</div>
+<script>
+  const saved = localStorage.getItem('alfMonogramImage');
+  if (saved) { document.getElementById('mDef').style.display='none'; const i=document.getElementById('mImg'); i.src=saved; i.style.display='block'; }
+  // Teacher signature
+  const tSig = localStorage.getItem('alfTeacherSignature');
+  if (tSig) { const si=document.getElementById('tSigImg'); si.src=tSig; si.style.display='block'; }
+  const tName = localStorage.getItem('alfTeacherSigName');
+  if (tName) document.getElementById('tSigName').textContent = tName;
+  function getGrade(pct) {
+    if (pct >= 90) return {g:'A+', cls:'grade-A'}; if (pct >= 80) return {g:'A', cls:'grade-A'};
+    if (pct >= 70) return {g:'B', cls:'grade-B'}; if (pct >= 60) return {g:'C', cls:'grade-B'};
+    if (pct >= 50) return {g:'D', cls:'grade-C'}; return {g:'F', cls:'grade-F'};
+  }
+  const p = new URLSearchParams(window.location.search);
+  document.getElementById('sName').textContent = p.get('name') || '-';
+  document.getElementById('sClass').textContent = p.get('class') || '-';
+  document.getElementById('sExam').textContent = p.get('exam') || '-';
+  document.getElementById('sYear').textContent = p.get('year') || new Date().getFullYear();
+  const subjectsRaw = p.get('subjects') || '';
+  const tbody = document.getElementById('marksTable');
+  let totalObt = 0, totalMax = 0;
+  if (subjectsRaw) {
+    subjectsRaw.split('|').forEach(s => {
+      const [subj, obt, max] = s.split(':');
+      const pct = Math.round((+obt / +max) * 100);
+      const {g, cls} = getGrade(pct);
+      totalObt += +obt; totalMax += +max;
+      tbody.innerHTML += `<tr><td>${subj}</td><td style="text-align:center">${max}</td><td style="text-align:center">${obt}</td><td style="text-align:center">${pct}%</td><td class="${cls}" style="text-align:center">${g}</td></tr>`;
+    });
+  } else { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:20px">No marks data</td></tr>'; }
+  const totalPct = totalMax ? Math.round((totalObt/totalMax)*100) : 0;
+  document.getElementById('totalObt').textContent = totalObt;
+  document.getElementById('totalMax').textContent = totalMax;
+  document.getElementById('percentage').textContent = totalPct + '%';
+  document.getElementById('resultBadge').innerHTML = totalPct >= 40 ? '<span class="result-badge pass">✅ PASS</span>' : '<span class="result-badge fail">❌ FAIL</span>';
+  if (p.get('print') === '1') setTimeout(() => window.print(), 800);
+</script>
+</body>
+</html>

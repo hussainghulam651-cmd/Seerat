@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Monogram Setup - Al-Fareed</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Serif+4:wght@400;600&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: linear-gradient(135deg, #1a7a3c 0%, #0d4a24 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+  .container {
+    background: white;
+    border-radius: 16px;
+    padding: 35px 30px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #1a7a3c;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  .header p { color: #888; font-size: 14px; margin-bottom: 25px; }
+
+  /* Preview Circle */
+  .monogram-preview {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #1a7a3c;
+    border: 4px solid #f0c040;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .monogram-preview:hover { transform: scale(1.05); }
+  .monogram-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .monogram-preview .default-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .monogram-preview .af-text {
+    color: #f0d700;
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .monogram-preview .school-text {
+    color: #f0c040;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .monogram-preview .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .monogram-preview:hover .overlay { opacity: 1; }
+  .overlay span { color: white; font-size: 28px; }
+  .overlay p { color: white; font-size: 11px; margin-top: 4px; }
+
+  /* Hidden file input */
+  #fileInput { display: none; }
+
+  /* Buttons */
+  .btn-upload {
+    background: #1a7a3c;
+    color: white;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-upload:hover { background: #145f2e; }
+  .btn-reset {
+    background: white;
+    color: #888;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .btn-reset:hover { border-color: #c62828; color: #c62828; }
+
+  /* Tip */
+  .tip {
+    background: #f0f9f4;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 13px;
+    color: #555;
+    text-align: left;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .tip strong { color: #1a7a3c; }
+
+  /* Status */
+  .status {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: none;
+  }
+  .status.success { background: #e8f5e9; color: #2e7d32; display: block; }
+  .status.error { background: #ffebee; color: #c62828; display: block; }
+
+  /* Documents list */
+  .docs-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 5px;
+  }
+  .doc-item {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 12px;
+    color: #444;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.15s;
+  }
+  .doc-item:hover { background: #e8f5e9; border-color: #1a7a3c; color: #1a7a3c; }
+
+  .section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🏫 School Monogram</h1>
+    <p>Gallery se photo choose karein — sab documents mein apply hoga</p>
+  </div>
+
+  <!-- Monogram Preview — click to upload -->
+  <div class="monogram-preview" id="previewCircle" onclick="document.getElementById('fileInput').click()">
+    <div class="default-text" id="defaultContent">
+      <div class="af-text">AF</div>
+      <div class="school-text">AL-FAREED<br>PUBLIC SCHOOL<br>TANDO JAM</div>
+    </div>
+    <img id="previewImg" src="" style="display:none" alt="Monogram">
+    <div class="overlay">
+      <span>📷</span>
+      <p>Tap to change</p>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept="image/*">
+
+  <div class="status" id="status"></div>
+
+  <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+    📷 Gallery se Monogram Choose Karein
+  </button>
+
+  <button class="btn-reset" onclick="resetMonogram()">
+    🔄 Default AF Logo Restore Karein
+  </button>
+
+  <div class="tip">
+    <strong>💡 Tips:</strong><br>
+    • <strong>Round ya square</strong> dono photo kaam kare gi<br>
+    • <strong>Clear background</strong> wali photo best lagti hai<br>
+    • Ek baar save hone ke baad <strong>sab documents</strong> mein<br>
+    &nbsp;&nbsp;automatically naya monogram ayega<br>
+    • Phone restart karne ke baad bhi saved rahega
+  </div>
+
+  <div class="section-title">Preview in Documents</div>
+  <div class="docs-list">
+    <a class="doc-item" href="print_certificate.html?name=Test&class=Nursery&title=Certificate+of+Excellence&achievement=outstanding+performance&date=2026-03-20" target="_blank">🏆 Certificate</a>
+    <a class="doc-item" href="print_fee_receipt.html?name=Test+Student&class=Class+1&month=March&amount=500&status=Paid&date=20+Mar+2026" target="_blank">💰 Fee Receipt</a>
+    <a class="doc-item" href="print_result.html?name=Test+Student&class=Class+5&exam=Annual+Exam&year=2026&subjects=Math:85:100|English:78:100|Science:90:100" target="_blank">📊 Result Card</a>
+    <a class="doc-item" href="print_attendance.html?class=Class+3&date=20+Mar+2026&students=Ahmed:P|Sara:A|Ali:P" target="_blank">✅ Attendance</a>
+    <a class="doc-item" href="print_notice.html?title=Test+Notice&content=Ye+ek+test+notice+hai&type=General" target="_blank">📢 Notice</a>
+    <a class="doc-item" href="print_idcard.html?name=Test+Student&class=Class+2&father=Test+Father&dob=2018-01-01" target="_blank">📛 ID Card</a>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'alfMonogramImage';
+
+  // Load saved monogram on start
+  window.onload = function() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) showImage(saved);
+  };
+
+  // File selected
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Size check — 2MB max
+    if (file.size > 2 * 1024 * 1024) {
+      showStatus('❌ Image bari hai! 2MB se choti image choose karein.', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const base64 = ev.target.result;
+      try {
+        localStorage.setItem(STORAGE_KEY, base64);
+        showImage(base64);
+        showStatus('✅ Monogram save ho gaya! Sab documents mein apply ho gaya.', 'success');
+      } catch(err) {
+        // If localStorage full, try smaller
+        showStatus('❌ Storage full — thodi choti image try karein.', 'error');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function showImage(src) {
+    document.getElementById('defaultContent').style.display = 'none';
+    const img = document.getElementById('previewImg');
+    img.src = src;
+    img.style.display = 'block';
+  }
+
+  function resetMonogram() {
+    localStorage.removeItem(STORAGE_KEY);
+    document.getElementById('defaultContent').style.display = 'flex';
+    document.getElementById('previewImg').style.display = 'none';
+    document.getElementById('previewImg').src = '';
+    showStatus('🔄 Default AF logo restore ho gaya.', 'success');
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status ' + type;
+    setTimeout(() => el.className = 'status', 4000);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate - Al-Fareed Public School</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital@0;1&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f0e8; font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+  .top-bar { background: #1a7a3c; color: white; padding: 10px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 700px; }
+  .top-bar button { background: white; color: #1a7a3c; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; }
+  .top-bar button:hover { background: #f0c040; }
+  .certificate { width: 100%; max-width: 700px; background: white; border: 4px solid #1a7a3c; border-radius: 12px; padding: 40px 50px; text-align: center; position: relative; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  .certificate::before { content: ''; position: absolute; inset: 8px; border: 1.5px solid #f0c040; border-radius: 8px; pointer-events: none; }
+  .monogram-wrap { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #f0c040; margin: 0 auto 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #1a7a3c; }
+  .monogram-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .monogram-default { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+  .monogram-default .af { color: #f0d700; font-size: 22px; font-weight: bold; font-family: Georgia, serif; line-height: 1; }
+  .monogram-default .sm { color: #f0c040; font-size: 6.5px; letter-spacing: 0.3px; text-align: center; line-height: 1.4; margin-top: 1px; }
+  .monogram-default .city { color: white; font-size: 5.5px; margin-top: 2px; }
+  .school-name { font-size: 11px; letter-spacing: 3px; color: #555; text-transform: uppercase; margin-bottom: 10px; }
+  .cert-title { font-family: 'Playfair Display', serif; font-size: 32px; color: #1a7a3c; font-weight: 700; margin-bottom: 8px; }
+  .certify-text { color: #666; font-size: 16px; margin-bottom: 15px; }
+  .student-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #1a1a1a; border-bottom: 2px solid #1a7a3c; display: inline-block; padding-bottom: 4px; margin-bottom: 20px; min-width: 200px; }
+  .cert-body { font-size: 16px; color: #444; line-height: 1.8; margin-bottom: 20px; }
+  .cert-body strong { color: #1a1a1a; }
+  .prayer { font-style: italic; color: #555; font-size: 15px; margin-bottom: 25px; line-height: 1.7; }
+  .issued-date { font-style: italic; color: #777; margin-bottom: 30px; font-size: 15px; }
+  .signatures { display: flex; justify-content: space-between; margin-top: 20px; }
+  .sig-box { text-align: center; width: 45%; }
+  .sig-line { border-top: 1.5px solid #333; margin-bottom: 6px; }
+  .sig-label { font-size: 13px; color: #555; }
+  .sig-name { font-size: 12px; color: #333; font-weight: bold; }
+  .sig-img { max-height: 45px; max-width: 140px; object-fit: contain; margin-bottom: 2px; display: block; margin-left: auto; margin-right: auto; }
+  @media print { body { background: white; padding: 0; } .top-bar { display: none !important; } .certificate { box-shadow: none; max-width: 100%; } }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <span style="font-size:15px; align-self:center;">🏆 Certificate Ready</span>
+  <button onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button onclick="window.close()">✖ Close</button>
+</div>
+<div class="certificate">
+  <div class="monogram-wrap" id="monogramWrap">
+    <div class="monogram-default" id="monogramDefault">
+      <div class="af">AF</div>
+      <div class="sm">AL-FAREED<br>PUBLIC SCHOOL</div>
+      <div class="city">TANDO JAM</div>
+    </div>
+    <img id="monogramImg" src="" alt="School Monogram" style="display:none">
+  </div>
+  <p class="school-name">Al-Fareed Public School, Tando Jam</p>
+  <h1 class="cert-title" id="certTitle">Certificate of Excellence</h1>
+  <p class="certify-text">This is to proudly certify that</p>
+  <div class="student-name" id="studentName">Student Name</div>
+  <div class="cert-body">of class <strong id="studentClass">Class</strong> at Al-Fareed Public School, Tando Jam<br>has been recognized for <strong id="achievement">outstanding performance</strong>.</div>
+  <p class="prayer">We pray for their continued success and excellence in all endeavors.</p>
+  <p class="issued-date">Issued on: <em id="issueDate"></em></p>
+  <div class="signatures">
+    <div class="sig-box">
+      <img id="teacherSigImg" class="sig-img" src="" alt="" style="display:none">
+      <div class="sig-line"></div>
+      <div class="sig-label">Class Teacher</div>
+      <div class="sig-name" id="teacherSigName"></div>
+    </div>
+    <div class="sig-box"><div class="sig-line"></div><div class="sig-label">Principal</div><div class="sig-name">Sir Ghulam Hussain</div></div>
+  </div>
+</div>
+<script>
+  const saved = localStorage.getItem('alfMonogramImage');
+  if (saved) {
+    document.getElementById('monogramDefault').style.display = 'none';
+    const img = document.getElementById('monogramImg');
+    img.src = saved; img.style.display = 'block';
+  }
+  // Teacher signature
+  const teacherSig = localStorage.getItem('alfTeacherSignature');
+  if (teacherSig) {
+    const si = document.getElementById('teacherSigImg');
+    si.src = teacherSig; si.style.display = 'block';
+  }
+  const teacherName = localStorage.getItem('alfTeacherSigName');
+  if (teacherName) document.getElementById('teacherSigName').textContent = teacherName;
+  const p = new URLSearchParams(window.location.search);
+  document.getElementById('studentName').textContent = p.get('name') || 'Student Name';
+  document.getElementById('studentClass').textContent = p.get('class') || 'Class';
+  document.getElementById('certTitle').textContent = p.get('title') || 'Certificate of Excellence';
+  document.getElementById('achievement').textContent = p.get('achievement') || 'outstanding performance';
+  document.getElementById('issueDate').textContent = p.get('date') || new Date().toISOString().split('T')[0];
+  if (p.get('print') === '1') setTimeout(() => window.print(), 800);
+</script>
+</body>
+</html>
