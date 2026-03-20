@@ -1650,7 +1650,7 @@ function rHW(){
     var hdr=document.createElement('div');hdr.className='ntitle';hdr.textContent=h.sub+' - '+h.cls;
     var bod=document.createElement('div');bod.className='nbody';bod.textContent=h.txt;
     var meta=document.createElement('div');meta.className='nmeta';
-    var dt=document.createElement('span');dt.textContent='Due: '+(h.due||'N/A');
+    var dt=document.createElement('span');dt.textContent='Due: '+fmtDate(h.due||'N/A');
     var btns=document.createElement('div');btns.style.cssText='display:flex;gap:5px';
     var eb=document.createElement('button');eb.className='btn btn-b btn-sm';eb.textContent='Edit';
     eb.addEventListener('click',(function(hid){return function(){openEditHW(hid);};})(h.id));
@@ -1669,7 +1669,7 @@ function hwWA(){
     '\uD83C\uDFEB *Class:* '+document.getElementById('hw-cls').value+'\n'+
     '\uD83D\uDCD6 *Subject:* '+document.getElementById('hw-sub').value+'\n'+
     '\uD83D\uDCDD *Homework:*\n'+document.getElementById('hw-txt').value+'\n\n'+
-    '\uD83D\uDCC5 *Due Date:* '+(document.getElementById('hw-date').value||'Kal tak')+'\n\n'+
+    '\uD83D\uDCC5 *Due Date:* '+fmtDate(document.getElementById('hw-date').value||'')+'\n\n'+
     waDiv()+'\n_Al-Fareed Public School, Tando Jam_';
   waOpen(msg);
 }
@@ -2270,6 +2270,15 @@ function emergencyReset(){
     if(er)er.checked=false;
     alert('Reset ho gaya! Ab Sign In karein.');
   }
+}
+function fmtDate(d){
+  if(!d)return '';
+  // Convert YYYY-MM-DD to DD-MM-YYYY
+  if(d.indexOf('-')>-1){
+    var p=d.split('-');
+    if(p.length===3&&p[0].length===4)return p[2]+'-'+p[1]+'-'+p[0];
+  }
+  return d;
 }
 function togglePw(id,btn){var i=document.getElementById(id);if(!i)return;if(i.type==='password'){i.type='text';btn.innerHTML='&#128584;';}else{i.type='password';btn.innerHTML='&#128065;';}}
 // INIT
