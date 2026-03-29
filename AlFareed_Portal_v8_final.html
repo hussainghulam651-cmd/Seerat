@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Fareed Public School Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#0d5c2e;--g2:#1a8a4a;--g4:#d4f5e5;
+  --gold:#e8b84b;--blue:#1565c0;--purple:#6a1b9a;
+  --orange:#e65100;--orange2:#fff3e0;--red:#c62828;
+  --wa:#25d366;
+  --bg:#f0f4f1;--card:#fff;--text:#1a2a1a;--muted:#5a6e5a;--border:#c8e6c9;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;padding-bottom:30px}
+
+/* ======== LOGIN SCREEN ======== */
+#login-screen{
+  position:fixed;inset:0;background:linear-gradient(160deg,#0a3d1f 0%,#1a8a4a 60%,#0d5c2e 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;padding:20px;
+}
+.login-logo{font-size:60px;margin-bottom:8px}
+.login-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--gold);text-align:center;margin-bottom:4px}
+.login-sub{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:28px;text-align:center}
+.login-box{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:24px;width:100%;max-width:380px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.role-btn{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;transition:.2s;color:#fff}
+.role-btn.sel{background:rgba(255,255,255,.25);border-color:var(--gold)}
+.role-btn .rico{font-size:26px}
+.role-btn .rnm{font-size:10px;font-weight:700}
+.login-inp{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px}
+.login-inp::placeholder{color:rgba(255,255,255,.5)}
+.login-inp:focus{border-color:var(--gold);background:rgba(255,255,255,.2)}
+.login-btn{width:100%;padding:13px;border-radius:10px;background:var(--gold);border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:#1a2a1a;margin-top:4px}
+.login-btn:active{opacity:.9}
+.login-err{color:#ff8a80;font-size:12px;text-align:center;margin-top:8px;min-height:20px}
+.login-hint{font-size:10px;color:rgba(255,255,255,.5);text-align:center;margin-top:12px}
+
+/* ======== ROLE BADGE ======== */
+.role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.rb-admin{background:#fff3cd;color:#856404}
+.rb-teacher{background:#d4f5e5;color:#0d5c2e}
+.rb-parent{background:#e3f0ff;color:#1565c0}
+
+/* ======== HEADER ======== */
+.hdr{background:linear-gradient(135deg,var(--g1),#0a3d1f);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 3px 16px rgba(0,0,0,.3)}
+.hdr-top{display:flex;align-items:center;gap:10px;padding:10px 14px}
+.hlogo{width:46px;height:46px;border-radius:50%;border:2px solid var(--gold);background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;position:relative}
+.hlogo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.hinfo{flex:1;min-width:0}
+.hname{font-family:'Playfair Display',serif;font-size:13px;font-weight:800;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hloc{font-size:10px;opacity:.75}
+.hbtn{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer}
+.navs{display:flex;overflow-x:auto;background:rgba(0,0,0,.2);scrollbar-width:none}
+.navs::-webkit-scrollbar{display:none}
+.ntab{flex-shrink:0;padding:9px 13px;font-size:11px;background:none;border:none;color:rgba(255,255,255,.65);cursor:pointer;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap}
+.ntab.on{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* ======== CONTENT ======== */
+.pg{padding:14px;max-width:640px;margin:0 auto}
+.sec{display:none}.sec.on{display:block}
+
+/* HOME */
+.hero{background:linear-gradient(135deg,var(--g1),#0a3d1f);border-radius:14px;padding:18px 16px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%}
+.hero-nm{font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:var(--gold)}
+.hero-sb{font-size:10px;opacity:.7;margin-bottom:14px}
+.cw{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cw-c{background:rgba(255,255,255,.13);border-radius:10px;padding:11px}
+.cw-l{font-size:9px;text-transform:uppercase;letter-spacing:.8px;opacity:.7;margin-bottom:4px}
+.clk{font-size:26px;font-weight:700;color:#fff;line-height:1}
+.clk-s{font-size:16px;opacity:.5}
+.clk-d{font-size:10px;opacity:.6;margin-top:3px}
+.wr{display:flex;align-items:center;gap:7px}
+.wt{font-size:22px;font-weight:700;color:#fff}
+.wi{font-size:10px;opacity:.7}
+.wg{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:6px}
+.wgi{font-size:9px;opacity:.6}
+
+.sts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stc{background:var(--card);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid var(--border)}
+.stn{font-size:22px;font-weight:700;line-height:1}
+.stl{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.3}
+
+.qg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.qb{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.qb:active{background:#f0faf4;border-color:var(--g2)}
+.qi{font-size:22px}.ql{font-size:10px;font-weight:600;text-align:center;color:var(--text);line-height:1.2}
+
+.hi{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0f4f0}
+.hi:last-child{border-bottom:none}
+.hd{font-size:9px;font-weight:700;background:var(--g4);color:var(--g1);padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.hn{font-size:11px;font-weight:600;flex:1}
+.ts{font-size:9px;background:var(--orange2);color:var(--orange);padding:2px 7px;border-radius:10px;font-weight:700}
+.tt{font-size:9px;background:#ffe0b2;color:#e65100;padding:2px 7px;border-radius:10px;font-weight:700;animation:pl 1s infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.4}}
+
+.bi{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f4f0}
+.bi:last-child{border-bottom:none}
+.ba{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),#9c27b0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;overflow:hidden}
+.ba img{width:100%;height:100%;object-fit:cover}
+
+/* FORM */
+.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid var(--border)}
+.ct{font-size:13px;font-weight:700;color:var(--g1);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.lbl{font-size:11px;color:var(--muted);display:block;margin-bottom:3px;margin-top:10px}
+input,select,textarea{width:100%;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);font-size:13px;font-family:'DM Sans',sans-serif;background:#f8fcf9;color:var(--text);outline:none;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--g2);background:#fff}
+textarea{resize:vertical;min-height:70px}
+
+/* ======== IMAGE UPLOAD - LABEL METHOD ======== */
+.img-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+label.upbox{
+  flex:1;min-width:90px;max-width:115px;aspect-ratio:1;
+  border-radius:12px;border:2.5px dashed var(--border);
+  background:#f8fcf9;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;cursor:pointer;
+  position:relative;overflow:hidden;transition:.2s;
+  -webkit-user-select:none;user-select:none;
+}
+label.upbox:active{border-color:var(--g2);background:#f0faf4}
+label.upbox input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0}
+label.upbox .uico{font-size:28px;pointer-events:none}
+label.upbox .ulbl{font-size:10px;color:var(--muted);text-align:center;line-height:1.3;pointer-events:none}
+label.upbox .uimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px;display:none;pointer-events:none}
+label.upbox .urm{position:absolute;top:4px;right:4px;background:rgba(200,40,40,.88);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700;z-index:10}
+label.upbox.got .uimg{display:block}
+label.upbox.got .urm{display:flex}
+label.upbox.got .uico,label.upbox.got .ulbl{display:none}
+
+/* SUBJECTS */
+.sr{display:grid;grid-template-columns:1fr 60px 60px;gap:5px;align-items:end;margin-bottom:6px}
+
+/* RESULT PREVIEW */
+.rp{background:linear-gradient(135deg,#f0faf4,#e6f5eb);border:2px solid var(--g2);border-radius:14px;padding:16px;margin-top:14px}
+.rpbar{font-weight:700;color:var(--gold);border-top:2px solid var(--g1);border-bottom:2px solid var(--g1);padding:3px;margin:6px 0;text-align:center;font-size:12px}
+.rpinfo{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:11px;margin-bottom:8px}
+.rtbl{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0}
+.rtbl th{background:var(--g1);color:#fff;padding:5px 6px;text-align:left}
+.rtbl td{padding:4px 6px;border-bottom:1px solid #e0f0e0}
+.rtbl tr:nth-child(even) td{background:#f0faf4}
+.rtbl tfoot td{background:var(--g1);color:#fff;font-weight:700;padding:5px 6px}
+.gb{display:inline-block;padding:1px 11px;border-radius:20px;font-weight:700;font-size:13px}
+.gA{background:#27ae60;color:#fff}.gB{background:#2980b9;color:#fff}.gC{background:#f39c12;color:#fff}.gD{background:#e74c3c;color:#fff}
+
+/* ACCESS DENIED */
+.no-access{text-align:center;padding:40px 20px;color:var(--muted)}
+.no-access .ico{font-size:48px;margin-bottom:12px}
+
+/* BUTTONS */
+.btn{padding:10px 18px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.btn:active{opacity:.85;transform:scale(.97)}
+.bg{background:var(--g1);color:#fff}
+.bwa{background:var(--wa);color:#fff}
+.bo{background:none;border:1.5px solid var(--g1);color:var(--g1)}
+.bred{background:var(--red);color:#fff}
+.bsm{padding:7px 12px;font-size:11px;border-radius:7px}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.chip{padding:6px 11px;border-radius:20px;font-size:11px;border:1.5px solid var(--border);cursor:pointer;background:#fff;font-weight:600}
+.chip.on{background:var(--g1);color:#fff;border-color:var(--g1)}
+
+.si{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;margin-bottom:8px;background:#f8fcf9;border:1px solid var(--border)}
+.sav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;overflow:hidden}
+.sav img{width:100%;height:100%;object-fit:cover}
+.waq{background:var(--wa);border:none;color:#fff;padding:7px 10px;border-radius:7px;font-size:12px;cursor:pointer;font-weight:600}
+
+.setr{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.tog{width:44px;height:24px;border-radius:12px;background:#ccc;border:none;cursor:pointer;position:relative;transition:.3s;flex-shrink:0}
+.tog.on{background:var(--g2)}.tog::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.3s}.tog.on::after{left:22px}
+
+/* PERMISSIONS TABLE */
+.ptbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.ptbl th{background:var(--g1);color:#fff;padding:8px 10px;text-align:left;font-size:11px}
+.ptbl td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ptbl tr:nth-child(even) td{background:#f8fcf9}
+.pck{color:#27ae60;font-size:16px;font-weight:700}
+.pcx{color:#ccc;font-size:16px}
+
+/* CERT */
+.cw2{background:linear-gradient(135deg,#fffdf0,#fff8dc);border:3px double var(--gold);border-radius:16px;padding:20px;margin-top:14px;text-align:center}
+
+/* AI CHAT */
+.aich{display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto;padding:4px 0;margin-bottom:12px}
+.aim{border-radius:12px;padding:10px 13px;font-size:12px;line-height:1.6;max-width:92%;word-break:break-word}
+.aim.u{background:var(--g1);color:#fff;align-self:flex-end}
+.aim.b{background:#f0faf4;align-self:flex-start;border:1px solid var(--border)}
+.aim.b b{color:var(--g1)}
+.aic{background:#fff;border-radius:8px;border:1px solid var(--border);padding:8px;margin-top:6px}
+.aty{display:flex;gap:4px;align-items:center;padding:10px;background:#f0faf4;border-radius:12px;border:1px solid var(--border);width:fit-content}
+.ad{width:7px;height:7px;border-radius:50%;background:var(--g2);animation:bk 1.2s infinite}
+.ad:nth-child(2){animation-delay:.2s}.ad:nth-child(3){animation-delay:.4s}
+@keyframes bk{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.ais{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.asg{padding:6px 12px;border-radius:20px;font-size:11px;background:var(--g4);color:var(--g1);border:1px solid var(--border);cursor:pointer;font-weight:600}
+.air{display:flex;gap:8px}
+.aii{flex:1;padding:10px 13px;border-radius:25px;border:1.5px solid var(--border);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;background:#f8fcf9}
+.aii:focus{border-color:var(--g2)}
+.aisn{background:var(--g1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.mo.on{display:flex}
+.mb{background:#fff;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;animation:su .3s ease}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mtt{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.mcl{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)}
+
+.tst{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a2a1a;color:#fff;padding:10px 22px;border-radius:25px;font-size:12px;z-index:9999;opacity:0;transition:.3s;pointer-events:none;max-width:90%;text-align:center}
+.tst.on{opacity:1}
+
+@media print{
+  #login-screen,#app-header,.navs,.brow,#sec-home{display:none!important}
+  body{padding:0;background:#fff}
+  .sec.on{display:block}
+}
+
+/* ======== USER MANAGEMENT ======== */
+.usr-card{display:flex;align-items:center;gap:10px;padding:11px;border-radius:10px;margin-bottom:8px;background:#f8fcf9;border:1px solid var(--border)}
+.usr-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;color:#fff}
+.av-teacher{background:linear-gradient(135deg,#1565c0,#1976d2)}
+.av-parent{background:linear-gradient(135deg,#6a1b9a,#8e24aa)}
+.usr-info{flex:1}
+.usr-name{font-size:13px;font-weight:600}
+.usr-meta{font-size:10px;color:var(--muted)}
+.usr-active{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.ua-yes{background:#d4f5e5;color:#0d5c2e}
+.ua-no{background:#ffebee;color:#c62828}
+.revoke-btn{background:var(--red);border:none;color:#fff;padding:6px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-weight:700}
+.restore-btn{background:var(--g1);border:none;color:#fff;padding:6px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-weight:700}
+.del-btn{background:#555;border:none;color:#fff;padding:6px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ======== LOGIN SCREEN ======== -->
+<div id="login-screen">
+  <div class="login-logo">🏫</div>
+  <div class="login-title">Al-Fareed Public School</div>
+  <div class="login-sub">Tando Jam, Sindh — School Portal</div>
+  <div class="login-box">
+    <div style="font-size:12px;color:rgba(255,255,255,.8);margin-bottom:10px;font-weight:600">Apna Role Select Karein:</div>
+    <div class="role-grid">
+      <div class="role-btn sel" id="rb-admin" onclick="selRole('admin')">
+        <div class="rico">👑</div><div class="rnm">Admin</div>
+      </div>
+      <div class="role-btn" id="rb-teacher" onclick="selRole('teacher')">
+        <div class="rico">📚</div><div class="rnm">Teacher</div>
+      </div>
+      <div class="role-btn" id="rb-parent" onclick="selRole('parent')">
+        <div class="rico">👨‍👩‍👧</div><div class="rnm">Parent</div>
+      </div>
+    </div>
+    <div id="pin-section">
+      <div id="username-row" style="display:none">
+        <span style="font-size:11px;color:rgba(255,255,255,.7);display:block;margin-bottom:4px">Apna Naam / ID:</span>
+        <input class="login-inp" id="li-user" placeholder="Naam likhein...">
+      </div>
+      <span style="font-size:11px;color:rgba(255,255,255,.7);display:block;margin-bottom:4px" id="pin-label">Admin PIN daakhalin:</span>
+      <input class="login-inp" id="li-pin" type="password" placeholder="PIN..." onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div id="login-err" class="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">🔓 Login Karein</button>
+    <div class="login-hint" id="login-hint">Admin PIN: 1234 | Teacher PIN: 5678 | Parent PIN: 9999</div>
+  </div>
+</div>
+
+<!-- ======== MAIN APP ======== -->
+<div id="app" style="display:none">
+
+<div class="hdr" id="app-header">
+  <div class="hdr-top">
+    <label class="hlogo" id="hlogo" style="cursor:pointer">
+      <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,\'sl\')">
+      <span id="hlem">🏫</span>
+      <img id="hlim" alt="">
+    </label>
+    <div class="hinfo">
+      <div class="hname" id="hname">AL-FAREED PUBLIC SCHOOL</div>
+      <div class="hloc" id="hloc">📍 Tando Jam, Sindh</div>
+    </div>
+    <div style="display:flex;gap:5px;align-items:center">
+      <span id="user-badge" class="role-badge rb-admin">👑 Admin</span>
+      <button class="hbtn" onclick="go('home')">🏠</button>
+      <button class="hbtn" onclick="omod('m-ai')">🤖</button>
+      <button class="hbtn" onclick="doLogout()" title="Logout">🔒</button>
+    </div>
+  </div>
+  <div class="navs" id="main-nav">
+    <button class="ntab on" id="t-home" onclick="go('home')">🏠 Home</button>
+    <button class="ntab" id="t-result" onclick="go('result')">📊 Result</button>
+    <button class="ntab" id="t-marksheet" onclick="go('marksheet')">📋 Marksheet</button>
+    <button class="ntab" id="t-fee" onclick="go('fee')">💰 Fee</button>
+    <button class="ntab" id="t-idcard" onclick="go('idcard')">🪪 ID Card</button>
+    <button class="ntab" id="t-cert" onclick="go('cert')">🏆 Certificate</button>
+    <button class="ntab" id="t-notif" onclick="go('notif')">📢 Notice</button>
+    <button class="ntab" id="t-students" onclick="go('students')">👥 Students</button>
+    <button class="ntab" id="t-users" onclick="go('users')">👤 Users</button>
+    <button class="ntab" id="t-settings" onclick="go('settings')">⚙️ Settings</button>
+  </div>
+</div>
+
+<div class="pg">
+
+<!-- HOME -->
+<div class="sec on" id="sec-home">
+  <div class="hero">
+    <div class="hero-nm" id="h-nm">AL-FAREED PUBLIC SCHOOL</div>
+    <div class="hero-sb" id="h-sb">📍 Tando Jam | Principal: Sir Ghulam Hussain</div>
+    <div class="cw">
+      <div class="cw-c">
+        <div class="cw-l">🕐 Live Time</div>
+        <div class="clk" id="clk">00:00<span class="clk-s">:00</span></div>
+        <div class="clk-d" id="clkd">—</div>
+      </div>
+      <div class="cw-c">
+        <div class="cw-l">🌤️ Tando Jam</div>
+        <div class="wr">
+          <div id="wico" style="font-size:26px">⏳</div>
+          <div><div class="wt" id="wtmp">--°</div><div class="wi" id="wdsc">Loading...</div></div>
+        </div>
+        <div class="wg">
+          <div class="wgi">💧<span id="whum">--%</span></div>
+          <div class="wgi">💨<span id="wwnd">--</span></div>
+          <div class="wgi">🌡️<span id="wfel">--°</span></div>
+          <div class="wgi">👁️<span id="wvis">--km</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sts">
+    <div class="stc"><div class="stn" style="color:var(--g1)" id="st-s">0</div><div class="stl">👥 Students</div></div>
+    <div class="stc"><div class="stn" style="color:var(--purple)" id="st-b">0</div><div class="stl">🎂 Birthdays<br>This Month</div></div>
+    <div class="stc"><div class="stn" style="color:var(--orange)" id="st-h">—</div><div class="stl">🎉 Next Holiday</div></div>
+  </div>
+  <!-- Welcome card -->
+  <div class="card" id="welcome-card" style="margin-bottom:14px">
+    <div class="ct" id="welcome-title">👋 Welcome!</div>
+    <div id="welcome-msg" style="font-size:12px;color:var(--muted)"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct">⚡ Quick Actions</div>
+    <div class="qg" id="qa-grid"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct" style="color:var(--orange)">🎉 Upcoming Holidays</div>
+    <div id="hlist"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct" style="color:var(--purple)">🎂 Upcoming Birthdays</div>
+    <div id="blist"><p style="font-size:11px;color:var(--muted)">Students mein DOB add karein</p></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="sec" id="sec-result">
+  <div id="result-content"></div>
+</div>
+
+<!-- MARKSHEET -->
+<div class="sec" id="sec-marksheet">
+  <div id="marksheet-content"></div>
+</div>
+
+<!-- FEE -->
+<div class="sec" id="sec-fee">
+  <div id="fee-content"></div>
+</div>
+
+<!-- ID CARD -->
+<div class="sec" id="sec-idcard">
+  <div id="idcard-content"></div>
+</div>
+
+<!-- CERTIFICATE -->
+<div class="sec" id="sec-cert">
+  <div id="cert-content"></div>
+</div>
+
+<!-- NOTICE -->
+<div class="sec" id="sec-notif">
+  <div id="notif-content"></div>
+</div>
+
+<!-- STUDENTS -->
+<div class="sec" id="sec-students">
+  <div id="students-content"></div>
+</div>
+
+<!-- USERS -->
+<div class="sec" id="sec-users">
+  <div id="users-content"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="sec" id="sec-settings">
+  <div id="settings-content"></div>
+</div>
+
+</div><!-- /pg -->
+
+<!-- AI MODAL -->
+<div class="mo" id="m-ai">
+  <div class="mb" style="max-height:92vh">
+    <div class="mtt"><span>🤖 Al-Fareed AI Assistant</span><button class="mcl" onclick="cmod('m-ai')">✕</button></div>
+    <div class="ais">
+      <div class="asg" onclick="ask('Aaj ka mausam kaisa hai Tando Jam mein?')">🌤️ Weather</div>
+      <div class="asg" onclick="ask('Agla Pakistan ka holiday kab hai?')">🎉 Holiday</div>
+      <div class="asg" onclick="ask('Physics ke important topics aur formulas batao')">⚛️ Physics</div>
+      <div class="asg" onclick="ask('Chemistry ke important topics batao')">🧪 Chemistry</div>
+      <div class="asg" onclick="ask('Mathematics ke important topics batao')">➗ Math</div>
+      <div class="asg" onclick="ask('Biology ke important topics batao')">🧬 Biology</div>
+      <div class="asg" onclick="ask('English grammar ke important rules batao')">📝 English</div>
+      <div class="asg" onclick="ask('Islamiyat ke important topics batao')">☪️ Islamiyat</div>
+      <div class="asg" onclick="ask('Grade system aur percentage samjhao')">📊 Grades</div>
+    </div>
+    <div class="aich" id="aich">
+      <div class="aim b">Assalamu Alaikum! 👋 Main <b>Al-Fareed AI Assistant</b> hoon — Anthropic Claude se powered!<br><br>Koi bhi sawal poochhen — subjects, school info, weather, holidays! 🏫</div>
+    </div>
+    <div class="air">
+      <input class="aii" id="aii" placeholder="Koi bhi sawal likhein..." onkeydown="if(event.key==='Enter')sendAI()">
+      <button class="aisn" onclick="sendAI()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="mo" id="m-adduser">
+  <div class="mb">
+    <div class="mtt">➕ User Add Karein <button class="mcl" onclick="cmod('m-adduser')">✕</button></div>
+    <span class="lbl">Naam *</span><input id="u-name" placeholder="Teacher / Parent ka naam">
+    <span class="lbl">Role</span>
+    <select id="u-role">
+      <option value="teacher">📚 Teacher</option>
+      <option value="parent">👨‍👩‍👧 Parent</option>
+    </select>
+    <span class="lbl">PIN (4-6 digits) *</span>
+    <input id="u-pin" type="password" placeholder="Unique PIN likhen" maxlength="10">
+    <span class="lbl">Notes (optional)</span>
+    <input id="u-note" placeholder="e.g. Class 5 Teacher, Ahmed ka parent">
+    <div class="brow"><button class="btn bg" onclick="addUser()">✅ Add User</button></div>
+  </div>
+</div>
+
+<!-- ADD STUDENT MODAL -->
+<div class="mo" id="m-add">
+  <div class="mb">
+    <div class="mtt">➕ Student Add <button class="mcl" onclick="cmod('m-add')">✕</button></div>
+    <div class="img-row">
+      <label class="upbox" id="bx-np">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'np')">
+        <div class="uico">👤</div><div class="ulbl">Photo</div>
+        <img class="uimg" id="im-np">
+        <button class="urm" onclick="rmImg(event,'np');return false;">✕</button>
+      </label>
+    </div>
+    <span class="lbl">Naam *</span><input id="an" placeholder="Student ka naam">
+    <span class="lbl">Class</span><input id="ac" placeholder="Class 1">
+    <span class="lbl">Roll No</span><input id="ar" placeholder="01">
+    <span class="lbl">Father Ka Naam</span><input id="af" placeholder="Father ka naam">
+    <span class="lbl">Phone</span><input type="tel" id="ap" placeholder="0300-0000000">
+    <span class="lbl">Date of Birth (DD/MM/YYYY)</span><input id="ad" placeholder="15/03/2019">
+    <div class="brow"><button class="btn bg" onclick="addSt()">✅ Add</button></div>
+  </div>
+</div>
+
+</div><!-- /app -->
+<div class="tst" id="tst"></div>
+
+<script>
+// ============================================================
+// STATE & CONFIG
+// ============================================================
+var D = {
+  cfg:{sch:'Al-Fareed Public School',adr:'Tando Jam, Sindh',pr:'Sir Ghulam Hussain',ph:'',url:'https://hussainghulam651-cmd.github.io/Seerat',wa:'',showSig:true,sendLink:true,
+    pins:{admin:'1234',teacher:'5678',parent:'9999'}
+  },
+  imgs:{},stu:[],
+  users:[]
+};
+
+// Role permissions
+var PERMS = {
+  admin:  {result:true, marksheet:true, fee:true, idcard:true, cert:true, notif:true, students:true, users:true,  settings:true},
+  teacher:{result:true, marksheet:true, fee:false, idcard:true, cert:true, notif:true, students:true, users:false, settings:false},
+  parent: {result:true, marksheet:true, fee:true,  idcard:false,cert:false,notif:true, students:false,users:false, settings:false}
+};
+
+var ROLE_INFO = {
+  admin:  {icon:'👑', name:'Admin',   badge:'rb-admin',   color:'#856404'},
+  teacher:{icon:'📚', name:'Teacher', badge:'rb-teacher', color:'#0d5c2e'},
+  parent: {icon:'👨‍👩‍👧', name:'Parent',  badge:'rb-parent',  color:'#1565c0'}
+};
+
+var currentRole = 'admin';
+var currentUser = '';
+var selectedLoginRole = 'admin';
+
+// ============================================================
+// DATA PERSISTENCE
+// ============================================================
+function sv(){try{localStorage.setItem('alf8',JSON.stringify(D));}catch(e){}}
+function ld(){try{var d=JSON.parse(localStorage.getItem('alf8')||'{}');if(d.cfg)D.cfg=Object.assign({},D.cfg,d.cfg);if(d.imgs)D.imgs=d.imgs;if(d.stu)D.stu=d.stu;}catch(e){}}
+function v(id){var e=document.getElementById(id);return e?e.value||'':''}
+function s(id,val){var e=document.getElementById(id);if(e)e.textContent=val;}
+function tdy(){var n=new Date();return String(n.getDate()).padStart(2,'0')+'/'+String(n.getMonth()+1).padStart(2,'0')+'/'+n.getFullYear();}
+function tdISO(){return new Date().toISOString().split('T')[0];}
+
+// ============================================================
+// LOGIN SYSTEM
+// ============================================================
+function selRole(role){
+  selectedLoginRole = role;
+  ['admin','teacher','parent'].forEach(function(r){
+    document.getElementById('rb-'+r).classList.remove('sel');
+  });
+  document.getElementById('rb-'+role).classList.add('sel');
+  var labels={admin:'Admin PIN daakhalin:',teacher:'Teacher PIN daakhalin:',parent:'Parent PIN daakhalin:'};
+  document.getElementById('pin-label').textContent = labels[role];
+  var urow = document.getElementById('username-row');
+  urow.style.display = (role!=='admin') ? 'block' : 'none';
+  document.getElementById('li-pin').value='';
+  document.getElementById('login-err').textContent='';
+}
+
+function doLogin(){
+  var pin = document.getElementById('li-pin').value.trim();
+  var uname = document.getElementById('li-user').value.trim();
+  var role = selectedLoginRole;
+  if(!pin){document.getElementById('login-err').textContent='PIN likhein!';return;}
+
+  // Check if role is revoked globally (admin disabled entire role)
+  if(D.cfg['revoked_'+role]){
+    document.getElementById('login-err').textContent='❌ Is role ka access band hai. Admin se rabta karein.';return;
+  }
+
+  // For teacher/parent: check individual user PIN first
+  if(role !== 'admin' && D.users && D.users.length > 0){
+    var matchUser = null;
+    for(var i=0;i<D.users.length;i++){
+      if(D.users[i].role===role && D.users[i].pin===pin){matchUser=D.users[i];break;}
+    }
+    if(matchUser){
+      if(!matchUser.active){
+        document.getElementById('login-err').textContent='❌ Aapka access revoke ho gaya hai. Admin se rabta karein.';return;
+      }
+      currentRole=role;currentUser=matchUser.name||uname||ROLE_INFO[role].name;
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('app').style.display='block';
+      applyRoleUI();toast('✅ Welcome, '+currentUser+'!');return;
+    }
+  }
+
+  // Fallback: check master PIN
+  var correct = D.cfg.pins[role];
+  if(pin !== correct){document.getElementById('login-err').textContent='❌ Wrong PIN! Dobara try karein.';return;}
+  currentRole=role;currentUser=uname||ROLE_INFO[role].name;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  applyRoleUI();toast('✅ Welcome, '+currentUser+'!');
+}
+
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('li-pin').value='';
+  document.getElementById('login-err').textContent='';
+  go('home');
+}
+
+function applyRoleUI(){
+  var ri = ROLE_INFO[currentRole];
+  var badge = document.getElementById('user-badge');
+  if(badge){badge.textContent=ri.icon+' '+currentUser;badge.className='role-badge '+ri.badge;}
+
+  // Show/hide nav tabs based on permissions
+  var p = PERMS[currentRole];
+  var tabMap = {result:'t-result',marksheet:'t-marksheet',fee:'t-fee',idcard:'t-idcard',cert:'t-cert',notif:'t-notif',students:'t-students',users:'t-users',settings:'t-settings'};
+  for(var key in tabMap){
+    var el = document.getElementById(tabMap[key]);
+    if(el) el.style.display = p[key] ? '' : 'none';
+  }
+
+  // Build quick actions
+  buildQA();
+
+  // Welcome message
+  var msgs = {
+    admin:'Aap ke paas poora access hai. Sab features use kar saktay hain.',
+    teacher:'Aap result, marksheet, ID card, certificate aur notice use kar saktay hain.',
+    parent:'Aap apne bache ki result, marksheet, fee aur notices dekh saktay hain.'
+  };
+  document.getElementById('welcome-title').textContent = ri.icon+' Welcome, '+currentUser+'!';
+  document.getElementById('welcome-msg').textContent = msgs[currentRole];
+
+  // Render all sections
+  renderAllSections();
+  renderS();
+  renderBdays();
+  var ss=document.getElementById('st-s');if(ss)ss.textContent=D.stu.length;
+}
+
+function buildQA(){
+  var p = PERMS[currentRole];
+  var all = [
+    {k:'result',i:'📊',l:'Result Card'},
+    {k:'marksheet',i:'📋',l:'Marksheet'},
+    {k:'fee',i:'💰',l:'Fee Receipt'},
+    {k:'idcard',i:'🪪',l:'ID Card'},
+    {k:'cert',i:'🏆',l:'Certificate'},
+    {k:'notif',i:'📢',l:'Notice'},
+    {k:'students',i:'👥',l:'Students'},
+  ];
+  var html = all.filter(function(x){return p[x.k];}).map(function(x){
+    return '<div class="qb" onclick="go(\''+x.k+'\')"><div class="qi">'+x.i+'</div><div class="ql">'+x.l+'</div></div>';
+  }).join('');
+  html += '<div class="qb" onclick="omod(\'m-ai\')"><div class="qi">🤖</div><div class="ql">AI Assistant</div></div>';
+  html += '<div class="qb" onclick="loadW()"><div class="qi">🔄</div><div class="ql">Refresh</div></div>';
+  document.getElementById('qa-grid').innerHTML = html;
+}
+
+function canAccess(key){return PERMS[currentRole]&&PERMS[currentRole][key];}
+
+function noAccessHTML(msg){
+  return '<div class="no-access"><div class="ico">🔒</div><div style="font-size:16px;font-weight:700;color:var(--red);margin-bottom:8px">Access Nahi Hai</div><div style="font-size:12px">'+( msg||'Aapke role ko yeh section dekhne ki permission nahi hai.')+'</div></div>';
+}
+
+// ============================================================
+// RENDER ALL SECTIONS
+// ============================================================
+function renderAllSections(){
+  renderResult();
+  renderMarksheet();
+  renderFee();
+  renderIDCard();
+  renderCert();
+  renderNotif();
+  renderStudents2();
+  renderUsers();
+  renderSettings2();
+}
+
+function renderResult(){
+  var el=document.getElementById('result-content');
+  if(!canAccess('result')){el.innerHTML=noAccessHTML('Result card sirf Admin aur Teachers dekh saktay hain.');return;}
+  el.innerHTML=`
+  <div class="card">
+    <div class="ct">📊 Result Card</div>
+    <div class="img-row">
+      <label class="upbox" id="bx-mono">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'mono')">
+        <div class="uico">🏫</div><div class="ulbl">Monogram</div>
+        <img class="uimg" id="im-mono"><button class="urm" onclick="rmImg(event,'mono');return false;">✕</button>
+      </label>
+      <label class="upbox" id="bx-spic">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'spic')">
+        <div class="uico">👤</div><div class="ulbl">Student Pic</div>
+        <img class="uimg" id="im-spic"><button class="urm" onclick="rmImg(event,'spic');return false;">✕</button>
+      </label>
+      <label class="upbox" id="bx-sig">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'sig')">
+        <div class="uico">✍️</div><div class="ulbl">Signature</div>
+        <img class="uimg" id="im-sig"><button class="urm" onclick="rmImg(event,'sig');return false;">✕</button>
+      </label>
+    </div>
+    <span class="lbl">Student Ka Naam *</span><input id="rn" placeholder="Seerat">
+    <span class="lbl">Father Ka Naam</span><input id="rf" placeholder="Muhammad Ali">
+    <span class="lbl">Class</span><input id="rc" placeholder="Nursery">
+    <span class="lbl">Roll No</span><input id="rr" placeholder="01">
+    <span class="lbl">Exam</span><input id="re" placeholder="Monthly Test 2026">
+    <div class="ct" style="margin-top:14px;font-size:12px">📚 Subjects & Marks</div>
+    <div id="rsw">
+      <div class="sr"><div><span class="lbl">Subject</span><input type="text" class="rn" placeholder="Urdu"></div><div><span class="lbl">Total</span><input type="number" class="rm" placeholder="100" min="0"></div><div><span class="lbl">Marks</span><input type="number" class="ro" placeholder="53" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="rn" placeholder="English"></div><div><input type="number" class="rm" placeholder="100" min="0"></div><div><input type="number" class="ro" placeholder="53" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="rn" placeholder="Math"></div><div><input type="number" class="rm" placeholder="100" min="0"></div><div><input type="number" class="ro" placeholder="63" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="rn" placeholder="Science"></div><div><input type="number" class="rm" placeholder="100" min="0"></div><div><input type="number" class="ro" placeholder="52" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="rn" placeholder="Islamiyat"></div><div><input type="number" class="rm" placeholder="100" min="0"></div><div><input type="number" class="ro" placeholder="63" min="0"></div></div>
+    </div>
+    <button class="btn bo bsm" onclick="addR()" style="margin-top:6px">+ Subject</button>
+    <div class="brow">
+      <button class="btn bg" onclick="prevR()">👁️ Preview</button>
+      <button class="btn bwa" onclick="waR()">📱 WhatsApp</button>
+    </div>
+  </div>
+  <div id="rprev" style="display:none">
+    <div class="rp" id="print-area">
+      <div style="text-align:center;margin-bottom:8px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px">
+          <img id="pv-mono" style="width:42px;height:42px;border-radius:50%;display:none;border:2px solid var(--g1)">
+          <div><div style="font-size:14px;font-weight:700;color:var(--g1)" id="pv-sch">AL-FAREED PUBLIC SCHOOL</div><div style="font-size:10px;color:var(--muted)" id="pv-loc">Tando Jam</div></div>
+          <img id="pv-spic" style="width:42px;height:42px;border-radius:50%;display:none;border:2px solid var(--g1);margin-left:auto">
+        </div>
+        <div class="rpbar">📊 RESULT CARD</div>
+      </div>
+      <div class="rpinfo">
+        <div><b>Student:</b> <span id="pv-n">-</span></div><div><b>Class:</b> <span id="pv-c">-</span></div>
+        <div><b>Roll:</b> <span id="pv-r">-</span></div><div><b>Exam:</b> <span id="pv-e">-</span></div>
+        <div><b>Father:</b> <span id="pv-f">-</span></div><div><b>Date:</b> <span id="pv-d">-</span></div>
+      </div>
+      <table class="rtbl">
+        <thead><tr><th>Subject</th><th>Total</th><th>Marks</th><th>%</th></tr></thead>
+        <tbody id="pv-tb"></tbody>
+        <tfoot><tr><td>TOTAL</td><td id="pv-tm">0</td><td id="pv-to">0</td><td id="pv-tp">0%</td></tr></tfoot>
+      </table>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+        <div>Grade: <span id="pv-g" class="gb gD">D</span></div>
+        <div style="font-size:11px;color:var(--g1);font-weight:700" id="pv-rm">—</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;padding-top:8px;border-top:1px dashed #ccc">
+        <div style="font-size:10px;color:#888">Principal: <span id="pv-pr">—</span><br><img id="pv-sig" style="height:26px;display:none;margin-top:2px"></div>
+        <div style="font-size:10px;color:#888;font-style:italic" id="pv-ft">Al-Fareed Public School</div>
+      </div>
+    </div>
+    <div class="brow">
+      <button class="btn bwa" onclick="waR()">📱 WhatsApp</button>
+      <button class="btn bo bsm" onclick="window.print()">🖨️ Print</button>
+    </div>
+  </div>`;
+  // restore images
+  ['mono','spic','sig'].forEach(function(k){if(D.imgs[k])restoreBox(k);});
+}
+
+function renderMarksheet(){
+  var el=document.getElementById('marksheet-content');
+  if(!canAccess('marksheet')){el.innerHTML=noAccessHTML();return;}
+  el.innerHTML=`<div class="card"><div class="ct">📋 Marksheet</div>
+    <span class="lbl">Student Ka Naam</span><input id="msn" placeholder="Seerat">
+    <span class="lbl">Class</span><input id="msc" placeholder="Class 5">
+    <span class="lbl">Roll No</span><input id="msr" placeholder="05">
+    <span class="lbl">Father Ka Naam</span><input id="msf" placeholder="Muhammad Ali">
+    <span class="lbl">Session</span><input id="mss" placeholder="2025-2026">
+    <div class="ct" style="margin-top:14px;font-size:12px">📚 Subjects</div>
+    <div id="mssw">
+      <div class="sr"><div><span class="lbl">Subject</span><input type="text" class="mn" placeholder="Urdu"></div><div><span class="lbl">Total</span><input type="number" class="mm" placeholder="100" min="0"></div><div><span class="lbl">Marks</span><input type="number" class="mo" placeholder="75" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="mn" placeholder="English"></div><div><input type="number" class="mm" placeholder="100" min="0"></div><div><input type="number" class="mo" placeholder="80" min="0"></div></div>
+      <div class="sr"><div><input type="text" class="mn" placeholder="Math"></div><div><input type="number" class="mm" placeholder="100" min="0"></div><div><input type="number" class="mo" placeholder="70" min="0"></div></div>
+    </div>
+    <button class="btn bo bsm" onclick="addMs()" style="margin-top:6px">+ Subject</button>
+    <div class="brow"><button class="btn bwa" onclick="waMs()">📱 WhatsApp</button></div>
+  </div>`;
+}
+
+function renderFee(){
+  var el=document.getElementById('fee-content');
+  if(!canAccess('fee')){el.innerHTML=noAccessHTML('Fee receipt sirf Admin aur Parents dekh saktay hain.');return;}
+  el.innerHTML=`<div class="card"><div class="ct">💰 Fee Receipt</div>
+    <span class="lbl">Student Ka Naam</span><input id="fn" placeholder="Seerat">
+    <span class="lbl">Class</span><input id="fc" placeholder="Nursery">
+    <span class="lbl">Roll No</span><input id="fr" placeholder="01">
+    <span class="lbl">Father Ka Naam</span><input id="ff" placeholder="Muhammad Ali">
+    <span class="lbl">Month</span><input id="fm" placeholder="March 2026">
+    <span class="lbl">Monthly Fee (Rs.)</span><input type="number" id="fm1" placeholder="1500" min="0">
+    <span class="lbl">Admission Fee</span><input type="number" id="fm2" placeholder="0" min="0">
+    <span class="lbl">Exam Fee</span><input type="number" id="fm3" placeholder="0" min="0">
+    <span class="lbl">Fine</span><input type="number" id="fm4" placeholder="0" min="0">
+    <span class="lbl">Status</span>
+    <select id="fs"><option>✅ Fee Paid</option><option>⏳ Pending</option><option>❌ Unpaid</option></select>
+    <span class="lbl">Remarks</span><input id="fmr" placeholder="On time">
+    <div class="brow"><button class="btn bwa" onclick="waFee()">📱 WhatsApp</button></div>
+  </div>`;
+}
+
+function renderIDCard(){
+  var el=document.getElementById('idcard-content');
+  if(!canAccess('idcard')){el.innerHTML=noAccessHTML();return;}
+  el.innerHTML=`<div class="card"><div class="ct">🪪 ID Card</div>
+    <div class="img-row">
+      <label class="upbox" id="bx-idm">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'idm')">
+        <div class="uico">🏫</div><div class="ulbl">Monogram</div>
+        <img class="uimg" id="im-idm"><button class="urm" onclick="rmImg(event,'idm');return false;">✕</button>
+      </label>
+      <label class="upbox" id="bx-idp">
+        <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,'idp')">
+        <div class="uico">👤</div><div class="ulbl">Student Pic</div>
+        <img class="uimg" id="im-idp"><button class="urm" onclick="rmImg(event,'idp');return false;">✕</button>
+      </label>
+    </div>
+    <span class="lbl">Student Ka Naam</span><input id="idn" placeholder="Seerat">
+    <span class="lbl">Class</span><input id="idc" placeholder="Nursery">
+    <span class="lbl">Roll No</span><input id="idr" placeholder="01">
+    <span class="lbl">Father Ka Naam</span><input id="idf" placeholder="Muhammad Ali">
+    <span class="lbl">Address</span><input id="ida" placeholder="Tando Jam">
+    <span class="lbl">Phone</span><input type="tel" id="idph" placeholder="0300-1234567">
+    <span class="lbl">Blood Group</span><input id="idb" placeholder="B+">
+    <span class="lbl">Date of Birth</span><input id="idd" placeholder="15/03/2019">
+    <span class="lbl">Session</span><input id="ids" placeholder="2025-2026">
+    <div class="brow"><button class="btn bwa" onclick="waID()">📱 WhatsApp</button></div>
+  </div>`;
+  ['idm','idp'].forEach(function(k){if(D.imgs[k])restoreBox(k);});
+}
+
+function renderCert(){
+  var el=document.getElementById('cert-content');
+  if(!canAccess('cert')){el.innerHTML=noAccessHTML();return;}
+  el.innerHTML=`<div class="card"><div class="ct">🏆 Certificate</div>
+    <div class="chips" id="cch">
+      <div class="chip on" onclick="selc(this,'cch','Merit Certificate')">🥇 Merit</div>
+      <div class="chip" onclick="selc(this,'cch','Appreciation Certificate')">⭐ Appreciation</div>
+      <div class="chip" onclick="selc(this,'cch','Participation Certificate')">🎖️ Participation</div>
+      <div class="chip" onclick="selc(this,'cch','Good Conduct Certificate')">✅ Conduct</div>
+      <div class="chip" onclick="selc(this,'cch','Completion Certificate')">🎓 Completion</div>
+    </div>
+    <span class="lbl">Student Ka Naam *</span><input id="ctn" placeholder="Seerat">
+    <span class="lbl">Class</span><input id="ctc" placeholder="Nursery">
+    <span class="lbl">Session</span><input id="cts" placeholder="2025-2026">
+    <span class="lbl">Achievement / Reason</span>
+    <textarea id="ctr" placeholder="securing 1st position..."></textarea>
+    <span class="lbl">Principal</span><input id="ctp" placeholder="Sir Ghulam Hussain">
+    <span class="lbl">Date</span><input id="ctd" placeholder="${tdy()}">
+    <div class="brow">
+      <button class="btn bg" onclick="prevC()">👁️ Preview</button>
+      <button class="btn bwa" onclick="waC()">📱 WhatsApp</button>
+    </div>
+  </div>
+  <div id="cprev" style="display:none">
+    <div class="cw2">
+      <div style="font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:4px">✦ ✦ ✦</div>
+      <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:800;color:var(--g1)" id="c-sch">AL-FAREED PUBLIC SCHOOL</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:10px" id="c-loc">Tando Jam, Sindh</div>
+      <div style="font-size:11px;color:var(--gold);border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);padding:4px;margin:6px 0;letter-spacing:1px;font-weight:700" id="c-typ">MERIT CERTIFICATE</div>
+      <div style="font-size:13px;line-height:1.8;margin:10px 0">
+        This is to certify that<br>
+        <div style="font-size:20px;font-weight:700;color:var(--g1);border-bottom:2px solid var(--gold);padding-bottom:2px;margin:6px 0 8px;display:inline-block;min-width:180px" id="c-nm">—</div>
+        of Class <b id="c-cl">—</b> | Session: <b id="c-ses">—</b>
+        <div style="margin:10px 0;font-style:italic" id="c-rsn">—</div>
+      </div>
+      <div style="font-size:36px;margin:8px 0" id="c-seal">🏆</div>
+      <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:10px;color:var(--muted)">
+        <div>Date: <b id="c-dt">—</b></div>
+        <div style="text-align:right"><div style="border-top:1px solid #aaa;padding-top:3px;min-width:130px" id="c-pr">Principal</div><div style="font-size:9px" id="c-ftr">Al-Fareed Public School</div></div>
+      </div>
+    </div>
+    <div class="brow">
+      <button class="btn bwa" onclick="waC()">📱 WhatsApp</button>
+      <button class="btn bo bsm" onclick="window.print()">🖨️ Print</button>
+    </div>
+  </div>`;
+}
+
+function renderNotif(){
+  var el=document.getElementById('notif-content');
+  if(!canAccess('notif')){el.innerHTML=noAccessHTML();return;}
+  el.innerHTML=`<div class="card"><div class="ct">📢 Notification / Circular</div>
+    <div class="chips" id="nch">
+      <div class="chip on" onclick="selc(this,'nch','📅 Exam Schedule')">📅 Exam</div>
+      <div class="chip" onclick="selc(this,'nch','🎉 Holiday Notice')">🎉 Holiday</div>
+      <div class="chip" onclick="selc(this,'nch','💰 Fee Reminder')">💰 Fee</div>
+      <div class="chip" onclick="selc(this,'nch','👥 Parent Meeting')">👥 Meeting</div>
+      <div class="chip" onclick="selc(this,'nch','📊 Result Day')">📊 Result</div>
+      <div class="chip" onclick="selc(this,'nch','📢 General Notice')">📢 General</div>
+    </div>
+    <span class="lbl">Title</span><input id="nt" placeholder="Monthly Exam Schedule">
+    <span class="lbl">Date</span><input id="nd" placeholder="${tdy()}">
+    <span class="lbl">Message</span>
+    <textarea id="nm" placeholder="Tamam waldain ko ittila di jati hai ke..."></textarea>
+    <span class="lbl">Principal</span><input id="np" placeholder="${D.cfg.pr}">
+    <div class="brow"><button class="btn bwa" onclick="waN()">📱 WhatsApp</button></div>
+  </div>`;
+}
+
+function renderStudents2(){
+  var el=document.getElementById('students-content');
+  if(!canAccess('students')){el.innerHTML=noAccessHTML('Students list sirf Admin aur Teachers dekh saktay hain.');return;}
+  var addBtn=canAccess('settings')?'<button class="btn bg bsm" onclick="omod('m-add')">+ Add</button>':'';
+  el.innerHTML='<div class="card"><div class="ct">👥 Students</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:12px">'
+    +'<input id="ssh" placeholder="Search..." oninput="renderS()" style="flex:1">'
+    +addBtn
+    +'</div>'
+    +'<div id="slist"></div>'
+    +'</div>';
+  renderS();
+}
+
+function renderSettings2(){
+  var el=document.getElementById('settings-content');
+  if(!canAccess('settings')){
+    // Show permissions table for all roles
+    var ptRows='';
+    [['Result Card','result'],['Marksheet','marksheet'],['Fee Receipt','fee'],['ID Card','idcard'],['Certificate','cert'],['Notice','notif'],['Students','students'],['Settings','settings']].forEach(function(r){
+      ptRows+='<tr><td>'+r[0]+'</td><td class="pck">'+(PERMS.admin[r[1]]?'✓':'')+'</td><td class="'+(PERMS.teacher[r[1]]?'pck':'pcx')+'">'+(PERMS.teacher[r[1]]?'✓':'✗')+'</td><td class="'+(PERMS.parent[r[1]]?'pck':'pcx')+'">'+(PERMS.parent[r[1]]?'✓':'✗')+'</td></tr>';
+    });
+    el.innerHTML='<div class="card"><div class="ct">🔒 Permissions</div><table class="ptbl"><thead><tr><th>Feature</th><th>👑 Admin</th><th>📚 Teacher</th><th>👨‍👩‍👧 Parent</th></tr></thead><tbody>'+ptRows+'</tbody></table></div>';
+    return;
+  }
+  var pr2Rows='';
+  [['Result Card','result'],['Marksheet','marksheet'],['Fee Receipt','fee'],['ID Card','idcard'],['Certificate','cert'],['Notice','notif'],['Students List','students'],['Settings','settings']].forEach(function(r){
+    pr2Rows+='<tr><td>'+r[0]+'</td><td class="pck">✓</td><td class="'+(PERMS.teacher[r[1]]?'pck':'pcx')+'">'+(PERMS.teacher[r[1]]?'✓':'✗')+'</td><td class="'+(PERMS.parent[r[1]]?'pck':'pcx')+'">'+(PERMS.parent[r[1]]?'✓':'✗')+'</td></tr>';
+  });
+  var sSig=D.cfg.showSig?'on':'';
+  var sLnk=D.cfg.sendLink?'on':'';
+  el.innerHTML=
+    '<div class="card"><div class="ct">⚙️ School Settings</div>'
+    +'<div class="img-row">'
+    +'<label class="upbox" id="bx-sl"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,\'sl\')"><div class="uico">🏫</div><div class="ulbl">School Logo</div><img class="uimg" id="im-sl"><button class="urm" onclick="rmImg(event,\'sl\');return false;">✕</button></label>'
+    +'<label class="upbox" id="bx-ss"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,\'ss\')"><div class="uico">✍️</div><div class="ulbl">Principal Sign</div><img class="uimg" id="im-ss"><button class="urm" onclick="rmImg(event,\'ss\');return false;">✕</button></label>'
+    +'</div>'
+    +'<span class="lbl">School Ka Naam</span><input id="set-sch" value="'+D.cfg.sch+'">'
+    +'<span class="lbl">Address</span><input id="set-adr" value="'+D.cfg.adr+'">'
+    +'<span class="lbl">Principal Ka Naam</span><input id="set-pr" value="'+D.cfg.pr+'">'
+    +'<span class="lbl">School Phone</span><input type="tel" id="set-ph" value="'+(D.cfg.ph||'')+'">'
+    +'<span class="lbl">GitHub Pages URL</span><input id="set-url" value="'+D.cfg.url+'">'
+    +'<span class="lbl">Default WhatsApp Number</span><input type="tel" id="set-wa" value="'+(D.cfg.wa||'')+'">'
+    +'<div style="margin-top:16px"><div class="ct" style="font-size:12px;margin-bottom:8px">🔑 PIN Settings</div>'
+    +'<span class="lbl">Admin PIN</span><input id="set-padmin" type="password" placeholder="Naya Admin PIN">'
+    +'<span class="lbl">Teacher PIN</span><input id="set-pteacher" type="password" placeholder="Naya Teacher PIN">'
+    +'<span class="lbl">Parent PIN</span><input id="set-pparent" type="password" placeholder="Naya Parent PIN">'
+    +'</div>'
+    +'<div style="margin-top:14px">'
+    +'<div class="setr"><div><div style="font-size:13px;font-weight:600">Principal Signature dikhaye</div></div>'
+    +'<button class="tog '+sSig+'" id="tog-sig" onclick="tog(this,&quot;showSig&quot;)"></button></div>'
+    +'<div class="setr"><div><div style="font-size:13px;font-weight:600">Printable Link WhatsApp mein</div></div>'
+    +'<button class="tog '+sLnk+'" id="tog-lnk" onclick="tog(this,&quot;sendLink&quot;)"></button></div>'
+    +'</div>'
+    +'<div class="brow"><button class="btn bg" onclick="saveSt()">💾 Save</button></div>'
+    +'<div id="saved" style="display:none;color:var(--g1);font-size:12px;margin-top:8px;font-weight:700">✅ Saved!</div>'
+    +'</div>'
+    +'<div class="card"><div class="ct">🔒 Role Permissions</div>'
+    +'<table class="ptbl"><thead><tr><th>Feature</th><th>👑 Admin</th><th>📚 Teacher</th><th>👨‍👩‍👧 Parent</th></tr></thead>'
+    +'<tbody>'+pr2Rows+'</tbody></table></div>';
+
+  ['sl','ss'].forEach(function(k){if(D.imgs[k])restoreBox(k);});
+}
+
+// ============================================================
+// IMAGE UPLOAD
+// ============================================================
+function gotImg(inp, key){
+  var f=inp.files&&inp.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    D.imgs[key]=e.target.result;sv();
+    restoreBox(key);
+    if(key==='sl')updHL();
+    toast('✅ Image upload ho gayi!');
+  };
+  r.readAsDataURL(f);
+}
+
+function restoreBox(key){
+  var MAP={mono:'bx-mono',spic:'bx-spic',sig:'bx-sig',idm:'bx-idm',idp:'bx-idp',sl:'bx-sl',ss:'bx-ss',np:'bx-np'};
+  var IMP={mono:'im-mono',spic:'im-spic',sig:'im-sig',idm:'im-idm',idp:'im-idp',sl:'im-sl',ss:'im-ss',np:'im-np'};
+  var bx=document.getElementById(MAP[key]);
+  var im=document.getElementById(IMP[key]);
+  if(bx&&D.imgs[key]){bx.classList.add('got');}
+  if(im&&D.imgs[key]){im.src=D.imgs[key];}
+}
+
+function rmImg(ev,key){
+  ev.stopPropagation();
+  delete D.imgs[key];sv();
+  var MAP={mono:'bx-mono',spic:'bx-spic',sig:'bx-sig',idm:'bx-idm',idp:'bx-idp',sl:'bx-sl',ss:'bx-ss',np:'bx-np'};
+  var IMP={mono:'im-mono',spic:'im-spic',sig:'im-sig',idm:'im-idm',idp:'im-idp',sl:'im-sl',ss:'im-ss',np:'im-np'};
+  var bx=document.getElementById(MAP[key]);var im=document.getElementById(IMP[key]);
+  if(bx)bx.classList.remove('got');if(im){im.src='';}
+  if(key==='sl')updHL();
+}
+
+function updHL(){
+  var d=D.imgs['sl'];
+  var im=document.getElementById('hlim');var em=document.getElementById('hlem');
+  if(d&&im){im.src=d;im.style.display='block';if(em)em.style.display='none';}
+  else if(im){im.style.display='none';if(em)em.style.display='';}
+}
+
+// ============================================================
+// CLOCK & WEATHER
+// ============================================================
+function startClk(){
+  var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function tick(){
+    var n=new Date();
+    var hh=String(n.getHours()).padStart(2,'0'),mm=String(n.getMinutes()).padStart(2,'0'),ss=String(n.getSeconds()).padStart(2,'0');
+    var ch=document.getElementById('clk');
+    if(ch)ch.innerHTML=hh+':'+mm+'<span class="clk-s">:'+ss+'</span>';
+    var cd=document.getElementById('clkd');
+    if(cd)cd.textContent=DAYS[n.getDay()]+', '+n.getDate()+' '+MO[n.getMonth()]+' '+n.getFullYear();
+  }
+  tick();setInterval(tick,1000);
+}
+
+function loadW(){
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=25.4274&longitude=68.5361&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,visibility,weather_code&wind_speed_unit=kmh&timezone=Asia%2FKarachi')
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var c=d.current;
+    s('wtmp',Math.round(c.temperature_2m)+'°C');s('whum',c.relative_humidity_2m+'%');
+    s('wwnd',Math.round(c.wind_speed_10m)+' km/h');s('wfel',Math.round(c.apparent_temperature)+'°C');
+    s('wvis',Math.round(c.visibility/1000)+' km');
+    var wc=c.weather_code,ico='☀️',dsc='Clear';
+    if(wc>=1&&wc<=3){ico='⛅';dsc='Partly Cloudy';}else if(wc>=45&&wc<=48){ico='🌫️';dsc='Foggy';}
+    else if(wc>=51&&wc<=67){ico='🌧️';dsc='Rainy';}else if(wc>=71&&wc<=77){ico='❄️';dsc='Snow';}
+    else if(wc>=80&&wc<=99){ico='⛈️';dsc='Storm';}
+    s('wico',ico);s('wdsc',dsc);
+  }).catch(function(){s('wdsc','Offline');});
+}
+
+// ============================================================
+// HOLIDAYS
+// ============================================================
+var HOLS=[
+  {d:'2026-03-20',n:'Eid ul-Fitr 🌙 (1st Day)'},{d:'2026-03-21',n:'Eid ul-Fitr 🌙 (2nd Day)'},{d:'2026-03-22',n:'Eid ul-Fitr 🌙 (3rd Day)'},
+  {d:'2026-03-23',n:'Pakistan Day 🇵🇰'},{d:'2026-05-01',n:'Labour Day'},
+  {d:'2026-05-27',n:'Eid ul-Adha 🐑 (1st Day)'},{d:'2026-05-28',n:'Eid ul-Adha 🐑 (2nd Day)'},{d:'2026-05-29',n:'Eid ul-Adha 🐑 (3rd Day)'},
+  {d:'2026-06-16',n:'Muharram / Ashura'},{d:'2026-08-14',n:'Independence Day 🇵🇰'},
+  {d:'2026-08-25',n:'Eid Milad-un-Nabi ﷺ'},{d:'2026-11-09',n:'Allama Iqbal Day'},{d:'2026-12-25',n:'Quaid-e-Azam Day'},
+];
+
+function renderHols(){
+  var today=tdISO();
+  var up=HOLS.filter(function(h){return h.d>=today;}).slice(0,7);
+  var el=document.getElementById('hlist');if(!el)return;
+  if(!up.length){el.innerHTML='<p style="font-size:11px;color:var(--muted)">Koi upcoming holiday nahi</p>';return;}
+  var d0=Math.round((new Date(up[0].d)-new Date(today))/864e5);
+  var sh=document.getElementById('st-h');if(sh)sh.textContent=d0===0?'Aaj':d0;
+  el.innerHTML=up.map(function(h){
+    var diff=Math.round((new Date(h.d)-new Date(today))/864e5);
+    var p=h.d.split('-');
+    var tag=diff===0?'<span class="tt">🎉 Aaj!</span>':diff===1?'<span class="ts">Kal</span>':diff<=7?'<span class="ts">'+diff+' din</span>':'<span style="font-size:10px;color:var(--muted)">'+diff+' din</span>';
+    return'<div class="hi"><div class="hd">'+p[2]+'/'+p[1]+'</div><div class="hn">'+h.n+'</div>'+tag+'</div>';
+  }).join('');
+}
+
+function renderBdays(){
+  var el=document.getElementById('blist');if(!el)return;
+  var sts=D.stu.filter(function(x){return x.dob;});
+  if(!sts.length){el.innerHTML='<p style="font-size:11px;color:var(--muted)">Students mein DOB add karein</p>';return;}
+  var now=new Date();now.setHours(0,0,0,0);
+  var yr=now.getFullYear(),mo=now.getMonth(),thisMo=0;
+  var up=sts.map(function(st){
+    var dob;if(st.dob.indexOf('/')>=0){var p=st.dob.split('/');dob=new Date(+p[2],+p[1]-1,+p[0]);}else dob=new Date(st.dob);
+    if(isNaN(dob))return null;
+    if(dob.getMonth()===mo)thisMo++;
+    var nxt=new Date(yr,dob.getMonth(),dob.getDate());
+    if(nxt<now)nxt=new Date(yr+1,dob.getMonth(),dob.getDate());
+    return Object.assign({},st,{diff:Math.round((nxt-now)/864e5)});
+  }).filter(Boolean).sort(function(a,b){return a.diff-b.diff;}).slice(0,5);
+  var sb=document.getElementById('st-b');if(sb)sb.textContent=thisMo;
+  el.innerHTML=up.map(function(st){
+    var lbl=st.diff===0?'🎂 Aaj!':st.diff===1?'Kal':st.diff+' din mein';
+    return'<div class="bi"><div class="ba">'+(st.pic?'<img src="'+st.pic+'">':(st.name[0]||'?').toUpperCase())+'</div><div style="flex:1"><div style="font-size:11px;font-weight:600">'+st.name+'</div><div style="font-size:10px;color:var(--muted)">'+(st.cls||'')+' | '+lbl+'</div></div></div>';
+  }).join('');
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function go(n){
+  if(n!=='home'&&!canAccess(n)){toast('🔒 Access nahi hai!');return;}
+  document.querySelectorAll('.sec').forEach(function(x){x.classList.remove('on');});
+  document.querySelectorAll('.ntab').forEach(function(x){x.classList.remove('on');});
+  var sec=document.getElementById('sec-'+n);if(sec)sec.classList.add('on');
+  var tab=document.getElementById('t-'+n);if(tab)tab.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+// ============================================================
+// SUBJECTS
+// ============================================================
+function addR(){var c=document.getElementById('rsw');if(!c)return;var d=document.createElement('div');d.className='sr';d.innerHTML='<div><input type="text" class="rn" placeholder="Subject"></div><div><input type="number" class="rm" placeholder="100" min="0"></div><div><input type="number" class="ro" placeholder="0" min="0"></div>';c.appendChild(d);}
+function addMs(){var c=document.getElementById('mssw');if(!c)return;var d=document.createElement('div');d.className='sr';d.innerHTML='<div><input type="text" class="mn" placeholder="Subject"></div><div><input type="number" class="mm" placeholder="100" min="0"></div><div><input type="number" class="mo" placeholder="0" min="0"></div>';c.appendChild(d);}
+function getSubs(nc,mc,oc){var ns=document.querySelectorAll('.'+nc),ms=document.querySelectorAll('.'+mc),os=document.querySelectorAll('.'+oc);var r=[];ns.forEach(function(n,i){if(n.value.trim())r.push({name:n.value.trim(),tot:parseFloat(ms[i].value)||100,obt:parseFloat(os[i].value)||0});});return r;}
+function grOf(pct){if(pct>=80)return{g:'A',c:'gA',r:'🌟 Excellent! Shabash!'};if(pct>=65)return{g:'B',c:'gB',r:'👍 Good!'};if(pct>=50)return{g:'C',c:'gC',r:'📚 Average - Mehnat karen!'};return{g:'D',c:'gD',r:'📚 Mehnat jari rakhein!'};}
+
+function mkLink(name,cls,exam,yr,subs){
+  var base=(D.cfg.url||'https://hussainghulam651-cmd.github.io/Seerat').replace(/\/+$/,'');
+  var sub=subs.map(function(x){return encodeURIComponent(x.name)+':'+x.obt+':'+x.tot;}).join('|');
+  return base+'/print_result.html?name='+encodeURIComponent(name)+'&class='+encodeURIComponent(cls)+'&exam='+encodeURIComponent(exam)+'&year='+encodeURIComponent(yr)+'&subjects='+encodeURIComponent(sub);
+}
+
+// ============================================================
+// RESULT
+// ============================================================
+function prevR(){
+  var name=v('rn'),father=v('rf'),cls=v('rc'),roll=v('rr'),exam=v('re');
+  var subs=getSubs('rn','rm','ro');if(!subs.length){toast('⚠️ Subject likhein!');return;}
+  var tm=0,to=0,tb='';
+  subs.forEach(function(x){tm+=x.tot;to+=x.obt;var p=x.tot?Math.round(x.obt/x.tot*100):0;tb+='<tr><td>'+x.name+'</td><td>'+x.tot+'</td><td>'+x.obt+'</td><td>'+p+'%</td></tr>';});
+  var pct=tm?Math.round(to/tm*100):0;var gr=grOf(pct);
+  s('pv-sch',D.cfg.sch);s('pv-loc',D.cfg.adr);s('pv-n',name);s('pv-c',cls);s('pv-r',roll||'-');s('pv-e',exam);s('pv-f',father||'-');s('pv-d',tdy());s('pv-pr',D.cfg.pr);s('pv-ft',D.cfg.sch);
+  document.getElementById('pv-tb').innerHTML=tb;
+  s('pv-tm',tm);s('pv-to',to);s('pv-tp',pct+'%');
+  var gb=document.getElementById('pv-g');gb.textContent=gr.g;gb.className='gb '+gr.c;s('pv-rm',gr.r);
+  var setI=function(id,key){var el=document.getElementById(id);if(el){el.src=D.imgs[key]||'';el.style.display=D.imgs[key]?'inline-block':'none';}};
+  setI('pv-mono','mono');setI('pv-spic','spic');
+  var sd=D.imgs['sig']||D.imgs['ss'];var ps=document.getElementById('pv-sig');
+  if(ps){ps.src=sd||'';ps.style.display=(sd&&D.cfg.showSig)?'inline-block':'none';}
+  var pw=document.getElementById('rprev');pw.style.display='block';pw.scrollIntoView({behavior:'smooth'});
+}
+function buildR(){
+  var name=v('rn')||'-',father=v('rf')||'-',cls=v('rc')||'-',roll=v('rr')||'-',exam=v('re')||'-';
+  var yr=String(new Date().getFullYear());var subs=getSubs('rn','rm','ro');
+  var tm=0,to=0,lines='';
+  subs.forEach(function(x){tm+=x.tot;to+=x.obt;var p=x.tot?Math.round(x.obt/x.tot*100):0;lines+='\n   '+x.name+': '+x.obt+'/'+x.tot+' ('+p+'%)';});
+  var pct=tm?Math.round(to/tm*100):0;var gr=grOf(pct);
+  var L='──────────────────────────────';
+  var txt='🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n📊 *RESULT CARD*\n\n👤 Student: *'+name+'*\n📚 Class: '+cls+'  |  🔢 Roll: '+roll+'\n👨 Father: '+father+'\n📝 Exam: '+exam+'\n'+L+'\n*Subjects:*'+lines+'\n'+L+'\n📊 Total: *'+to+'/'+tm+' ('+pct+'%)*\n🏅 Grade: *'+gr.g+'*\n\n'+gr.r+'\n'+L+'\nPrincipal: '+D.cfg.pr+'\nDate: '+tdy()+'\n\n_'+D.cfg.sch+'_';
+  if(D.cfg.sendLink&&name!=='-'&&subs.length>0)txt+='\n\n🖨️ *Printable Result Card:*\n'+mkLink(name,cls,exam,yr,subs);
+  return txt;
+}
+function waR(){openWA(buildR());}
+
+// ============================================================
+// MARKSHEET, FEE, ID, CERT, NOTICE
+// ============================================================
+function waMs(){
+  var ses=v('mss')||'-';var subs=getSubs('mn','mm','mo');
+  var tm=0,to=0,lines='';subs.forEach(function(x){tm+=x.tot;to+=x.obt;var p=x.tot?Math.round(x.obt/x.tot*100):0;lines+='\n   '+x.name+': '+x.obt+'/'+x.tot+' ('+p+'%)';});
+  var pct=tm?Math.round(to/tm*100):0;var gr=grOf(pct);
+  var yr=ses.split('-')[1]||String(new Date().getFullYear());
+  var L='──────────────────────────────';var name=v('msn')||'-';
+  var txt='🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n📋 *MARKSHEET*\n📅 Session: '+ses+'\n\n👤 *'+name+'*\n📚 Class: '+(v('msc')||'-')+' | Roll: '+(v('msr')||'-')+'\n👨 Father: '+(v('msf')||'-')+'\n'+L+'\n*Marks:*'+lines+'\n'+L+'\nTotal: *'+to+'/'+tm+' ('+pct+'%)*\nGrade: *'+gr.g+'*\n\nPrincipal: '+D.cfg.pr+'\n_'+D.cfg.sch+'_';
+  if(D.cfg.sendLink&&name!=='-'&&subs.length)txt+='\n\n🖨️ *Printable Marksheet:*\n'+mkLink(name,v('msc')||'-','Annual Exam',yr,subs);
+  openWA(txt);
+}
+function waFee(){
+  var m=parseFloat(v('fm1'))||0,a=parseFloat(v('fm2'))||0,e=parseFloat(v('fm3'))||0,f=parseFloat(v('fm4'))||0,total=m+a+e+f;
+  var lines='   Monthly Fee: Rs. '+m;if(a>0)lines+='\n   Admission:   Rs. '+a;if(e>0)lines+='\n   Exam Fee:    Rs. '+e;if(f>0)lines+='\n   Fine:        Rs. '+f;
+  var L='──────────────────────────────';
+  openWA('🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n💰 *FEE RECEIPT*\n📅 Month: '+(v('fm')||'-')+'\n\n👤 *'+(v('fn')||'-')+'*\n📚 Class: '+(v('fc')||'-')+' | Roll: '+(v('fr')||'-')+'\n👨 Father: '+(v('ff')||'-')+'\n'+L+'\n*Fee Details:*\n'+lines+'\n'+L+'\n💵 *Total: Rs. '+total+'*\n'+(document.getElementById('fs')?document.getElementById('fs').value:'✅ Fee Paid')+(v('fmr')?'\nRemark: '+v('fmr'):'')+'\n\nDate: '+tdy()+'\nPrincipal: '+D.cfg.pr+'\n_'+D.cfg.sch+'_');
+}
+function waID(){
+  var L='──────────────────────────────';
+  openWA('🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n🪪 *STUDENT ID CARD*\n\n👤 Name: *'+(v('idn')||'-')+'*\n📚 Class: '+(v('idc')||'-')+'\n🔢 Roll: '+(v('idr')||'-')+'\n👨 Father: '+(v('idf')||'-')+'\n🏠 Address: '+(v('ida')||'-')+'\n📞 Phone: '+(v('idph')||'-')+'\n🩸 Blood: '+(v('idb')||'-')+'\n🎂 DOB: '+(v('idd')||'-')+'\n📅 Session: '+(v('ids')||'-')+'\n'+L+'\nPrincipal: '+D.cfg.pr+'\n\n_'+D.cfg.sch+'_');
+}
+
+var cType='Merit Certificate',nType='📅 Exam Schedule';
+var SEALS={'Merit Certificate':'🥇','Appreciation Certificate':'⭐','Participation Certificate':'🎖️','Good Conduct Certificate':'✅','Completion Certificate':'🎓'};
+
+function selc(el,gid,val){document.querySelectorAll('#'+gid+' .chip').forEach(function(c){c.classList.remove('on');});el.classList.add('on');if(gid==='nch')nType=val;else if(gid==='cch')cType=val;}
+function prevC(){
+  s('c-sch',D.cfg.sch);s('c-loc',D.cfg.adr);s('c-typ',cType.toUpperCase());
+  s('c-nm',v('ctn')||'—');s('c-cl',v('ctc')||'—');s('c-ses',v('cts')||'—');
+  s('c-rsn','is hereby awarded this certificate for '+(v('ctr')||'outstanding performance'));
+  s('c-seal',SEALS[cType]||'🏆');s('c-dt',v('ctd')||tdy());s('c-pr',v('ctp')||D.cfg.pr);s('c-ftr',D.cfg.sch);
+  var cp=document.getElementById('cprev');cp.style.display='block';cp.scrollIntoView({behavior:'smooth'});
+}
+function waC(){
+  var seal=SEALS[cType]||'🏆';var L='──────────────────────────────';
+  openWA('🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n'+seal+' *'+cType.toUpperCase()+'*\n\nThis is to certify that\n\n✨ *'+(v('ctn')||'—')+'* ✨\nClass: '+(v('ctc')||'—')+' | Session: '+(v('cts')||'—')+'\n\nis hereby awarded for:\n\n_'+(v('ctr')||'outstanding performance')+'_\n\n'+L+'\nDate: '+(v('ctd')||tdy())+'\nPrincipal: *'+(v('ctp')||D.cfg.pr)+'*\n_'+D.cfg.sch+'_');
+}
+function waN(){
+  var L='──────────────────────────────';
+  openWA('🏫 *'+D.cfg.sch+'*\n📍 '+D.cfg.adr+'\n'+L+'\n\n📢 *'+(v('nt')||nType).toUpperCase()+'*\n📅 Date: '+(v('nd')||tdy())+'\n'+L+'\n\n'+(v('nm')||'')+'\n'+L+'\nPrincipal: *'+(v('np')||D.cfg.pr)+'*\n_'+D.cfg.sch+'_');
+}
+
+// ============================================================
+// STUDENTS
+// ============================================================
+function renderS(){
+  var el=document.getElementById('slist');if(!el)return;
+  var q=(document.getElementById('ssh')?document.getElementById('ssh').value||'':'').toLowerCase();
+  var fl=D.stu.filter(function(x){return x.name.toLowerCase().indexOf(q)>=0||(x.cls||'').toLowerCase().indexOf(q)>=0;});
+  if(!fl.length){el.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:20px">Koi student nahi mila</p>';return;}
+  el.innerHTML=fl.map(function(x){
+    var idx=D.stu.indexOf(x);
+    return'<div class="si"><div class="sav">'+(x.pic?'<img src="'+x.pic+'">':(x.name[0]||'?').toUpperCase())+'</div><div style="flex:1"><div style="font-size:13px;font-weight:600">'+x.name+'</div><div style="font-size:10px;color:var(--muted)">'+(x.cls||'')+' | Roll: '+(x.roll||'-')+' | 👨 '+(x.father||'-')+'</div></div><button class="waq" onclick="qWA('+idx+')">📱</button></div>';
+  }).join('');
+}
+function qWA(idx){
+  var x=D.stu[idx];var L='──────────────────────────────';
+  var txt='Assalamu Alaikum! 🏫 *'+D.cfg.sch+'*\n\nDear *'+(x.father||'Parent')+'* sahab,\nAapke bache *'+x.name+'* (Class '+(x.cls||'-')+', Roll '+(x.roll||'-')+') ke baare mein ittila dena chahte hain.\n\nPrincipal: '+D.cfg.pr+'\n_'+D.cfg.sch+'_';
+  var ph=(x.phone||'').replace(/[^0-9]/g,'').replace(/^0/,'');
+  window.open(ph?'https://wa.me/92'+ph+'?text='+encodeURIComponent(txt):'https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+function addSt(){
+  var nm=document.getElementById('an').value.trim();if(!nm){toast('⚠️ Naam likhein!');return;}
+  D.stu.push({name:nm,cls:v('ac'),roll:v('ar'),father:v('af'),phone:v('ap'),dob:v('ad'),pic:D.imgs['np']||''});
+  delete D.imgs['np'];sv();
+  renderStudents2();
+  var ss=document.getElementById('st-s');if(ss)ss.textContent=D.stu.length;
+  cmod('m-add');toast('✅ Student add ho gaya!');
+  ['an','ac','ar','af','ap','ad'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  var bx=document.getElementById('bx-np');var im=document.getElementById('im-np');
+  if(bx)bx.classList.remove('got');if(im)im.src='';
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function saveSt(){
+  D.cfg.sch=v('set-sch')||D.cfg.sch;D.cfg.adr=v('set-adr')||D.cfg.adr;D.cfg.pr=v('set-pr')||D.cfg.pr;
+  D.cfg.ph=v('set-ph');D.cfg.url=v('set-url')||D.cfg.url;D.cfg.wa=v('set-wa');
+  var pa=v('set-padmin'),pt=v('set-pteacher'),pp=v('set-pparent');
+  if(pa)D.cfg.pins.admin=pa;if(pt)D.cfg.pins.teacher=pt;if(pp)D.cfg.pins.parent=pp;
+  sv();
+  s('hname',(D.cfg.sch||'').toUpperCase());s('hloc','📍 '+(D.cfg.adr||''));
+  s('h-nm',(D.cfg.sch||'').toUpperCase());s('h-sb','📍 '+D.cfg.adr+' | Principal: '+D.cfg.pr);
+  var msg=document.getElementById('saved');if(msg){msg.style.display='block';setTimeout(function(){msg.style.display='none';},3000);}
+  toast('✅ Settings save ho gayi!');
+}
+function tog(btn,key){btn.classList.toggle('on');D.cfg[key]=btn.classList.contains('on');sv();}
+function openWA(txt){var url=D.cfg.wa?'https://wa.me/'+D.cfg.wa+'?text='+encodeURIComponent(txt):'https://wa.me/?text='+encodeURIComponent(txt);window.open(url,'_blank');}
+function omod(id){document.getElementById(id).classList.add('on');}
+function cmod(id){document.getElementById(id).classList.remove('on');}
+function toast(msg){var t=document.getElementById('tst');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2500);}
+
+// ============================================================
+// AI ASSISTANT — Anthropic API
+// ============================================================
+var aiHistory = [];
+
+function sendAI(){var inp=document.getElementById('aii');var q=inp.value.trim();if(!q)return;inp.value='';ask(q);}
+
+async function ask(q){
+  var chat=document.getElementById('aich');
+  var um=document.createElement('div');um.className='aim u';um.textContent=q;chat.appendChild(um);
+  var tp=document.createElement('div');tp.className='aty';tp.innerHTML='<div class="ad"></div><div class="ad"></div><div class="ad"></div>';chat.appendChild(tp);
+  chat.scrollTop=chat.scrollHeight;
+
+  // Build context
+  var today=tdISO();
+  var upHols=HOLS.filter(function(h){return h.d>=today;}).slice(0,3).map(function(h){var d=Math.round((new Date(h.d)-new Date(today))/864e5);return h.n+' ('+h.d+', '+d+' din mein)';}).join(', ');
+  var wt=document.getElementById('wtmp')?document.getElementById('wtmp').textContent:'--';
+  var wd=document.getElementById('wdsc')?document.getElementById('wdsc').textContent:'--';
+
+  var sysPrompt='Aap Al-Fareed Public School Tando Jam ke AI assistant hain. Aap Roman Urdu aur English dono mein jawab dete hain - simple, clear aur helpful tareeqe se.\n\nSchool Info:\n- School: '+D.cfg.sch+'\n- Address: '+D.cfg.adr+'\n- Principal: '+D.cfg.pr+'\n- Total Students: '+D.stu.length+'\n- Aaj ki date: '+tdy()+'\n\nLive Data:\n- Tando Jam Weather: '+wt+' - '+wd+'\n- Upcoming Holidays: '+upHols+'\n\nGrade System: A=80%+, B=65-79%, C=50-64%, D=below 50%\n\nAap subjects ke topics, formulas, school info, weather, holidays ke baare mein poori madad karte hain. Short aur helpful answers dein.';
+
+  aiHistory.push({role:'user',content:q});
+
+  try{
+    var response = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:sysPrompt,
+        messages:aiHistory
+      })
+    });
+    var data = await response.json();
+    var reply = (data.content&&data.content[0]&&data.content[0].text)||'Jawab nahi mil saka. Dobara try karein.';
+    aiHistory.push({role:'assistant',content:reply});
+    if(aiHistory.length>20)aiHistory=aiHistory.slice(-20);
+    tp.remove();
+    var bm=document.createElement('div');bm.className='aim b';
+    bm.innerHTML=reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\*(.*?)\*/g,'<b>$1</b>');
+    chat.appendChild(bm);
+  } catch(e){
+    tp.remove();
+    var bm=document.createElement('div');bm.className='aim b';
+    bm.innerHTML='⚠️ AI se connection nahi ho saka. Apna internet check karein aur dobara try karein.';
+    chat.appendChild(bm);
+  }
+  chat.scrollTop=chat.scrollHeight;
+}
+
+
+// ============================================================
+// USER MANAGEMENT
+// ============================================================
+function renderUsers(){
+  var el=document.getElementById('users-content');if(!el)return;
+  if(!canAccess('users')){el.innerHTML=noAccessHTML('User management sirf Admin kar sakta hai.');return;}
+
+  var teachers=D.users.filter(function(u){return u.role==='teacher';});
+  var parents=D.users.filter(function(u){return u.role==='parent';});
+
+  function userCard(u,i){
+    var idx=D.users.indexOf(u);
+    var av='<div class="usr-av av-'+u.role+'">'+(u.name?u.name[0].toUpperCase():'?')+'</div>';
+    var badge=u.active?'<span class="usr-active ua-yes">✓ Active</span>':'<span class="usr-active ua-no">✗ Revoked</span>';
+    var btn=u.active
+      ?'<button class="revoke-btn" onclick="revokeUser('+idx+')">🚫 Revoke</button>'
+      :'<button class="restore-btn" onclick="restoreUser('+idx+')">✅ Restore</button>';
+    return '<div class="usr-card">'+av+'<div class="usr-info"><div class="usr-name">'+u.name+(u.note?' <span style="font-size:10px;color:var(--muted);">('+u.note+')</span>':'')+'</div><div class="usr-meta">'+ROLE_INFO[u.role].icon+' '+ROLE_INFO[u.role].name+' | PIN: '+(u.pin||'?')+' | Added: '+(u.addedOn||'-')+'</div></div>'+badge+'<div style="display:flex;gap:5px">'+btn+'<button class="del-btn" onclick="deleteUser('+idx+')">🗑️</button></div></div>';
+  }
+
+  var tBlocked=D.cfg.revoked_teacher?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Teacher login band hai</span><button class="restore-btn bsm" onclick="toggleRoleBlock(&quot;teacher&quot;,false)">Kholo</button></div>':'';
+  var pBlocked=D.cfg.revoked_parent?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Parent login band hai</span><button class="restore-btn bsm" onclick="toggleRoleBlock(&quot;parent&quot;,false)">Kholo</button></div>':'';
+
+  el.innerHTML='<div class="card"><div class="ct">👤 User Management</div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">'
+    +'<button class="btn bg bsm" onclick="omod(&quot;m-adduser&quot;)">+ User Add</button>'
+    +'<button class="btn bred bsm" onclick="toggleRoleBlock(&quot;teacher&quot;,true)" '+(D.cfg.revoked_teacher?'style="opacity:.5" disabled':'')+'>🚫 Sab Teachers Block</button>'
+    +'<button class="btn bred bsm" onclick="toggleRoleBlock(&quot;parent&quot;,true)" '+(D.cfg.revoked_parent?'style="opacity:.5" disabled':'')+'>🚫 Sab Parents Block</button>'
+    +'</div>'
+    +tBlocked+pBlocked
+    +'<div style="font-size:12px;font-weight:700;color:var(--g1);margin:10px 0 6px">📚 Teachers ('+teachers.length+')</div>'
+    +(teachers.length?teachers.map(userCard).join(''):'<p style="font-size:11px;color:var(--muted);padding:8px">Koi teacher nahi. + User Add karein.</p>')
+    +'<div style="font-size:12px;font-weight:700;color:var(--g1);margin:14px 0 6px">👨‍👩‍👧 Parents ('+parents.length+')</div>'
+    +(parents.length?parents.map(userCard).join(''):'<p style="font-size:11px;color:var(--muted);padding:8px">Koi parent nahi. + User Add karein.</p>')
+    +'</div>';
+}
+
+function addUser(){
+  var name=document.getElementById('u-name').value.trim();
+  var role=document.getElementById('u-role').value;
+  var pin=document.getElementById('u-pin').value.trim();
+  var note=document.getElementById('u-note').value.trim();
+  if(!name){toast('⚠️ Naam likhein!');return;}
+  if(!pin||pin.length<3){toast('⚠️ PIN kam az kam 3 digits ka ho!');return;}
+  // Check PIN not duplicate
+  for(var i=0;i<D.users.length;i++){
+    if(D.users[i].pin===pin&&D.users[i].role===role){toast('⚠️ Yeh PIN already use ho rahi hai!');return;}
+  }
+  if(pin===D.cfg.pins.admin||pin===D.cfg.pins.teacher||pin===D.cfg.pins.parent){toast('⚠️ Yeh master PIN hai, alag PIN choose karein!');return;}
+  D.users.push({name:name,role:role,pin:pin,note:note,active:true,addedOn:tdy()});
+  sv();renderUsers();cmod('m-adduser');
+  ['u-name','u-pin','u-note'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  toast('✅ '+ROLE_INFO[role].name+' "'+name+'" add ho gaya!');
+}
+
+function revokeUser(idx){
+  if(idx<0||idx>=D.users.length)return;
+  var u=D.users[idx];
+  if(confirm(u.name+' ka access revoke karen?')){
+    D.users[idx].active=false;sv();renderUsers();toast('🚫 '+u.name+' ka access revoke ho gaya!');
+  }
+}
+
+function restoreUser(idx){
+  if(idx<0||idx>=D.users.length)return;
+  D.users[idx].active=true;sv();renderUsers();toast('✅ '+D.users[idx].name+' ka access restore ho gaya!');
+}
+
+function deleteUser(idx){
+  if(idx<0||idx>=D.users.length)return;
+  var u=D.users[idx];
+  if(confirm(u.name+' ko permanently delete karen?')){
+    D.users.splice(idx,1);sv();renderUsers();toast('🗑️ User delete ho gaya!');
+  }
+}
+
+function toggleRoleBlock(role,block){
+  D.cfg['revoked_'+role]=block;sv();renderUsers();
+  toast(block?('🚫 Sab '+role+'s ka access band!'):('✅ '+role+' access khol diya!'));
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  ld();
+  startClk();loadW();renderHols();
+  s('hname',(D.cfg.sch||'').toUpperCase());
+  s('hloc','📍 '+(D.cfg.adr||''));
+  updHL();
+}
+init();
+</script>
+</body>
+</html>
