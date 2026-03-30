@@ -472,6 +472,20 @@ label.upbox.got .uico,label.upbox.got .ulbl{display:none}
 <div class="tst" id="tst"></div>
 
 <script>
+// ── onclick helpers (no quote issues) ──
+function goTab(el){go(el.dataset?el.dataset.tab:el);}
+function openAIModal(){omod('m-ai');}
+function openAddUser(){omod('m-adduser');}
+function openAddStudent(){omod('m-add');}
+function blockTeachers(){toggleRoleBlock('teacher',true);}
+function blockParents(){toggleRoleBlock('parent',true);}
+function unblockTeachers(){toggleRoleBlock('teacher',false);}
+function unblockParents(){toggleRoleBlock('parent',false);}
+function togShowSig(btn){tog(btn,'showSig');}
+function togSendLink(btn){tog(btn,'sendLink');}
+function gotImgKey(inp){if(inp&&inp.dataset&&inp.dataset.key)gotImg(inp,inp.dataset.key);}
+function rmImgKey(ev,btn){if(btn&&btn.dataset&&btn.dataset.key){ev.stopPropagation();rmImg(ev,btn.dataset.key);}}
+
 // ============================================================
 // STATE & CONFIG
 // ============================================================
@@ -616,9 +630,9 @@ function buildQA(){
     {k:'students',i:'👥',l:'Students'},
   ];
   var html = all.filter(function(x){return p[x.k];}).map(function(x){
-    return '<div class="qb" onclick="go(&quot;'+x.k+'&quot;)"><div class="qi">'+x.i+'</div><div class="ql">'+x.l+'</div></div>';
+    return '<div class="qb" onclick="goTab(this)" data-tab="'+x.k+'"><div class="qi">'+x.i+'</div><div class="ql">'+x.l+'</div></div>';
   }).join('');
-  html += '<div class="qb" onclick="omod(&quot;m-ai&quot;)"><div class="qi">🤖</div><div class="ql">AI Assistant</div></div>';
+  html += '<div class="qb" onclick="openAIModal()"><div class="qi">🤖</div><div class="ql">AI Assistant</div></div>';
   html += '<div class="qb" onclick="loadW()"><div class="qi">🔄</div><div class="ql">Refresh</div></div>';
   document.getElementById('qa-grid').innerHTML = html;
 }
@@ -866,7 +880,7 @@ function renderNotif(){
 function renderStudents2(){
   var el=document.getElementById('students-content');
   if(!canAccess('students')){el.innerHTML=noAccessHTML('Students list sirf Admin aur Teachers dekh saktay hain.');return;}
-  var addBtn=canAccess('settings')?'<button class="btn bg bsm" onclick="omod('m-add')">+ Add</button>':'';
+  var addBtn=canAccess('settings')?'<button class="btn bg bsm" onclick="openAddStudent()">+ Add</button>':'';
   el.innerHTML='<div class="card"><div class="ct">👥 Students</div>'
     +'<div style="display:flex;gap:8px;margin-bottom:12px">'
     +'<input id="ssh" placeholder="Search..." oninput="renderS()" style="flex:1">'
@@ -897,8 +911,8 @@ function renderSettings2(){
   el.innerHTML=
     '<div class="card"><div class="ct">⚙️ School Settings</div>'
     +'<div class="img-row">'
-        +'<label class="upbox" id="bx-sl"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,&quot;sl&quot;)"><div class="uico">🏫</div><div class="ulbl">School Logo</div><img class="uimg" id="im-sl"><button class="urm" onclick="rmImg(event,&quot;sl&quot;);return false;">✕</button></label>'
-        +'<label class="upbox" id="bx-ss"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" onchange="gotImg(this,&quot;ss&quot;)"><div class="uico">✍️</div><div class="ulbl">Principal Sign</div><img class="uimg" id="im-ss"><button class="urm" onclick="rmImg(event,&quot;ss&quot;);return false;">✕</button></label>'
+        +'<label class="upbox" id="bx-sl"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" data-key="sl" onchange="gotImgKey(this)"><div class="uico">🏫</div><div class="ulbl">School Logo</div><img class="uimg" id="im-sl"><button class="urm" data-key="sl" onclick="rmImgKey(event,this);return false;">✕</button></label>'
+        +'<label class="upbox" id="bx-ss"><input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0" data-key="ss" onchange="gotImgKey(this)"><div class="uico">✍️</div><div class="ulbl">Principal Sign</div><img class="uimg" id="im-ss"><button class="urm" data-key="ss" onclick="rmImgKey(event,this);return false;">✕</button></label>'
     +'</div>'
     +'<span class="lbl">School Ka Naam</span><input id="set-sch" value="'+D.cfg.sch+'">'
     +'<span class="lbl">Address</span><input id="set-adr" value="'+D.cfg.adr+'">'
@@ -913,9 +927,9 @@ function renderSettings2(){
     +'</div>'
     +'<div style="margin-top:14px">'
     +'<div class="setr"><div><div style="font-size:13px;font-weight:600">Principal Signature dikhaye</div></div>'
-    +'<button class="tog '+sSig+'" id="tog-sig" onclick="tog(this,&quot;showSig&quot;)"></button></div>'
+    +'<button class="tog '+sSig+'" id="tog-sig" onclick="togShowSig(this)"></button></div>'
     +'<div class="setr"><div><div style="font-size:13px;font-weight:600">Printable Link WhatsApp mein</div></div>'
-    +'<button class="tog '+sLnk+'" id="tog-lnk" onclick="tog(this,&quot;sendLink&quot;)"></button></div>'
+    +'<button class="tog '+sLnk+'" id="tog-lnk" onclick="togSendLink(this)"></button></div>'
     +'</div>'
     +'<div class="brow"><button class="btn bg" onclick="saveSt()">💾 Save</button></div>'
     +'<div id="saved" style="display:none;color:var(--g1);font-size:12px;margin-top:8px;font-weight:700">✅ Saved!</div>'
@@ -1273,14 +1287,14 @@ function renderUsers(){
     return '<div class="usr-card">'+av+'<div class="usr-info"><div class="usr-name">'+u.name+(u.note?' <span style="font-size:10px;color:var(--muted);">('+u.note+')</span>':'')+'</div><div class="usr-meta">'+ROLE_INFO[u.role].icon+' '+ROLE_INFO[u.role].name+' | PIN: '+(u.pin||'?')+' | Added: '+(u.addedOn||'-')+'</div></div>'+badge+'<div style="display:flex;gap:5px">'+btn+'<button class="del-btn" onclick="deleteUser('+idx+')">🗑️</button></div></div>';
   }
 
-  var tBlocked=D.cfg.revoked_teacher?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Teacher login band hai</span><button class="restore-btn bsm" onclick="toggleRoleBlock(&quot;teacher&quot;,false)">Kholo</button></div>':'';
-  var pBlocked=D.cfg.revoked_parent?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Parent login band hai</span><button class="restore-btn bsm" onclick="toggleRoleBlock(&quot;parent&quot;,false)">Kholo</button></div>':'';
+  var tBlocked=D.cfg.revoked_teacher?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Teacher login band hai</span><button class="restore-btn bsm" onclick="unblockTeachers()">Kholo</button></div>':'';
+  var pBlocked=D.cfg.revoked_parent?'<div style="background:#ffebee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--red);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>⚠️ Parent login band hai</span><button class="restore-btn bsm" onclick="unblockParents()">Kholo</button></div>':'';
 
   el.innerHTML='<div class="card"><div class="ct">👤 User Management</div>'
     +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">'
-    +'<button class="btn bg bsm" onclick="omod(&quot;m-adduser&quot;)">+ User Add</button>'
-    +'<button class="btn bred bsm" onclick="toggleRoleBlock(&quot;teacher&quot;,true)" '+(D.cfg.revoked_teacher?'style="opacity:.5" disabled':'')+'>🚫 Sab Teachers Block</button>'
-    +'<button class="btn bred bsm" onclick="toggleRoleBlock(&quot;parent&quot;,true)" '+(D.cfg.revoked_parent?'style="opacity:.5" disabled':'')+'>🚫 Sab Parents Block</button>'
+    +'<button class="btn bg bsm" onclick="openAddUser()">+ User Add</button>'
+    +'<button class="btn bred bsm" onclick="blockTeachers()" '+(D.cfg.revoked_teacher?'style="opacity:.5" disabled':'')+'>🚫 Sab Teachers Block</button>'
+    +'<button class="btn bred bsm" onclick="blockParents()" '+(D.cfg.revoked_parent?'style="opacity:.5" disabled':'')+'>🚫 Sab Parents Block</button>'
     +'</div>'
     +tBlocked+pBlocked
     +'<div style="font-size:12px;font-weight:700;color:var(--g1);margin:10px 0 6px">📚 Teachers ('+teachers.length+')</div>'
