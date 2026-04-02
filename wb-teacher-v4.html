@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>AI Whiteboard Teacher</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--board:#0f1e10;--frame:#2a1a0e;--tray:#3d2510;
+  --chalk:#eee8dc;--cy:#f5d94e;--cb:#6ecff6;--cg:#7ed98a;
+  --cp:#f9a8d4;--co:#ffb347;--cr:#ff7f7f;--cv:#c4a8f9;
+  --pan:#111820;--pb:rgba(255,255,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100vh;background:var(--bg);font-family:'Kalam',cursive;overflow-x:hidden}
+.app{display:flex;flex-direction:column;max-width:900px;margin:0 auto;padding:8px}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 2px 6px;flex-wrap:wrap;gap:5px}
+.logo{font-family:'Caveat',cursive;font-size:1.45rem;font-weight:700;color:var(--cy)}
+.logo span{color:var(--cb)}
+.hbtns{display:flex;gap:4px;flex-wrap:wrap}
+.hbtn{background:rgba(255,255,255,.06);border:1px solid var(--pb);border-radius:8px;padding:5px 9px;font-family:'Kalam',cursive;font-size:.72rem;color:rgba(255,255,255,.55);cursor:pointer}
+.hbtn:hover,.hbtn:active{background:rgba(245,217,78,.12);border-color:var(--cy);color:var(--cy)}
+
+/* SUBJECTS */
+.srow{display:flex;gap:5px;overflow-x:auto;padding:0 0 4px;scrollbar-width:none;margin-bottom:6px}
+.srow::-webkit-scrollbar{display:none}
+.stab{flex-shrink:0;padding:5px 11px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:.74rem;color:rgba(255,255,255,.45);cursor:pointer;white-space:nowrap}
+.stab.on{color:#fff;border-color:transparent}
+.s-bio.on{background:#1a3a1a;border-color:#7ed98a;color:#7ed98a}
+.s-che.on{background:#1a1a3a;border-color:#6ecff6;color:#6ecff6}
+.s-phy.on{background:#2a1a1a;border-color:#ffb347;color:#ffb347}
+.s-mat.on{background:#1a1a2a;border-color:#c4a8f9;color:#c4a8f9}
+.s-urd.on{background:#2a1a2a;border-color:#f9a8d4;color:#f9a8d4}
+.s-eng.on{background:#1a2a2a;border-color:#f5d94e;color:#f5d94e}
+.s-sin.on{background:#2a1a10;border-color:#ffb347;color:#ffb347}
+.s-isl.on{background:#1a2a1a;border-color:#7ed98a;color:#7ed98a}
+.s-geo.on{background:#1a2a2a;border-color:#6ecff6;color:#6ecff6}
+.s-his.on{background:#2a2a1a;border-color:#f5d94e;color:#f5d94e}
+.s-com.on{background:#1a1a2a;border-color:#c4a8f9;color:#c4a8f9}
+.s-gen.on{background:#1a1a1a;border-color:#ff7f7f;color:#ff7f7f}
+
+/* BOARD */
+.bframe{background:var(--frame);border-radius:10px;padding:10px;box-shadow:0 8px 32px rgba(0,0,0,.7);margin-bottom:8px}
+.board{background:var(--board);border-radius:6px;position:relative;overflow:hidden;box-shadow:inset 0 2px 24px rgba(0,0,0,.6)}
+.board::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 36px,rgba(255,255,255,.012) 36px,rgba(255,255,255,.013) 37px);pointer-events:none;z-index:0}
+.bin{position:relative;z-index:1;padding:16px 18px;min-height:380px;max-height:520px;overflow-y:auto}
+.bin::-webkit-scrollbar{width:3px}
+.bin::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.chalk-tray{background:var(--tray);height:14px;border-radius:0 0 6px 6px;display:flex;align-items:center;padding:0 16px;gap:5px}
+.cp{height:8px;border-radius:4px;opacity:.75}
+
+/* WELCOME */
+.wel{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px;text-align:center;padding:20px}
+.w-ic{font-size:3rem;margin-bottom:10px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.w-t{font-family:'Caveat',cursive;font-size:2rem;color:var(--cy);margin-bottom:8px}
+.w-s{font-size:.9rem;color:rgba(255,255,255,.4);max-width:300px;line-height:1.7;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:4px 12px;font-size:.8rem;color:var(--cb);cursor:pointer}
+.chip:hover,.chip:active{background:rgba(110,207,246,.15);border-color:var(--cb)}
+
+/* LOADING */
+.ldg{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:360px;gap:12px}
+.ldg-t{font-family:'Caveat',cursive;font-size:1.4rem;color:rgba(255,255,255,.55);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.dots{display:flex;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;animation:jump .8s ease-in-out infinite}
+@keyframes jump{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* LESSON */
+.lesson{display:none}
+
+/* Word title */
+.wt{text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px dashed rgba(255,255,255,.1)}
+.ww{font-family:'Caveat',cursive;font-size:3rem;font-weight:700;color:var(--cy);letter-spacing:3px}
+.brow{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:6px}
+.bdg{display:inline-flex;align-items:center;border-radius:12px;padding:2px 10px;font-size:.72rem;border:1px solid;font-family:'Caveat',cursive}
+.bt{background:rgba(110,207,246,.1);border-color:rgba(110,207,246,.3);color:var(--cb)}
+.bs{background:rgba(126,217,138,.1);border-color:rgba(126,217,138,.3);color:var(--cg)}
+.bl{background:rgba(249,168,212,.1);border-color:rgba(249,168,212,.3);color:var(--cp)}
+.bi{background:rgba(196,168,249,.1);border-color:rgba(196,168,249,.3);color:var(--cv)}
+.tts-row{display:flex;gap:7px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.tb{background:rgba(110,207,246,.1);border:1px solid rgba(110,207,246,.25);border-radius:20px;padding:4px 12px;font-size:.75rem;color:var(--cb);cursor:pointer}
+.tb:hover,.tb:active{background:rgba(110,207,246,.2)}
+
+/* Sections */
+.sec{margin-bottom:14px}
+.shd{font-family:'Caveat',cursive;font-size:1.05rem;font-weight:700;color:var(--cg);margin-bottom:7px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:4px}
+.sbody{font-size:.96rem;color:var(--chalk);line-height:1.75}
+
+/* Clickable word */
+.cw{cursor:pointer;border-bottom:1.5px dashed rgba(245,217,78,.5);color:var(--cy);border-radius:3px;padding:0 2px}
+.cw:hover,.cw:active{background:rgba(245,217,78,.12)}
+
+/* Urdu meaning */
+.umean{font-family:'Kalam',cursive;font-size:1.2rem;color:var(--cy);background:rgba(245,217,78,.07);border:1px solid rgba(245,217,78,.18);border-radius:8px;padding:10px 14px;line-height:1.8}
+.uscript{font-family:'Amiri',serif;font-size:1.4rem;direction:rtl;display:block;text-align:right;color:var(--cy);margin-bottom:4px}
+
+/* Breakdown */
+.bkdn{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.sylb{background:rgba(245,217,78,.08);border:1.5px solid rgba(245,217,78,.28);border-radius:8px;padding:6px 12px;text-align:center;min-width:56px}
+.sylt{font-family:'Caveat',cursive;font-size:1.4rem;font-weight:700;color:var(--cy);display:block}
+.syli{font-size:.7rem;color:rgba(245,217,78,.55)}
+.plsym{color:rgba(255,255,255,.25);font-size:1.3rem;align-self:center}
+.aline{display:flex;align-items:center;gap:7px;margin-top:8px;flex-wrap:wrap}
+.apart{background:rgba(196,168,249,.07);border:1px solid rgba(196,168,249,.22);border-radius:6px;padding:4px 10px;font-size:.8rem;color:var(--cv)}
+
+/* Lang history */
+.ltree{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px;margin-top:6px}
+.lstep{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.lic{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.ltxt{font-size:.86rem;color:rgba(255,255,255,.72);line-height:1.6}
+.llbl{font-size:.68rem;color:var(--co);text-transform:uppercase;letter-spacing:.5px;display:block}
+
+/* Examples */
+.exlist{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.exitem{display:flex;align-items:flex-start;gap:8px;background:rgba(126,217,138,.05);border-left:3px solid var(--cg);border-radius:0 8px 8px 0;padding:8px 10px}
+.exem{font-size:1.2rem;flex-shrink:0}
+.exen{font-size:.9rem;color:var(--chalk)}
+.exur{font-size:.83rem;color:var(--cp);margin-top:2px}
+
+/* Diagram */
+.dgwrap{background:rgba(255,255,255,.02);border:1.5px solid rgba(255,255,255,.09);border-radius:10px;padding:14px;overflow-x:auto}
+.dgtitle{font-family:'Caveat',cursive;font-size:1rem;color:var(--co);margin-bottom:10px;text-align:center}
+.dgarea{font-family:monospace;color:var(--chalk);line-height:1.6;white-space:pre;font-size:.78rem}
+.lbtag{display:inline-block;background:rgba(255,179,71,.1);border:1px solid rgba(255,179,71,.28);border-radius:4px;padding:1px 7px;font-size:.76rem;color:var(--co);margin:2px}
+
+/* Formula */
+.fbox{background:rgba(196,168,249,.07);border:1.5px solid rgba(196,168,249,.22);border-radius:8px;padding:10px 14px;text-align:center}
+.ftxt{font-family:'Caveat',cursive;font-size:1.6rem;color:var(--cv);letter-spacing:2px}
+.flbl{font-size:.78rem;color:rgba(196,168,249,.55);margin-top:4px}
+
+/* Memory */
+.mbox{background:rgba(255,179,71,.07);border:1.5px dashed rgba(255,179,71,.38);border-radius:8px;padding:10px 14px}
+.mtxt{font-family:'Caveat',cursive;font-size:1.1rem;color:var(--co)}
+
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{border-radius:14px;padding:3px 11px;font-size:.78rem;cursor:pointer;border:1px solid}
+.trel{background:rgba(249,168,212,.06);border-color:rgba(249,168,212,.22);color:var(--cp)}
+.trel:hover,.trel:active{background:rgba(249,168,212,.16)}
+.tant{background:rgba(255,127,127,.06);border-color:rgba(255,127,127,.22);color:var(--cr)}
+.tant:hover,.tant:active{background:rgba(255,127,127,.16)}
+.tsyn{background:rgba(110,207,246,.06);border-color:rgba(110,207,246,.22);color:var(--cb)}
+.tsyn:hover,.tsyn:active{background:rgba(110,207,246,.16)}
+
+/* Fun fact */
+.ff{background:rgba(110,207,246,.05);border-left:3px solid var(--cb);padding:8px 12px;border-radius:0 8px 8px 0}
+.fft{font-size:.88rem;color:var(--cb);line-height:1.6}
+
+/* Pron */
+.pbox{background:rgba(196,168,249,.06);border:1px solid rgba(196,168,249,.18);border-radius:8px;padding:10px;text-align:center}
+.pipa{font-family:'Caveat',cursive;font-size:1.7rem;color:var(--cv);letter-spacing:3px}
+.pguide{font-size:.82rem;color:rgba(255,255,255,.5);margin-top:4px;line-height:1.6}
+
+/* INPUT */
+.iarea{background:var(--pan);border:1px solid var(--pb);border-radius:10px;padding:12px;margin-bottom:8px}
+.irow{display:flex;gap:6px;margin-bottom:8px}
+.winp{flex:1;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;padding:11px 14px;font-family:'Kalam',cursive;font-size:1rem;color:#fff;outline:none}
+.winp:focus{border-color:var(--cy)}
+.winp::placeholder{color:rgba(255,255,255,.22)}
+.gobtn{background:var(--cy);color:#0d0d00;border:none;border-radius:8px;padding:11px 18px;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;cursor:pointer}
+.gobtn:active{transform:scale(.96)}
+.gobtn:disabled{opacity:.5;cursor:not-allowed}
+
+/* TOOLS */
+.tbar{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:8px}
+.tbtn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;cursor:pointer}
+.tbtn:hover,.tbtn:active{background:rgba(245,217,78,.09);border-color:rgba(245,217,78,.22)}
+.tic{font-size:1.15rem}
+.tlbl{font-size:.66rem;color:rgba(255,255,255,.45)}
+.tbtn:hover .tlbl,.tbtn:active .tlbl{color:var(--cy)}
+
+/* PANELS */
+.panel{background:rgba(255,255,255,.03);border:1px solid var(--pb);border-radius:10px;padding:12px;margin-bottom:8px;display:none}
+.panel.open{display:block}
+.phd{font-family:'Caveat',cursive;font-size:1.1rem;color:var(--cy);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.pclose{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:1.1rem;padding:0}
+
+/* QUIZ */
+.qq{font-size:.95rem;color:var(--chalk);margin-bottom:10px;line-height:1.65}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.qo{padding:9px 10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.11);border-radius:8px;font-size:.83rem;color:var(--chalk);cursor:pointer;text-align:center;font-family:'Kalam',cursive}
+.qo:hover,.qo:active{border-color:var(--cb);background:rgba(110,207,246,.09)}
+.qo.ok{border-color:var(--cg) !important;background:rgba(126,217,138,.13) !important}
+.qo.no{border-color:var(--cr) !important;background:rgba(255,127,127,.1) !important}
+.qfb{margin-top:8px;font-size:.86rem;color:rgba(255,255,255,.68);line-height:1.6;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;display:none}
+
+/* HISTORY */
+.hi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.88rem;color:rgba(255,255,255,.62)}
+.hi:hover,.hi:active{background:rgba(255,255,255,.06);color:#fff}
+.hsub{font-size:.7rem;color:rgba(255,255,255,.28)}
+
+/* NOTES */
+.nta{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:8px;font-family:'Kalam',cursive;font-size:.88rem;color:var(--chalk);resize:vertical;min-height:80px;outline:none}
+.nbtn{margin-top:6px;padding:5px 14px;background:rgba(126,217,138,.13);border:1px solid rgba(126,217,138,.28);border-radius:6px;font-family:'Kalam',cursive;font-size:.78rem;color:var(--cg);cursor:pointer}
+
+/* COMPARE */
+.crow{display:flex;gap:6px;margin-bottom:8px}
+.cinp{flex:1;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 12px;font-family:'Kalam',cursive;font-size:.88rem;color:#fff;outline:none}
+.cinp:focus{border-color:var(--cv)}
+.cbtn{background:rgba(196,168,249,.13);border:1px solid rgba(196,168,249,.28);border-radius:8px;padding:8px 14px;font-family:'Kalam',cursive;font-size:.82rem;color:var(--cv);cursor:pointer;white-space:nowrap}
+.cres{font-size:.86rem;color:var(--chalk);line-height:1.7}
+
+/* FLASHCARD */
+.fc{background:linear-gradient(135deg,rgba(245,217,78,.07),rgba(110,207,246,.05));border:1.5px solid rgba(245,217,78,.18);border-radius:12px;padding:20px;text-align:center;cursor:pointer;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fcf{font-family:'Caveat',cursive;font-size:2rem;color:var(--cy)}
+.fcb{display:none;font-size:.93rem;color:var(--chalk);line-height:1.7}
+.fch{font-size:.72rem;color:rgba(255,255,255,.28);margin-top:8px}
+
+/* DRAW */
+.cwrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:4px;margin-top:4px}
+#dc{border-radius:6px;display:block;touch-action:none;cursor:crosshair;max-width:100%}
+.ctools{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.ct{padding:4px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:6px;font-size:.73rem;color:rgba(255,255,255,.55);cursor:pointer}
+.ct:hover,.ct:active,.ct.on{background:rgba(245,217,78,.13);border-color:var(--cy);color:var(--cy)}
+.cdot{width:17px;height:17px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0}
+.cdot.sel{border-color:#fff;transform:scale(1.25)}
+
+/* ERASE ANIM */
+@keyframes erase{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(30px)}}
+.erasing{animation:erase .3s ease forwards}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1e3020;border:1px solid var(--cg);border-radius:8px;padding:8px 18px;font-family:'Kalam',cursive;font-size:.88rem;color:var(--cg);z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+
+/* SETUP SCREEN */
+.setup-ov{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px}
+.setup-box{background:#131e14;border:1.5px solid rgba(126,217,138,.25);border-radius:16px;padding:24px 20px;width:100%;max-width:420px;text-align:center}
+.setup-logo{font-family:'Caveat',cursive;font-size:2rem;color:var(--cy);margin-bottom:6px}
+.setup-sub{font-size:.88rem;color:rgba(255,255,255,.45);margin-bottom:18px;line-height:1.6}
+.setup-tabs{display:flex;gap:6px;margin-bottom:14px}
+.setup-tab{flex:1;padding:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-family:'Kalam',cursive;font-size:.82rem;color:rgba(255,255,255,.5);cursor:pointer}
+.setup-tab.on{background:rgba(245,217,78,.13);border-color:rgba(245,217,78,.35);color:var(--cy)}
+.setup-lbl{font-family:'Caveat',cursive;font-size:1rem;color:var(--cg);text-align:left;margin-bottom:6px;display:block}
+.setup-inp{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:11px 14px;font-family:'Kalam',cursive;font-size:.95rem;color:#fff;outline:none;margin-bottom:12px}
+.setup-inp:focus{border-color:var(--cy)}
+.setup-inp::placeholder{color:rgba(255,255,255,.25)}
+.setup-btn{width:100%;background:var(--cy);color:#0d0d00;border:none;border-radius:8px;padding:13px;font-family:'Caveat',cursive;font-size:1.15rem;font-weight:700;cursor:pointer;margin-bottom:10px}
+.setup-btn:active{transform:scale(.97)}
+.setup-hint{font-size:.75rem;color:rgba(255,255,255,.3);line-height:1.6}
+.setup-hint a{color:var(--cb);text-decoration:none}
+.setup-err{color:var(--cr);font-size:.82rem;margin-top:8px;display:none}
+
+/* WORD POPUP */
+.wpop-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:none;align-items:flex-end;justify-content:center}
+.wpop-ov.open{display:flex}
+.wpop{background:#131e14;border:1px solid rgba(126,217,138,.2);border-radius:16px 16px 0 0;width:100%;max-width:900px;max-height:80vh;overflow-y:auto;padding:16px}
+.wpop-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.wpop-word{font-family:'Caveat',cursive;font-size:1.8rem;color:var(--cy);font-weight:700}
+.wpop-close{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:28px;height:28px;color:rgba(255,255,255,.5);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.wpop-close:hover,.wpop-close:active{background:rgba(255,127,127,.2);color:var(--cr)}
+.wpop-body{font-size:.92rem;color:var(--chalk);line-height:1.75}
+.wpop-umean{font-family:'Kalam',cursive;font-size:1.1rem;color:var(--cy);background:rgba(245,217,78,.07);border:1px solid rgba(245,217,78,.18);border-radius:8px;padding:10px 14px;margin-bottom:10px}
+.wpop-uscript{font-family:'Amiri',serif;font-size:1.25rem;direction:rtl;display:block;text-align:right;margin-bottom:4px}
+.wpop-detail{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.75;margin-bottom:10px}
+.wpop-ex{background:rgba(126,217,138,.04);border-left:3px solid var(--cg);border-radius:0 8px 8px 0;padding:8px 10px;font-size:.86rem;color:var(--chalk);margin-bottom:8px}
+.wpop-mem{background:rgba(255,179,71,.07);border:1.5px dashed rgba(255,179,71,.3);border-radius:8px;padding:8px 12px;font-family:'Caveat',cursive;font-size:1rem;color:var(--co);margin-bottom:10px}
+.wpop-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.wpop-btn{padding:7px 14px;border-radius:8px;font-family:'Kalam',cursive;font-size:.82rem;cursor:pointer;border:1px solid}
+.wb-learn{background:rgba(245,217,78,.15);border-color:rgba(245,217,78,.35);color:var(--cy)}
+.wb-speak{background:rgba(110,207,246,.1);border-color:rgba(110,207,246,.28);color:var(--cb)}
+.wpop-ldg{text-align:center;padding:30px;font-family:'Caveat',cursive;font-size:1.2rem;color:rgba(255,255,255,.45)}
+
+@media(max-width:480px){
+  .ww{font-size:2.2rem}
+  .qopts{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">&#x1F393; AI <span>Whiteboard</span> Teacher</div>
+  <div class="hbtns">
+    <div class="hbtn" onclick="toggleTheme()">&#x1F313; Theme</div>
+    <div class="hbtn" onclick="openPanel('notesPanel')">&#x1F4DD; Notes</div>
+    <div class="hbtn" onclick="openPanel('flashPanel')">&#x1F3C3; Flash</div>
+    <div class="hbtn" onclick="togglePanel('drawPanel');resizeDC()">&#x1F58A; Draw</div>
+    <div class="hbtn" onclick="showSetup()">&#x2699; Key</div>
+  </div>
+</div>
+
+<!-- SUBJECTS -->
+<div class="srow">
+  <div class="stab s-gen on" data-s="general" onclick="setSub(this)">&#x1F310; General</div>
+  <div class="stab s-bio" data-s="biology" onclick="setSub(this)">&#x1F9EC; Biology</div>
+  <div class="stab s-che" data-s="chemistry" onclick="setSub(this)">&#x2697; Chemistry</div>
+  <div class="stab s-phy" data-s="physics" onclick="setSub(this)">&#x26A1; Physics</div>
+  <div class="stab s-mat" data-s="mathematics" onclick="setSub(this)">&#x1F4D0; Maths</div>
+  <div class="stab s-urd" data-s="urdu" onclick="setSub(this)">&#x1F1F5;&#x1F1F0; Urdu</div>
+  <div class="stab s-eng" data-s="english" onclick="setSub(this)">&#x1F1EC;&#x1F1E7; English</div>
+  <div class="stab s-sin" data-s="sindhi" onclick="setSub(this)">&#x1F4DC; Sindhi</div>
+  <div class="stab s-isl" data-s="islamiat" onclick="setSub(this)">&#x262A; Islamiat</div>
+  <div class="stab s-geo" data-s="geography" onclick="setSub(this)">&#x1F30D; Geography</div>
+  <div class="stab s-his" data-s="history" onclick="setSub(this)">&#x1F4DC; History</div>
+  <div class="stab s-com" data-s="computer" onclick="setSub(this)">&#x1F4BB; Computer</div>
+</div>
+
+<!-- BOARD -->
+<div class="bframe">
+  <div class="board">
+    <div class="bin" id="bin">
+      <div class="wel" id="ws">
+        <div class="w-ic">&#x270F;</div>
+        <div class="w-t">Koi bhi lafz ya term!</div>
+        <div class="w-s">Neeche koi bhi word likho. Main whiteboard par Urdu mein samjhaunga! Kisi bhi highlighted lafz ko press karo to aur details milein.</div>
+        <div class="chips">
+          <div class="chip" onclick="go('Photosynthesis')">&#x1F33F; Photosynthesis</div>
+          <div class="chip" onclick="go('Osmosis')">&#x1F4A7; Osmosis</div>
+          <div class="chip" onclick="go('Democracy')">&#x1F3DB; Democracy</div>
+          <div class="chip" onclick="go('Gravity')">&#x1F34E; Gravity</div>
+          <div class="chip" onclick="go('Algorithm')">&#x1F4BB; Algorithm</div>
+          <div class="chip" onclick="go('Metabolism')">&#x26A1; Metabolism</div>
+          <div class="chip" onclick="go('Chromosome')">&#x1F52C; Chromosome</div>
+          <div class="chip" onclick="go('Catalyst')">&#x2697; Catalyst</div>
+          <div class="chip" onclick="go('Hypothesis')">&#x1F9EA; Hypothesis</div>
+          <div class="chip" onclick="go('Mitosis')">&#x1F9EC; Mitosis</div>
+        </div>
+      </div>
+      <div class="ldg" id="lds">
+        <div class="ldg-t">Samjha raha hoon...</div>
+        <div class="dots">
+          <div class="dot" style="background:var(--cy)"></div>
+          <div class="dot" style="background:var(--cb);animation-delay:.15s"></div>
+          <div class="dot" style="background:var(--cg);animation-delay:.3s"></div>
+        </div>
+      </div>
+      <div class="lesson" id="les"></div>
+    </div>
+  </div>
+  <div class="chalk-tray">
+    <div class="cp" style="background:#eee8dc;width:40px"></div>
+    <div class="cp" style="background:#f5d94e;width:28px"></div>
+    <div class="cp" style="background:#6ecff6;width:22px"></div>
+    <div class="cp" style="background:#7ed98a;width:34px"></div>
+    <div class="cp" style="background:#f9a8d4;width:18px"></div>
+    <div class="cp" style="background:#c4a8f9;width:26px"></div>
+    <div class="cp" style="background:#ffb347;width:14px"></div>
+  </div>
+</div>
+
+<!-- INPUT -->
+<div class="iarea">
+  <div class="irow">
+    <input class="winp" id="wi" type="text" placeholder="Koi word, term ya concept likho...">
+    <button class="gobtn" id="gobtn" onclick="learn()">Seekho</button>
+  </div>
+  <div class="tbar">
+    <div class="tbtn" onclick="openPanel('quizPanel')"><span class="tic">&#x1F9E0;</span><span class="tlbl">Quiz</span></div>
+    <div class="tbtn" onclick="togglePanel('histPanel')"><span class="tic">&#x1F4DA;</span><span class="tlbl">History</span></div>
+    <div class="tbtn" onclick="doSpeak()"><span class="tic">&#x1F50A;</span><span class="tlbl">Sunain</span></div>
+    <div class="tbtn" onclick="doErase()"><span class="tic">&#x1F9F9;</span><span class="tlbl">Erase</span></div>
+    <div class="tbtn" onclick="doRandom()"><span class="tic">&#x1F3B2;</span><span class="tlbl">Random</span></div>
+    <div class="tbtn" onclick="doCopy()"><span class="tic">&#x1F4CB;</span><span class="tlbl">Copy</span></div>
+    <div class="tbtn" onclick="togglePanel('compPanel')"><span class="tic">&#x2696;</span><span class="tlbl">Compare</span></div>
+    <div class="tbtn" onclick="togglePanel('drawPanel');resizeDC()"><span class="tic">&#x1F58A;</span><span class="tlbl">Drawing</span></div>
+  </div>
+</div>
+
+<!-- QUIZ PANEL -->
+<div class="panel" id="quizPanel">
+  <div class="phd">&#x1F9E0; Quick Quiz <button class="pclose" onclick="closePanel('quizPanel')">X</button></div>
+  <div id="qbody"><div style="color:rgba(255,255,255,.38);font-size:.88rem">Pehle koi word seekho!</div></div>
+</div>
+
+<!-- HISTORY PANEL -->
+<div class="panel" id="histPanel">
+  <div class="phd">&#x1F4DA; Seekhay Gaye Alfaz <button class="pclose" onclick="closePanel('histPanel')">X</button></div>
+  <div id="hbody"><div style="color:rgba(255,255,255,.28);font-size:.82rem">Abhi koi word nahi seekha...</div></div>
+</div>
+
+<!-- COMPARE PANEL -->
+<div class="panel" id="compPanel">
+  <div class="phd">&#x2696; Do Alfaz Compare <button class="pclose" onclick="closePanel('compPanel')">X</button></div>
+  <div class="crow">
+    <input class="cinp" id="cw1" placeholder="Pehla word..." type="text">
+    <input class="cinp" id="cw2" placeholder="Doosra word..." type="text">
+    <div class="cbtn" onclick="doCompare()">Compare</div>
+  </div>
+  <div id="cres" class="cres"></div>
+</div>
+
+<!-- NOTES PANEL -->
+<div class="panel" id="notesPanel">
+  <div class="phd">&#x1F4DD; Mere Notes <button class="pclose" onclick="closePanel('notesPanel')">X</button></div>
+  <textarea class="nta" id="nta" placeholder="Yahan apne notes likho..."></textarea>
+  <button class="nbtn" onclick="saveNotes()">Save</button>
+  <button class="nbtn" style="background:rgba(255,127,127,.1);border-color:rgba(255,127,127,.22);color:var(--cr);margin-left:6px" onclick="clearNotes()">Clear</button>
+</div>
+
+<!-- FLASHCARD PANEL -->
+<div class="panel" id="flashPanel">
+  <div class="phd">&#x1F3C3; Flashcard <button class="pclose" onclick="closePanel('flashPanel')">X</button></div>
+  <div id="fbody"><div style="color:rgba(255,255,255,.35);font-size:.88rem">Pehle koi word seekho!</div></div>
+</div>
+
+<!-- DRAWING PANEL -->
+<div class="panel" id="drawPanel">
+  <div class="phd">&#x1F58A; Drawing Board <button class="pclose" onclick="closePanel('drawPanel')">X</button></div>
+  <div class="ctools">
+    <div class="ct on" id="penT" onclick="setTool('pen',this)">Pen</div>
+    <div class="ct" id="eraseT" onclick="setTool('eraser',this)">Eraser</div>
+    <div class="ct" onclick="clearDC()">Clear</div>
+    <div class="ct" onclick="saveDC()">Save</div>
+    <div class="cdot sel" style="background:#f5d94e" onclick="setCol('#f5d94e',this)"></div>
+    <div class="cdot" style="background:#6ecff6" onclick="setCol('#6ecff6',this)"></div>
+    <div class="cdot" style="background:#7ed98a" onclick="setCol('#7ed98a',this)"></div>
+    <div class="cdot" style="background:#f9a8d4" onclick="setCol('#f9a8d4',this)"></div>
+    <div class="cdot" style="background:#ffffff" onclick="setCol('#ffffff',this)"></div>
+    <div class="cdot" style="background:#ff7f7f" onclick="setCol('#ff7f7f',this)"></div>
+  </div>
+  <div class="cwrap" id="cwrap">
+    <canvas id="dc"></canvas>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<!-- SETUP SCREEN -->
+<div class="setup-ov" id="setupOv">
+  <div class="setup-box">
+    <div class="setup-logo">AI Whiteboard Teacher</div>
+    <div class="setup-sub">Shuru karne ke liye apni API key daalein. Key sirf aapke phone mein save hogi.</div>
+    <div class="setup-tabs">
+      <div class="setup-tab on" id="stab-groq" onclick="selApiTab('groq',this)">Groq API (Free)</div>
+      <div class="setup-tab" id="stab-claude" onclick="selApiTab('claude',this)">Claude API</div>
+    </div>
+    <div id="groq-sec">
+      <span class="setup-lbl">Groq API Key:</span>
+      <input class="setup-inp" id="groqInp" type="password" placeholder="gsk_xxxxxxxxxxxxxxxx">
+      <div class="setup-hint">Free key: <a href="https://console.groq.com" target="_blank">console.groq.com</a> — API Keys — Create<br>Aapki existing key: gsk_fL1h... wali use karein</div>
+    </div>
+    <div id="claude-sec" style="display:none">
+      <span class="setup-lbl">Claude API Key:</span>
+      <input class="setup-inp" id="claudeInp" type="password" placeholder="sk-ant-xxxxxxxxxxxxxxxx">
+      <div class="setup-hint">Key: <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></div>
+    </div>
+    <div class="setup-err" id="setupErr">Key galat hai ya mismatched prefix!</div>
+    <br>
+    <button class="setup-btn" onclick="saveKey()">Shuru Karein</button>
+    <div class="setup-hint">Key sirf is device pe save hoti hai.</div>
+  </div>
+</div>
+
+<!-- WORD POPUP -->
+<div class="wpop-ov" id="wpopOv" onclick="wpopBg(event)">
+  <div class="wpop" id="wpop">
+    <div class="wpop-hd">
+      <div class="wpop-word" id="wpopWord"></div>
+      <div class="wpop-close" onclick="closeWpop()">X</div>
+    </div>
+    <div id="wpopBody">
+      <div class="wpop-ldg">Samjha raha hoon...</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+var curSub = 'general';
+var curWord = '';
+var curData = null;
+var quizData = null;
+var apiType = 'groq';
+var apiKey = '';
+var darkMode = true;
+var dtool = 'pen';
+var dcol = '#f5d94e';
+var dctx = null;
+var dDraw = false;
+var dLX = 0;
+var dLY = 0;
+
+var hist = [];
+try { hist = JSON.parse(localStorage.getItem('wt4_hist') || '[]'); } catch(e) { hist = []; }
+
+function initApp() {
+  var stype = localStorage.getItem('wt4_apitype') || '';
+  var skey = localStorage.getItem('wt4_apikey') || '';
+  if (skey && skey.length > 8) {
+    apiType = stype || 'groq';
+    apiKey = skey;
+    document.getElementById('setupOv').style.display = 'none';
+  }
+  var nv = localStorage.getItem('wt4_notes') || '';
+  document.getElementById('nta').value = nv;
+  renderHist();
+  setTimeout(resizeDC, 300);
+}
+
+document.getElementById('wi').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { learn(); }
+});
+
+window.addEventListener('resize', resizeDC);
+
+function selApiTab(type, el) {
+  apiType = type;
+  var tabs = document.querySelectorAll('.setup-tab');
+  for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('on'); }
+  el.classList.add('on');
+  document.getElementById('groq-sec').style.display = (type === 'groq') ? 'block' : 'none';
+  document.getElementById('claude-sec').style.display = (type === 'claude') ? 'block' : 'none';
+}
+
+function saveKey() {
+  var key = '';
+  var errEl = document.getElementById('setupErr');
+  errEl.style.display = 'none';
+  if (apiType === 'groq') {
+    key = document.getElementById('groqInp').value.trim();
+    if (key.indexOf('gsk_') !== 0) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Groq key gsk_ se shuru honi chahiye!';
+      return;
+    }
+  } else {
+    key = document.getElementById('claudeInp').value.trim();
+    if (key.indexOf('sk-ant') !== 0) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Claude key sk-ant se shuru honi chahiye!';
+      return;
+    }
+  }
+  apiKey = key;
+  localStorage.setItem('wt4_apitype', apiType);
+  localStorage.setItem('wt4_apikey', key);
+  document.getElementById('setupOv').style.display = 'none';
+  showToast('Key save ho gayi! Ab seekho!');
+}
+
+function showSetup() {
+  document.getElementById('setupOv').style.display = 'flex';
+}
+
+function setSub(el) {
+  var tabs = document.querySelectorAll('.stab');
+  for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove('on'); }
+  el.classList.add('on');
+  curSub = el.getAttribute('data-s');
+}
+
+function learn() {
+  var w = document.getElementById('wi').value.trim();
+  if (!w) { return; }
+  if (!apiKey) { showSetup(); return; }
+  curWord = w;
+  showLdg();
+  var btn = document.getElementById('gobtn');
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  fetchLesson(w, curSub, function(data) {
+    btn.disabled = false;
+    btn.textContent = 'Seekho';
+    if (data) {
+      curData = data;
+      addHist(data.word || w, curSub);
+      renderLesson(data);
+    } else {
+      renderErr();
+    }
+  });
+}
+
+function go(w) {
+  document.getElementById('wi').value = w;
+  learn();
+}
+
+function showLdg() {
+  document.getElementById('ws').style.display = 'none';
+  document.getElementById('les').style.display = 'none';
+  document.getElementById('lds').style.display = 'flex';
+}
+
+function buildPrompt(sub) {
+  var lines = [
+    'You are a world-class Pakistani school teacher explaining on a whiteboard.',
+    'Subject context: ' + sub + '.',
+    'RULES:',
+    '1. Explain FULLY IN ROMAN URDU mixed with simple English.',
+    '2. Provide Urdu script (nastaliq) for key phrases.',
+    '3. Use Pakistani daily life examples: chai, roti, school, bazaar, khet, dukaan.',
+    '4. Return ONLY valid compact JSON. No markdown. No backticks. No text before or after JSON.',
+    '5. Keep all JSON string values on single lines - no newlines inside values.',
+    'JSON structure to return:',
+    '{"word":"","type":"","subject":"","language_origin":"","language_family":"","ipa":"","simple_urdu":"","urdu_script":"","detailed_urdu":"","word_parts":[{"part":"","origin":"","meaning_urdu":""}],"lang_history":[{"era":"","form":"","meaning":""}],"diagram":{"title":"","art":"","labels":[""]},"formula":{"text":"","explanation":""},"examples":[{"emoji":"","english":"","urdu":"","uscript":""}],"memory_trick":"","related":[""],"synonyms":[""],"antonyms":[""],"pron_guide":"","fun_fact":"","common_mistake":"","quiz":{"q":"","opts":["","","",""],"ci":0,"exp":""},"fc_back":""}'
+  ];
+  return lines.join(' ');
+}
+
+function fetchLesson(word, sub, cb) {
+  var prompt = buildPrompt(sub);
+  var url, headers, body;
+  if (apiType === 'groq') {
+    url = 'https://api.groq.com/openai/v1/chat/completions';
+    headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey };
+    body = JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 1800,
+      messages: [
+        { role: 'system', content: prompt },
+        { role: 'user', content: 'Explain this word fully: ' + word }
+      ],
+      response_format: { type: 'json_object' }
+    });
+  } else {
+    url = 'https://api.anthropic.com/v1/messages';
+    headers = { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' };
+    body = JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1800,
+      system: prompt,
+      messages: [{ role: 'user', content: 'Explain this word fully: ' + word }]
+    });
+  }
+  fetch(url, { method: 'POST', headers: headers, body: body })
+    .then(function(r) {
+      if (!r.ok) {
+        if (r.status === 401 || r.status === 403) {
+          apiKey = '';
+          localStorage.removeItem('wt4_apikey');
+          showSetup();
+          document.getElementById('setupErr').style.display = 'block';
+          document.getElementById('setupErr').textContent = 'API key galat hai! Dobara daalein.';
+        }
+        throw new Error('HTTP ' + r.status);
+      }
+      return r.json();
+    })
+    .then(function(d) {
+      var txt = '';
+      if (apiType === 'groq') {
+        txt = (d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || '';
+      } else {
+        if (d.content && d.content.length) {
+          for (var i = 0; i < d.content.length; i++) {
+            if (d.content[i].type === 'text') { txt = d.content[i].text; break; }
+          }
+        }
+      }
+      if (txt.indexOf('```') === 0) { txt = txt.replace('```json','').replace('```',''); } if (txt.lastIndexOf('```') > 0) { txt = txt.substring(0, txt.lastIndexOf('```')); } txt = txt.trim();
+      var si = txt.indexOf('{');
+      var ei = txt.lastIndexOf('}');
+      if (si >= 0 && ei > si) { txt = txt.substring(si, ei + 1); }
+      var obj = JSON.parse(txt);
+      cb(obj);
+    })
+    .catch(function(e) {
+      console.error('API Error:', e);
+      cb(null);
+    });
+}
+
+function xs(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function esc(s) {
+  return String(s || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+function makeClickable(text) {
+  return text.replace(/\b([A-Z][a-zA-Z]{3,})\b/g, function(m) {
+    return '<span class="cw" onclick="openWpop(\'' + esc(m) + '\')">' + m + '</span>';
+  });
+}
+
+function renderLesson(d) {
+  document.getElementById('lds').style.display = 'none';
+  var h = '';
+
+  // Title area
+  h += '<div class="wt">';
+  h += '<div class="ww">' + xs(d.word || curWord) + '</div>';
+  h += '<div class="brow">';
+  if (d.type) { h += '<span class="bdg bt">' + xs(d.type) + '</span>'; }
+  if (d.subject) { h += '<span class="bdg bs">' + xs(d.subject) + '</span>'; }
+  if (d.language_origin) { h += '<span class="bdg bl">' + xs(d.language_origin) + (d.language_family ? ' | ' + xs(d.language_family) : '') + '</span>'; }
+  if (d.ipa) { h += '<span class="bdg bi">' + xs(d.ipa) + '</span>'; }
+  h += '</div>';
+  h += '<div class="tts-row">';
+  h += '<div class="tb" onclick="spk(\'' + esc(d.word || curWord) + '\',\'en\')">Sunain (EN)</div>';
+  h += '<div class="tb" onclick="spk(\'' + esc(d.simple_urdu || '') + '\',\'ur\')">Sunain (UR)</div>';
+  h += '<div class="tb" onclick="spkSlow(\'' + esc(d.word || curWord) + '\')">Slow</div>';
+  h += '</div></div>';
+
+  // Meaning
+  h += '<div class="sec"><div class="shd">Matlab (Meaning)</div>';
+  h += '<div class="umean">';
+  if (d.urdu_script) { h += '<span class="uscript">' + xs(d.urdu_script) + '</span>'; }
+  h += '<strong style="color:var(--cy);font-size:1.1rem">' + xs(d.simple_urdu || '') + '</strong>';
+  h += '</div></div>';
+
+  // Detail
+  h += '<div class="sec"><div class="shd">Tafseel (Detail)</div>';
+  h += '<div class="sbody">' + makeClickable(xs(d.detailed_urdu || '')) + '</div></div>';
+
+  // Word breakdown
+  if (d.word_parts && d.word_parts.length) {
+    h += '<div class="sec"><div class="shd">Lafz Ki Todh (Word Breakdown)</div>';
+    h += '<div class="bkdn">';
+    for (var i = 0; i < d.word_parts.length; i++) {
+      if (i > 0) { h += '<span class="plsym">+</span>'; }
+      h += '<div class="sylb"><span class="sylt">' + xs(d.word_parts[i].part) + '</span><span class="syli">' + xs(d.word_parts[i].origin || '') + '</span></div>';
+    }
+    h += '</div><div class="aline">';
+    for (var j = 0; j < d.word_parts.length; j++) {
+      if (j > 0) { h += '<span style="color:rgba(255,255,255,.2)">-></span>'; }
+      h += '<span class="apart">' + xs(d.word_parts[j].meaning_urdu || '') + '</span>';
+    }
+    h += '</div></div>';
+  }
+
+  // Pronunciation
+  if (d.ipa || d.pron_guide) {
+    h += '<div class="sec"><div class="shd">Talaffuz (Pronunciation)</div>';
+    h += '<div class="pbox"><div class="pipa">' + xs(d.ipa || '') + '</div>';
+    h += '<div class="pguide">' + xs(d.pron_guide || '') + '</div></div></div>';
+  }
+
+  // Language history
+  if (d.lang_history && d.lang_history.length) {
+    h += '<div class="sec"><div class="shd">Zuban Ki Taareekh (Language History)</div>';
+    h += '<div class="ltree">';
+    for (var k = 0; k < d.lang_history.length; k++) {
+      var icons = ['[A]', '[~]', '[OK]'];
+      h += '<div class="lstep"><span class="lic">' + (icons[k] || '[>]') + '</span>';
+      h += '<div class="ltxt"><span class="llbl">' + xs(d.lang_history[k].era || '') + '</span>';
+      h += '<strong style="color:var(--cy)">' + xs(d.lang_history[k].form || '') + '</strong> - ' + xs(d.lang_history[k].meaning || '') + '</div></div>';
+    }
+    h += '</div></div>';
+  }
+
+  // Diagram
+  if (d.diagram && d.diagram.art && d.diagram.art.length > 4) {
+    h += '<div class="sec"><div class="shd">Diagram (Tasveer)</div>';
+    h += '<div class="dgwrap"><div class="dgtitle">' + xs(d.diagram.title || '') + '</div>';
+    h += '<div class="dgarea">' + xs(d.diagram.art).replace(/\n/g, '<br>') + '</div>';
+    if (d.diagram.labels && d.diagram.labels.length) {
+      h += '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">';
+      for (var li = 0; li < d.diagram.labels.length; li++) {
+        h += '<span class="lbtag">[L] ' + xs(d.diagram.labels[li]) + '</span>';
+      }
+      h += '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  // Formula
+  if (d.formula && d.formula.text && d.formula.text.length > 1) {
+    h += '<div class="sec"><div class="shd">Formula / Equation</div>';
+    h += '<div class="fbox"><div class="ftxt">' + xs(d.formula.text) + '</div>';
+    h += '<div class="flbl">' + xs(d.formula.explanation || '') + '</div></div></div>';
+  }
+
+  // Examples
+  if (d.examples && d.examples.length) {
+    h += '<div class="sec"><div class="shd">Pakistani Misalain (Real Life Examples)</div>';
+    h += '<div class="exlist">';
+    for (var ei = 0; ei < d.examples.length; ei++) {
+      var ex = d.examples[ei];
+      h += '<div class="exitem"><span class="exem">' + xs(ex.emoji || '*') + '</span>';
+      h += '<div><div class="exen">' + xs(ex.english || '') + '</div>';
+      h += '<div class="exur">' + xs(ex.urdu || '');
+      if (ex.uscript) { h += '<br><span style="font-family:Amiri,serif;font-size:1rem;direction:rtl">' + xs(ex.uscript) + '</span>'; }
+      h += '</div></div></div>';
+    }
+    h += '</div></div>';
+  }
+
+  // Memory trick
+  if (d.memory_trick) {
+    h += '<div class="sec"><div class="shd">Memory Trick (Yaad Rakhne Ka Tareeqa)</div>';
+    h += '<div class="mbox"><div class="mtxt">[!] ' + xs(d.memory_trick) + '</div></div></div>';
+  }
+
+  // Fun fact
+  if (d.fun_fact) {
+    h += '<div class="sec"><div class="shd">Dilchasp Baat (Fun Fact)</div>';
+    h += '<div class="ff"><div class="fft">' + xs(d.fun_fact) + '</div></div></div>';
+  }
+
+  // Common mistake
+  if (d.common_mistake) {
+    h += '<div class="sec"><div class="shd">Aam Ghalti (Common Mistake)</div>';
+    h += '<div style="background:rgba(255,127,127,.06);border:1px solid rgba(255,127,127,.18);border-radius:8px;padding:8px 12px;font-size:.88rem;color:rgba(255,200,200,.82)">' + xs(d.common_mistake) + '</div></div>';
+  }
+
+  // Related / Synonyms / Antonyms
+  if (d.related && d.related.length) {
+    h += '<div class="sec"><div class="shd">Milte Julte Alfaz (Related)</div><div class="tags">';
+    for (var ri = 0; ri < d.related.length; ri++) {
+      h += '<span class="tag trel" onclick="go(\'' + esc(d.related[ri]) + '\')">' + xs(d.related[ri]) + '</span>';
+    }
+    h += '</div></div>';
+  }
+  if (d.synonyms && d.synonyms.length) {
+    h += '<div class="sec"><div class="shd">Hum Maani (Synonyms)</div><div class="tags">';
+    for (var si2 = 0; si2 < d.synonyms.length; si2++) {
+      h += '<span class="tag tsyn" onclick="go(\'' + esc(d.synonyms[si2]) + '\')">' + xs(d.synonyms[si2]) + '</span>';
+    }
+    h += '</div></div>';
+  }
+  if (d.antonyms && d.antonyms.length) {
+    h += '<div class="sec"><div class="shd">Ulte Alfaz (Antonyms)</div><div class="tags">';
+    for (var ai = 0; ai < d.antonyms.length; ai++) {
+      h += '<span class="tag tant" onclick="go(\'' + esc(d.antonyms[ai]) + '\')">' + xs(d.antonyms[ai]) + '</span>';
+    }
+    h += '</div></div>';
+  }
+
+  var le = document.getElementById('les');
+  le.innerHTML = h;
+  le.style.display = 'block';
+
+  if (d.quiz) {
+    quizData = { q: d.quiz.q, opts: d.quiz.opts, ci: d.quiz.ci, exp: d.quiz.exp };
+  }
+  updateFC(d.word || curWord, d.fc_back || d.simple_urdu || '');
+}
+
+function renderErr() {
+  document.getElementById('lds').style.display = 'none';
+  var le = document.getElementById('les');
+  le.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,127,127,.7);font-family:Kalam,cursive">Masla hua. Network check karein ya API key check karein.</div>';
+  le.style.display = 'block';
+}
+
+// WORD POPUP
+function openWpop(word) {
+  var ov = document.getElementById('wpopOv');
+  var wb = document.getElementById('wpopBody');
+  document.getElementById('wpopWord').textContent = word;
+  wb.innerHTML = '<div class="wpop-ldg">Samjha raha hoon...</div>';
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (!apiKey) { wb.innerHTML = '<div style="color:var(--cr);padding:20px;text-align:center">API key nahi hai. Key button se add karein.</div>'; return; }
+  fetchLesson(word, curSub, function(data) {
+    if (!data) {
+      wb.innerHTML = '<div style="color:rgba(255,127,127,.7);padding:20px;text-align:center">Masla hua. Dobara koshish karein.</div>';
+      return;
+    }
+    var wh = '';
+    wh += '<div class="wpop-umean">';
+    if (data.urdu_script) { wh += '<span class="wpop-uscript">' + xs(data.urdu_script) + '</span>'; }
+    wh += '<strong style="color:var(--cy)">' + xs(data.simple_urdu || '') + '</strong></div>';
+    wh += '<div class="wpop-detail">' + xs(data.detailed_urdu || '') + '</div>';
+    if (data.word_parts && data.word_parts.length) {
+      wh += '<div style="margin-bottom:10px"><div style="font-family:Caveat,cursive;font-size:.95rem;color:var(--cg);margin-bottom:6px">Lafz ki todh</div><div class="bkdn">';
+      for (var i = 0; i < data.word_parts.length; i++) {
+        if (i > 0) { wh += '<span class="plsym">+</span>'; }
+        wh += '<div class="sylb"><span class="sylt">' + xs(data.word_parts[i].part) + '</span><span class="syli">' + xs(data.word_parts[i].origin || '') + '</span></div>';
+      }
+      wh += '</div></div>';
+    }
+    if (data.ipa) { wh += '<div style="margin-bottom:8px;font-family:Caveat,cursive;font-size:1.1rem;color:var(--cv)">/ ' + xs(data.ipa) + ' /</div>'; }
+    if (data.examples && data.examples[0]) {
+      wh += '<div class="wpop-ex">' + xs(data.examples[0].english || '') + '<br><span style="color:var(--cp)">' + xs(data.examples[0].urdu || '') + '</span></div>';
+    }
+    if (data.memory_trick) { wh += '<div class="wpop-mem">[!] ' + xs(data.memory_trick) + '</div>'; }
+    if (data.related && data.related.length) {
+      wh += '<div class="tags">';
+      for (var ri = 0; ri < data.related.length; ri++) {
+        wh += '<span class="tag trel" onclick="closeWpop();go(\'' + esc(data.related[ri]) + '\')">' + xs(data.related[ri]) + '</span>';
+      }
+      wh += '</div>';
+    }
+    wh += '<div class="wpop-btns">';
+    wh += '<div class="wpop-btn wb-learn" onclick="closeWpop();go(\'' + esc(data.word || word) + '\')">Board par samjho</div>';
+    wh += '<div class="wpop-btn wb-speak" onclick="spk(\'' + esc(data.word || word) + '\',\'en\')">Sunain</div>';
+    wh += '</div>';
+    wb.innerHTML = wh;
+  });
+}
+
+function closeWpop() {
+  document.getElementById('wpopOv').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function wpopBg(e) {
+  if (e.target === document.getElementById('wpopOv')) { closeWpop(); }
+}
+
+// TOOLS
+function doErase() {
+  var le = document.getElementById('les');
+  le.classList.add('erasing');
+  setTimeout(function() {
+    le.style.display = 'none';
+    le.classList.remove('erasing');
+    le.innerHTML = '';
+    document.getElementById('ws').style.display = 'flex';
+    document.getElementById('wi').value = '';
+    curData = null;
+    quizData = null;
+    curWord = '';
+  }, 320);
+}
+
+function doSpeak() { if (curWord) { spk(curWord, 'en'); } }
+
+function spk(txt, lang) {
+  if (!window.speechSynthesis) { return; }
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = (lang === 'ur') ? 'ur-PK' : 'en-US';
+  u.rate = 0.88;
+  window.speechSynthesis.speak(u);
+}
+
+function spkSlow(txt) {
+  if (!window.speechSynthesis) { return; }
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'en-US';
+  u.rate = 0.45;
+  window.speechSynthesis.speak(u);
+}
+
+var rlist = ['Photosynthesis','Mitosis','Gravity','Democracy','Catalyst','Osmosis','Metabolism','Algorithm','Renaissance','Chromosome','Thermodynamics','Ecosystem','Hypothesis','Antibiotics','Civilisation','Quantum','Refraction','Digestion','Evaporation','Symbiosis','Evolution','Genetics','Electrolysis','Polynomial','Equilibrium','Oxidation','Respiration','Diffusion','Inflammation','Archaeology','Philosophy','Psychology','Sociology','Economics','Constitution','Magnetism','Radiation','Velocity','Acceleration','Friction','Camouflage','Empathy','Feudalism','Capitalism','Electron','Proton','DNA','RNA','Mitochondria','Nucleus','Enzyme','Hormone','Vaccination','Fossil','Erosion','Tsunami','Hurricane','Monsoon','Glacier'];
+
+function doRandom() {
+  go(rlist[Math.floor(Math.random() * rlist.length)]);
+}
+
+function doCopy() {
+  if (!curData) { showToast('Pehle koi word seekho!'); return; }
+  var t = 'WORD: ' + (curData.word || curWord) + '\nMatlab: ' + (curData.simple_urdu || '') + '\n' + (curData.urdu_script || '') + '\n\nDetail: ' + (curData.detailed_urdu || '') + '\n\nMemory Trick: ' + (curData.memory_trick || '');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(t).then(function() { showToast('Copy ho gaya!'); });
+  }
+}
+
+// PANELS
+function openPanel(id) {
+  var panels = document.querySelectorAll('.panel');
+  for (var i = 0; i < panels.length; i++) { panels[i].classList.remove('open'); }
+  document.getElementById(id).classList.add('open');
+  if (id === 'quizPanel') { renderQuiz(); }
+  if (id === 'drawPanel') { setTimeout(resizeDC, 50); }
+}
+
+function togglePanel(id) {
+  var p = document.getElementById(id);
+  if (p.classList.contains('open')) { closePanel(id); } else { openPanel(id); }
+}
+
+function closePanel(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// QUIZ
+function renderQuiz() {
+  var qb = document.getElementById('qbody');
+  if (!quizData) {
+    qb.innerHTML = '<div style="color:rgba(255,255,255,.38);font-size:.88rem">Pehle koi word seekho!</div>';
+    return;
+  }
+  var h = '<div class="qq">? ' + xs(quizData.q || '') + '</div><div class="qopts">';
+  for (var i = 0; i < (quizData.opts || []).length; i++) {
+    h += '<div class="qo" id="qo' + i + '" onclick="ansQ(' + i + ',' + quizData.ci + ',\'' + esc(quizData.exp || '') + '\')">' + xs(quizData.opts[i]) + '</div>';
+  }
+  h += '</div><div class="qfb" id="qfb"></div>';
+  qb.innerHTML = h;
+}
+
+function ansQ(sel, ci, exp) {
+  var opts = document.querySelectorAll('.qo');
+  for (var i = 0; i < opts.length; i++) { opts[i].onclick = null; opts[i].style.cursor = 'default'; }
+  document.getElementById('qo' + sel).classList.add(sel === ci ? 'ok' : 'no');
+  if (sel !== ci && document.getElementById('qo' + ci)) { document.getElementById('qo' + ci).classList.add('ok'); }
+  var fb = document.getElementById('qfb');
+  fb.style.display = 'block';
+  fb.innerHTML = (sel === ci ? 'Shabaash! Bilkul sahi!' : 'Nahi, galat.') + ' ' + xs(exp);
+}
+
+// HISTORY
+function addHist(word, sub) {
+  hist = hist.filter(function(h) { return h.w !== word; });
+  hist.unshift({ w: word, s: sub });
+  if (hist.length > 30) { hist.pop(); }
+  try { localStorage.setItem('wt4_hist', JSON.stringify(hist)); } catch(e) {}
+  renderHist();
+}
+
+function renderHist() {
+  var hb = document.getElementById('hbody');
+  if (!hist.length) {
+    hb.innerHTML = '<div style="color:rgba(255,255,255,.28);font-size:.82rem">Abhi koi word nahi seekha</div>';
+    return;
+  }
+  var h = '';
+  for (var i = 0; i < hist.length; i++) {
+    h += '<div class="hi" onclick="closePanel(\'histPanel\');go(\'' + esc(hist[i].w) + '\')">';
+    h += '<span>*</span><div><div>' + xs(hist[i].w) + '</div><div class="hsub">' + xs(hist[i].s || '') + '</div></div></div>';
+  }
+  hb.innerHTML = h;
+}
+
+// FLASHCARD
+function updateFC(word, back) {
+  document.getElementById('fbody').innerHTML = '<div class="fc" onclick="flipFC()"><div class="fcf" id="fcf">' + xs(word) + '</div><div class="fcb" id="fcb">' + xs(back) + '</div><div class="fch">Tap karein!</div></div>';
+}
+
+function flipFC() {
+  var f = document.getElementById('fcf');
+  var b = document.getElementById('fcb');
+  if (!f || !b) { return; }
+  if (f.style.display === 'none') { f.style.display = 'block'; b.style.display = 'none'; }
+  else { f.style.display = 'none'; b.style.display = 'block'; }
+}
+
+// COMPARE
+function doCompare() {
+  var w1 = document.getElementById('cw1').value.trim();
+  var w2 = document.getElementById('cw2').value.trim();
+  if (!w1 || !w2) { showToast('Dono words likho!'); return; }
+  if (!apiKey) { showSetup(); return; }
+  var res = document.getElementById('cres');
+  res.innerHTML = '<div style="color:rgba(255,255,255,.38)">Compare ho raha hai...</div>';
+  var prompt2 = 'Compare "' + w1 + '" vs "' + w2 + '" in Roman Urdu. Show differences, similarities, examples. Short, clear. Pakistani student ke liye.';
+  var url, headers, body;
+  if (apiType === 'groq') {
+    url = 'https://api.groq.com/openai/v1/chat/completions';
+    headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey };
+    body = JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 600, messages: [{ role: 'user', content: prompt2 }] });
+  } else {
+    url = 'https://api.anthropic.com/v1/messages';
+    headers = { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' };
+    body = JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt2 }] });
+  }
+  fetch(url, { method: 'POST', headers: headers, body: body })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var txt = (apiType === 'groq') ? ((d.choices && d.choices[0] && d.choices[0].message && d.choices[0].message.content) || '') : ((d.content && d.content[0] && d.content[0].text) || '');
+      res.innerHTML = xs(txt).replace(/\n/g, '<br>');
+    })
+    .catch(function() { res.innerHTML = '<span style="color:var(--cr)">Error. Dobara try karein.</span>'; });
+}
+
+// NOTES
+function saveNotes() {
+  try { localStorage.setItem('wt4_notes', document.getElementById('nta').value); } catch(e) {}
+  showToast('Notes save ho gaye!');
+}
+function clearNotes() {
+  document.getElementById('nta').value = '';
+  try { localStorage.removeItem('wt4_notes'); } catch(e) {}
+  showToast('Notes clear!');
+}
+
+// DRAWING
+function initDC() {
+  var c = document.getElementById('dc');
+  dctx = c.getContext('2d');
+  dctx.fillStyle = '#0f1e10';
+  dctx.fillRect(0, 0, c.width, c.height);
+  dctx.lineCap = 'round';
+  dctx.lineJoin = 'round';
+  c.addEventListener('mousedown', function(e) { dDraw = true; var r = c.getBoundingClientRect(); dLX = e.clientX - r.left; dLY = e.clientY - r.top; });
+  c.addEventListener('mousemove', function(e) { if (!dDraw) { return; } var r = c.getBoundingClientRect(); dLine(e.clientX - r.left, e.clientY - r.top); });
+  c.addEventListener('mouseup', function() { dDraw = false; });
+  c.addEventListener('mouseleave', function() { dDraw = false; });
+  c.addEventListener('touchstart', function(e) { e.preventDefault(); dDraw = true; var r = c.getBoundingClientRect(); var t = e.touches[0]; dLX = t.clientX - r.left; dLY = t.clientY - r.top; }, { passive: false });
+  c.addEventListener('touchmove', function(e) { e.preventDefault(); if (!dDraw) { return; } var r = c.getBoundingClientRect(); var t = e.touches[0]; dLine(t.clientX - r.left, t.clientY - r.top); }, { passive: false });
+  c.addEventListener('touchend', function() { dDraw = false; });
+}
+
+function resizeDC() {
+  var c = document.getElementById('dc');
+  var wrap = document.getElementById('cwrap');
+  if (!wrap) { return; }
+  var w = wrap.clientWidth - 8;
+  if (w < 100) { return; }
+  c.width = w;
+  c.height = Math.max(160, Math.round(w * 0.28));
+  if (!dctx) { initDC(); return; }
+  dctx = c.getContext('2d');
+  dctx.fillStyle = '#0f1e10';
+  dctx.fillRect(0, 0, c.width, c.height);
+  dctx.lineCap = 'round';
+  dctx.lineJoin = 'round';
+}
+
+function dLine(x, y) {
+  if (!dctx) { return; }
+  dctx.beginPath();
+  if (dtool === 'eraser') { dctx.strokeStyle = '#0f1e10'; dctx.lineWidth = 22; }
+  else { dctx.strokeStyle = dcol; dctx.lineWidth = 3; }
+  dctx.moveTo(dLX, dLY);
+  dctx.lineTo(x, y);
+  dctx.stroke();
+  dLX = x;
+  dLY = y;
+}
+
+function setTool(t, el) {
+  dtool = t;
+  var cts = document.querySelectorAll('.ct');
+  for (var i = 0; i < cts.length; i++) { cts[i].classList.remove('on'); }
+  el.classList.add('on');
+}
+
+function setCol(c, el) {
+  dcol = c;
+  var dots = document.querySelectorAll('.cdot');
+  for (var i = 0; i < dots.length; i++) { dots[i].classList.remove('sel'); }
+  el.classList.add('sel');
+  if (dtool === 'eraser') { setTool('pen', document.getElementById('penT')); }
+}
+
+function clearDC() {
+  if (dctx) { dctx.fillStyle = '#0f1e10'; dctx.fillRect(0, 0, document.getElementById('dc').width, document.getElementById('dc').height); }
+}
+
+function saveDC() {
+  var a = document.createElement('a');
+  a.download = 'drawing.png';
+  a.href = document.getElementById('dc').toDataURL();
+  a.click();
+}
+
+// THEME
+function toggleTheme() {
+  darkMode = !darkMode;
+  var r = document.documentElement.style;
+  if (!darkMode) {
+    r.setProperty('--bg', '#f0ede5');
+    r.setProperty('--board', '#fffef8');
+    r.setProperty('--pan', '#fff');
+    r.setProperty('--pb', 'rgba(0,0,0,.09)');
+    r.setProperty('--chalk', '#1a1a1a');
+    document.body.style.background = '#f0ede5';
+  } else {
+    r.setProperty('--bg', '#0d1117');
+    r.setProperty('--board', '#0f1e10');
+    r.setProperty('--pan', '#111820');
+    r.setProperty('--pb', 'rgba(255,255,255,.08)');
+    r.setProperty('--chalk', '#eee8dc');
+    document.body.style.background = '#0d1117';
+  }
+}
+
+// TOAST
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (t._timer) { clearTimeout(t._timer); }
+  t._timer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+initApp();
+</script>
+</body>
+</html>
