@@ -447,6 +447,11 @@
       <button class="gen-btn" id="genBtn" onclick="generateSlides()">
         ✨ Generate AI Slides
       </button>
+
+      <div class="field-group" style="margin-top:12px">
+        <label>🔑 Groq API Key <a href="https://console.groq.com/keys" target="_blank" style="color:var(--accent4);font-size:0.72rem">(Free — groq.com)</a></label>
+        <input type="password" id="groqKeyInput" placeholder="gsk_..." oninput="GROQ_KEY=this.value">
+      </div>
     </div>
 
     <!-- SLIDE VIEW -->
@@ -655,6 +660,35 @@
 </div>
 
 <script>
+// ========== GROQ API CONFIG ==========
+var GROQ_KEY = 'YOUR_GROQ_API_KEY_HERE'; // groq.com se free key lo
+var GROQ_MODEL = 'llama-3.3-70b-versatile';
+
+function aiCall(prompt, maxTokens, callback) {
+  maxTokens = maxTokens || 800;
+  fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + GROQ_KEY
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      max_tokens: maxTokens,
+      messages: [{role:'user', content: prompt}]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error) { callback(null, data.error.message); return; }
+    var txt = data.choices[0].message.content;
+    callback(txt, null);
+  })
+  .catch(function(e) {
+    callback(null, e.message);
+  });
+}
+
 // ========== STATE ==========
 var currentSubject = 'Physics';
 var currentSubjectIcon = '⚛️';
@@ -746,31 +780,19 @@ function generateSlides() {
     '[\n  {\n    "title": "Slide title",\n    "titleUrdu": "عنوان",\n    "badge": "short label",\n    "body": "2-3 sentence explanation with key terms emphasized by wrapping them in {{double braces}}",\n    "bodyUrdu": "اردو میں متن",\n    "emoji": "relevant emoji",\n    "terms": ["term1","term2","term3"]\n  }\n]\n' +
     'Use exactly {{term}} syntax around 3-5 important terms per slide. Make content colorful, engaging, educational.';
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 3000,
-      messages: [{role:'user', content: prompt}]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var raw = data.content[0].text;
-    raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    slides = JSON.parse(raw);
-    currentSlide = 0;
-    renderSlide();
-    renderDots();
+  aiCall(prompt, 3000, function(txt, err) {
     btn.disabled = false;
     btn.textContent = '✨ Generate AI Slides';
-  })
-  .catch(function(e) {
-    btn.disabled = false;
-    btn.textContent = '✨ Generate AI Slides';
-    // Fallback demo slides
-    slides = getDemoSlides(topic, count);
+    if (err || !txt) {
+      slides = getDemoSlides(topic, count);
+    } else {
+      try {
+        var raw = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+        slides = JSON.parse(raw);
+      } catch(e) {
+        slides = getDemoSlides(topic, count);
+      }
+    }
     currentSlide = 0;
     renderSlide();
     renderDots();
@@ -885,37 +907,34 @@ function openTerm(term) {
   document.getElementById('popTags').innerHTML = '';
   document.getElementById('termPopup').classList.add('open');
 
-  // Quick explanation
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 600,
-      messages: [{role:'user', content:
-        'For the term "' + term + '" in context of ' + currentSubject + ':\n' +
-        '1. Urdu translation/meaning (2-3 words)\n' +
-        '2. Simple English definition (2 sentences)\n' +
-        '3. Subject tags (3 tags)\n\n' +
-        'Return JSON only: {"urdu":"...","english":"...","tags":["tag1","tag2","tag3"]}'
-      }]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var raw = data.content[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
-    var d = JSON.parse(raw);
-    document.getElementById('popUrdu').textContent = d.urdu || term;
-    document.getElementById('popBody').textContent = d.english || 'A key concept in ' + currentSubject + '.';
-    var tagsHtml = (d.tags || []).map(function(t) {
-      return '<span class="tag" style="background:var(--accent4)22;color:var(--accent4)">' + t + '</span>';
-    }).join('');
-    document.getElementById('popTags').innerHTML = tagsHtml;
-  })
-  .catch(function() {
-    document.getElementById('popUrdu').textContent = term + ' (اردو ترجمہ)';
-    document.getElementById('popBody').textContent = 'A key concept in ' + currentSubject + '. Click "Deep Explain" for full details.';
-  });
+  aiCall(
+    'For the term "' + term + '" in context of ' + currentSubject + ':\n' +
+    '1. Urdu translation/meaning (2-3 words)\n' +
+    '2. Simple English definition (2 sentences)\n' +
+    '3. Subject tags (3 tags)\n\n' +
+    'Return JSON only: {"urdu":"...","english":"...","tags":["tag1","tag2","tag3"]}',
+    400,
+    function(txt, err) {
+      if (err || !txt) {
+        document.getElementById('popUrdu').textContent = term + ' (اردو ترجمہ)';
+        document.getElementById('popBody').textContent = 'A key concept in ' + currentSubject + '. Click "Deep Explain" for details.';
+        return;
+      }
+      try {
+        var raw = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+        var d = JSON.parse(raw);
+        document.getElementById('popUrdu').textContent = d.urdu || term;
+        document.getElementById('popBody').textContent = d.english || 'A key concept in ' + currentSubject + '.';
+        var tagsHtml = (d.tags || []).map(function(t) {
+          return '<span class="tag" style="background:var(--accent4)22;color:var(--accent4)">' + t + '</span>';
+        }).join('');
+        document.getElementById('popTags').innerHTML = tagsHtml;
+      } catch(e) {
+        document.getElementById('popUrdu').textContent = term;
+        document.getElementById('popBody').textContent = txt.substring(0, 200);
+      }
+    }
+  );
 }
 
 function closePopup() {
@@ -953,22 +972,12 @@ function popupAction(action) {
       'Make them educational and fun.'
   };
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 800,
-      messages: [{role:'user', content: prompts[action]}]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var txt = data.content.map(function(c) { return c.text || ''; }).join('');
+  aiCall(prompts[action], 800, function(txt, err) {
+    if (err || !txt) {
+      res.innerHTML = '<div style="color:var(--accent1)">Error loading. Check your Groq API key.</div>';
+      return;
+    }
     res.innerHTML = '<div style="white-space:pre-wrap">' + txt + '</div>';
-  })
-  .catch(function(e) {
-    res.innerHTML = 'Error loading. Please try again.';
   });
 }
 
@@ -1015,23 +1024,13 @@ function runTool(tool) {
     story: 'Explain "' + q + '" as an engaging story for Pakistani students.\nMake it fun, relatable with local examples.\nEnd with key learning points.\nAlso tell a short version in Urdu (اردو میں مختصر کہانی).'
   };
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{role:'user', content: prompts[tool]}]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var txt = data.content.map(function(c) { return c.text || ''; }).join('');
+  aiCall(prompts[tool], 1000, function(txt, err) {
+    if (err || !txt) {
+      res.textContent = 'Error: Could not connect to AI. Check Groq API key.';
+      return;
+    }
     res.style.whiteSpace = 'pre-wrap';
     res.textContent = txt;
-  })
-  .catch(function(e) {
-    res.textContent = 'Error: Could not connect to AI. Please try again.';
   });
 }
 
@@ -1050,23 +1049,18 @@ function generateQuiz() {
     '[{"q":"question","options":["A","B","C","D"],"answer":0,"explanation":"brief explanation"}]\n' +
     'answer is index (0-3). Make questions educational and varied difficulty.';
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{role:'user', content: prompt}]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var raw = data.content[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
-    quizData = JSON.parse(raw);
-    renderQuiz();
-  })
-  .catch(function() {
-    area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Could not generate quiz. Check connection and try again.</div>';
+  aiCall(prompt, 1000, function(txt, err) {
+    if (err || !txt) {
+      area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Could not generate quiz. Check Groq API key.</div>';
+      return;
+    }
+    try {
+      var raw = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+      quizData = JSON.parse(raw);
+      renderQuiz();
+    } catch(e) {
+      area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Parse error. Try again.</div>';
+    }
   });
 }
 
@@ -1124,25 +1118,20 @@ function generateFlashcards() {
     '[{"front":"English term or question","back":"اردو میں جواب + English answer"}]\n' +
     'Make them educational and bilingual.';
 
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 800,
-      messages: [{role:'user', content: prompt}]
-    })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var raw = data.content[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
-    fcData = JSON.parse(raw);
-    fcIndex = 0;
-    renderFC();
-    document.getElementById('fcNav').style.display = 'block';
-  })
-  .catch(function() {
-    area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Could not generate flashcards.</div>';
+  aiCall(prompt, 800, function(txt, err) {
+    if (err || !txt) {
+      area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Could not generate flashcards. Check Groq API key.</div>';
+      return;
+    }
+    try {
+      var raw = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+      fcData = JSON.parse(raw);
+      fcIndex = 0;
+      renderFC();
+      document.getElementById('fcNav').style.display = 'block';
+    } catch(e) {
+      area.innerHTML = '<div style="text-align:center;color:var(--accent1);padding:20px">Parse error. Try again.</div>';
+    }
   });
 }
 
@@ -1184,6 +1173,16 @@ document.addEventListener('keydown', function(e) {
 
 // ========== INIT ==========
 (function init() {
+  // Load saved Groq key
+  try {
+    var saved = localStorage.getItem('groq_key');
+    if (saved) { GROQ_KEY = saved; document.getElementById('groqKeyInput').value = saved; }
+  } catch(e) {}
+  // Save key on input
+  document.getElementById('groqKeyInput').addEventListener('input', function() {
+    GROQ_KEY = this.value;
+    try { localStorage.setItem('groq_key', this.value); } catch(e) {}
+  });
   // Load default demo slides
   slides = getDemoSlides("Newton's Laws of Motion", 6);
   renderSlide();
