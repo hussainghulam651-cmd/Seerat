@@ -159,8 +159,24 @@ textarea{min-height:80px;resize:vertical}
         <button class="lbtn active" id="lEn" onclick="setLang('en')">🇬🇧 EN</button>
         <button class="lbtn" id="lBi" onclick="setLang('bi')">🔀 Both</button>
         <button class="lbtn" id="lUr" onclick="setLang('ur')">🇵🇰 اردو</button>
+        <button class="lbtn" id="lSi" onclick="setLang('si')">سنڌي</button>
       </div>
-      <div class="fgrp"><label>📝 Topic</label><input type="text" id="topicIn" value="Newton's Laws of Motion"></div>
+      <div class="fgrp">
+        <label>📝 Topic — or Image se Topic</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="text" id="topicIn" value="Newton's Laws of Motion" style="flex:1">
+          <label title="Gallery se image chunen" style="width:36px;height:36px;border-radius:9px;background:var(--a3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0">
+            🖼️<input type="file" accept="image/*" id="galleryPick" style="display:none" onchange="readImageTopic(this,'gallery')">
+          </label>
+          <label title="Camera se photo len" style="width:36px;height:36px;border-radius:9px;background:var(--a6);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0">
+            📷<input type="file" accept="image/*" capture="environment" id="cameraPick" style="display:none" onchange="readImageTopic(this,'camera')">
+          </label>
+        </div>
+        <div id="imgPreview" style="display:none;margin-top:7px;border-radius:10px;overflow:hidden;max-height:120px;text-align:center;background:var(--card2);padding:4px">
+          <img id="imgThumb" style="max-height:112px;border-radius:8px;object-fit:contain">
+          <div id="imgStatus" style="font-size:.72rem;color:var(--a2);margin-top:4px">Analyzing image...</div>
+        </div>
+      </div>
       <div class="fgrp"><label>📊 Slides</label><select id="slideN"><option value="4">4</option><option value="6" selected>6</option><option value="8">8</option><option value="10">10</option></select></div>
       <div class="fgrp"><label>🎨 Style</label><select id="slideS"><option value="educational">📚 Educational</option><option value="colorful">🌈 Colorful</option><option value="professional">💼 Professional</option><option value="story">📖 Story</option></select></div>
       <button class="gbtn" id="genBtn" onclick="generateSlides()">✨ Generate AI Slides</button>
@@ -211,14 +227,14 @@ textarea{min-height:80px;resize:vertical}
     <div class="twin">
       <input type="text" id="q-wordmeaning" placeholder="e.g. محبت / Science / خوشي">
       <select id="wmlang" style="width:auto;flex-shrink:0">
-        <option value="Urdu to Urdu">اردو to اردو</option>
-        <option value="English to Urdu">English to اردو</option>
-        <option value="Urdu to English">اردو to English</option>
-        <option value="Sindhi to Sindhi">سنڌي to سنڌي</option>
-        <option value="Sindhi to Urdu">سنڌي to اردو</option>
-        <option value="Urdu to Sindhi">اردو to سنڌي</option>
-        <option value="English to Sindhi">English to سنڌي</option>
-        <option value="Sindhi to English">سنڌي to English</option>
+        <option value="Urdu to Urdu">اردو ← اردو</option>
+        <option value="English to Urdu">English ← اردو</option>
+        <option value="Urdu to English">اردو ← English</option>
+        <option value="Sindhi to Sindhi">سنڌي ← سنڌي</option>
+        <option value="Sindhi to Urdu">سنڌي ← اردو</option>
+        <option value="Urdu to Sindhi">اردو ← سنڌي</option>
+        <option value="English to Sindhi">English ← سنڌي</option>
+        <option value="Sindhi to English">سنڌي ← English</option>
       </select>
       <button class="trun" onclick="runTool('wordmeaning')">معنی</button>
     </div>
@@ -398,6 +414,7 @@ function setLang(l) {
   document.getElementById('lEn').classList.toggle('active',l==='en');
   document.getElementById('lBi').classList.toggle('active',l==='bi');
   document.getElementById('lUr').classList.toggle('active',l==='ur');
+  document.getElementById('lSi').classList.toggle('active',l==='si');
 }
 function showPanel(n) {
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
@@ -425,8 +442,11 @@ function generateSlides() {
   var btn=document.getElementById('genBtn');
   btn.disabled=true; btn.textContent='Generating...';
   document.getElementById('deckTitle').textContent=topic;
-  var li=curLang==='ur'?'All content in proper Urdu script only. No Roman Urdu. No Hindi.':curLang==='bi'?'English and proper Urdu script both. No Roman Urdu. No Hindi.':'English only, with key terms Urdu translation in parentheses using Urdu script.';
-  var p='Create '+cnt+' slides on "'+topic+'" for '+curSubj+'. Style: '+style+'. '+li+'\nReturn ONLY JSON array no markdown:\n[{"title":"","titleUrdu":"","badge":"","body":"text with {{key terms}} in double braces","bodyUrdu":"","emoji":"","terms":["t1","t2","t3"]}]\nPut 3-5 key terms in {{double braces}} per slide.';
+  var li=curLang==='ur'?'All content in proper Urdu script only. No Roman Urdu. No Hindi.':
+    curLang==='si'?'All content in proper Sindhi script only. No Roman. No Hindi. No Urdu.':
+    curLang==='bi'?'English and proper Urdu script both. No Roman Urdu. No Hindi.':
+    'English only, with key terms Urdu translation in parentheses using Urdu script.';
+  var p='Create '+cnt+' slides on "'+topic+'" for '+curSubj+'. Style: '+style+'. '+li+'\nReturn ONLY JSON array no markdown:\n[{"title":"","titleUrdu":"","titleSindhi":"","badge":"","body":"text with {{key terms}} in double braces","bodyUrdu":"","bodySindhi":"","emoji":"","terms":["t1","t2","t3"]}]\nPut 3-5 key terms in {{double braces}} per slide. Fill titleSindhi and bodySindhi with proper Sindhi script.';
   ai(p,3000,function(txt,err){
     btn.disabled=false; btn.textContent='✨ Generate AI Slides';
     if(err||!txt){slides=demoSlides(topic,cnt);}
@@ -454,9 +474,11 @@ function renderSlide() {
   document.getElementById('sCtr').textContent=(curSlide+1)+'/'+slides.length;
   var bh=wrapTerms(s.body||''); var buh=wrapTerms(s.bodyUrdu||'');
   var tB=curLang==='ur'?'<div class="stitle-ur">'+(s.titleUrdu||s.title)+'</div>':
+    curLang==='si'?'<div class="stitle-ur">'+(s.titleSindhi||s.titleUrdu||s.title)+'</div>':
     curLang==='bi'?'<div class="stitle" style="color:'+p.ac+'">'+s.title+'</div><div class="stitle-ur" style="color:'+p.ac+'cc">'+(s.titleUrdu||'')+'</div>':
     '<div class="stitle" style="color:'+p.ac+'">'+s.title+'</div>';
   var bdB=curLang==='ur'?'<div class="sbody-ur">'+buh+'</div>':
+    curLang==='si'?'<div class="sbody-ur">'+(s.bodySindhi?wrapTerms(s.bodySindhi):buh)+'</div>':
     curLang==='bi'?'<div class="sbody">'+bh+'</div>'+(s.bodyUrdu?'<div class="sbody-ur" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1)">'+buh+'</div>':''):
     '<div class="sbody">'+bh+'</div>';
   var tags=(s.terms||[]).slice(0,5).map(function(t,i){var c=TC[i%TC.length];return '<span class="tag" style="background:'+c+'22;color:'+c+';cursor:pointer" onclick="openTerm(\''+t.replace(/['"\\]/g,'_')+'\')" >'+t+'</span>';}).join('');
@@ -529,7 +551,7 @@ function runTool(tool) {
   var ps={
     explain:'Explain "'+q+'" in '+curSubj+' context.\nWrite ONLY in two sections:\nSection 1 — English: A warm, friendly explanation in 3-4 sentences as a knowledgeable teacher would speak. Use **bold** on 4-5 key terms. No bullet points, no symbols, natural paragraphs.\nSection 2 — اردو میں وضاحت: Write 3-4 sentences fully in proper Urdu script (not Roman Urdu, not Hindi). Use **bold** on important Urdu terms.\nDo NOT write in Roman Urdu. Do NOT write in Hindi.',
 
-    wordmeaning:'Explain the word "'+q+'" with direction: '+document.getElementById('wmlang').value+'.\nProvide:\n1. Direct meaning/translation\n2. Meanings in 3 different contexts\n3. One example sentence\n4. Two related words\nWrite ONLY in proper Urdu script and/or English depending on direction selected. Do NOT use Roman Urdu. Do NOT use Hindi. Use **bold** on the main word and its translation.',
+    wordmeaning:'Explain the word "'+q+'" with direction: '+document.getElementById('wmlang').value+'.\nProvide:\n1. Direct meaning/translation\n2. Meanings in 3 different contexts\n3. One example sentence\n4. Two related words\nWrite ONLY in proper script matching the target language — if Urdu use Urdu script, if Sindhi use Sindhi script, if English use English. Do NOT use Roman Urdu or Roman Sindhi or Hindi. Use **bold** on the main word and its translation.',
 
     wordhistory:'Tell the complete origin and history of the word "'+q+'".\nWrite ONLY in two sections:\nSection 1 — English: A storytelling-style explanation. Which language it came from, what it meant originally, how its meaning changed over time. Use **bold** on key historical terms and language names. 4-5 sentences, natural paragraphs, no symbols.\nSection 2 — اردو میں تاریخ: Write 3-4 sentences in proper Urdu script (not Roman Urdu, not Hindi) summarizing the same history.\nDo NOT use Roman Urdu or Hindi.',
 
@@ -620,6 +642,53 @@ document.addEventListener('keydown',function(e){
   if(document.getElementById('tPop').classList.contains('open')){if(e.key==='Escape')closePop();return;}
   if(document.getElementById('panel-slides').classList.contains('active')){if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();}
 });
+
+// ===== IMAGE TO TOPIC =====
+function readImageTopic(input, src) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var b64 = e.target.result.split(',')[1];
+    var mime = file.type || 'image/jpeg';
+    // Show preview
+    document.getElementById('imgThumb').src = e.target.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    document.getElementById('imgStatus').textContent = 'Image analyze ho rahi hai...';
+    document.getElementById('topicIn').value = '';
+    if (!GROQ_KEY || GROQ_KEY.length < 10) {
+      document.getElementById('imgStatus').textContent = 'Pehle Groq API key enter karein';
+      return;
+    }
+    // Use Groq vision model
+    fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body: JSON.stringify({
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        max_tokens: 200,
+        messages: [{
+          role: 'user',
+          content: [
+            {type:'image_url', image_url:{url:'data:'+mime+';base64,'+b64}},
+            {type:'text', text:'Look at this image. What is the main educational topic, subject or concept shown? Reply with ONLY a short topic name (3-7 words) suitable for a presentation. No explanation, just the topic name.'}
+          ]
+        }]
+      })
+    })
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if (d.error) { document.getElementById('imgStatus').textContent = 'Error: '+d.error.message; return; }
+      var topic = d.choices[0].message.content.trim().replace(/^["']|["']$/g,'');
+      document.getElementById('topicIn').value = topic;
+      document.getElementById('imgStatus').textContent = 'Topic mila: ' + topic;
+    })
+    .catch(function(e){
+      document.getElementById('imgStatus').textContent = 'Error: ' + e.message;
+    });
+  };
+  reader.readAsDataURL(file);
+}
 
 (function(){
   try{var k=localStorage.getItem('gk');if(k){GROQ_KEY=k;document.getElementById('groqKey').value=k;}}catch(e){}
