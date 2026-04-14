@@ -244,12 +244,12 @@ textarea{min-height:80px;resize:vertical}
     <div class="twin">
       <input type="text" id="q-translate" placeholder="Text likhen...">
       <select id="tlang" style="width:auto;flex-shrink:0">
-        <option value="English to Urdu">EN to اردو</option>
-        <option value="Urdu to English">اردو to EN</option>
-        <option value="English to Sindhi">EN to سنڌي</option>
+        <option value="English to Urdu">English to اردو</option>
+        <option value="Urdu to English">اردو to English</option>
+        <option value="English to Sindhi">English to سنڌي</option>
         <option value="Sindhi to Urdu">سنڌي to اردو</option>
         <option value="Urdu to Sindhi">اردو to سنڌي</option>
-        <option value="English to Roman Urdu">EN to Roman Urdu</option>
+        <option value="Sindhi to English">سنڌي to English</option>
       </select>
       <button class="trun" onclick="runTool('translate')">Translate</button>
     </div>
@@ -425,7 +425,7 @@ function generateSlides() {
   var btn=document.getElementById('genBtn');
   btn.disabled=true; btn.textContent='Generating...';
   document.getElementById('deckTitle').textContent=topic;
-  var li=curLang==='ur'?'All in Urdu only.':curLang==='bi'?'English+Urdu both.':'English, Urdu terms in parentheses.';
+  var li=curLang==='ur'?'All content in proper Urdu script only. No Roman Urdu. No Hindi.':curLang==='bi'?'English and proper Urdu script both. No Roman Urdu. No Hindi.':'English only, with key terms Urdu translation in parentheses using Urdu script.';
   var p='Create '+cnt+' slides on "'+topic+'" for '+curSubj+'. Style: '+style+'. '+li+'\nReturn ONLY JSON array no markdown:\n[{"title":"","titleUrdu":"","badge":"","body":"text with {{key terms}} in double braces","bodyUrdu":"","emoji":"","terms":["t1","t2","t3"]}]\nPut 3-5 key terms in {{double braces}} per slide.';
   ai(p,3000,function(txt,err){
     btn.disabled=false; btn.textContent='✨ Generate AI Slides';
@@ -504,9 +504,9 @@ function popAct(action) {
     return;
   }
   var ps={
-    deepexplain:'Explain "'+curTerm+'" for a student studying '+curSubj+' — warm, friendly tone jaise ek wise teacher bolte hain. Kya hai, kaise kaam karta hai, kyun zaroori hai, ek interesting baat. Use **bold** on 4-5 important terms. Phir 2 sentences Urdu mein. No bullet points, no robotic symbols, flowing paragraphs only.',
-    examples:'4 real-world examples of "'+curTerm+'" — Pakistani students ke liye relatable, roz ki zindagi se. Use **bold** on main concept. Phir 2 Urdu mein. Friendly tone, no lists.',
-    quiz:'3 MCQ questions on "'+curTerm+'" in '+curSubj+'. Format:\nQ1. Sawal?\nA) ... B) ... C) ... D) ...\nJawab: X — kyunki...\n\nSimple aur educational.'
+    deepexplain:'You are a warm, knowledgeable teacher. Explain "'+curTerm+'" for a student studying '+curSubj+'.\nWrite ONLY in two sections:\nSection 1 — English: A friendly, clear explanation in 3-4 sentences. Use **bold** on 4-5 key terms. No bullet points, no symbols, flowing paragraphs only.\nSection 2 — اردو میں وضاحت: Write 3-4 sentences explaining the same concept fully in proper Urdu script (not Roman Urdu, not Hindi). Use **bold** on key Urdu terms.\nDo NOT use Roman Urdu. Do NOT use Hindi. Only English and Urdu script.',
+    examples:'Give 4 real-world examples of "'+curTerm+'" from '+curSubj+' that students can relate to.\nWrite ONLY in two sections:\nSection 1 — English: 4 examples in clear English. Use **bold** on the key concept in each.\nSection 2 — اردو مثالیں: Write 2 examples fully in proper Urdu script (not Roman Urdu, not Hindi).\nNo bullet points. Friendly tone. Do NOT use Roman Urdu or Hindi.',
+    quiz:'Create 3 MCQ questions about "'+curTerm+'" in '+curSubj+'.\nWrite questions in English.\nFormat:\nQ1. Question?\nA) option  B) option  C) option  D) option\nAnswer: X — Because: brief reason in English.\n\nThen repeat all 3 questions in proper Urdu script only (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi anywhere.'
   };
   ai(ps[action],900,function(txt,err){
     if(err||!txt){res.innerHTML='<span style="color:var(--a1)">'+(err||'Error')+'</span>';return;}
@@ -527,17 +527,29 @@ function runTool(tool) {
   var res=document.getElementById('r-'+tool);
   res.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
   var ps={
-    explain:'Yeh concept samjhao: "'+q+'" — insani, dosti bhari zaban mein jaise ek wise ustad bolte hain. Kya hai, kaise kaam karta hai, kyun aham hai, ek interesting fact. Use **bold** on 4-5 key terms. Phir 2-3 Urdu sentences. Flowing paragraphs, no bullet symbols.',
-    wordmeaning:'Word: "'+q+'"\nDirection: '+document.getElementById('wmlang').value+'\n\nDo:\n1. Direct meaning/translation\n2. Different context meanings (3-4)\n3. Example sentence\n4. Related words\n\nUse **bold** on main word and translation. Friendly human tone.',
-    wordhistory:'"'+q+'" — is lafz ki puri taareekh kahani ke andaz mein sunao. Kahan se aya, konsi zaban se, pehle kya matlab tha, waqt ke saath kaise badla. Use **bold** on key origins and language names. Phir chhoti Urdu summary. Story jaisi writing.',
-    sciterm:'Scientific term "'+q+'" ko root by root todo. Har part ki Greek/Latin origin, matlab, combined meaning. Phir full concept simply explain karo. Use **bold** on each root. Urdu mein brief explanation bhi dena.',
-    scientist:'"'+q+'" ki zindagi ek fascinating human story ke taur par sunao. Early life, struggles, **key discoveries** (bold on names), achievements, duniya par asar. Muslim/Pakistani science connection if relevant. End with their famous quote. No bullet points, story format. Urdu mein 3-line summary.',
-    translate:'Translate: "'+q+'"\nDirection: '+document.getElementById('tlang').value+'\nOnly translation, nothing else.',
-    summarize:'Summarize karo yeh text 4-5 key points mein, friendly tone:\n\n'+q+'\n\nUse **bold** on main ideas. 2-line Urdu summary.',
-    essay:'Essay likho "'+q+'" par '+document.getElementById('elang').value+' mein. 300-350 words. Use **bold** on key terms. Natural flowing style.',
-    formula:'"'+q+'" ke key formulas. Har formula ke liye: **name** (bold), formula, symbols ki meaning, Urdu naam. Human explanations.',
-    timeline:'"'+q+'" ki timeline — 8 key events. Format: Saal — **Event naam** — ek sentence. 3-line Urdu summary.',
-    story:'"'+q+'" Pakistani students ke liye engaging story mein samjhao. Use **bold** on key concepts. 3 learning points. Phir Urdu mein chhoti kahani.'
+    explain:'Explain "'+q+'" in '+curSubj+' context.\nWrite ONLY in two sections:\nSection 1 — English: A warm, friendly explanation in 3-4 sentences as a knowledgeable teacher would speak. Use **bold** on 4-5 key terms. No bullet points, no symbols, natural paragraphs.\nSection 2 — اردو میں وضاحت: Write 3-4 sentences fully in proper Urdu script (not Roman Urdu, not Hindi). Use **bold** on important Urdu terms.\nDo NOT write in Roman Urdu. Do NOT write in Hindi.',
+
+    wordmeaning:'Explain the word "'+q+'" with direction: '+document.getElementById('wmlang').value+'.\nProvide:\n1. Direct meaning/translation\n2. Meanings in 3 different contexts\n3. One example sentence\n4. Two related words\nWrite ONLY in proper Urdu script and/or English depending on direction selected. Do NOT use Roman Urdu. Do NOT use Hindi. Use **bold** on the main word and its translation.',
+
+    wordhistory:'Tell the complete origin and history of the word "'+q+'".\nWrite ONLY in two sections:\nSection 1 — English: A storytelling-style explanation. Which language it came from, what it meant originally, how its meaning changed over time. Use **bold** on key historical terms and language names. 4-5 sentences, natural paragraphs, no symbols.\nSection 2 — اردو میں تاریخ: Write 3-4 sentences in proper Urdu script (not Roman Urdu, not Hindi) summarizing the same history.\nDo NOT use Roman Urdu or Hindi.',
+
+    sciterm:'Break down the scientific term "'+q+'" root by root.\nWrite ONLY in two sections:\nSection 1 — English: Explain each Greek or Latin root, what it means, and the combined meaning. Then explain the full scientific concept simply. Use **bold** on each root word. Natural paragraphs, no bullet symbols.\nSection 2 — اردو میں وضاحت: Write a 3-4 sentence explanation of the term and its roots in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.',
+
+    scientist:'Write about the scientist "'+q+'" as a fascinating human story.\nWrite ONLY in two sections:\nSection 1 — English: Cover early life, struggles, **key discoveries** (bold names), major achievements, and impact on the world. If relevant, mention Islamic or Pakistani scientific contributions. End with their most famous quote in English. 5-6 natural sentences, no bullet points.\nSection 2 — اردو میں سوانح: Write 4-5 sentences about the same scientist fully in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.',
+
+    translate:'Translate the following text.\nDirection: '+document.getElementById('tlang').value+'\nText: "'+q+'"\nProvide ONLY the translation. No explanation. Use proper script — if translating to Urdu use Urdu script, if Sindhi use Sindhi script. Do NOT use Roman Urdu or Roman Sindhi.',
+
+    summarize:'Summarize the following text.\nWrite ONLY in two sections:\nSection 1 — English Summary: 4-5 key points in clear English. Use **bold** on main ideas. Natural sentences.\nSection 2 — اردو خلاصہ: Write a 3-4 sentence summary in proper Urdu script (not Roman Urdu, not Hindi).\nText to summarize:\n'+q,
+
+    essay:'Write an essay on "'+q+'" in '+document.getElementById('elang').value+'.\nLength: 300-350 words. Introduction, 2-3 body paragraphs, conclusion. Use **bold** on key terms. Natural flowing style, no robotic headings or symbols.\nIf Urdu is selected: write fully in proper Urdu script, not Roman Urdu.\nIf Bilingual: write full essay in English, then full essay in proper Urdu script. No Roman Urdu.',
+
+    formula:'List the key formulas for "'+q+'".\nFor each formula write:\n**Formula Name** (bold)\nFormula with symbols\nWhat each symbol means in English\nاردو نام (Urdu name in Urdu script)\nExplain each in a friendly human way. No robotic symbols. Do NOT use Roman Urdu.',
+
+    timeline:'Create a timeline of "'+q+'" with 8 key events.\nWrite ONLY in two sections:\nSection 1 — English: Each event as: Year — **Event Name** — one clear sentence.\nSection 2 — اردو خلاصہ: Write a 4-5 sentence timeline summary in proper Urdu script (not Roman Urdu, not Hindi).',
+
+    compare:'Compare "'+q+'" clearly.\nWrite ONLY in two sections:\nSection 1 — English: Explain similarities, differences, and key features. Use **bold** on important points. Natural paragraphs, no symbols.\nSection 2 — اردو موازنہ: Write a 3-4 sentence comparison in proper Urdu script (not Roman Urdu, not Hindi).',
+
+    story:'Explain "'+q+'" as an engaging story for students.\nWrite ONLY in two sections:\nSection 1 — English Story: Use **bold** on key concepts. End with 3 learning points. Warm, natural storytelling style.\nSection 2 — اردو کہانی: Write a short version of the same story fully in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.'
   };
   var mx=(tool==='essay'||tool==='story'||tool==='scientist'||tool==='wordhistory')?1100:800;
   ai(ps[tool],mx,function(txt,err){
@@ -552,7 +564,7 @@ function generateQuiz() {
   var area=document.getElementById('qArea');
   area.innerHTML='<div class="ldots" style="justify-content:center;padding:36px"><span></span><span></span><span></span></div>';
   document.getElementById('qScore').style.display='none'; qAns=[];
-  ai('5 MCQ questions on "'+topic+'" for '+subj+'. Language: '+lang+'. Return ONLY JSON:\n[{"q":"","options":["","","",""],"answer":0,"explanation":""}]',
+  ai('Create 5 MCQ questions on "'+topic+'" for '+subj+'.\nLanguage: '+lang+'.\nIMPORTANT: If Urdu is selected, write questions fully in proper Urdu script (NOT Roman Urdu, NOT Hindi). If Bilingual, write each question in English then again in proper Urdu script.\nReturn ONLY JSON:\n[{"q":"","options":["","","",""],"answer":0,"explanation":""}]',
   1000,function(txt,err){
     if(err||!txt){area.innerHTML='<div style="color:var(--a1);text-align:center;padding:20px">'+(err||'Error')+'</div>';return;}
     try{qData=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());renderQuiz();}
