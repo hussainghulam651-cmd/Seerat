@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Fareed School Notification App</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --emerald: #0d5c3a;
+  --gold: #c9a84c;
+  --cream: #faf7f0;
+  --deep: #0a1a0f;
+  --accent: #e8d5a3;
+  --red: #c0392b;
+  --light-green: #e8f5ee;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  font-family: 'Crimson Pro', serif;
+  min-height: 100vh;
+  color: var(--deep);
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, var(--emerald) 0%, #1a7a4f 50%, var(--emerald) 100%);
+  padding: 16px 20px 12px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(13,92,58,0.4);
+  border-bottom: 3px solid var(--gold);
+}
+.app-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.header-inner { position: relative; display: flex; align-items: center; justify-content: center; gap: 14px; }
+.monogram-wrap {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  overflow: hidden;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: 0.3s;
+}
+.monogram-wrap:hover { border-color: #fff; transform: scale(1.05); }
+.monogram-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.monogram-placeholder { font-size: 22px; color: var(--gold); font-weight: 900; }
+.header-text { text-align: left; }
+.school-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+.school-name span { color: var(--gold); }
+.school-sub { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+.header-badge {
+  position: absolute; right: 0; top: 0;
+  background: var(--gold);
+  color: var(--deep);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 0 0 0 8px;
+  letter-spacing: 1px;
+}
+input[type="file"] { display: none; }
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  background: var(--emerald);
+  border-bottom: 2px solid var(--gold);
+}
+.tab-btn {
+  flex: 1;
+  padding: 11px 5px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-family: 'Crimson Pro', serif;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.tab-btn.active {
+  color: var(--gold);
+  background: rgba(201,168,76,0.15);
+  border-bottom: 2px solid var(--gold);
+}
+
+/* ===== SECTIONS ===== */
+.section { display: none; padding: 16px; }
+.section.active { display: block; }
+
+/* ===== CARD ===== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 12px rgba(13,92,58,0.1);
+  border: 1px solid rgba(201,168,76,0.25);
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--emerald);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--accent);
+  display: flex; align-items: center; gap: 7px;
+}
+.card-title .icon { font-size: 18px; }
+
+/* ===== FORM ELEMENTS ===== */
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--emerald);
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+input[type="text"], select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Crimson Pro', serif;
+  color: var(--deep);
+  background: var(--cream);
+  outline: none;
+  transition: 0.2s;
+  margin-bottom: 10px;
+}
+input[type="text"]:focus, select:focus, textarea:focus {
+  border-color: var(--emerald);
+  background: #fff;
+}
+textarea { min-height: 80px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row2 > div { margin-bottom: 0; }
+
+/* ===== NOTIFICATION TYPES ===== */
+.notif-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.notif-chip {
+  padding: 9px 6px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 11px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #555;
+  font-weight: 600;
+  line-height: 1.3;
+  background: var(--cream);
+  user-select: none;
+}
+.notif-chip.selected {
+  border-color: var(--emerald);
+  background: var(--light-green);
+  color: var(--emerald);
+}
+.notif-chip .emoji { font-size: 16px; display: block; margin-bottom: 3px; }
+
+/* ===== LANG TOGGLE ===== */
+.lang-row {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.lang-btn {
+  flex: 1; padding: 9px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Crimson Pro', serif;
+  font-weight: 700;
+  background: var(--cream);
+  cursor: pointer;
+  transition: 0.2s;
+  color: #666;
+}
+.lang-btn.active {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--deep);
+}
+
+/* ===== TEACHER NAME ===== */
+.teacher-options { display: flex; gap: 8px; margin-bottom: 8px; }
+.t-opt {
+  flex: 1; padding: 8px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--cream);
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+  color: #666;
+}
+.t-opt.active { border-color: var(--emerald); background: var(--light-green); color: var(--emerald); }
+#teacherAutoWrap, #teacherManualWrap { display: none; }
+#teacherAutoWrap.show, #teacherManualWrap.show { display: block; }
+
+/* ===== IMAGE UPLOADS ===== */
+.img-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.img-box {
+  border: 1.5px dashed #ccc;
+  border-radius: 10px;
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  background: var(--cream);
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.img-box:hover { border-color: var(--emerald); background: var(--light-green); }
+.img-box.has-img { border-style: solid; border-color: var(--emerald); }
+.img-box img { width: 100%; height: 55px; object-fit: cover; border-radius: 6px; }
+.img-box .img-label { font-size: 10px; font-weight: 600; color: #888; }
+.img-box .img-icon { font-size: 22px; }
+.img-box .remove-img {
+  position: absolute; top: 3px; right: 3px;
+  background: var(--red); color: #fff;
+  border: none; border-radius: 50%;
+  width: 18px; height: 18px;
+  font-size: 11px;
+  cursor: pointer; display: none;
+  align-items: center; justify-content: center;
+  line-height: 1;
+}
+.img-box.has-img .remove-img { display: flex; }
+
+/* ===== PREVIEW NOTICE ===== */
+#noticePreview {
+  background: #fff;
+  border: 2px solid var(--emerald);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(13,92,58,0.15);
+}
+.preview-header {
+  background: linear-gradient(135deg, var(--emerald), #1a7a4f);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--gold);
+}
+.preview-logo {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  overflow: hidden;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.preview-logo img { width: 100%; height: 100%; object-fit: cover; }
+.preview-logo-text { color: var(--gold); font-weight: 900; font-size: 18px; }
+.preview-school-info { flex: 1; }
+.preview-school-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+}
+.preview-school-name span { color: var(--gold); }
+.preview-school-sub { font-size: 11px; color: rgba(255,255,255,0.8); }
+.preview-student-photo {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  overflow: hidden;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.preview-student-photo img { width: 100%; height: 100%; object-fit: cover; }
+.preview-student-photo-text { color: rgba(255,255,255,0.7); font-size: 20px; }
+
+.notice-type-badge {
+  background: var(--gold);
+  color: var(--deep);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.preview-body { padding: 14px 16px; }
+.preview-date { font-size: 11px; color: #888; margin-bottom: 10px; }
+.preview-meta {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px; margin-bottom: 12px;
+}
+.meta-item {
+  background: var(--light-green);
+  border-radius: 7px;
+  padding: 7px 10px;
+  border-left: 3px solid var(--emerald);
+}
+.meta-item .meta-key { font-size: 10px; font-weight: 700; color: var(--emerald); margin-bottom: 2px; }
+.meta-item .meta-val { font-size: 13px; font-weight: 600; color: var(--deep); }
+.preview-notice-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--deep);
+  margin-bottom: 14px;
+  padding: 12px;
+  background: var(--cream);
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+}
+.preview-notice-text.urdu {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  direction: rtl;
+  font-size: 16px;
+  line-height: 2;
+}
+.preview-footer {
+  border-top: 1px solid var(--accent);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.signature-area { text-align: center; }
+.signature-img { max-height: 40px; max-width: 100px; object-fit: contain; margin-bottom: 4px; }
+.signature-line { width: 100px; height: 1px; background: var(--deep); margin: 4px 0; }
+.signature-name { font-size: 11px; font-weight: 700; color: var(--deep); }
+.signature-title { font-size: 10px; color: #888; }
+.stamp-area {
+  width: 60px; height: 60px;
+  border: 2px dashed var(--emerald);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  color: var(--emerald);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ===== GENERATE BUTTON ===== */
+.gen-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--emerald), #1a7a4f);
+  color: var(--gold);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(13,92,58,0.35);
+  margin-bottom: 10px;
+}
+.gen-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,92,58,0.45); }
+.gen-btn:active { transform: translateY(0); }
+
+.action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.act-btn {
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn-print { background: var(--emerald); color: var(--gold); }
+.btn-wa { background: #25D366; color: #fff; }
+.btn-copy { background: #3498db; color: #fff; }
+.btn-clear { background: #e0e0e0; color: #555; }
+
+/* ===== SAVED NOTICES ===== */
+.saved-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(201,168,76,0.25);
+  box-shadow: 0 2px 8px rgba(13,92,58,0.08);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.saved-item:hover { border-color: var(--emerald); }
+.saved-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.saved-badge { background: var(--light-green); color: var(--emerald); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.saved-date { font-size: 10px; color: #aaa; }
+.saved-name { font-size: 14px; font-weight: 700; color: var(--deep); }
+.saved-class { font-size: 12px; color: #888; }
+.saved-del {
+  background: none; border: none; color: var(--red);
+  font-size: 16px; cursor: pointer; padding: 4px;
+}
+
+/* ===== NOTICE PREVIEW AREA ===== */
+#previewEmpty {
+  text-align: center;
+  padding: 30px;
+  color: #aaa;
+}
+#previewEmpty .empty-icon { font-size: 48px; margin-bottom: 8px; }
+#previewEmpty p { font-size: 14px; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--deep);
+  color: var(--gold);
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.3s;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Print styles */
+@media print {
+  body * { visibility: hidden; }
+  #noticePreview, #noticePreview * { visibility: visible; }
+  #noticePreview { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+  .action-row, .gen-btn { display: none !important; }
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--emerald);
+  margin-bottom: 16px;
+  font-weight: 900;
+}
+.empty-saved { text-align: center; color: #aaa; padding: 30px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="app-header">
+  <div class="header-badge">NOTIFICATION APP</div>
+  <div class="header-inner">
+    <div class="monogram-wrap" onclick="document.getElementById('monogramInput').click()" title="Tap to upload monogram">
+      <img id="monogramImg" src="" alt="" style="display:none">
+      <div class="monogram-placeholder" id="monogramPlaceholder">AF</div>
+    </div>
+    <div class="header-text">
+      <div class="school-name">AL-FAREED <span>PUBLIC SCHOOL</span></div>
+      <div class="school-sub">Tando Jam | Est. Est. Sindh, Pakistan</div>
+    </div>
+  </div>
+  <input type="file" id="monogramInput" accept="image/*" onchange="loadMonogram(this)">
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('create')">✏️ Create</button>
+  <button class="tab-btn" onclick="showTab('preview')">👁️ Preview</button>
+  <button class="tab-btn" onclick="showTab('saved')">📁 Saved</button>
+</div>
+
+<!-- ===== CREATE TAB ===== -->
+<div id="tab-create" class="section active">
+
+  <!-- Notification Type -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> Notification Type</div>
+    <div class="notif-grid" id="notifGrid">
+      <div class="notif-chip" data-id="homework" onclick="selectNotif(this)">
+        <span class="emoji">📚</span>Homework Incomplete
+      </div>
+      <div class="notif-chip" data-id="attention" onclick="selectNotif(this)">
+        <span class="emoji">👁️</span>Low Attention in Class
+      </div>
+      <div class="notif-chip" data-id="absent" onclick="selectNotif(this)">
+        <span class="emoji">❌</span>Irregular Attendance
+      </div>
+      <div class="notif-chip" data-id="incomplete" onclick="selectNotif(this)">
+        <span class="emoji">📝</span>Work Not Completed
+      </div>
+      <div class="notif-chip" data-id="discipline" onclick="selectNotif(this)">
+        <span class="emoji">⚠️</span>Discipline Issue
+      </div>
+      <div class="notif-chip" data-id="fees" onclick="selectNotif(this)">
+        <span class="emoji">💰</span>Fee Dues Pending
+      </div>
+      <div class="notif-chip" data-id="uniform" onclick="selectNotif(this)">
+        <span class="emoji">👕</span>Uniform Issue
+      </div>
+      <div class="notif-chip" data-id="meeting" onclick="selectNotif(this)">
+        <span class="emoji">🤝</span>Parent Meeting
+      </div>
+      <div class="notif-chip" data-id="exam" onclick="selectNotif(this)">
+        <span class="emoji">📊</span>Poor Performance
+      </div>
+      <div class="notif-chip" data-id="custom" onclick="selectNotif(this)">
+        <span class="emoji">✏️</span>Custom Notice
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Info -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎓</span> Student Info</div>
+    <div class="row2">
+      <div>
+        <label>Student Name</label>
+        <input type="text" id="studentName" placeholder="e.g. Ali Ahmed">
+      </div>
+      <div>
+        <label>Class / Grade</label>
+        <select id="studentClass">
+          <option value="">-- Select Class --</option>
+          <option value="Nursery">Nursery</option>
+          <option value="KG-1">KG-1</option>
+          <option value="KG-2">KG-2</option>
+          <option value="Class 1">Class 1</option>
+          <option value="Class 2">Class 2</option>
+          <option value="Class 3">Class 3</option>
+          <option value="Class 4">Class 4</option>
+          <option value="Class 5">Class 5</option>
+          <option value="Class 6">Class 6</option>
+          <option value="Class 7">Class 7</option>
+          <option value="Class 8">Class 8</option>
+          <option value="Class 9">Class 9</option>
+          <option value="Class 10">Class 10</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>Roll No. (Optional)</label>
+        <input type="text" id="rollNo" placeholder="e.g. 12">
+      </div>
+      <div>
+        <label>Section (Optional)</label>
+        <input type="text" id="section" placeholder="e.g. A">
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Info -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👩‍🏫</span> Class Teacher</div>
+    <label>Select Teacher</label>
+    <select id="teacherSelect" style="margin-bottom:8px"></select>
+    <div style="display:flex;gap:8px;margin-bottom:0">
+      <input type="text" id="newTeacherInput" placeholder="New teacher name..." style="margin-bottom:0;flex:1">
+      <button onclick="addTeacher()" style="padding:10px 14px;background:var(--emerald);color:var(--gold);border:none;border-radius:8px;font-weight:700;font-size:18px;cursor:pointer;flex-shrink:0">+</button>
+      <button onclick="removeTeacher()" style="padding:10px 14px;background:var(--red);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;flex-shrink:0">✕</button>
+    </div>
+    <div style="font-size:11px;color:#888;margin-top:5px">+ button se add karo, ✕ se selected teacher delete karo</div>
+  </div>
+
+  <!-- Language + Notice Content -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🌐</span> Notice Language & Content</div>
+    <div class="lang-row">
+      <button class="lang-btn active" id="langEN" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="lang-btn" id="langUR" onclick="setLang('ur')">🇵🇰 Urdu</button>
+    </div>
+    <label>Notice Text</label>
+    <textarea id="noticeText" placeholder="Notice content will appear here..."></textarea>
+    <label>Additional Remarks (Optional)</label>
+    <input type="text" id="remarks" placeholder="e.g. Please come to school tomorrow">
+  </div>
+
+  <!-- Images -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🖼️</span> Photos & Signature</div>
+    <div class="img-row">
+      <div class="img-box" id="monogramBox" onclick="document.getElementById('monogramInput2').click()">
+        <div class="img-icon">🏫</div>
+        <div class="img-label">School Monogram</div>
+        <button class="remove-img" onclick="removeImg('monogram',event)">✕</button>
+      </div>
+      <div class="img-box" id="studentBox" onclick="document.getElementById('studentInput').click()">
+        <div class="img-icon">👤</div>
+        <div class="img-label">Student Photo</div>
+        <button class="remove-img" onclick="removeImg('student',event)">✕</button>
+      </div>
+      <div class="img-box" id="signBox" onclick="document.getElementById('signInput').click()">
+        <div class="img-icon">✍️</div>
+        <div class="img-label">Signature</div>
+        <button class="remove-img" onclick="removeImg('sign',event)">✕</button>
+      </div>
+    </div>
+    <input type="file" id="monogramInput2" accept="image/*" onchange="loadImg('monogram',this)">
+    <input type="file" id="studentInput" accept="image/*" onchange="loadImg('student',this)">
+    <input type="file" id="signInput" accept="image/*" onchange="loadImg('sign',this)">
+  </div>
+
+  <button class="gen-btn" onclick="generateNotice()">📄 Generate Notice</button>
+
+</div>
+
+<!-- ===== PREVIEW TAB ===== -->
+<div id="tab-preview" class="section">
+  <div class="section-title">Notice Preview</div>
+
+  <div id="previewEmpty">
+    <div class="empty-icon">📄</div>
+    <p>Create a notice first<br>from the Create tab</p>
+  </div>
+
+  <div id="noticePreview" style="display:none">
+    <!-- Dynamic content -->
+  </div>
+
+  <div class="action-row" id="actionRow" style="display:none; margin-top:14px;">
+    <button class="act-btn btn-print" onclick="window.print()">🖨️ Print</button>
+    <button class="act-btn btn-wa" onclick="shareWhatsApp()">💬 WhatsApp</button>
+    <button class="act-btn btn-copy" onclick="copyNotice()">📋 Copy</button>
+    <button class="act-btn btn-clear" onclick="saveNotice()">💾 Save</button>
+  </div>
+</div>
+
+<!-- ===== SAVED TAB ===== -->
+<div id="tab-saved" class="section">
+  <div class="section-title">Saved Notices</div>
+  <div id="savedList"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+var monogramData = '';
+var studentPhotoData = '';
+var signatureData = '';
+var currentLang = 'en';
+var currentNotifType = '';
+var savedNotices = JSON.parse(localStorage.getItem('afNotices') || '[]');
+
+// Notification content templates
+var notifContent = {
+  homework: {
+    en: "Dear Parent/Guardian,\n\nThis is to bring to your kind attention that your ward has not been completing his/her homework regularly. Homework is an essential part of the learning process and its regular completion is mandatory.\n\nKindly ensure that your child completes all assigned homework on time. Your cooperation is highly appreciated.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0627\u0637\u0644\u0627\u0639 \u062f\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 (Homework) \u0645\u06a9\u0645\u0644 \u06a9\u0631\u06a9\u06d2 \u0646\u06c1\u06cc\u06ba \u0622\u0631\u06c1\u0627\u0964 \u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 \u062a\u0639\u0644\u06cc\u0645\u06cc \u0639\u0645\u0644 \u06a9\u0627 \u0627\u06c1\u0645 \u062d\u0635\u06c1 \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0627\u067e\u0646\u06d2 \u0628\u0686\u06d2 \u06a9\u0648 \u0631\u0648\u0632\u0627\u0646\u06c1 \u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u06a9\u0631\u0648\u0627\u0626\u06cc\u06ba\u0964 \u0622\u067e \u06a9\u06d2 \u062a\u0639\u0627\u0648\u0646 \u06a9\u0627 \u0634\u06a9\u0631\u06cc\u06c1\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  attention: {
+    en: "Dear Parent/Guardian,\n\nWe regret to inform you that your child is not paying proper attention during class hours. This behaviour is affecting his/her academic performance significantly.\n\nWe kindly request you to have a serious discussion with your child regarding the importance of classroom attentiveness. Please visit the school at your earliest convenience to discuss this matter.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0622\u06af\u0627\u06c1 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u06a9\u0644\u0627\u0633 \u0645\u06cc\u06ba \u062a\u0648\u062c\u06c1 \u0646\u06c1\u06cc\u06ba \u062f\u06cc \u0631\u06c1\u0627\u0964 \u06cc\u06c1 \u0631\u0648\u06cc\u06c1 \u0627\u0633 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u067e\u0631 \u0628\u0631\u0627 \u0627\u062b\u0631 \u0688\u0627\u0644 \u0631\u06c1\u0627 \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0627\u067e\u0646\u06d2 \u0628\u0686\u06d2 \u0633\u06d2 \u06a9\u0644\u0627\u0633 \u0645\u06cc\u06ba \u062a\u0648\u062c\u06c1 \u062f\u06cc\u0646\u06d2 \u06a9\u06cc \u0627\u06c1\u0645\u06cc\u062a \u067e\u0631 \u0628\u0627\u062a \u06a9\u0631\u06cc\u06ba \u0627\u0648\u0631 \u062c\u0644\u062f \u0627\u0632 \u062c\u0644\u062f \u0627\u0633\u06a9\u0648\u0644 \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  absent: {
+    en: "Dear Parent/Guardian,\n\nThis notice is to inform you that your child has been frequently absent from school without prior intimation. Regular attendance is crucial for academic growth and development.\n\nPlease ensure that your child attends school regularly. In case of unavoidable absence, kindly inform the school in advance. Continued absence may affect promotion to the next class.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0622\u06af\u0627\u06c1 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0627\u0633\u06a9\u0648\u0644 \u0633\u06d2 \u0628\u0627\u0631 \u0628\u0627\u0631 \u063a\u06cc\u0631 \u062d\u0627\u0636\u0631 \u0631\u06c1 \u0631\u06c1\u0627 \u06c1\u06d2\u0964 \u0628\u0627\u0642\u0627\u0639\u062f\u06c1 \u062d\u0627\u0636\u0631\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u062a\u0631\u0642\u06cc \u06a9\u06d2 \u0644\u06cc\u06d2 \u0628\u06c1\u062a \u0636\u0631\u0648\u0631\u06cc \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0627\u067e\u0646\u06d2 \u0628\u0686\u06d2 \u06a9\u06cc \u0628\u0627\u0642\u0627\u0639\u062f\u06c1 \u062d\u0627\u0636\u0631\u06cc \u06cc\u0642\u06cc\u0646\u06cc \u0628\u0646\u0627\u0626\u06cc\u06ba\u0964 \u0645\u0633\u0644\u0633\u0644 \u063a\u06cc\u0631 \u062d\u0627\u0636\u0631\u06cc \u0627\u06af\u0644\u06cc \u062c\u0645\u0627\u0639\u062a \u0645\u06cc\u06ba \u062a\u0631\u0642\u06cc \u0645\u062a\u0627\u062b\u0631 \u06a9\u0631 \u0633\u06a9\u062a\u06cc \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  incomplete: {
+    en: "Dear Parent/Guardian,\n\nWe wish to inform you that your child has not been completing the assigned class work and daily tasks given by the teacher. This is causing him/her to fall behind in studies.\n\nPlease encourage your child to complete all school work diligently. Your active involvement in your child's education is requested.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0645\u0637\u0644\u0639 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0627\u0633\u0627\u062a\u0630\u06c1 \u06a9\u06cc \u062c\u0627\u0646\u0628 \u0633\u06d2 \u062f\u06cc\u0626\u06d2 \u06af\u0626\u06d2 \u06a9\u0644\u0627\u0633 \u0648\u0631\u06a9 \u0627\u0648\u0631 \u0631\u0648\u0632\u0627\u0646\u06c1 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u0646\u06c1\u06cc\u06ba \u06a9\u0631\u062a\u0627\u0964 \u06cc\u06c1 \u0633\u0644\u0633\u0644\u06c1 \u0627\u0633 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u0643\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u067e\u0631 \u0627\u062b\u0631 \u0627\u0646\u062f\u0627\u0632 \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0627\u067e\u0646\u06d2 \u0628\u0686\u06d2 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u0633\u0631\u06af\u0631\u0645\u06cc\u0648\u06ba \u0645\u06cc\u06ba \u062f\u0644\u0686\u0633\u067e\u06cc \u0644\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  discipline: {
+    en: "Dear Parent/Guardian,\n\nThis is to notify you that your child has been displaying inappropriate behaviour in school premises. Discipline is the cornerstone of a good educational environment.\n\nWe strongly request you to counsel your child regarding proper school conduct. Please visit the school to meet the Principal at the earliest.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0627\u0637\u0644\u0627\u0639 \u062f\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0627\u0633\u06a9\u0648\u0644 \u0645\u06cc\u06ba \u0646\u0627\u0645\u0646\u0627\u0633\u0628 \u0631\u0648\u06cc\u06c1 \u0627\u062e\u062a\u06cc\u0627\u0631 \u06a9\u0631 \u0631\u06c1\u0627 \u06c1\u06d2\u0964 \u0646\u0638\u0645 \u0648 \u0636\u0628\u0637 \u0627\u0686\u06be\u06d2 \u062a\u0639\u0644\u06cc\u0645\u06cc \u0645\u0627\u062d\u0648\u0644 \u06a9\u06cc \u0628\u0646\u06cc\u0627\u062f \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0627\u067e\u0646\u06d2 \u0628\u0686\u06d2 \u06a9\u0648 \u0635\u062d\u06cc\u062d \u0637\u0631\u0632 \u0639\u0645\u0644 \u06a9\u06cc \u062a\u0644\u0642\u06cc\u0646 \u06a9\u0631\u06cc\u06ba\u0964 \u0641\u0648\u0631\u06cc \u0637\u0648\u0631 \u067e\u0631 \u0627\u0633\u06a9\u0648\u0644 \u0622 \u06a9\u0631 \u067e\u0631\u0646\u0633\u067e\u0644 \u0633\u06d2 \u0645\u0644\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  fees: {
+    en: "Dear Parent/Guardian,\n\nThis is a gentle reminder that the school fee for the current month is still pending. Timely payment of fees is essential for the smooth operation of school activities.\n\nKindly clear the outstanding dues at the earliest. Continued non-payment may result in consequences as per school policy.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u06cc\u0627\u062f \u062f\u06c1\u0627\u0646\u06cc \u06a9\u0631\u0627\u0626\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2 \u06a9\u06c1 \u0645\u0648\u062c\u0648\u062f\u06c1 \u0645\u0627\u06c1 \u06a9\u06cc \u0627\u0633\u06a9\u0648\u0644 \u0641\u06cc\u0633 \u0627\u0628 \u062a\u06a9 \u0627\u062f\u0627 \u0646\u06c1\u06cc\u06ba \u06c1\u0648\u0626\u06cc\u0964 \u0641\u06cc\u0633 \u06a9\u06cc \u0628\u0631\u0648\u0642\u062a \u0627\u062f\u0627\u0626\u06cc\u06af\u06cc \u0627\u0633\u06a9\u0648\u0644 \u06a9\u06cc \u0633\u0631\u06af\u0631\u0645\u06cc\u0648\u06ba \u06a9\u06d2 \u0644\u06cc\u06d2 \u0636\u0631\u0648\u0631\u06cc \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u062c\u0644\u062f \u0627\u0632 \u062c\u0644\u062f \u0641\u06cc\u0633 \u0627\u062f\u0627 \u06a9\u0631\u06cc\u06ba\u0964 \u0645\u0633\u0644\u0633\u0644 \u0639\u062f\u0645 \u0627\u062f\u0627\u0626\u06cc\u06af\u06cc \u067e\u0631 \u0627\u0633\u06a9\u0648\u0644 \u06a9\u06cc \u067e\u0627\u0644\u06cc\u0633\u06cc \u06a9\u06d2 \u0645\u0637\u0627\u0628\u0642 \u06a9\u0627\u0631\u0631\u0648\u0627\u0626\u06cc \u06c1\u0648\u06af\u06cc\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  uniform: {
+    en: "Dear Parent/Guardian,\n\nThis is to inform you that your child has been repeatedly coming to school without proper school uniform. Wearing complete school uniform is mandatory as per school rules.\n\nPlease ensure that your child comes to school in complete and proper uniform every day.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0645\u0637\u0644\u0639 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2 \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0628\u0627\u0631 \u0628\u0627\u0631 \u0628\u063a\u06cc\u0631 \u0645\u06a9\u0645\u0644 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u06a9\u06d2 \u0627\u0633\u06a9\u0648\u0644 \u0622 \u0631\u06c1\u0627 \u06c1\u06d2\u0964 \u0627\u0633\u06a9\u0648\u0644 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u067e\u06c1\u0646\u0646\u0627 \u0636\u0631\u0648\u0631\u06cc \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u06cc\u0642\u06cc\u0646\u06cc \u0628\u0646\u0627\u0626\u06cc\u06ba \u06a9\u06c1 \u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0631\u0648\u0632\u0627\u0646\u06c1 \u0645\u06a9\u0645\u0644 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u0645\u06cc\u06ba \u0627\u0633\u06a9\u0648\u0644 \u0622\u0626\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  meeting: {
+    en: "Dear Parent/Guardian,\n\nYou are hereby cordially invited to attend a Parent-Teacher Meeting at Al-Fareed Public School. Your presence is very important to discuss your child's academic progress and overall development.\n\nKindly visit the school at your earliest convenience and meet the class teacher. Your cooperation is highly appreciated.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u0645\u06cc\u06ba \u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0633\u0627\u062a\u0630\u06c1 \u0645\u0644\u0627\u0642\u0627\u062a (\u067e\u06cc\u0631\u0646\u0679 \u0679\u06cc\u0686\u0631 \u0645\u06cc\u0679\u0646\u06af) \u0645\u06cc\u06ba \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0646\u06d2 \u06a9\u06cc \u062f\u0639\u0648\u062a \u062f\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2\u0964 \u0622\u067e \u06a9\u06cc \u0645\u0648\u062c\u0648\u062f\u06af\u06cc \u0622\u067e \u06a9\u06d2 \u0628\u0686\u06d2 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u062a\u0631\u0642\u06cc \u06a9\u06d2 \u0644\u06cc\u06d2 \u0636\u0631\u0648\u0631\u06cc \u06c1\u06d2\u0964\n\n\u062c\u0644\u062f \u0627\u0632 \u062c\u0644\u062f \u0627\u0633\u06a9\u0648\u0644 \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  exam: {
+    en: "Dear Parent/Guardian,\n\nWe are concerned to inform you that your child's academic performance in recent examinations has been below expectations. This requires immediate attention and improvement.\n\nPlease assist your child with studies at home and ensure he/she is well prepared for upcoming assessments. Consider arranging additional tutoring if required.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u06c1\u0645\u06cc\u06ba \u0622\u067e \u06a9\u0648 \u0622\u06af\u0627\u06c1 \u06a9\u0631\u062a\u06d2 \u06c1\u0648\u0626\u06d2 \u0627\u0641\u0633\u0648\u0633 \u06c1\u06d2 \u06a9\u06c1 \u062d\u0627\u0644\u06cc\u06c1 \u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a \u0645\u06cc\u06ba \u0622\u067e \u06a9\u06d2 \u0628\u0686\u06d2 \u06a9\u06cc \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u062a\u0648\u0642\u0639\u0627\u062a \u0633\u06d2 \u06a9\u0645 \u0631\u06c1\u06cc \u06c1\u06d2\u0964 \u06cc\u06c1 \u0641\u0648\u0631\u06cc \u062a\u0648\u062c\u06c1 \u0627\u0648\u0631 \u0628\u06c1\u062a\u0631\u06cc \u06a9\u0627 \u0645\u062a\u0642\u0627\u0636\u06cc \u06c1\u06d2\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0622\u067e \u06af\u06be\u0631 \u0645\u06cc\u06ba \u0628\u06be\u06cc \u0628\u0686\u06d2 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u0645\u062f\u062f \u06a9\u0631\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  },
+  custom: {
+    en: "Dear Parent/Guardian,\n\nThis is to inform you regarding an important matter related to your child at Al-Fareed Public School, Tando Jam.\n\nKindly visit the school at your earliest convenience for further discussion.\n\nThank you.",
+    ur: "\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645 \u0633\u06d2 \u0622\u067e \u06a9\u06d2 \u0628\u0686\u06d2 \u06a9\u06d2 \u0645\u062a\u0639\u0644\u0642 \u0627\u06cc\u06a9 \u0627\u06c1\u0645 \u0645\u0639\u0627\u0645\u0644\u06d2 \u0645\u06cc\u06ba \u0622\u06af\u0627\u06c1 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2\u0964\n\n\u0645\u0632\u06cc\u062f \u06af\u0641\u062a\u06af\u0648 \u06a9\u06d2 \u0644\u06cc\u06d2 \u062c\u0644\u062f \u0627\u0632 \u062c\u0644\u062f \u0627\u0633\u06a9\u0648\u0644 \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1"
+  }
+};
+
+var notifLabels = {
+  homework: 'HOMEWORK INCOMPLETE',
+  attention: 'LOW CLASS ATTENTION',
+  absent: 'IRREGULAR ATTENDANCE',
+  incomplete: 'CLASS WORK INCOMPLETE',
+  discipline: 'DISCIPLINE NOTICE',
+  fees: 'FEE DUES NOTICE',
+  uniform: 'UNIFORM NOTICE',
+  meeting: 'PARENT-TEACHER MEETING',
+  exam: 'POOR ACADEMIC PERFORMANCE',
+  custom: 'GENERAL NOTICE'
+};
+
+function showTab(name) {
+  var tabs = document.querySelectorAll('.section');
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  btns[['create','preview','saved'].indexOf(name)].classList.add('active');
+  if (name === 'saved') renderSaved();
+}
+
+function selectNotif(el) {
+  var chips = document.querySelectorAll('.notif-chip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('selected');
+  el.classList.add('selected');
+  currentNotifType = el.getAttribute('data-id');
+  // Auto-fill notice text
+  if (notifContent[currentNotifType]) {
+    document.getElementById('noticeText').value = notifContent[currentNotifType][currentLang];
+  }
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('langEN').classList.toggle('active', lang === 'en');
+  document.getElementById('langUR').classList.toggle('active', lang === 'ur');
+  if (currentNotifType && notifContent[currentNotifType]) {
+    document.getElementById('noticeText').value = notifContent[currentNotifType][lang];
+  }
+}
+
+function setTeacherMode(mode) {
+  document.getElementById('tOptAuto').classList.toggle('active', mode === 'auto');
+  document.getElementById('tOptManual').classList.toggle('active', mode === 'manual');
+  document.getElementById('teacherAutoWrap').classList.toggle('show', mode === 'auto');
+  document.getElementById('teacherManualWrap').classList.toggle('show', mode === 'manual');
+}
+
+function loadMonogram(input) {
+  if (!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    monogramData = e.target.result;
+    var img = document.getElementById('monogramImg');
+    img.src = monogramData;
+    img.style.display = 'block';
+    document.getElementById('monogramPlaceholder').style.display = 'none';
+    // Also update img box
+    updateImgBox('monogram', monogramData);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function loadImg(type, input) {
+  if (!input.files || !input.files[0]) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var data = e.target.result;
+    if (type === 'monogram') {
+      monogramData = data;
+      var mi = document.getElementById('monogramImg');
+      mi.src = data; mi.style.display = 'block';
+      document.getElementById('monogramPlaceholder').style.display = 'none';
+    } else if (type === 'student') {
+      studentPhotoData = data;
+    } else if (type === 'sign') {
+      signatureData = data;
+    }
+    updateImgBox(type, data);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function updateImgBox(type, data) {
+  var box = document.getElementById(type + 'Box');
+  box.innerHTML = '<img src="' + data + '" alt=""><div class="img-label">' +
+    (type==='monogram'?'School Monogram':type==='student'?'Student Photo':'Signature') +
+    '</div><button class="remove-img" onclick="removeImg(\'' + type + '\',event)">\u2715</button>';
+  box.classList.add('has-img');
+}
+
+function removeImg(type, e) {
+  if (e) e.stopPropagation();
+  var labels = {monogram:'School Monogram', student:'Student Photo', sign:'Signature'};
+  var icons = {monogram:'\uD83C\uDFEB', student:'\uD83D\uDC64', sign:'\u270D\uFE0F'};
+  var box = document.getElementById(type + 'Box');
+  box.innerHTML = '<div class="img-icon">' + icons[type] + '</div><div class="img-label">' + labels[type] + '</div><button class="remove-img" onclick="removeImg(\'' + type + '\',event)">\u2715</button>';
+  box.classList.remove('has-img');
+  if (type === 'monogram') { monogramData = ''; document.getElementById('monogramImg').style.display='none'; document.getElementById('monogramPlaceholder').style.display='block'; }
+  else if (type === 'student') studentPhotoData = '';
+  else signatureData = '';
+}
+
+// ===== TEACHER MANAGEMENT =====
+var teachers = JSON.parse(localStorage.getItem('afTeachers') || '[]');
+
+function renderTeacherSelect() {
+  var sel = document.getElementById('teacherSelect');
+  var prev = sel.value;
+  sel.innerHTML = '<option value="">-- Teacher Select Karen --</option>';
+  for (var i = 0; i < teachers.length; i++) {
+    var opt = document.createElement('option');
+    opt.value = teachers[i];
+    opt.textContent = teachers[i];
+    sel.appendChild(opt);
+  }
+  if (prev) sel.value = prev;
+}
+
+function addTeacher() {
+  var inp = document.getElementById('newTeacherInput');
+  var name = inp.value.trim();
+  if (!name) { showToast('Teacher ka naam likhein!'); return; }
+  if (teachers.indexOf(name) !== -1) { showToast('Yeh teacher pehle se hai!'); return; }
+  teachers.push(name);
+  localStorage.setItem('afTeachers', JSON.stringify(teachers));
+  renderTeacherSelect();
+  document.getElementById('teacherSelect').value = name;
+  inp.value = '';
+  showToast(name + ' add ho gaya!');
+}
+
+function removeTeacher() {
+  var sel = document.getElementById('teacherSelect');
+  var name = sel.value;
+  if (!name) { showToast('Pehle teacher select karen!'); return; }
+  teachers = teachers.filter(function(t) { return t !== name; });
+  localStorage.setItem('afTeachers', JSON.stringify(teachers));
+  renderTeacherSelect();
+  showToast(name + ' delete ho gaya!');
+}
+
+function getTeacherName() {
+  return document.getElementById('teacherSelect').value || 'Class Teacher';
+}
+
+renderTeacherSelect();
+
+function generateNotice() {
+  var sName = document.getElementById('studentName').value.trim();
+  var sClass = document.getElementById('studentClass').value;
+  var rollNo = document.getElementById('rollNo').value.trim();
+  var section = document.getElementById('section').value.trim();
+  var noticeText = document.getElementById('noticeText').value.trim();
+  var remarks = document.getElementById('remarks').value.trim();
+  var teacher = getTeacherName();
+
+  if (!sName) { showToast('Please enter student name!'); return; }
+  if (!sClass) { showToast('Please select class!'); return; }
+  if (!currentNotifType) { showToast('Please select notification type!'); return; }
+  if (!noticeText) { showToast('Please enter notice text!'); return; }
+
+  var today = new Date();
+  var dateStr = today.toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+
+  var logoHtml = monogramData ?
+    '<img src="' + monogramData + '" alt="Monogram">' :
+    '<div class="preview-logo-text">AF</div>';
+
+  var studentPhotoHtml = studentPhotoData ?
+    '<img src="' + studentPhotoData + '" alt="Student">' :
+    '<div class="preview-student-photo-text">\uD83E\uDDD1</div>';
+
+  var metaHtml = '<div class="preview-meta">' +
+    '<div class="meta-item"><div class="meta-key">STUDENT NAME</div><div class="meta-val">' + sName + '</div></div>' +
+    '<div class="meta-item"><div class="meta-key">CLASS</div><div class="meta-val">' + sClass + (section ? ' - ' + section : '') + '</div></div>' +
+    (rollNo ? '<div class="meta-item"><div class="meta-key">ROLL NO.</div><div class="meta-val">' + rollNo + '</div></div>' : '') +
+    '<div class="meta-item"><div class="meta-key">CLASS TEACHER</div><div class="meta-val">' + teacher + '</div></div>' +
+    '</div>';
+
+  var noticeClass = currentLang === 'ur' ? 'preview-notice-text urdu' : 'preview-notice-text';
+  var formattedText = noticeText.replace(/\n/g, '<br>');
+
+  var remarksHtml = remarks ? '<div style="margin-top:8px;padding:8px 12px;background:#fff3cd;border-radius:6px;font-size:13px;border-left:3px solid var(--gold);"><strong>Remarks:</strong> ' + remarks + '</div>' : '';
+
+  var signHtml = signatureData ?
+    '<img class="signature-img" src="' + signatureData + '" alt="Signature"><div class="signature-line"></div>' : '<div class="signature-line"></div>';
+
+  var html = '<div class="preview-header">' +
+    '<div class="preview-logo">' + logoHtml + '</div>' +
+    '<div class="preview-school-info">' +
+    '<div class="preview-school-name">AL-FAREED <span>PUBLIC SCHOOL</span></div>' +
+    '<div class="preview-school-sub">Tando Jam, Sindh, Pakistan</div>' +
+    '</div>' +
+    '<div class="preview-student-photo">' + studentPhotoHtml + '</div>' +
+    '</div>' +
+    '<div class="notice-type-badge">' + (notifLabels[currentNotifType] || 'NOTICE') + '</div>' +
+    '<div class="preview-body">' +
+    '<div class="preview-date">Date: ' + dateStr + '</div>' +
+    metaHtml +
+    '<div class="' + noticeClass + '">' + formattedText + '</div>' +
+    remarksHtml +
+    '<div class="preview-footer">' +
+    '<div class="signature-area">' +
+    signHtml +
+    '<div class="signature-name">Sir Ghulam Hussain</div>' +
+    '<div class="signature-title">Principal</div>' +
+    '</div>' +
+    '<div class="signature-area">' +
+    '<div class="signature-line"></div>' +
+    '<div class="signature-name">' + teacher + '</div>' +
+    '<div class="signature-title">Class Teacher</div>' +
+    '</div>' +
+    '<div class="stamp-area">SCHOOL<br>STAMP</div>' +
+    '</div>' +
+    '</div>';
+
+  document.getElementById('noticePreview').innerHTML = html;
+  document.getElementById('noticePreview').style.display = 'block';
+  document.getElementById('previewEmpty').style.display = 'none';
+  document.getElementById('actionRow').style.display = 'grid';
+
+  showTab('preview');
+  showToast('Notice generated successfully!');
+}
+
+function shareWhatsApp() {
+  // Pehle printable notice window banao
+  var sName = document.getElementById('studentName').value.trim();
+  var sClass = document.getElementById('studentClass').value;
+  var rollNo = document.getElementById('rollNo').value.trim();
+  var section = document.getElementById('section').value.trim();
+  var teacher = getTeacherName();
+  var noticeText = document.getElementById('noticeText').value.trim();
+  var remarks = document.getElementById('remarks').value.trim();
+  var type = notifLabels[currentNotifType] || 'NOTICE';
+  var today = new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+
+  var formattedText = noticeText.replace(/\n/g, '<br>');
+  var isUrdu = currentLang === 'ur';
+
+  var noticeHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">' +
+    '<title>Notice - ' + sName + '</title>' +
+    '<style>' +
+    'body{margin:0;padding:16px;background:#faf7f0;font-family:"Crimson Pro",serif;}' +
+    '.notice-wrap{max-width:600px;margin:0 auto;background:#fff;border:2px solid #0d5c3a;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(13,92,58,.15);}' +
+    '.nh{background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #c9a84c;}' +
+    '.nl{width:54px;height:54px;border-radius:50%;border:2px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}' +
+    '.nl img{width:100%;height:100%;object-fit:cover;}' +
+    '.nlt{color:#c9a84c;font-weight:900;font-size:20px;font-family:"Playfair Display",serif;}' +
+    '.nsi{flex:1;}.nsn{font-family:"Playfair Display",serif;font-size:15px;font-weight:900;color:#fff;line-height:1.2;}' +
+    '.nsn span{color:#c9a84c;}.nss{font-size:11px;color:rgba(255,255,255,.8);}' +
+    '.nsp{width:50px;height:50px;border-radius:50%;border:2px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,.7);}' +
+    '.nsp img{width:100%;height:100%;object-fit:cover;}' +
+    '.ntb{background:#c9a84c;color:#0a1a0f;font-size:11px;font-weight:700;padding:5px 14px;text-align:center;letter-spacing:1px;text-transform:uppercase;}' +
+    '.nb{padding:14px 16px;}' +
+    '.nd{font-size:11px;color:#888;margin-bottom:10px;}' +
+    '.nm{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}' +
+    '.mi{background:#e8f5ee;border-radius:7px;padding:7px 10px;border-left:3px solid #0d5c3a;}' +
+    '.mk{font-size:10px;font-weight:700;color:#0d5c3a;margin-bottom:2px;}' +
+    '.mv{font-size:13px;font-weight:600;color:#0a1a0f;}' +
+    '.nt{font-size:14px;line-height:1.8;color:#0a1a0f;margin-bottom:12px;padding:12px;background:#faf7f0;border-radius:8px;border:1px solid #e8d5a3;}' +
+    '.ntu{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;font-size:16px;line-height:2.2;}' +
+    '.rem{margin-bottom:12px;padding:8px 12px;background:#fff3cd;border-radius:6px;font-size:13px;border-left:3px solid #c9a84c;}' +
+    '.nf{border-top:1px solid #e8d5a3;padding-top:12px;display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px;}' +
+    '.sa{text-align:center;}.sl{width:100px;height:1px;background:#0a1a0f;margin:4px 0;}' +
+    '.sn{font-size:11px;font-weight:700;color:#0a1a0f;}.st{font-size:10px;color:#888;}' +
+    '.stamp{width:60px;height:60px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3;}' +
+    '.sig-img{max-height:40px;max-width:100px;object-fit:contain;display:block;margin:0 auto 4px;}' +
+    '.wa-btn{display:block;width:100%;margin-top:16px;padding:13px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;font-family:"Crimson Pro",serif;}' +
+    '@media print{.wa-btn{display:none;}}' +
+    '</style></head><body>' +
+    '<div class="notice-wrap">' +
+    '<div class="nh">' +
+    '<div class="nl">' + (monogramData ? '<img src="' + monogramData + '">' : '<span class="nlt">AF</span>') + '</div>' +
+    '<div class="nsi"><div class="nsn">AL-FAREED <span>PUBLIC SCHOOL</span></div><div class="nss">Tando Jam, Sindh, Pakistan</div></div>' +
+    '<div class="nsp">' + (studentPhotoData ? '<img src="' + studentPhotoData + '">' : '\uD83E\uDDD1') + '</div>' +
+    '</div>' +
+    '<div class="ntb">' + type + '</div>' +
+    '<div class="nb">' +
+    '<div class="nd">Date: ' + today + '</div>' +
+    '<div class="nm">' +
+    '<div class="mi"><div class="mk">STUDENT NAME</div><div class="mv">' + sName + '</div></div>' +
+    '<div class="mi"><div class="mk">CLASS</div><div class="mv">' + sClass + (section ? ' - ' + section : '') + '</div></div>' +
+    (rollNo ? '<div class="mi"><div class="mk">ROLL NO.</div><div class="mv">' + rollNo + '</div></div>' : '') +
+    '<div class="mi"><div class="mk">CLASS TEACHER</div><div class="mv">' + teacher + '</div></div>' +
+    '</div>' +
+    '<div class="nt ' + (isUrdu ? 'ntu' : '') + '">' + formattedText + '</div>' +
+    (remarks ? '<div class="rem"><strong>Remarks:</strong> ' + remarks + '</div>' : '') +
+    '<div class="nf">' +
+    '<div class="sa">' +
+    (signatureData ? '<img class="sig-img" src="' + signatureData + '">' : '') +
+    '<div class="sl"></div><div class="sn">Sir Ghulam Hussain</div><div class="st">Principal</div>' +
+    '</div>' +
+    '<div class="sa"><div class="sl"></div><div class="sn">' + teacher + '</div><div class="st">Class Teacher</div></div>' +
+    '<div class="stamp">SCHOOL<br>STAMP</div>' +
+    '</div>' +
+    '</div></div>' +
+    '<button class="wa-btn" onclick="shareToWA()">📤 Share on WhatsApp</button>' +
+    '<script>' +
+    'function shareToWA(){' +
+    'var msg="*AL-FAREED PUBLIC SCHOOL*\\n*Tando Jam, Sindh*\\n\\n' +
+    '*' + type.replace(/'/g, "\\'") + '*\\n\\n' +
+    '\uD83D\uDC66 Student: ' + sName.replace(/'/g, "\\'") + '\\n' +
+    '\uD83C\uDFEB Class: ' + sClass.replace(/'/g, "\\'") + '\\n' +
+    '\uD83D\uDC68\\u200D\uD83C\uDFEB Teacher: ' + teacher.replace(/'/g, "\\'") + '\\n' +
+    '\uD83D\uDCC5 Date: ' + today + '\\n\\n' +
+    noticeText.replace(/'/g, "\\'").replace(/\n/g, '\\n') + '\\n\\n' +
+    '_Principal: Sir Ghulam Hussain_\\n_Al-Fareed Public School_";' +
+    'window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");}' +
+    '<\/script>' +
+    '</body></html>';
+
+  var win = window.open('', '_blank');
+  if (win) {
+    win.document.write(noticeHtml);
+    win.document.close();
+  } else {
+    showToast('Popup blocked! Browser settings check karen.');
+  }
+}
+
+function copyNotice() {
+  var sName = document.getElementById('studentName').value.trim();
+  var sClass = document.getElementById('studentClass').value;
+  var teacher = getTeacherName();
+  var noticeText = document.getElementById('noticeText').value.trim();
+  var type = notifLabels[currentNotifType] || 'NOTICE';
+  var today = new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+
+  var text = 'AL-FAREED PUBLIC SCHOOL\nTando Jam, Sindh\n\n' +
+    type + '\n\nStudent: ' + sName + ' | Class: ' + sClass + '\nTeacher: ' + teacher + '\nDate: ' + today + '\n\n' + noticeText +
+    '\n\nPrincipal: Sir Ghulam Hussain';
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() { showToast('Copied to clipboard!'); });
+  } else {
+    showToast('Copy: ' + text.substring(0,30) + '...');
+  }
+}
+
+function saveNotice() {
+  var sName = document.getElementById('studentName').value.trim();
+  var sClass = document.getElementById('studentClass').value;
+  if (!sName || !currentNotifType) { showToast('No notice to save!'); return; }
+  var notice = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('en-GB'),
+    studentName: sName,
+    studentClass: sClass,
+    type: currentNotifType,
+    typeLabel: notifLabels[currentNotifType],
+    teacher: getTeacherName(),
+    text: document.getElementById('noticeText').value,
+    lang: currentLang
+  };
+  savedNotices.unshift(notice);
+  if (savedNotices.length > 50) savedNotices = savedNotices.slice(0, 50);
+  localStorage.setItem('afNotices', JSON.stringify(savedNotices));
+  showToast('Notice saved!');
+}
+
+function renderSaved() {
+  var list = document.getElementById('savedList');
+  if (savedNotices.length === 0) {
+    list.innerHTML = '<div class="empty-saved">\uD83D\uDCC2 No saved notices yet</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < savedNotices.length; i++) {
+    var n = savedNotices[i];
+    html += '<div class="saved-item">' +
+      '<div class="saved-item-top">' +
+      '<span class="saved-badge">' + (n.typeLabel || n.type) + '</span>' +
+      '<div><span class="saved-date">' + n.date + '</span>' +
+      '<button class="saved-del" onclick="deleteNotice(' + n.id + ')">\uD83D\uDDD1</button></div>' +
+      '</div>' +
+      '<div class="saved-name">' + n.studentName + '</div>' +
+      '<div class="saved-class">' + n.studentClass + ' &bull; ' + n.teacher + '</div>' +
+      '</div>';
+  }
+  list.innerHTML = html;
+}
+
+function deleteNotice(id) {
+  savedNotices = savedNotices.filter(function(n) { return n.id !== id; });
+  localStorage.setItem('afNotices', JSON.stringify(savedNotices));
+  renderSaved();
+  showToast('Notice deleted');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+</script>
+</body>
+</html>
