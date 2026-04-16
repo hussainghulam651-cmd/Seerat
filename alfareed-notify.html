@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Fareed School Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0d5c3a;--g2:#1a7a4f;--gold:#c9a84c;--cream:#faf7f0;--deep:#0a1a0f;--acc:#e8d5a3;--red:#c0392b;--lg:#e8f5ee;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--cream);font-family:'Crimson Pro',serif;min-height:100vh;color:var(--deep);}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--g),var(--g2),var(--g));padding:14px 16px 10px;border-bottom:3px solid var(--gold);position:relative;}
+.hdr::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0 5.5 4.5 10 10 10s10-4.5 10-10-4.5-10-10-10-10 4.5-10 10z'/%3E%3C/g%3E%3C/svg%3E");}
+.hdr-in{position:relative;display:flex;align-items:center;gap:12px;}
+.logo-wrap{width:58px;height:58px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.logo-wrap img{width:100%;height:100%;object-fit:cover;}
+.logo-txt{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--gold);}
+.hdr-txt .s1{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#fff;line-height:1.1;}
+.hdr-txt .s1 span{color:var(--gold);}
+.hdr-txt .s2{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;}
+.hdr-badge{position:absolute;right:0;top:0;background:var(--gold);color:var(--deep);font-size:9px;font-weight:700;padding:3px 8px;border-radius:0 0 0 8px;letter-spacing:1px;}
+/* TABS */
+.tabs{display:flex;background:var(--g);border-bottom:2px solid var(--gold);}
+.tb{flex:1;padding:11px 4px;background:none;border:none;color:rgba(255,255,255,.6);font-size:11px;font-family:'Crimson Pro',serif;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.3px;}
+.tb.on{color:var(--gold);background:rgba(201,168,76,.15);border-bottom:2px solid var(--gold);}
+/* SECTIONS */
+.sec{display:none;padding:14px;}
+.sec.on{display:block;}
+/* CARD */
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px rgba(13,92,58,.1);border:1px solid rgba(201,168,76,.2);}
+.ct{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--g);margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid var(--acc);display:flex;align-items:center;gap:7px;}
+/* FORM */
+label{display:block;font-size:11px;font-weight:700;color:var(--g);margin-bottom:3px;letter-spacing:.3px;}
+input[type=text],select,textarea{width:100%;padding:9px 11px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:'Crimson Pro',serif;color:var(--deep);background:var(--cream);outline:none;transition:.2s;margin-bottom:9px;}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--g);background:#fff;}
+textarea{min-height:75px;resize:vertical;}
+input[type=file]{display:none;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.cat-chip{padding:11px 7px;border:1.5px solid #ddd;border-radius:10px;font-size:11px;text-align:center;cursor:pointer;transition:.2s;color:#555;font-weight:700;background:var(--cream);user-select:none;line-height:1.4;}
+.cat-chip.on{border-color:var(--g);background:var(--lg);color:var(--g);}
+.cat-chip .ic{font-size:20px;display:block;margin-bottom:4px;}
+/* TOPIC LIST */
+.topic-wrap{max-height:220px;overflow-y:auto;border:1.5px solid #ddd;border-radius:9px;background:#fff;margin-bottom:9px;}
+.topic-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid #f0f0f0;transition:.15s;font-size:13px;font-weight:600;color:var(--deep);}
+.topic-item:last-child{border-bottom:none;}
+.topic-item:hover,.topic-item.on{background:var(--lg);color:var(--g);}
+.topic-item .tu{font-size:11px;color:#888;font-weight:400;}
+/* LANG TOGGLE */
+.lang-row{display:flex;gap:8px;margin-bottom:10px;}
+.lb{flex:1;padding:9px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:'Crimson Pro',serif;font-weight:700;background:var(--cream);cursor:pointer;transition:.2s;color:#666;}
+.lb.on{border-color:var(--gold);background:var(--gold);color:var(--deep);}
+/* IMG BOXES */
+.img-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+.ib{border:1.5px dashed #ccc;border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:.2s;background:var(--cream);min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative;overflow:hidden;}
+.ib:hover{border-color:var(--g);background:var(--lg);}
+.ib.has{border-style:solid;border-color:var(--g);}
+.ib img{width:100%;height:54px;object-fit:cover;border-radius:6px;}
+.ib .il{font-size:10px;font-weight:700;color:#888;}
+.ib .ii{font-size:22px;}
+.rim{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:none;align-items:center;justify-content:center;}
+.ib.has .rim{display:flex;}
+/* GENERATE BTN */
+.gbtn{width:100%;padding:14px;background:linear-gradient(135deg,var(--g),var(--g2));color:var(--gold);border:none;border-radius:10px;font-size:16px;font-family:'Playfair Display',serif;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 4px 14px rgba(13,92,58,.3);margin-bottom:10px;letter-spacing:.5px;}
+.gbtn:active{transform:scale(.98);}
+/* ACTION ROW */
+.arow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px;}
+.abtn{padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.abtn-p{background:var(--g);color:var(--gold);}
+.abtn-w{background:#25D366;color:#fff;}
+.abtn-s{background:#e0e0e0;color:#555;}
+.abtn-c{background:#3498db;color:#fff;}
+/* SAVED */
+.sv-item{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid rgba(201,168,76,.2);box-shadow:0 2px 8px rgba(13,92,58,.07);}
+.sv-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.sv-badge{background:var(--lg);color:var(--g);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.sv-del{background:none;border:none;color:var(--red);font-size:16px;cursor:pointer;}
+/* CERT TYPES */
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.cert-chip{padding:10px 6px;border:1.5px solid #ddd;border-radius:10px;font-size:11px;text-align:center;cursor:pointer;transition:.2s;color:#555;font-weight:700;background:var(--cream);user-select:none;line-height:1.4;}
+.cert-chip.on{border-color:var(--gold);background:#fff9ee;color:#8a6200;}
+.cert-chip .ic{font-size:20px;display:block;margin-bottom:3px;}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--deep);color:var(--gold);padding:9px 20px;border-radius:25px;font-size:13px;font-weight:600;transition:.3s;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);white-space:nowrap;}
+.toast.on{transform:translateX(-50%) translateY(0);}
+.sec-ttl{font-family:'Playfair Display',serif;font-size:18px;color:var(--g);margin-bottom:14px;font-weight:900;}
+.empty-box{text-align:center;padding:30px;color:#aaa;}
+.empty-box .ei{font-size:46px;margin-bottom:8px;}
+/* PREVIEW */
+#noticePreview{background:#fff;border:2px solid var(--g);border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(13,92,58,.12);}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-badge">AL-FAREED SCHOOL</div>
+  <div class="hdr-in">
+    <div class="logo-wrap" onclick="document.getElementById('logoInp').click()">
+      <img id="logoImg" src="" style="display:none">
+      <span class="logo-txt" id="logoTxt">AF</span>
+    </div>
+    <div class="hdr-txt">
+      <div class="s1">AL-FAREED <span>PUBLIC SCHOOL</span></div>
+      <div class="s2">Tando Jam, Sindh &bull; Official Notification App</div>
+    </div>
+  </div>
+  <input type="file" id="logoInp" accept="image/*" onchange="loadLogo(this)">
+</div>
+
+<div class="tabs">
+  <button class="tb on" onclick="showTab('notify')">📢 Notifications</button>
+  <button class="tb" onclick="showTab('cert')">🏆 Certificates</button>
+  <button class="tb" onclick="showTab('saved')">📁 Saved</button>
+</div>
+
+<!-- ===== NOTIFICATIONS TAB ===== -->
+<div id="tab-notify" class="sec on">
+
+  <!-- Category -->
+  <div class="card">
+    <div class="ct">📋 Notification Category</div>
+    <div class="cat-grid" id="catGrid">
+      <div class="cat-chip" data-cat="holiday" onclick="selectCat(this)"><span class="ic">🎉</span>Holidays & Vacations</div>
+      <div class="cat-chip" data-cat="exam" onclick="selectCat(this)"><span class="ic">📝</span>Exams & Tests</div>
+      <div class="cat-chip" data-cat="fees" onclick="selectCat(this)"><span class="ic">💰</span>Fee Notices</div>
+      <div class="cat-chip" data-cat="event" onclick="selectCat(this)"><span class="ic">🎭</span>School Events</div>
+      <div class="cat-chip" data-cat="discipline" onclick="selectCat(this)"><span class="ic">⚠️</span>Student Conduct</div>
+      <div class="cat-chip" data-cat="academic" onclick="selectCat(this)"><span class="ic">📚</span>Academic Notices</div>
+      <div class="cat-chip" data-cat="meeting" onclick="selectCat(this)"><span class="ic">🤝</span>Parent Meetings</div>
+      <div class="cat-chip" data-cat="general" onclick="selectCat(this)"><span class="ic">📣</span>General Notices</div>
+    </div>
+  </div>
+
+  <!-- Topic -->
+  <div class="card" id="topicCard" style="display:none">
+    <div class="ct">📌 Select Topic</div>
+    <div class="topic-wrap" id="topicList"></div>
+  </div>
+
+  <!-- Language -->
+  <div class="card" id="contentCard" style="display:none">
+    <div class="ct">🌐 Language & Content</div>
+    <div class="lang-row">
+      <button class="lb on" id="lEN" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="lb" id="lUR" onclick="setLang('ur')">🇵🇰 Urdu</button>
+    </div>
+    <label>Notice Text (Edit if needed)</label>
+    <textarea id="noticeText"></textarea>
+    <label>Recipient / Class (Optional)</label>
+    <input type="text" id="recipient" placeholder="e.g. All Parents / Class 5-A / All Students">
+    <label>Additional Remarks (Optional)</label>
+    <input type="text" id="remarks" placeholder="e.g. School will remain closed on Monday">
+  </div>
+
+  <!-- Images -->
+  <div class="card" id="imgCard" style="display:none">
+    <div class="ct">🖼️ School Monogram & Signature</div>
+    <div class="img-row">
+      <div class="ib" id="mBox" onclick="document.getElementById('mInp').click()">
+        <div class="ii">🏫</div><div class="il">School Monogram</div>
+        <button class="rim" onclick="rmImg('m',event)">✕</button>
+      </div>
+      <div class="ib" id="sBox" onclick="document.getElementById('sInp').click()">
+        <div class="ii">✍️</div><div class="il">Principal Signature</div>
+        <button class="rim" onclick="rmImg('s',event)">✕</button>
+      </div>
+    </div>
+    <input type="file" id="mInp" accept="image/*" onchange="loadImg('m',this)">
+    <input type="file" id="sInp" accept="image/*" onchange="loadImg('s',this)">
+  </div>
+
+  <button class="gbtn" id="genBtn" style="display:none" onclick="generateNotice()">📄 Generate Notice</button>
+
+</div>
+
+<!-- ===== CERTIFICATES TAB ===== -->
+<div id="tab-cert" class="sec">
+
+  <div class="card">
+    <div class="ct">🏆 Certificate Type</div>
+    <div class="cert-grid" id="certGrid">
+      <div class="cert-chip" data-ctype="firstpos" onclick="selectCert(this)"><span class="ic">🥇</span>1st Position</div>
+      <div class="cert-chip" data-ctype="secondpos" onclick="selectCert(this)"><span class="ic">🥈</span>2nd Position</div>
+      <div class="cert-chip" data-ctype="thirdpos" onclick="selectCert(this)"><span class="ic">🥉</span>3rd Position</div>
+      <div class="cert-chip" data-ctype="beststu" onclick="selectCert(this)"><span class="ic">⭐</span>Best Student</div>
+      <div class="cert-chip" data-ctype="sports" onclick="selectCert(this)"><span class="ic">🏅</span>Sports Champion</div>
+      <div class="cert-chip" data-ctype="attend" onclick="selectCert(this)"><span class="ic">📅</span>Best Attendance</div>
+      <div class="cert-chip" data-ctype="debate" onclick="selectCert(this)"><span class="ic">🎤</span>Debate Winner</div>
+      <div class="cert-chip" data-ctype="art" onclick="selectCert(this)"><span class="ic">🎨</span>Art Excellence</div>
+      <div class="cert-chip" data-ctype="quran" onclick="selectCert(this)"><span class="ic">📖</span>Quran Recitation</div>
+      <div class="cert-chip" data-ctype="teacher" onclick="selectCert(this)"><span class="ic">👩‍🏫</span>Best Teacher</div>
+      <div class="cert-chip" data-ctype="science" onclick="selectCert(this)"><span class="ic">🔬</span>Science Award</div>
+      <div class="cert-chip" data-ctype="custom" onclick="selectCert(this)"><span class="ic">✏️</span>Custom Award</div>
+    </div>
+  </div>
+
+  <div class="card" id="certFormCard" style="display:none">
+    <div class="ct">👤 Recipient Details</div>
+    <div class="row2">
+      <div>
+        <label>Name</label>
+        <input type="text" id="cName" placeholder="Student / Teacher name">
+      </div>
+      <div>
+        <label>Class / Designation</label>
+        <input type="text" id="cClass" placeholder="e.g. Class 5 / Teacher">
+      </div>
+    </div>
+    <label>Achievement / Subject (Optional)</label>
+    <input type="text" id="cAchieve" placeholder="e.g. Annual Exams 2024 / District Level">
+    <label>Custom Award Title (if Custom)</label>
+    <input type="text" id="cTitle" placeholder="e.g. Excellence in Mathematics">
+
+    <div class="ct" style="margin-top:4px">🌐 Language</div>
+    <div class="lang-row">
+      <button class="lb on" id="cEN" onclick="setCertLang('en')">🇬🇧 English</button>
+      <button class="lb" id="cUR" onclick="setCertLang('ur')">🇵🇰 Urdu</button>
+    </div>
+
+    <div class="ct">🖼️ Images</div>
+    <div class="img-row">
+      <div class="ib" id="cmBox" onclick="document.getElementById('cmInp').click()">
+        <div class="ii">🏫</div><div class="il">School Monogram</div>
+        <button class="rim" onclick="rmImg('cm',event)">✕</button>
+      </div>
+      <div class="ib" id="csBox" onclick="document.getElementById('csInp').click()">
+        <div class="ii">✍️</div><div class="il">Principal Signature</div>
+        <button class="rim" onclick="rmImg('cs',event)">✕</button>
+      </div>
+    </div>
+    <input type="file" id="cmInp" accept="image/*" onchange="loadImg('cm',this)">
+    <input type="file" id="csInp" accept="image/*" onchange="loadImg('cs',this)">
+  </div>
+
+  <button class="gbtn" id="certGenBtn" style="display:none" onclick="generateCert()">🏆 Generate Certificate</button>
+
+</div>
+
+<!-- ===== SAVED TAB ===== -->
+<div id="tab-saved" class="sec">
+  <div class="sec-ttl">Saved Items</div>
+  <div id="savedList"><div class="empty-box"><div class="ei">📁</div><p>Nothing saved yet</p></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA =====
+var mData='', sData='', cmData='', csData='';
+var curCat='', curTopic=null, curLang='en';
+var curCert='', certLang='en';
+var saved = JSON.parse(localStorage.getItem('afSaved')||'[]');
+
+// ===== TOPICS DATABASE =====
+var topics = {
+holiday:[
+  {en:'Summer Vacation Notice',ur:'\u06af\u0631\u0645\u06cc\u0648\u06ba \u06a9\u06cc \u0686\u06be\u0679\u06cc\u0648\u06ba \u06a9\u0627 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nThis is to inform all parents and students that Al-Fareed Public School, Tando Jam will observe Summer Vacations from [Start Date] to [End Date]. School will reopen on [Reopen Date].\n\nKindly ensure that your child completes all holiday homework during vacation. Holiday work will be checked on the first day of reopening.\n\nWishing all students and parents a happy and healthy vacation.\n\nRegards,\nPrincipal\nAl-Fareed Public School',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646/\u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0622\u067e \u06a9\u0648 \u0622\u06af\u0627\u06c1 \u06a9\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2 \u06a9\u06c1 \u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645 \u0645\u06cc\u06ba [\u0634\u0631\u0648\u0639 \u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 [\u062e\u062a\u0645 \u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 \u06af\u0631\u0645\u06cc\u0648\u06ba \u06a9\u06cc \u0686\u06be\u0679\u06cc\u0627\u06ba \u06c1\u0648\u06ba \u06af\u06cc\u06ba\u0964 \u0627\u0633\u06a9\u0648\u0644 [\u062f\u0648\u0628\u0627\u0631\u06c1 \u06a9\u06be\u0644\u0646\u06d2 \u06a9\u06cc \u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u06a9\u06be\u0644\u06d2 \u06af\u0627\u0964\n\n\u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u0686\u06be\u0679\u06cc \u06a9\u0627 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u06a9\u0631\u0648\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644'},
+  {en:'Winter Vacation Notice',ur:'\u0633\u0631\u062f\u06cc\u0648\u06ba \u06a9\u06cc \u0686\u06be\u0679\u06cc\u0648\u06ba \u06a9\u0627 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam will observe Winter Vacations from [Start Date] to [End Date]. School will reopen on [Reopen Date].\n\nStudents are requested to complete their holiday assignments. Stay warm and safe during winter.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u0645\u06cc\u06ba [\u0634\u0631\u0648\u0639 \u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 [\u062e\u062a\u0645 \u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 \u0633\u0631\u062f\u06cc\u0648\u06ba \u06a9\u06cc \u0686\u06be\u0679\u06cc\u0627\u06ba \u06c1\u0648\u06ba \u06af\u06cc\u06ba\u0964 \u0627\u0633\u06a9\u0648\u0644 [\u062f\u0648\u0628\u0627\u0631\u06c1 \u06a9\u06be\u0644\u0646\u06d2 \u06a9\u06cc \u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u06a9\u06be\u0644\u06d2 \u06af\u0627\u0964\n\n\u0686\u06be\u0679\u06cc \u06a9\u0627 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u06a9\u0631\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Eid-ul-Fitr Holiday',ur:'\u0639\u06cc\u062f \u0627\u0644\u0641\u0637\u0631 \u06a9\u06cc \u0686\u06be\u0679\u06cc',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam wishes all parents and students Eid Mubarak!\n\nSchool will remain closed on the occasion of Eid-ul-Fitr from [Start Date] to [End Date]. School will reopen on [Reopen Date].\n\nEid Mubarak to all!\n\nPrincipal\nAl-Fareed Public School',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645 \u06a9\u06cc \u062c\u0627\u0646\u0628 \u0633\u06d2 \u0639\u06cc\u062f \u0627\u0644\u0641\u0637\u0631 \u06a9\u06cc \u062e\u0648\u0634\u06cc \u0645\u06cc\u06ba \u062a\u0645\u0627\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0648\u0631 \u0637\u0644\u0628\u0627\u0621 \u06a9\u0648 \u0639\u06cc\u062f \u0645\u0628\u0627\u0631\u06a9!\n\n\u0627\u0633\u06a9\u0648\u0644 [\u0634\u0631\u0648\u0639] \u0633\u06d2 [\u062e\u062a\u0645] \u062a\u06a9 \u0628\u0646\u062f \u0631\u06c1\u06d2 \u06af\u0627\u0964\n\n\u0639\u06cc\u062f \u0645\u0628\u0627\u0631\u06a9!\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Eid-ul-Adha Holiday',ur:'\u0639\u06cc\u062f \u0627\u0644\u0627\u0636\u062d\u06cc \u06a9\u06cc \u0686\u06be\u0679\u06cc',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam extends warm Eid-ul-Adha greetings to all.\n\nSchool will remain closed on the occasion of Eid-ul-Adha from [Start Date] to [End Date]. School will reopen on [Reopen Date].\n\nEid-ul-Adha Mubarak!\n\nPrincipal\nAl-Fareed Public School',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0639\u06cc\u062f \u0627\u0644\u0627\u0636\u062d\u06cc \u06a9\u06cc \u062e\u0648\u0634\u06cc \u0645\u06cc\u06ba \u0627\u0633\u06a9\u0648\u0644 [\u0634\u0631\u0648\u0639] \u0633\u06d2 [\u062e\u062a\u0645] \u062a\u06a9 \u0628\u0646\u062f \u0631\u06c1\u06d2 \u06af\u0627\u0964\n\n\u0639\u06cc\u062f\u0627\u0644\u0627\u0636\u062d\u06cc \u0645\u0628\u0627\u0631\u06a9!\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'14th August Holiday',ur:'\u06cc\u0648\u0645 \u0622\u0632\u0627\u062f\u06cc \u06a9\u06cc \u0686\u06be\u0679\u06cc',
+   ten:'Dear Parents/Guardians,\n\nOn the occasion of Pakistan Independence Day (14th August), Al-Fareed Public School, Tando Jam will remain closed. A flag hoisting ceremony will be held at school on [Date] at [Time].\n\nAll students are requested to participate. Pakistan Zindabad!\n\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n14 \u0627\u06af\u0633\u062a \u06cc\u0648\u0645 \u0622\u0632\u0627\u062f\u06cc \u06a9\u06d2 \u0645\u0648\u0642\u0639 \u067e\u0631 \u0627\u0633\u06a9\u0648\u0644 \u0628\u0646\u062f \u0631\u06c1\u06d2 \u06af\u0627\u0964 \u062a\u0642\u0631\u06cc\u0628 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u067e\u0631 \u0645\u0646\u0639\u0642\u062f \u06c1\u0648\u06af\u06cc\u0964\n\n\u067e\u0627\u06a9\u0633\u062a\u0627\u0646 \u0632\u0646\u062f\u06c1 \u0628\u0627\u062f!\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+exam:[
+  {en:'Annual Exam Schedule',ur:'\u0633\u0627\u0644\u0627\u0646\u06c1 \u0627\u0645\u062a\u062d\u0627\u0646 \u0634\u06cc\u0688\u0648\u0644',
+   ten:'Dear Parents/Guardians,\n\nAnnual Examinations of Al-Fareed Public School, Tando Jam will commence from [Start Date]. The detailed date sheet will be provided to students.\n\nKindly ensure your child is well-prepared. Students must bring their admit card and school ID on examination days. Mobile phones are strictly prohibited.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u06a9\u06d2 \u0633\u0627\u0644\u0627\u0646\u06c1 \u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a [\u0634\u0631\u0648\u0639 \u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 \u0634\u0631\u0648\u0639 \u06c1\u0648\u06ba \u06af\u06d2\u0964 \u0628\u0686\u06e1 \u06a9\u0648 \u0627\u0645\u062a\u062d\u0627\u0646 \u0648\u0627\u0644\u06d2 \u062f\u0646 \u0627\u06cc\u0688\u0645\u0679 \u06a9\u0627\u0631\u0688 \u0644\u0627\u0632\u0645\u06cc \u0644\u0627\u0646\u0627 \u06c1\u0648\u06af\u0627\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Monthly Test Notice',ur:'\u0645\u0627\u06c1\u0627\u0646\u06c1 \u0679\u06cc\u0633\u0679 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nThis is to inform you that Monthly Tests for all classes will be held from [Start Date] to [End Date].\n\nPlease ensure your child is regular in attendance and well prepared. Test marks will be reflected in the monthly report card.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0645\u0627\u06c1\u0627\u0646\u06c1 \u0679\u06cc\u0633\u0679 [\u0634\u0631\u0648\u0639] \u0633\u06d2 [\u062e\u062a\u0645] \u062a\u06a9 \u06c1\u0648\u06ba\u06af\u06d2\u0964 \u0628\u0686\u06d2 \u06a9\u06cc \u062d\u0627\u0636\u0631\u06cc \u06cc\u0642\u06cc\u0646\u06cc \u0628\u0646\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Result Day Notice',ur:'\u0646\u062a\u0627\u0626\u062c \u06a9\u0627 \u062f\u0646',
+   ten:'Dear Parents/Guardians,\n\nResult of Annual Examination will be distributed on [Date] at [Time] at Al-Fareed Public School, Tando Jam.\n\nParents are requested to come personally to collect their child\'s result card. Without parents, result will not be given to students.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0633\u0627\u0644\u0627\u0646\u06c1 \u0627\u0645\u062a\u062d\u0627\u0646 \u06a9\u06d2 \u0646\u062a\u0627\u0626\u062c [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u062a\u0642\u0633\u06cc\u0645 \u06a9\u06cc\u06d2 \u062c\u0627\u0626\u06cc\u06ba \u06af\u06d2\u0964 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0630\u0627\u062a\u06cc \u0637\u0648\u0631 \u067e\u0631 \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+fees:[
+  {en:'Monthly Fee Notice',ur:'\u0645\u0627\u06c1\u0627\u0646\u06c1 \u0641\u06cc\u0633 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nThis is to remind you that monthly school fee for [Month] is now due. Kindly pay the fee by [Due Date] to avoid any late charges.\n\nFee can be paid at the school office between 8:00 AM to 2:00 PM on working days. Continued non-payment may result in issuance of TC.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u0645\u0627\u06c1] \u06a9\u06cc \u0641\u06cc\u0633 \u0627\u062f\u0627\u06cc\u06af\u06cc \u06a9\u06cc [\u0622\u062e\u0631\u06cc \u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 \u06cc\u0642\u06cc\u0646\u06cc \u0628\u0646\u0627\u0626\u06cc\u06ba\u0964 \u062a\u0627\u062e\u06cc\u0631 \u067e\u0631 \u062c\u0631\u0645\u0627\u0646\u06c1 \u0639\u0627\u0626\u062f \u06c1\u0648\u06af\u0627\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Fee Increase Notice',ur:'\u0641\u06cc\u0633 \u0627\u0636\u0627\u0641\u06c1 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nDue to rising operational costs, Al-Fareed Public School, Tando Jam regrets to inform that school fee will be revised from [Date]. The new fee structure will be as follows:\n\n[Fee details to be filled]\n\nYour understanding and cooperation is highly appreciated.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0633\u06a9\u0648\u0644 \u06a9\u06d2 \u0627\u062e\u0631\u0627\u062c\u0627\u062a \u0645\u06cc\u06ba \u0627\u0636\u0627\u0641\u06d2 \u06a9\u06d2 \u0628\u0627\u0639\u062b \u0641\u06cc\u0633 [\u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 \u062a\u0628\u062f\u06cc\u0644 \u06c1\u0648\u06af\u06cc\u0964\n\n\u0622\u067e \u06a9\u06d2 \u062a\u0639\u0627\u0648\u0646 \u06a9\u0627 \u0634\u06a9\u0631\u06cc\u06c1\u0964\n\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+event:[
+  {en:'Annual Sports Day',ur:'\u0633\u0627\u0644\u0627\u0646\u06c1 \u06a9\u06be\u06cc\u0644 \u06a9\u0627 \u062f\u0646',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam is pleased to announce its Annual Sports Day on [Date] at [Time].\n\nAll students are requested to participate actively. Parents are cordially invited to witness the events and encourage their children.\n\nVenue: School Ground\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u06a9\u0627 \u0633\u0627\u0644\u0627\u0646\u06c1 \u06a9\u06be\u06cc\u0644 \u06a9\u0627 \u062f\u0646 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0645\u0646\u0639\u0642\u062f \u06c1\u0648\u06af\u0627\u0964 \u0648\u0627\u0644\u062f\u06cc\u0646 \u06a9\u0648 \u062f\u0639\u0648\u062a \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Annual Prize Distribution',ur:'\u0633\u0627\u0644\u0627\u0646\u06c1 \u062a\u0642\u0633\u06cc\u0645 \u0627\u0646\u0639\u0627\u0645\u0627\u062a',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam cordially invites you to the Annual Prize Distribution Ceremony on [Date] at [Time].\n\nToppers and achievers of the academic year will be awarded. Your presence will be an honour for us.\n\nVenue: School Hall\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0633\u0627\u0644\u0627\u0646\u06c1 \u062a\u0642\u0633\u06cc\u0645 \u0627\u0646\u0639\u0627\u0645\u0627\u062a \u062a\u0642\u0631\u06cc\u0628 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0645\u0646\u0639\u0642\u062f \u06c1\u0648\u06af\u06cc\u0964 \u0622\u067e \u06a9\u06cc \u0634\u0631\u06a9\u062a \u06c1\u0645\u0627\u0631\u06d2 \u0644\u06cc\u06d2 \u0628\u0627\u0639\u062b \u0639\u0632\u062a \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Mehfil-e-Naat / Quran Tilawat',ur:'\u0645\u062d\u0641\u0644 \u0646\u0639\u062a / \u062a\u0644\u0627\u0648\u062a \u0642\u0631\u0622\u0646',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam is organizing a Mehfil-e-Naat and Quran Tilawat competition on [Date] at [Time].\n\nAll students are encouraged to participate. Parents are invited to grace the occasion with their presence.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0645\u062d\u0641\u0644 \u0646\u0639\u062a \u0627\u0648\u0631 \u062a\u0644\u0627\u0648\u062a \u0642\u0631\u0622\u0646 \u06a9\u0627 \u0627\u06c1\u062a\u0645\u0627\u0645 \u06c1\u0648\u0563\u0627\u0964 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0648\u0631 \u0637\u0644\u0628\u0627\u0621 \u06a9\u0648 \u0634\u0631\u06a9\u062a \u06a9\u06cc \u062f\u0639\u0648\u062a \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+discipline:[
+  {en:'Homework Not Complete',ur:'\u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u0646\u06c1\u06cc\u06ba',
+   ten:'Dear Parent/Guardian,\n\nThis is to bring to your kind attention that your ward has not been completing homework regularly. Homework is an essential part of learning.\n\nKindly ensure your child completes all homework on time. Your cooperation is highly appreciated.\n\nRegards,\nPrincipal & Class Teacher',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 \u0645\u06a9\u0645\u0644 \u06a9\u0631\u06a9\u06d2 \u0646\u06c1\u06cc\u06ba \u0622\u0631\u06c1\u0627\u0964 \u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u06af\u06be\u0631 \u06a9\u0627 \u06a9\u0627\u0645 \u0631\u0648\u0632\u0627\u0646\u06c1 \u06a9\u0631\u0648\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Irregular Attendance',ur:'\u0628\u0627\u0642\u0627\u0639\u062f\u06c1 \u063a\u06cc\u0631 \u062d\u0627\u0636\u0631\u06cc',
+   ten:'Dear Parent/Guardian,\n\nYour child has been frequently absent from school without prior intimation. Regular attendance is crucial for academic progress.\n\nKindly ensure regular attendance. Continued absence may affect promotion to next class.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0628\u0627\u0631 \u0628\u0627\u0631 \u0628\u063a\u06cc\u0631 \u0627\u0637\u0644\u0627\u0639 \u063a\u06cc\u0631 \u062d\u0627\u0636\u0631 \u06c1\u0648 \u0631\u06c1\u0627 \u06c1\u06d2\u0964 \u0628\u0627\u0642\u0627\u0639\u062f\u06c1 \u062d\u0627\u0636\u0631\u06cc \u0636\u0631\u0648\u0631\u06cc \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Discipline Issue / Bad Behaviour',ur:'\u0646\u0638\u0645 \u0648 \u0636\u0628\u0637 \u06a9\u0627 \u0645\u0633\u0626\u0644\u06c1',
+   ten:'Dear Parent/Guardian,\n\nYour child has been displaying inappropriate behaviour at school. This is seriously affecting the learning environment.\n\nPlease counsel your child. Kindly visit school to meet the Principal at your earliest.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0622\u067e \u06a9\u0627 \u0628\u0686\u06c1 \u0627\u0633\u06a9\u0648\u0644 \u0645\u06cc\u06ba \u0646\u0627\u0645\u0646\u0627\u0633\u0628 \u0631\u0648\u06cc\u06c1 \u0627\u062e\u062a\u06cc\u0627\u0631 \u06a9\u0631 \u0631\u06c1\u0627 \u06c1\u06d2\u0964 \u0641\u0648\u0631\u06cc \u0637\u0648\u0631 \u067e\u0631 \u0627\u0633\u06a9\u0648\u0644 \u0622\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+academic:[
+  {en:'New Session Admission Open',ur:'\u0646\u0626\u06d2 \u0633\u06cc\u0634\u0646 \u062f\u0627\u062e\u0644\u06c1',
+   ten:'Dear Parents/Guardians,\n\nAl-Fareed Public School, Tando Jam is pleased to announce that admissions for the new academic session [Year] are now open for all classes from Nursery to Class 10.\n\nEarly registration is encouraged. For more information, please contact the school office.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u0645\u06cc\u06ba \u0646\u0626\u06d2 \u062a\u0639\u0644\u06cc\u0645\u06cc \u0633\u0627\u0644 [\u0633\u0627\u0644] \u06a9\u06d2 \u0644\u06cc\u06d2 \u0646\u0631\u0633\u0631\u06cc \u0633\u06d2 \u062c\u0645\u0627\u0639\u062a \u062f\u06c1\u0645 \u062a\u06a9 \u062f\u0627\u062e\u0644\u06d2 \u06a9\u06be\u0644\u06d2 \u06c1\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Books / Syllabus Notice',ur:'\u06a9\u062a\u0627\u0628\u06cc\u06ba / \u0646\u0635\u0627\u0628 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nThe new academic session book list for [Class] is provided herewith. Kindly ensure your child brings all required books and stationery by [Date].\n\nStationery and books are available at [Location/Shop].\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u062c\u0645\u0627\u0639\u062a] \u06a9\u06cc \u06a9\u062a\u0627\u0628\u0648\u06ba \u06a9\u06cc \u0641\u06c1\u0631\u0633\u062a \u062f\u06cc \u062c\u0627 \u0631\u06c1\u06cc \u06c1\u06d2\u0964 [\u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 \u062a\u0645\u0627\u0645 \u06a9\u062a\u0627\u0628\u06cc\u06ba \u0644\u0627\u0632\u0645\u06cc \u06c1\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+meeting:[
+  {en:'Parent-Teacher Meeting',ur:'\u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0633\u0627\u062a\u0630\u06c1 \u0645\u0644\u0627\u0642\u0627\u062a',
+   ten:'Dear Parents/Guardians,\n\nA Parent-Teacher Meeting is scheduled on [Date] at [Time] at Al-Fareed Public School, Tando Jam.\n\nThe purpose of this meeting is to discuss your child\'s academic performance and overall development. Your presence is mandatory.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0633\u0627\u062a\u0630\u06c1 \u0645\u0644\u0627\u0642\u0627\u062a \u0645\u0646\u0639\u0642\u062f \u06c1\u06d2\u0964 \u0627\u0633 \u0645\u06cc\u06ba \u0628\u0686\u06d2 \u06a9\u06cc \u062a\u0639\u0644\u06cc\u0645\u06cc \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u067e\u0631 \u06af\u0641\u062a\u06af\u0648 \u06c1\u0648\u06af\u06cc\u0964 \u0622\u067e \u06a9\u06cc \u0634\u0631\u06a9\u062a \u0644\u0627\u0632\u0645\u06cc \u06c1\u06d2\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Urgent Parent Meeting',ur:'\u0641\u0648\u0631\u06cc \u0648\u0627\u0644\u062f\u06cc\u0646 \u0645\u0644\u0627\u0642\u0627\u062a',
+   ten:'Dear Parent/Guardian,\n\nYou are requested to meet the Principal of Al-Fareed Public School, Tando Jam urgently regarding an important matter related to your child.\n\nPlease visit the school on [Date] at [Time] without fail.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u0622\u067e \u0633\u06d2 \u06af\u0632\u0627\u0631\u0634 \u06c1\u06d2 \u06a9\u06c1 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0641\u0648\u0631\u06cc \u0637\u0648\u0631 \u067e\u0631 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+],
+general:[
+  {en:'School Timing Change',ur:'\u0627\u0633\u06a9\u0648\u0644 \u0627\u0648\u0642\u0627\u062a \u0645\u06cc\u06ba \u062a\u0628\u062f\u06cc\u0644\u06cc',
+   ten:'Dear Parents/Guardians,\n\nThis is to inform all parents and students that school timing will be changed from [Date]. New timings will be as follows:\n\nMorning: [Start Time]\nBreak: [Break Time]\nDismissal: [End Time]\n\nKindly make necessary arrangements accordingly.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 \u0627\u0633\u06a9\u0648\u0644 \u06a9\u06d2 \u0627\u0648\u0642\u0627\u062a \u062a\u0628\u062f\u06cc\u0644 \u06c1\u0648\u06ba \u06af\u06d2\u0964 \u0646\u0626\u06d2 \u0627\u0648\u0642\u0627\u062a:\n\n\u0635\u0628\u062d: [\u0648\u0642\u062a]\n\u0627\u062e\u062a\u062a\u0627\u0645: [\u0648\u0642\u062a]\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'School Closed (Emergency)',ur:'\u06c1\u0646\u06af\u0627\u0645\u06cc \u0628\u0646\u062f\u06cc',
+   ten:'Dear Parents/Guardians,\n\nDue to [reason], Al-Fareed Public School, Tando Jam will remain closed on [Date]. School will reopen on [Next Date].\n\nWe apologize for any inconvenience caused.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u0648\u062c\u06c1] \u06a9\u06d2 \u0628\u0627\u0639\u062b \u0627\u0633\u06a9\u0648\u0644 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u0628\u0646\u062f \u0631\u06c1\u06d2 \u06af\u0627\u0964 [\u0622\u0646\u06d2 \u0648\u0627\u0644\u06cc \u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u06a9\u06be\u0644\u06d2 \u06af\u0627\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  {en:'Uniform / ID Card Notice',ur:'\u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 / \u0622\u0626\u06cc \u0688\u06cc \u06a9\u0627\u0631\u0688 \u0646\u0648\u0679\u0633',
+   ten:'Dear Parents/Guardians,\n\nAll students are reminded to wear complete school uniform every day. Students without proper uniform will not be allowed to enter the school.\n\nNew ID cards are available at the school office. Kindly collect.\n\nRegards,\nPrincipal',
+   tur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n\u062a\u0645\u0627\u0645 \u0637\u0644\u0628\u0627\u0621 \u06a9\u0648 \u0644\u0627\u0632\u0645\u06cc \u06c1\u06d2 \u06a9\u06c1 \u0631\u0648\u0632\u0627\u0646\u06c1 \u0645\u06a9\u0645\u0644 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u0645\u06cc\u06ba \u0622\u0626\u06cc\u06ba\u0964 \u0628\u063a\u06cc\u0631 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u062f\u0627\u062e\u0644\u06c1 \u0646\u06c1\u06cc\u06ba \u0645\u0644\u06d2 \u06af\u0627\u0964\n\n\u0634\u06a9\u0631\u06cc\u06c1\n\u067e\u0631\u0646\u0633\u067e\u0644'}
+]
+};
+
+// Certificate texts
+var certText = {
+firstpos:{en:'This is to certify that [NAME] of Class [CLASS] has secured FIRST POSITION in [ACHIEVEMENT] at Al-Fareed Public School, Tando Jam. This outstanding achievement reflects exceptional dedication, hard work, and academic brilliance.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 \u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645 \u0645\u06cc\u06ba [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0627\u0648\u0644 \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964 \u06cc\u06c1 \u0646\u0645\u0627\u06cc\u0627\u06ba \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u0627\u0646 \u06a9\u06cc \u0644\u06af\u0646 \u0645\u062d\u0646\u062a \u0627\u0648\u0631 \u0642\u0627\u0628\u0644\u06cc\u062a \u06a9\u06cc \u062f\u0644\u06cc\u0644 \u06c1\u06d2\u0964',t:'FIRST POSITION CERTIFICATE'},
+secondpos:{en:'This is to certify that [NAME] of Class [CLASS] has secured SECOND POSITION in [ACHIEVEMENT] at Al-Fareed Public School, Tando Jam. This achievement is a testament to dedication and consistent effort.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062f\u0648\u0633\u0631\u06cc \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964',t:'SECOND POSITION CERTIFICATE'},
+thirdpos:{en:'This is to certify that [NAME] of Class [CLASS] has secured THIRD POSITION in [ACHIEVEMENT] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062a\u06cc\u0633\u0631\u06cc \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964',t:'THIRD POSITION CERTIFICATE'},
+beststu:{en:'This is to certify that [NAME] of Class [CLASS] has been awarded the BEST STUDENT award at Al-Fareed Public School, Tando Jam for [ACHIEVEMENT]. This award recognizes outstanding character, discipline, and academic excellence.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u06a9\u0648 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u06a9\u06d2 \u0644\u06cc\u06d2 \u0628\u06c1\u062a\u0631\u06cc\u0646 \u0637\u0627\u0644\u0628 \u0639\u0644\u0645 \u0642\u0631\u0627\u0631 \u062f\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2\u0964',t:'BEST STUDENT AWARD'},
+sports:{en:'This is to certify that [NAME] of Class [CLASS] has excelled in [ACHIEVEMENT] and has been awarded the SPORTS CHAMPION certificate at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u06a9\u06cc\u0627\u0964',t:'SPORTS CHAMPION CERTIFICATE'},
+attend:{en:'This is to certify that [NAME] of Class [CLASS] has maintained BEST ATTENDANCE record at Al-Fareed Public School, Tando Jam during [ACHIEVEMENT].',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0628\u06c1\u062a\u0631\u06cc\u0646 \u062d\u0627\u0636\u0631\u06cc \u06a9\u0627 \u0631\u06cc\u06a9\u0627\u0631\u0688 \u0628\u0646\u0627\u06cc\u0627\u0964',t:'BEST ATTENDANCE AWARD'},
+debate:{en:'This is to certify that [NAME] of Class [CLASS] has won the DEBATE COMPETITION at Al-Fareed Public School, Tando Jam in [ACHIEVEMENT]. This demonstrates exceptional communication and critical thinking skills.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0645\u0646\u0627\u0638\u0631\u06c1 \u0645\u0642\u0627\u0628\u0644\u06c1 \u062c\u06cc\u062a\u0627\u0964',t:'DEBATE WINNER CERTIFICATE'},
+art:{en:'This is to certify that [NAME] of Class [CLASS] has demonstrated outstanding creativity and talent in [ACHIEVEMENT] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u0641\u0646\u06cc \u0635\u0644\u0627\u062d\u06cc\u062a\u06cc\u06ba \u062f\u06a9\u06be\u0627\u0626\u06cc\u06ba\u0964',t:'ART EXCELLENCE AWARD'},
+quran:{en:'This is to certify that [NAME] of Class [CLASS] has excelled in Quran Recitation and has been awarded this certificate at Al-Fareed Public School, Tando Jam for [ACHIEVEMENT].',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062a\u0644\u0627\u0648\u062a \u0642\u0631\u0622\u0646 \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u0645\u0642\u0627\u0645 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964',t:'QURAN RECITATION AWARD'},
+teacher:{en:'This is to certify that [NAME] ([CLASS]) has been awarded the BEST TEACHER award at Al-Fareed Public School, Tando Jam for [ACHIEVEMENT]. This honour recognises exceptional dedication, professionalism, and contribution to education.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0628\u06c1\u062a\u0631\u06cc\u0646 \u0627\u0633\u062a\u0627\u062f \u06a9\u0627 \u0627\u0639\u0632\u0627\u0632 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964',t:'BEST TEACHER AWARD'},
+science:{en:'This is to certify that [NAME] of Class [CLASS] has shown outstanding performance in Science at Al-Fareed Public School, Tando Jam during [ACHIEVEMENT].',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0633\u0627\u0626\u0646\u0633 \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u06a9\u06cc\u0627\u0964',t:'SCIENCE EXCELLENCE AWARD'},
+custom:{en:'This is to certify that [NAME] of Class [CLASS] has been awarded [CUSTOM_TITLE] at Al-Fareed Public School, Tando Jam for [ACHIEVEMENT].',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u06a9\u0648 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u06a9\u06d2 \u0644\u06cc\u06d2 \u0633\u0646\u062f \u062f\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2\u0964',t:'CERTIFICATE OF ACHIEVEMENT'}
+};
+
+// ===== FUNCTIONS =====
+function showTab(t){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('tab-'+t).classList.add('on');
+  var idx={'notify':0,'cert':1,'saved':2}[t];
+  document.querySelectorAll('.tb')[idx].classList.add('on');
+  if(t==='saved') renderSaved();
+}
+
+function loadLogo(inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    mData=e.target.result;
+    var i=document.getElementById('logoImg');
+    i.src=mData;i.style.display='block';
+    document.getElementById('logoTxt').style.display='none';
+    updateIb('m',mData);
+  };
+  r.readAsDataURL(inp.files[0]);
+}
+
+function loadImg(type,inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var d=e.target.result;
+    if(type==='m'){mData=d;var i=document.getElementById('logoImg');i.src=d;i.style.display='block';document.getElementById('logoTxt').style.display='none';}
+    else if(type==='s') sData=d;
+    else if(type==='cm') cmData=d;
+    else if(type==='cs') csData=d;
+    updateIb(type,d);
+  };
+  r.readAsDataURL(inp.files[0]);
+}
+
+function updateIb(type,d){
+  var box=document.getElementById(type+'Box');
+  if(!box)return;
+  var labels={m:'School Monogram',s:'Principal Signature',cm:'School Monogram',cs:'Principal Signature'};
+  box.innerHTML='<img src="'+d+'"><div class="il">'+labels[type]+'</div><button class="rim" onclick="rmImg(\''+type+'\',event)">\u2715</button>';
+  box.classList.add('has');
+}
+
+function rmImg(type,e){
+  if(e)e.stopPropagation();
+  var box=document.getElementById(type+'Box');
+  var labels={m:'School Monogram',s:'Principal Signature',cm:'School Monogram',cs:'Principal Signature'};
+  var icons={m:'\uD83C\uDFEB',s:'\u270D\uFE0F',cm:'\uD83C\uDFEB',cs:'\u270D\uFE0F'};
+  box.innerHTML='<div class="ii">'+icons[type]+'</div><div class="il">'+labels[type]+'</div><button class="rim" onclick="rmImg(\''+type+'\',event)">\u2715</button>';
+  box.classList.remove('has');
+  if(type==='m'){mData='';document.getElementById('logoImg').style.display='none';document.getElementById('logoTxt').style.display='block';}
+  else if(type==='s') sData='';
+  else if(type==='cm') cmData='';
+  else if(type==='cs') csData='';
+}
+
+function selectCat(el){
+  document.querySelectorAll('.cat-chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  curCat=el.getAttribute('data-cat');
+  curTopic=null;
+  renderTopics();
+  document.getElementById('topicCard').style.display='block';
+  document.getElementById('contentCard').style.display='none';
+  document.getElementById('imgCard').style.display='none';
+  document.getElementById('genBtn').style.display='none';
+}
+
+function renderTopics(){
+  var list=document.getElementById('topicList');
+  var arr=topics[curCat]||[];
+  var html='';
+  for(var i=0;i<arr.length;i++){
+    html+='<div class="topic-item" data-idx="'+i+'" onclick="selectTopic(this,'+i+')">'+arr[i].en+'<br><span class="tu">'+arr[i].ur+'</span></div>';
+  }
+  list.innerHTML=html;
+}
+
+function selectTopic(el,idx){
+  document.querySelectorAll('.topic-item').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');
+  curTopic=topics[curCat][idx];
+  document.getElementById('noticeText').value=curLang==='en'?curTopic.ten:curTopic.tur;
+  document.getElementById('contentCard').style.display='block';
+  document.getElementById('imgCard').style.display='block';
+  document.getElementById('genBtn').style.display='block';
+}
+
+function setLang(l){
+  curLang=l;
+  document.getElementById('lEN').classList.toggle('on',l==='en');
+  document.getElementById('lUR').classList.toggle('on',l==='ur');
+  if(curTopic) document.getElementById('noticeText').value=l==='en'?curTopic.ten:curTopic.tur;
+}
+
+function setCertLang(l){
+  certLang=l;
+  document.getElementById('cEN').classList.toggle('on',l==='en');
+  document.getElementById('cUR').classList.toggle('on',l==='ur');
+}
+
+function selectCert(el){
+  document.querySelectorAll('.cert-chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  curCert=el.getAttribute('data-ctype');
+  document.getElementById('certFormCard').style.display='block';
+  document.getElementById('certGenBtn').style.display='block';
+}
+
+// Build printable HTML page
+function buildPrintPage(bodyHtml, isWa){
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+    '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">'+
+    '<style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#faf7f0;padding:12px;font-family:"Crimson Pro",serif;}'+
+    '.wa-share{display:block;width:100%;padding:13px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;font-family:"Crimson Pro",serif;}'+
+    '.prt-btn{display:block;width:100%;padding:12px;background:#0d5c3a;color:#c9a84c;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;font-family:"Crimson Pro",serif;}'+
+    '@media print{.wa-share,.prt-btn{display:none!important;}}'+
+    '</style></head><body>'+
+    '<button class="prt-btn" onclick="window.print()">🖨️ Print / Download PDF</button>'+
+    (isWa?'<button class="wa-share" onclick="doWA()">📤 Send on WhatsApp</button>':'')+
+    bodyHtml+
+    '<script>function doWA(){var t=document.getElementById("wa-text").value;window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");}<\/script>'+
+    '</body></html>';
+}
+
+function generateNotice(){
+  if(!curTopic){showToast('Pehle topic select karen!');return;}
+  var noticeText=document.getElementById('noticeText').value.trim();
+  var recipient=document.getElementById('recipient').value.trim();
+  var remarks=document.getElementById('remarks').value.trim();
+  if(!noticeText){showToast('Notice text khali hai!');return;}
+
+  var today=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  var isUrdu=curLang==='ur';
+  var title=(isUrdu?curTopic.ur:curTopic.en)||'NOTICE';
+  var formatted=noticeText.replace(/\n/g,'<br>');
+
+  var logoH=mData?'<img src="'+mData+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">':'<span style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;color:#c9a84c;">AF</span>';
+  var signH=sData?'<img src="'+sData+'" style="max-height:40px;max-width:100px;object-fit:contain;display:block;margin:0 auto 4px;">':'';
+
+  var waText='*AL-FAREED PUBLIC SCHOOL*\n*Tando Jam, Sindh*\n\n*'+title+'*\n\nDate: '+today+(recipient?'\nTo: '+recipient:'')+'\n\n'+noticeText+(remarks?'\n\nRemarks: '+remarks:'')+'\n\n_Principal: Sir Ghulam Hussain_\n_Al-Fareed Public School, Tando Jam_';
+
+  var noticeHtml=
+    '<div style="max-width:600px;margin:0 auto;background:#fff;border:2px solid #0d5c3a;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(13,92,58,.15);">'+
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #c9a84c;">'+
+    '<div style="width:56px;height:56px;border-radius:50%;border:2px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+logoH+'</div>'+
+    '<div style="flex:1;"><div style="font-family:\'Playfair Display\',serif;font-size:15px;font-weight:900;color:#fff;">AL-FAREED <span style="color:#c9a84c;">PUBLIC SCHOOL</span></div><div style="font-size:11px;color:rgba(255,255,255,.8);">Tando Jam, Sindh, Pakistan</div></div>'+
+    '</div>'+
+    '<div style="background:#c9a84c;color:#0a1a0f;font-size:11px;font-weight:700;padding:5px 14px;text-align:center;letter-spacing:1px;text-transform:uppercase;">OFFICIAL NOTICE</div>'+
+    '<div style="padding:14px 16px;">'+
+    '<div style="font-size:11px;color:#888;margin-bottom:10px;">Date: '+today+(recipient?'&nbsp;&nbsp;|&nbsp;&nbsp;To: <strong>'+recipient+'</strong>':'')+'</div>'+
+    '<div style="background:#e8f5ee;border-radius:8px;padding:10px 12px;border-left:4px solid #0d5c3a;margin-bottom:12px;font-family:\'Playfair Display\',serif;font-size:14px;font-weight:700;color:#0d5c3a;">'+title+'</div>'+
+    '<div style="font-size:14px;line-height:1.8;color:#0a1a0f;padding:12px;background:#faf7f0;border-radius:8px;border:1px solid #e8d5a3;margin-bottom:10px;'+(isUrdu?'font-family:\'Noto Nastaliq Urdu\',serif;direction:rtl;font-size:16px;line-height:2.2;':'')+'">'+(isUrdu?'<div style="text-align:right;">':'')+formatted+(isUrdu?'</div>':'')+'</div>'+
+    (remarks?'<div style="padding:8px 12px;background:#fff3cd;border-radius:6px;font-size:13px;border-left:3px solid #c9a84c;margin-bottom:12px;"><strong>Remarks:</strong> '+remarks+'</div>':'')+
+    '<div style="border-top:1px solid #e8d5a3;padding-top:12px;display:flex;justify-content:space-between;align-items:flex-end;">'+
+    '<div style="text-align:center;">'+signH+'<div style="width:110px;height:1px;background:#0a1a0f;margin:4px 0;"></div><div style="font-size:11px;font-weight:700;">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888;">Principal</div></div>'+
+    '<div style="width:60px;height:60px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3;">SCHOOL<br>STAMP</div>'+
+    '</div></div></div>'+
+    '<textarea id="wa-text" style="display:none;">'+waText+'</textarea>';
+
+  var fullPage=buildPrintPage(noticeHtml,true);
+  var win=window.open('','_blank');
+  if(win){win.document.write(fullPage);win.document.close();}
+  else showToast('Popup blocked! Browser allow karen.');
+
+  // Save
+  saved.unshift({id:Date.now(),type:'notice',title:title,date:today,text:noticeText.substring(0,60)});
+  if(saved.length>60)saved=saved.slice(0,60);
+  localStorage.setItem('afSaved',JSON.stringify(saved));
+}
+
+function generateCert(){
+  if(!curCert){showToast('Pehle certificate type select karen!');return;}
+  var name=document.getElementById('cName').value.trim();
+  var cls=document.getElementById('cClass').value.trim();
+  var achieve=document.getElementById('cAchieve').value.trim()||'Annual Year 2024';
+  var customTitle=document.getElementById('cTitle').value.trim();
+  if(!name){showToast('Naam likhein!');return;}
+
+  var ct=certText[curCert];
+  var isUrdu=certLang==='ur';
+  var logoSrc=cmData||mData;
+  var signSrc=csData||sData;
+  var today=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  var certTitle=ct.t;
+  if(curCert==='custom'&&customTitle) certTitle=customTitle.toUpperCase();
+
+  var bodyText=isUrdu?ct.ur:ct.en;
+  bodyText=bodyText.replace(/\[NAME\]/g,name).replace(/\[CLASS\]/g,cls||'').replace(/\[ACHIEVEMENT\]/g,achieve).replace(/\[CUSTOM_TITLE\]/g,customTitle||certTitle);
+
+  var logoH=logoSrc?'<img src="'+logoSrc+'" style="width:90px;height:90px;object-fit:contain;">':'<div style="font-family:\'Playfair Display\',serif;font-size:32px;font-weight:900;color:#c9a84c;">AF</div>';
+  var signH=signSrc?'<img src="'+signSrc+'" style="max-height:45px;max-width:120px;object-fit:contain;display:block;margin:0 auto 4px;">':'';
+
+  var waText='*CERTIFICATE*\n*'+certTitle+'*\n\n'+bodyText.replace(/<[^>]+>/g,'')+'\n\nDate: '+today+'\n\n*Al-Fareed Public School, Tando Jam*\nPrincipal: Sir Ghulam Hussain';
+
+  var certHtml=
+    '<div style="max-width:620px;margin:0 auto;background:linear-gradient(145deg,#fffdf5,#fdf8e8);border:3px solid #c9a84c;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 8px 30px rgba(201,168,76,.3);">'+
+    '<div style="position:absolute;inset:8px;border:1px solid rgba(201,168,76,.4);border-radius:12px;pointer-events:none;"></div>'+
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:16px;text-align:center;border-bottom:3px solid #c9a84c;">'+
+    '<div style="display:flex;align-items:center;justify-content:center;gap:14px;">'+
+    '<div style="width:80px;height:80px;border-radius:50%;border:3px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+logoH+'</div>'+
+    '<div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:.5px;">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-size:11px;color:rgba(255,255,255,.8);">Tando Jam, Sindh, Pakistan</div></div></div>'+
+    '</div>'+
+    '<div style="text-align:center;padding:14px 16px 6px;">'+
+    '<div style="display:inline-block;background:linear-gradient(135deg,#c9a84c,#e8d5a3);color:#0a1a0f;padding:6px 22px;border-radius:25px;font-family:\'Playfair Display\',serif;font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">CERTIFICATE OF ACHIEVEMENT</div>'+
+    '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:900;color:#0d5c3a;letter-spacing:1px;text-transform:uppercase;">'+certTitle+'</div>'+
+    '</div>'+
+    '<div style="padding:6px 24px;text-align:center;">'+
+    '<div style="font-size:13px;color:#666;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">This Certificate is Proudly Presented to</div>'+
+    '<div style="font-family:\'Playfair Display\',serif;font-size:26px;font-weight:900;color:#0d5c3a;border-bottom:2px solid #c9a84c;display:inline-block;padding:0 20px 4px;margin-bottom:6px;">'+name+'</div>'+
+    (cls?'<div style="font-size:14px;font-weight:600;color:#555;margin-bottom:8px;">'+cls+'</div>':'')+
+    '</div>'+
+    '<div style="padding:6px 24px 14px;text-align:center;">'+
+    '<div style="font-size:14px;line-height:1.8;color:#333;padding:12px 16px;background:rgba(13,92,58,.05);border-radius:10px;border:1px solid rgba(201,168,76,.25);'+(isUrdu?'font-family:\'Noto Nastaliq Urdu\',serif;direction:rtl;font-size:16px;line-height:2.2;':'')+'">'+bodyText+'</div>'+
+    '</div>'+
+    '<div style="padding:0 24px 16px;display:flex;justify-content:space-between;align-items:flex-end;">'+
+    '<div style="text-align:center;">'+
+    '<div style="font-size:12px;color:#888;margin-bottom:4px;">Date</div>'+
+    '<div style="width:100px;height:1px;background:#0a1a0f;margin:0 auto 4px;"></div>'+
+    '<div style="font-size:12px;font-weight:700;">'+today+'</div>'+
+    '</div>'+
+    '<div style="text-align:center;">'+
+    '<div style="width:80px;height:80px;border:2px dashed #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#c9a84c;font-weight:700;text-align:center;line-height:1.3;background:rgba(201,168,76,.05);">SCHOOL<br>STAMP</div>'+
+    '</div>'+
+    '<div style="text-align:center;">'+signH+
+    '<div style="width:120px;height:1px;background:#0a1a0f;margin:4px auto;"></div>'+
+    '<div style="font-size:11px;font-weight:700;">Sir Ghulam Hussain</div>'+
+    '<div style="font-size:10px;color:#888;">Principal</div>'+
+    '</div></div></div>'+
+    '<textarea id="wa-text" style="display:none;">'+waText+'</textarea>';
+
+  var fullPage=buildPrintPage(certHtml,true);
+  var win=window.open('','_blank');
+  if(win){win.document.write(fullPage);win.document.close();}
+  else showToast('Popup blocked! Browser allow karen.');
+
+  saved.unshift({id:Date.now(),type:'cert',title:certTitle,date:today,text:name+' - '+cls});
+  if(saved.length>60)saved=saved.slice(0,60);
+  localStorage.setItem('afSaved',JSON.stringify(saved));
+}
+
+function renderSaved(){
+  var list=document.getElementById('savedList');
+  if(!saved.length){list.innerHTML='<div class="empty-box"><div class="ei">\uD83D\uDCC1</div><p>Nothing saved yet</p></div>';return;}
+  var h='';
+  for(var i=0;i<saved.length;i++){
+    var s=saved[i];
+    h+='<div class="sv-item"><div class="sv-top"><span class="sv-badge">'+(s.type==='cert'?'\uD83C\uDFC6 Certificate':'\uD83D\uDCCE Notice')+'</span><button class="sv-del" onclick="delSaved('+s.id+')">\uD83D\uDDD1</button></div>'+
+    '<div style="font-size:14px;font-weight:700;color:var(--deep);">'+s.title+'</div>'+
+    '<div style="font-size:12px;color:#888;">'+s.text+' &bull; '+s.date+'</div></div>';
+  }
+  list.innerHTML=h;
+}
+
+function delSaved(id){
+  saved=saved.filter(function(s){return s.id!==id;});
+  localStorage.setItem('afSaved',JSON.stringify(saved));
+  renderSaved();
+  showToast('Deleted!');
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('on');
+  setTimeout(function(){t.classList.remove('on');},2500);
+}
+</script>
+</body>
+</html>
