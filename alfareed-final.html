@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Al-Fareed Public School — Official App</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0d5c3a;--g2:#1a7a4f;--gold:#c9a84c;--cream:#faf7f0;--deep:#0a1a0f;--red:#c0392b;--lg:#e8f5ee;--acc:#e8d5a3;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--cream);font-family:'Crimson Pro',serif;color:var(--deep);}
+input[type=file]{display:none;}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(135deg,var(--g),var(--g2),var(--g));padding:12px 14px 10px;border-bottom:3px solid var(--gold);position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;inset:0;opacity:.05;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%) 0/16px 16px;}
+.hdr-in{position:relative;display:flex;align-items:center;gap:11px;}
+.lc{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.lc img{width:100%;height:100%;object-fit:cover;}
+.lat{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--gold);}
+.s1{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff;line-height:1.1;}
+.s1 b{color:var(--gold);}
+.s2{font-size:9px;color:rgba(255,255,255,.75);margin-top:2px;}
+.hbg{position:absolute;right:0;top:0;background:var(--gold);color:var(--deep);font-size:8px;font-weight:700;padding:3px 8px;border-radius:0 0 0 7px;letter-spacing:1px;}
+
+/* ── TABS ── */
+.tabs{display:flex;background:var(--g);border-bottom:2px solid var(--gold);overflow-x:auto;}
+.tabs::-webkit-scrollbar{height:0;}
+.tb{padding:11px 13px;background:none;border:none;color:rgba(255,255,255,.55);font-size:11px;font-family:'Crimson Pro',serif;font-weight:700;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.tb.on{color:var(--gold);background:rgba(201,168,76,.12);border-bottom-color:var(--gold);}
+
+/* ── SECTIONS ── */
+.sec{display:none;padding:13px;}.sec.on{display:block;}
+
+/* ── CARD ── */
+.card{background:#fff;border-radius:11px;padding:13px;margin-bottom:11px;box-shadow:0 2px 10px rgba(13,92,58,.09);border:1px solid rgba(201,168,76,.2);}
+.ct{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--g);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--acc);display:flex;align-items:center;gap:6px;}
+
+/* ── FORM ── */
+label{display:block;font-size:11px;font-weight:700;color:var(--g);margin-bottom:3px;}
+input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{
+  width:100%;padding:9px 11px;border:1.5px solid #ddd;border-radius:8px;
+  font-size:13px;font-family:'Crimson Pro',serif;color:var(--deep);
+  background:var(--cream);outline:none;transition:.2s;margin-bottom:8px;}
+input:focus,select:focus,textarea:focus{border-color:var(--g);background:#fff;}
+textarea{min-height:72px;resize:vertical;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+/* ── LANG BTNS ── */
+.ltab{display:flex;gap:6px;margin-bottom:9px;flex-wrap:wrap;}
+.lt{flex:1;min-width:60px;padding:8px 4px;border:1.5px solid #ddd;border-radius:8px;font-size:11px;font-family:'Crimson Pro',serif;font-weight:700;background:var(--cream);cursor:pointer;transition:.2s;color:#666;text-align:center;}
+.lt.on{border-color:var(--gold);background:var(--gold);color:var(--deep);}
+
+/* ── CHIP GRID ── */
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.chip{padding:11px 7px;border:1.5px solid #ddd;border-radius:10px;font-size:11px;text-align:center;cursor:pointer;transition:.15s;color:#555;font-weight:700;background:var(--cream);user-select:none;line-height:1.4;}
+.chip.on{border-color:var(--g);background:var(--lg);color:var(--g);}
+.chip .ic{font-size:20px;display:block;margin-bottom:4px;}
+
+/* ── IMAGE BOXES ── */
+.irow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.ib{border:1.5px dashed #ccc;border-radius:9px;padding:10px;text-align:center;cursor:pointer;transition:.2s;background:var(--cream);min-height:65px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;overflow:hidden;}
+.ib:hover{border-color:var(--g);background:var(--lg);}
+.ib.has{border-style:solid;border-color:var(--g);}
+.ib img{width:100%;height:46px;object-fit:contain;border-radius:5px;}
+.il{font-size:9px;font-weight:700;color:#888;}
+.ii{font-size:19px;}
+.rim{position:absolute;top:2px;right:2px;background:var(--red);color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;display:none;align-items:center;justify-content:center;}
+.ib.has .rim{display:flex;}
+
+/* ── BUTTONS ── */
+.gbtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),var(--g2));color:var(--gold);border:none;border-radius:10px;font-size:15px;font-family:'Playfair Display',serif;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(13,92,58,.28);margin-bottom:9px;letter-spacing:.4px;}
+.gbtn:active{transform:scale(.98);}
+.sbtn{padding:8px 12px;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Crimson Pro',serif;}
+.sbtn-g{background:var(--g);color:var(--gold);}
+.sbtn-r{background:var(--red);color:#fff;}
+.sbtn-b{background:#2980b9;color:#fff;}
+
+/* ── MATH KEYBOARD ── */
+.mkb{display:flex;flex-wrap:wrap;gap:4px;background:#f0f0f0;padding:8px;border-radius:9px;margin-bottom:9px;}
+.mk{padding:6px 8px;background:#fff;border:1px solid #ccc;border-radius:5px;font-size:14px;cursor:pointer;font-family:'Times New Roman',serif;line-height:1;min-width:34px;text-align:center;transition:.12s;}
+.mk:hover{background:var(--lg);border-color:var(--g);}
+.mk:active{transform:scale(.87);}
+.mcat{width:100%;font-size:10px;font-weight:700;color:var(--g);padding:3px 5px;background:rgba(13,92,58,.08);border-radius:4px;margin:4px 0 2px;}
+
+/* ── QUESTION ITEM ── */
+.qi{background:var(--cream);border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid #e0e0e0;position:relative;}
+.qnum{background:var(--g);color:var(--gold);width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-right:5px;flex-shrink:0;}
+.qdel{position:absolute;top:8px;right:8px;background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ── TIMETABLE ── */
+.ttgrid{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:9px;}
+.ttgrid th{background:var(--g);color:var(--gold);padding:7px 4px;text-align:center;font-size:10px;border:1px solid rgba(255,255,255,.2);}
+.ttgrid td{padding:3px;border:1px solid #ddd;background:#fff;}
+.ttgrid tr:nth-child(even) td{background:#f9f9f9;}
+.ttgrid td input{width:100%;padding:4px 5px;border:1px solid #eee;border-radius:4px;font-size:10px;background:var(--cream);font-family:'Crimson Pro',serif;margin-bottom:0;}
+
+/* ── OVERLAY ── */
+#ov{display:none;position:fixed;inset:0;background:#fff;z-index:9999;overflow-y:auto;}
+.ovbar{position:sticky;top:0;z-index:10;background:#fff;padding:9px 11px;border-bottom:2px solid var(--gold);display:flex;gap:7px;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.ovbar button{padding:9px 11px;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'Crimson Pro',serif;}
+.ovbk{background:#888;color:#fff;flex-shrink:0;}
+.ovbp{flex:1;background:var(--g);color:var(--gold);}
+.ovbw{flex:1;background:#25D366;color:#fff;}
+#ovbd{padding:11px;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--deep);color:var(--gold);padding:8px 18px;border-radius:22px;font-size:12px;font-weight:600;transition:.3s;z-index:99999;box-shadow:0 4px 16px rgba(0,0,0,.3);white-space:nowrap;}
+.toast.on{transform:translateX(-50%) translateY(0);}
+.stl{font-family:'Playfair Display',serif;font-size:16px;color:var(--g);margin-bottom:11px;font-weight:900;}
+
+/* ── EXAM PAPER — EXACT IMAGE FORMAT ── */
+.epwrap{max-width:720px;margin:0 auto;background:#fff;border:2px solid #000;font-family:Arial,sans-serif;}
+.ephead{border-bottom:2px solid #000;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.eplogo{width:58px;height:58px;object-fit:contain;}
+.eplogoph{width:58px;height:58px;border:2px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0;}
+.epsc{flex:1;text-align:center;padding:0 6px;}
+.epsn{font-family:'Arial Black',Arial,sans-serif;font-size:15px;font-weight:900;text-transform:uppercase;line-height:1.2;letter-spacing:.3px;}
+.epse{font-size:11px;color:#333;margin-top:2px;}
+.epbdg{background:#000;color:#fff;font-size:11px;font-weight:700;padding:4px 16px;display:inline-block;margin-top:5px;letter-spacing:.5px;}
+.eprow1{display:flex;align-items:center;border-bottom:1px solid #000;padding:4px 10px;font-size:12px;font-family:Arial,sans-serif;}
+.eprow2{display:flex;align-items:center;border-bottom:2px solid #000;padding:4px 10px;font-size:12px;font-family:Arial,sans-serif;}
+.epl{font-weight:700;margin-right:4px;color:#000;}
+.epv{font-weight:900;margin-right:20px;}
+.epbody{padding:9px 11px;font-family:'Times New Roman',serif;}
+.aln{border-bottom:1px solid #aaa;height:22px;margin:3px 0;}
+.epfoot{border-top:2px solid #000;padding:8px 11px;display:flex;justify-content:space-between;align-items:flex-end;}
+
+/* ── HWSUB SUBJECT BUTTONS ── */
+.hwsub{padding:10px 6px;border:2px solid #ddd;border-radius:9px;font-size:12px;font-weight:700;background:#fff;cursor:pointer;transition:.15s;color:#333;font-family:'Crimson Pro',serif;line-height:1.3;}
+.hwsub:hover{border-color:var(--g);background:var(--lg);}
+.hwsub.on{border-color:var(--g);background:var(--g);color:#fff;}
+
+@media print{
+  .hdr,.tabs,.sec,#ov .ovbar{display:none!important;}
+  #ov{position:static!important;background:#fff!important;}
+  #ovbd{padding:0!important;}
+  .epwrap{border:1px solid #000;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hbg">AL-FAREED SCHOOL</div>
+  <div class="hdr-in">
+    <div class="lc" id="glc" onclick="document.getElementById('glf').click()">
+      <img id="gli" src="" style="display:none">
+      <span class="lat" id="glt">AF</span>
+    </div>
+    <div>
+      <div class="s1">AL-FAREED <b>PUBLIC SCHOOL</b></div>
+      <div class="s2">Tando Jam, Sindh &bull; SEMIS: 362 &bull; Principal: Sir Ghulam Hussain</div>
+    </div>
+  </div>
+  <input type="file" id="glf" accept="image/*" onchange="ldGL(this)">
+</div>
+
+<!-- MAIN TABS -->
+<div class="tabs">
+  <button class="tb on" onclick="sTab('pub')">📣 Publicity</button>
+  <button class="tb" onclick="sTab('hw')">📒 Homework</button>
+  <button class="tb" onclick="sTab('paper')">📄 Exam Paper</button>
+  <button class="tb" onclick="sTab('cert')">🏆 Certificate</button>
+  <button class="tb" onclick="sTab('ett')">📅 Exam Schedule</button>
+  <button class="tb" onclick="sTab('tt')">🗓️ Timetable</button>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 1 — PUBLICITY MATERIAL
+═══════════════════════════════ -->
+<div id="tab-pub" class="sec on">
+<div class="stl">📣 School Publicity &amp; Notices</div>
+
+<div class="card">
+  <div class="ct">📋 Notice Type Select Karen</div>
+  <div class="chips">
+    <div class="chip" data-t="admission" onclick="sPub(this)"><span class="ic">🏫</span>New Admission Open</div>
+    <div class="chip" data-t="result" onclick="sPub(this)"><span class="ic">🏆</span>Result Announcement</div>
+    <div class="chip" data-t="sports" onclick="sPub(this)"><span class="ic">⚽</span>Annual Sports Day</div>
+    <div class="chip" data-t="prize" onclick="sPub(this)"><span class="ic">🎖️</span>Prize Distribution</div>
+    <div class="chip" data-t="holiday" onclick="sPub(this)"><span class="ic">🎉</span>Holiday Notice</div>
+    <div class="chip" data-t="exam" onclick="sPub(this)"><span class="ic">📝</span>Exam Notification</div>
+    <div class="chip" data-t="meeting" onclick="sPub(this)"><span class="ic">🤝</span>Parent Meeting</div>
+    <div class="chip" data-t="fee" onclick="sPub(this)"><span class="ic">💰</span>Fee Notice</div>
+    <div class="chip" data-t="uniform" onclick="sPub(this)"><span class="ic">👕</span>Uniform Notice</div>
+    <div class="chip" data-t="general" onclick="sPub(this)"><span class="ic">📢</span>General Notice</div>
+  </div>
+</div>
+
+<div class="card" id="pubForm" style="display:none">
+  <div class="ct">🌐 Language: English Only</div>
+  <!-- Admission-only fields -->
+  <div id="admFields" style="display:none">
+    <div class="card" style="background:var(--lg);border:1px solid rgba(13,92,58,.2);margin-bottom:9px;">
+      <div class="ct" style="font-size:12px">🏫 Classes Open for Admission (select karen)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Nursery" style="width:15px;height:15px;margin:0;cursor:pointer"> Nursery</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="KG-1" style="width:15px;height:15px;margin:0;cursor:pointer"> KG-1</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="KG-2" style="width:15px;height:15px;margin:0;cursor:pointer"> KG-2</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 1" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 1</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 2" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 2</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 3" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 3</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 4" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 4</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 5" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 5</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 6" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 6</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 7" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 7</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 8" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 8</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 9" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 9</label>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--deep);cursor:pointer"><input type="checkbox" class="admCls" value="Class 10" style="width:15px;height:15px;margin:0;cursor:pointer"> Class 10</label>
+        <button onclick="selAllCls(true)" style="padding:5px 10px;background:var(--g);color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer">All</button>
+        <button onclick="selAllCls(false)" style="padding:5px 10px;background:#888;color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer">Clear</button>
+      </div>
+    </div>
+  </div>
+  <div class="r2">
+    <div><label>Date</label><input type="date" id="pDate"></div>
+    <div><label>Session / Extra Info</label><input type="text" id="pExtra" placeholder="2025-26"></div>
+  </div>
+  <label>Contact Number (Notice mein add hoga)</label>
+  <input type="text" id="pContact" placeholder="e.g. 0300-1234567 / 022-XXXXXXX">
+  <label>Notice Text (Edit karen)</label>
+  <textarea id="pText" style="min-height:130px"></textarea>
+  <div class="irow">
+    <div class="ib" id="pMBox" onclick="document.getElementById('pMF').click()">
+      <div class="ii">🏫</div><div class="il">School Monogram</div>
+      <button class="rim" onclick="rImg('pM',event)">✕</button>
+    </div>
+    <div class="ib" id="pSBox" onclick="document.getElementById('pSF').click()">
+      <div class="ii">✍️</div><div class="il">Principal Sign</div>
+      <button class="rim" onclick="rImg('pS',event)">✕</button>
+    </div>
+  </div>
+  <input type="file" id="pMF" accept="image/*" onchange="ldImg('pM',this)">
+  <input type="file" id="pSF" accept="image/*" onchange="ldImg('pS',this)">
+  <button class="gbtn" onclick="genPub()">📣 Generate &amp; Preview</button>
+</div>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 2 — HOMEWORK DIARY
+═══════════════════════════════ -->
+<div id="tab-hw" class="sec">
+<div class="stl">📒 Homework Diary</div>
+
+<!-- Diary Header Card -->
+<div style="background:#0d5c3a;border-radius:14px;padding:0;margin-bottom:12px;overflow:hidden;box-shadow:0 4px 18px rgba(13,92,58,.35)">
+  <!-- School Header -->
+  <div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #c9a84c">
+    <div id="hwLogoL" style="width:60px;height:60px;border-radius:50%;border:3px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onclick="document.getElementById('hwLogoLF').click()">
+      <img id="hwLogoLI" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+      <span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#c9a84c" id="hwLogoLT">AF</span>
+    </div>
+    <input type="file" id="hwLogoLF" accept="image/*" onchange="ldHWLogo('L',this)">
+    <div style="flex:1;text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff;line-height:1.1">AL - Fareed Public School</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#c9a84c">Tandojam</div>
+    </div>
+    <div id="hwLogoR" style="width:60px;height:60px;border-radius:50%;border:3px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer" onclick="document.getElementById('hwLogoRF').click()">
+      <img id="hwLogoRI" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+      <span style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#c9a84c" id="hwLogoRT">AF</span>
+    </div>
+    <input type="file" id="hwLogoRF" accept="image/*" onchange="ldHWLogo('R',this)">
+  </div>
+  <!-- Diary + Date row -->
+  <div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:#0a4f2e">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:#fff">Date:</span>
+      <input type="date" id="hwDate" style="padding:5px 9px;border:2px solid #c9a84c;border-radius:7px;font-size:12px;background:#fff;color:#000;margin:0;width:auto">
+    </div>
+    <div style="background:#ffff00;color:#000;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;padding:6px 24px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3)">Diary</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:12px;font-weight:700;color:#fff">Class:</span>
+      <select id="hwClass" style="padding:5px 8px;border:2px solid #c9a84c;border-radius:7px;font-size:12px;background:#fff;color:#000;margin:0;width:auto">
+        <option>Nursery</option><option>KG-1</option><option>KG-2</option>
+        <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+        <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+        <option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Subject Buttons -->
+<div class="card">
+  <div class="ct">📚 Subject Select Karo — Homework Add Karo</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+    <button class="hwsub" data-s="English" onclick="selHWSub(this)">📗 English</button>
+    <button class="hwsub" data-s="Urdu" onclick="selHWSub(this)">📘 اردو</button>
+    <button class="hwsub" data-s="Mathematics" onclick="selHWSub(this)">📐 Math</button>
+    <button class="hwsub" data-s="Science" onclick="selHWSub(this)">🔬 Science</button>
+    <button class="hwsub" data-s="Social Studies" onclick="selHWSub(this)">🌍 Social St.</button>
+    <button class="hwsub" data-s="Islamiat" onclick="selHWSub(this)">📖 Islamiat</button>
+    <button class="hwsub" data-s="Computer" onclick="selHWSub(this)">💻 Computer</button>
+    <button class="hwsub" data-s="Sindhi" onclick="selHWSub(this)">🔵 سنڌي</button>
+    <button class="hwsub" data-s="Chemistry" onclick="selHWSub(this)">⚗️ Chemistry</button>
+    <button class="hwsub" data-s="Biology" onclick="selHWSub(this)">🧬 Biology</button>
+    <button class="hwsub" data-s="Physics" onclick="selHWSub(this)">⚡ Physics</button>
+    <button class="hwsub" data-s="Other" onclick="selHWSub(this)">📝 Other</button>
+  </div>
+
+  <!-- Active subject homework input -->
+  <div id="hwInputArea" style="display:none;background:var(--lg);border-radius:10px;padding:12px;border:2px solid var(--g)">
+    <div style="font-size:13px;font-weight:700;color:var(--g);margin-bottom:7px">📝 <span id="hwActiveSubLbl"></span> — Homework likhein:</div>
+    <textarea id="hwInput" placeholder="e.g. Page 45-46 exercises complete karo..." style="min-height:70px;margin-bottom:8px"></textarea>
+    <button onclick="addHWEntry()" style="width:100%;padding:10px;background:var(--g);color:var(--gold);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Crimson Pro',serif">✅ Add Homework</button>
+  </div>
+</div>
+
+<!-- Homework Table Preview -->
+<div class="card">
+  <div class="ct">📋 Homework List
+    <button onclick="clearHW()" style="margin-left:auto;padding:4px 10px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer">Clear All</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table id="hwTable" style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead>
+        <tr style="background:#0d5c3a;color:#fff">
+          <th style="padding:9px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;letter-spacing:1px">Class</th>
+          <th style="padding:9px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;letter-spacing:1px">Subject</th>
+          <th style="padding:9px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;letter-spacing:1px">Home Work</th>
+          <th style="padding:9px 4px;border:2px solid #000;width:30px"></th>
+        </tr>
+      </thead>
+      <tbody id="hwBody">
+        <tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa;border:1px solid #ddd">Koi homework nahi — subject select karke add karo</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Footer info -->
+<div class="card">
+  <div class="ct">📞 Contact Info (Diary Footer)</div>
+  <div class="r2">
+    <div><label>Phone 1</label><input type="text" id="hwPhone1" value="03435272484"></div>
+    <div><label>Phone 2</label><input type="text" id="hwPhone2" value="03453655553"></div>
+  </div>
+  <label>Address</label>
+  <input type="text" id="hwAddr" value="Near National Bank, Tando Jam.">
+</div>
+
+<button class="gbtn" style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f)" onclick="genHW()">📒 Generate Diary &amp; Share</button>
+</div>
+<div id="tab-paper" class="sec">
+<div class="stl">📄 Examination Paper Creator</div>
+
+<!-- EXAM NAME -->
+<div style="margin-bottom:9px">
+  <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">EXAM NAME</label>
+  <select id="epExNm" style="width:100%;padding:13px 14px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;font-family:'Crimson Pro',serif;color:var(--deep);background:#f5f5f5;outline:none;margin-top:5px;margin-bottom:0">
+    <option value="MIDTERM EXAMINATION">MIDTERM EXAMINATION</option>
+    <option value="ANNUAL EXAMINATION">ANNUAL EXAMINATION</option>
+    <option value="MONTHLY TEST">MONTHLY TEST</option>
+    <option value="FIRST TERM EXAMINATION">FIRST TERM EXAMINATION</option>
+    <option value="SECOND TERM EXAMINATION">SECOND TERM EXAMINATION</option>
+    <option value="HALF YEARLY EXAMINATION">HALF YEARLY EXAMINATION</option>
+    <option value="PRE-BOARD EXAMINATION">PRE-BOARD EXAMINATION</option>
+    <option value="UNIT TEST">UNIT TEST</option>
+    <option value="WEEKLY TEST">WEEKLY TEST</option>
+  </select>
+</div>
+
+<!-- ACADEMIC YEAR -->
+<div style="margin-bottom:9px">
+  <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">ACADEMIC YEAR</label>
+  <input type="text" id="epSes" placeholder="2025-26" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 14px;">
+</div>
+
+<!-- SUBJECT & CLASS -->
+<div class="r2" style="margin-bottom:9px">
+  <div>
+    <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">SUBJECT</label>
+    <select id="epSubj" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 10px;">
+      <option>English</option>
+      <option>Urdu / اردو</option>
+      <option>Mathematics / حساب</option>
+      <option>Science / سائنس</option>
+      <option>Islamiyat / اسلامیات</option>
+      <option>Social Studies</option>
+      <option>Sindhi / سنڌي</option>
+      <option>Pakistan Studies</option>
+      <option>Physics / طبیعیات</option>
+      <option>Chemistry / کیمیا</option>
+      <option>Biology / حیاتیات</option>
+      <option>Computer Science</option>
+      <option>General Science</option>
+      <option>Drawing / آرٹ</option>
+      <option>Quran / قرآن</option>
+    </select>
+  </div>
+  <div>
+    <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">CLASS</label>
+    <select id="epCls" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 10px;">
+      <option>Nursery</option><option>KG-1</option><option>KG-2</option>
+      <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+      <option>Class 4</option><option selected>Class 5</option><option>Class 6</option>
+      <option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+    </select>
+  </div>
+</div>
+
+<!-- FONT SIZE & LINE SPACE SLIDERS -->
+<div class="r2" style="margin-bottom:9px">
+  <div style="background:#f5f5f5;border-radius:10px;padding:12px 14px;">
+    <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">FONT SIZE: <span id="fsVal">11.5</span>PT</div>
+    <input type="range" id="epFS" min="9" max="18" step="0.5" value="11.5" oninput="document.getElementById('fsVal').textContent=this.value" style="width:100%;accent-color:#2980b9;cursor:pointer">
+  </div>
+  <div style="background:#f5f5f5;border-radius:10px;padding:12px 14px;">
+    <div style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">LINE SPACE: <span id="lsVal">1.1</span></div>
+    <input type="range" id="epLS" min="1" max="3" step="0.1" value="1.1" oninput="document.getElementById('lsVal').textContent=parseFloat(this.value).toFixed(1)" style="width:100%;accent-color:#2980b9;cursor:pointer">
+  </div>
+</div>
+
+<!-- DATE -->
+<div style="margin-bottom:9px">
+  <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">DATE</label>
+  <input type="date" id="epDt" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 14px;">
+</div>
+
+<!-- TOTAL MARKS & PASS MARKS -->
+<div class="r2" style="margin-bottom:9px">
+  <div>
+    <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">TOTAL MARKS</label>
+    <input type="number" id="epTot" value="100" min="1" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 14px;">
+  </div>
+  <div>
+    <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">PASS MARKS</label>
+    <input type="number" id="epPass" value="33" min="1" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 14px;">
+  </div>
+</div>
+
+<!-- TIME -->
+<div style="margin-bottom:9px">
+  <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">TIME</label>
+  <select id="epTm" style="margin-top:5px;margin-bottom:0;background:#f5f5f5;border-radius:10px;padding:13px 14px;">
+    <option value="1 Hour">1 Hour</option>
+    <option value="1:30 Hours">1:30 Hours</option>
+    <option value="2 Hours">2 Hours</option>
+    <option value="2:30 Hours">2:30 Hours</option>
+    <option value="3 Hours" selected>3 Hours</option>
+  </select>
+</div>
+
+<!-- CONTENT EDITOR TOOLBAR -->
+<div style="background:#eef3ff;border-radius:12px;padding:12px;margin-bottom:9px;">
+  <div style="font-size:13px;font-weight:700;color:var(--deep);margin-bottom:10px;letter-spacing:.3px">CONTENT EDITOR</div>
+
+  <!-- Row 1: B, Fonts, Pic, Grid size -->
+  <div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px">
+    <button onclick="fmtDoc('bold')" style="padding:8px 12px;background:#fff;border:1px solid #ccc;border-radius:7px;font-weight:900;font-size:14px;cursor:pointer">B</button>
+    <button onclick="chgFont()" style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px"><span style="color:#2980b9;font-weight:700">A</span> Fonts</button>
+    <button onclick="document.getElementById('epImgF').click()" style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:13px;cursor:pointer">📸 Pic</button>
+    <input type="file" id="epImgF" accept="image/*" onchange="insertImg(this)">
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto">
+      <input type="number" id="gCols" value="3" min="1" max="6" style="width:42px;padding:7px 5px;border:1px solid #ccc;border-radius:6px;text-align:center;font-size:13px;margin:0;background:#fff">
+      <span style="font-size:13px;color:#888">x</span>
+      <input type="number" id="gRows" value="3" min="1" max="20" style="width:42px;padding:7px 5px;border:1px solid #ccc;border-radius:6px;text-align:center;font-size:13px;margin:0;background:#fff">
+    </div>
+  </div>
+
+  <!-- Row 2: Table, Polish, AI Generate -->
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
+    <button onclick="insertTable()" style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px"><span style="color:#2980b9">⊞</span> Table</button>
+    <button onclick="polishText()" style="padding:8px 10px;background:#fff;border:1px solid rgba(46,204,113,.5);border-radius:7px;font-size:12px;cursor:pointer;color:#27ae60;font-weight:700">✓ Polish</button>
+    <button onclick="aiGen()" style="padding:8px 10px;background:#fff;border:1px solid rgba(142,68,173,.4);border-radius:7px;font-size:12px;cursor:pointer;color:#8e44ad;font-weight:700">✏️ AI Generate</button>
+  </div>
+
+  <!-- Row 3: Language + formatting toolbar -->
+  <div style="font-size:11px;color:#e67e22;font-weight:700;margin-bottom:6px">Select Language of Paper, Fonts, Size, Bold etc</div>
+  <div style="background:#fff;border-radius:9px;padding:9px;border:1px solid #e0e0e0">
+    <!-- Lang buttons -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <button onclick="fmtDoc('undo')" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:13px;cursor:pointer">↩</button>
+      <button onclick="fmtDoc('redo')" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:13px;cursor:pointer">↪</button>
+      <button onclick="fmtDoc('bold')" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-weight:900;font-size:13px;cursor:pointer">B</button>
+      <button onclick="chgSz(1)" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:13px;cursor:pointer">A+</button>
+      <button onclick="chgSz(-1)" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:13px;cursor:pointer">A-</button>
+      <button id="btnEN" onclick="setEdLang('en')" style="padding:6px 9px;border:1.5px solid #2980b9;border-radius:6px;background:#ebf5fb;font-size:12px;font-weight:700;cursor:pointer;color:#2980b9">EN</button>
+      <button id="btnSD" onclick="setEdLang('sd')" style="padding:6px 9px;border:1.5px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;font-weight:700;cursor:pointer;color:#555">SD</button>
+      <button id="btnUR" onclick="setEdLang('ur')" style="padding:6px 9px;border:1.5px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;font-weight:700;cursor:pointer;color:#555">UR</button>
+    </div>
+    <!-- Format row -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <select id="fontFam" onchange="applyFont()" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;margin:0">
+        <option value="">⚡ Auto-Mix</option>
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Noto Nastaliq Urdu">Urdu Font</option>
+        <option value="Crimson Pro">Crimson</option>
+        <option value="monospace">Mono</option>
+      </select>
+      <button onclick="adjLines(0.1)" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">≡ Lines</button>
+      <button onclick="toggleDual()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">⊡ Dual</button>
+    </div>
+    <!-- Alignment + list row -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <button onclick="insertBreak()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">✂ Break</button>
+      <button onclick="fmtDoc('justifyLeft')" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:14px;cursor:pointer">≡</button>
+      <button onclick="fmtDoc('justifyCenter')" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:14px;cursor:pointer">≡</button>
+      <button onclick="fmtDoc('justifyRight')" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:14px;cursor:pointer">≡</button>
+      <button onclick="fmtDoc('insertOrderedList')" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">1≡</button>
+      <button onclick="fmtDoc('insertUnorderedList')" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">A,B,C</button>
+    </div>
+    <!-- Cols/Table/Pic row -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <button onclick="addStar()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:14px;cursor:pointer">⭐</button>
+      <select id="qNumStyle" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;margin:0">
+        <option value="1">1</option><option value="a">a</option><option value="i">i</option>
+      </select>
+      <button onclick="insertCols()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">⊞ Cols</button>
+      <button onclick="insertTable()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">⊟ Table</button>
+      <button onclick="document.getElementById('epImgF2').click()" style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f9f9f9;font-size:12px;cursor:pointer">📸 Pic</button>
+      <input type="file" id="epImgF2" accept="image/*" onchange="insertImg(this)">
+    </div>
+  </div>
+</div>
+
+<!-- ENABLE SCHOOL WATERMARK -->
+<div style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:12px 14px;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:10px">
+    <input type="checkbox" id="epWM" style="width:18px;height:18px;cursor:pointer;margin:0">
+    <span style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase">ENABLE SCHOOL WATERMARK</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <select id="epWMStyle" style="padding:7px 9px;border:1px solid #ddd;border-radius:7px;font-size:12px;margin:0;background:#f5f5f5">
+      <option>Light</option><option>Medium</option><option>Dark</option>
+    </select>
+    <button onclick="ldWatermark()" style="padding:8px 14px;background:#2980b9;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">📂 Load</button>
+  </div>
+</div>
+
+<!-- MATH TOOLS (always visible like GBELS) -->
+<div style="background:#fff9ee;border:1.5px solid #f0c040;border-radius:12px;padding:12px;margin-bottom:9px">
+  <div style="font-size:13px;font-weight:700;color:#e67e22;margin-bottom:9px;letter-spacing:.5px">MATH TOOLS</div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px">
+    <button onclick="ins2('÷')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">÷</button>
+    <button onclick="ins2('×')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">×</button>
+    <button onclick="ins2('°')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">°</button>
+    <button onclick="ins2('π')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">π</button>
+    <button onclick="ins2('∠')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∠</button>
+    <button onclick="ins2('Δ')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">Δ</button>
+    <button onclick="ins2('θ')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">θ</button>
+    <button onclick="ins2('∞')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∞</button>
+    <button onclick="ins2('≠')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">≠</button>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px">
+    <button onclick="ins2('≤')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">≤</button>
+    <button onclick="ins2('≥')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">≥</button>
+    <button onclick="ins2('a/b')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:14px;cursor:pointer;font-family:serif">a/b</button>
+    <button onclick="ins2('√')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">√x</button>
+    <button onclick="ins2('²')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">x²</button>
+    <button onclick="ins2('₂')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">x₂</button>
+    <button onclick="ins2('△')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">△</button>
+    <button onclick="ins2('±')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">±</button>
+    <!-- More math -->
+    <button onclick="ins2('∑')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∑</button>
+    <button onclick="ins2('∫')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∫</button>
+    <button onclick="ins2('∂')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∂</button>
+    <button onclick="ins2('∈')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∈</button>
+    <button onclick="ins2('∩')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∩</button>
+    <button onclick="ins2('∪')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">∪</button>
+    <button onclick="ins2('³')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">x³</button>
+    <button onclick="ins2('½')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">½</button>
+    <button onclick="ins2('→')" style="padding:8px 11px;background:#fff;border:1.5px solid #ccc;border-radius:8px;font-size:16px;cursor:pointer;font-family:serif">→</button>
+  </div>
+</div>
+
+<!-- CONTENT EDITOR — big textarea like GBELS -->
+<div style="background:#fff;border:1.5px solid #e0e0e0;border-radius:12px;overflow:hidden;margin-bottom:9px">
+  <div id="epEditor" contenteditable="true"
+    style="min-height:320px;padding:14px;font-size:11.5pt;line-height:1.1;font-family:Arial,sans-serif;outline:none;color:#111"
+    placeholder="Type your paper here..."
+    oninput="syncEditor()">
+  </div>
+</div>
+<style>
+#epEditor:empty:before{content:attr(placeholder);color:#aaa;pointer-events:none;}
+#epEditor:focus{border-color:var(--g)!important;}
+</style>
+
+<!-- MONOGRAM IMAGES -->
+<div style="margin-bottom:9px">
+  <label style="font-size:12px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">SCHOOL MONOGRAM (Left &amp; Right)</label>
+  <div class="irow">
+    <div class="ib" id="epLMBox" onclick="document.getElementById('epLMF').click()">
+      <div class="ii">🏫</div><div class="il">Left Monogram</div>
+      <button class="rim" onclick="rImg('epLM',event)">✕</button>
+    </div>
+    <div class="ib" id="epRMBox" onclick="document.getElementById('epRMF').click()">
+      <div class="ii">🏫</div><div class="il">Right Logo</div>
+      <button class="rim" onclick="rImg('epRM',event)">✕</button>
+    </div>
+  </div>
+  <input type="file" id="epLMF" accept="image/*" onchange="ldImg('epLM',this)">
+  <input type="file" id="epRMF" accept="image/*" onchange="ldImg('epRM',this)">
+</div>
+
+<button class="gbtn" onclick="genPaper()" style="background:linear-gradient(135deg,#2980b9,#1a6fa8)">📄 Generate Exam Paper</button>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 3 — CERTIFICATES
+═══════════════════════════════ -->
+<div id="tab-cert" class="sec">
+<div class="stl">🏆 Certificate Creator</div>
+
+<div class="card">
+  <div class="ct">🎖️ Certificate Type</div>
+  <div class="chips">
+    <div class="chip" data-ct="position1" onclick="selCert(this)"><span class="ic">🥇</span>1st Position</div>
+    <div class="chip" data-ct="position2" onclick="selCert(this)"><span class="ic">🥈</span>2nd Position</div>
+    <div class="chip" data-ct="position3" onclick="selCert(this)"><span class="ic">🥉</span>3rd Position</div>
+    <div class="chip" data-ct="beststu" onclick="selCert(this)"><span class="ic">⭐</span>Best Student</div>
+    <div class="chip" data-ct="bestteach" onclick="selCert(this)"><span class="ic">👩‍🏫</span>Best Teacher</div>
+    <div class="chip" data-ct="attend" onclick="selCert(this)"><span class="ic">📅</span>Best Attendance</div>
+    <div class="chip" data-ct="sports" onclick="selCert(this)"><span class="ic">🏅</span>Sports Champion</div>
+    <div class="chip" data-ct="debate" onclick="selCert(this)"><span class="ic">🎤</span>Debate Winner</div>
+    <div class="chip" data-ct="quran" onclick="selCert(this)"><span class="ic">📖</span>Quran Recitation</div>
+    <div class="chip" data-ct="art" onclick="selCert(this)"><span class="ic">🎨</span>Art Excellence</div>
+    <div class="chip" data-ct="science" onclick="selCert(this)"><span class="ic">🔬</span>Science Award</div>
+    <div class="chip" data-ct="custom" onclick="selCert(this)"><span class="ic">✏️</span>Custom Award</div>
+  </div>
+</div>
+
+<div class="card" id="certForm" style="display:none">
+  <div class="ct">👤 Recipient Details</div>
+  <div class="r2">
+    <div><label>Name / نام</label><input type="text" id="cName" placeholder="Ali Ahmed"></div>
+    <div><label>Class / Designation</label><input type="text" id="cCls" placeholder="Class 5 / Teacher"></div>
+  </div>
+  <div class="r2">
+    <div><label>Father's Name</label><input type="text" id="cFather" placeholder="Muhammad Ahmed"></div>
+    <div><label>Roll No. (if student)</label><input type="text" id="cRoll" placeholder="15"></div>
+  </div>
+  <label>Achievement / Subject / Event</label>
+  <input type="text" id="cAch" placeholder="Annual Exams 2025 / District Level Competition">
+  <label>Custom Award Title (Custom type ke liye)</label>
+  <input type="text" id="cCustomTitle" placeholder="Excellence in Mathematics">
+  <div class="r2">
+    <div><label>Date</label><input type="date" id="cDate"></div>
+    <div><label>Session / Year</label><input type="text" id="cSession" placeholder="2024-25"></div>
+  </div>
+  <div class="ct" style="margin-top:4px">🌐 Language</div>
+  <div class="ltab">
+    <button class="lt on" id="cEN" onclick="setCL('en')">🇬🇧 English</button>
+    <button class="lt" id="cUR" onclick="setCL('ur')">🇵🇰 Urdu</button>
+  </div>
+  <div class="ct" style="margin-top:4px">🖼️ Images</div>
+  <div class="irow">
+    <div class="ib" id="cMBox" onclick="document.getElementById('cMF').click()"><div class="ii">🏫</div><div class="il">School Monogram</div><button class="rim" onclick="rImg('cM',event)">✕</button></div>
+    <div class="ib" id="cSBox" onclick="document.getElementById('cSF').click()"><div class="ii">✍️</div><div class="il">Principal Sign</div><button class="rim" onclick="rImg('cS',event)">✕</button></div>
+  </div>
+  <input type="file" id="cMF" accept="image/*" onchange="ldImg('cM',this)">
+  <input type="file" id="cSF" accept="image/*" onchange="ldImg('cS',this)">
+</div>
+<button class="gbtn" id="certGenBtn" style="display:none;background:linear-gradient(135deg,#8e44ad,#6c3483)" onclick="genCert()">🏆 Generate Certificate</button>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 4 — EXAM SCHEDULE
+═══════════════════════════════ -->
+<div id="tab-ett" class="sec">
+<div class="stl">📅 Examination Schedule</div>
+<div class="card">
+  <div class="ct">📋 Exam Details</div>
+  <div class="r2">
+    <div><label>Exam Name</label><input type="text" id="etNm" placeholder="Annual Examination 2025"></div>
+    <div><label>Exam Name Urdu</label><input type="text" id="etNmU" placeholder="سالانہ امتحان"></div>
+  </div>
+  <div class="r2">
+    <div><label>Classes</label><input type="text" id="etCls" placeholder="Class 1 to 10"></div>
+    <div><label>Session</label><input type="text" id="etSes" placeholder="2025-26"></div>
+  </div>
+  <div class="r2">
+    <div><label>Start Date</label><input type="date" id="etSt"></div>
+    <div><label>End Date</label><input type="date" id="etEn"></div>
+  </div>
+  <div class="r2">
+    <div><label>Morning Time</label><input type="time" id="etT1" value="08:00"></div>
+    <div><label>Evening Time (optional)</label><input type="time" id="etT2"></div>
+  </div>
+</div>
+<div class="card">
+  <div class="ct">📚 Schedule Rows</div>
+  <div style="overflow-x:auto">
+    <table class="ttgrid" id="etTbl">
+      <thead><tr>
+        <th>Date</th><th>Day</th><th>Subject</th>
+        <th>Class</th><th>Time</th><th>Marks</th>
+      </tr></thead>
+      <tbody id="etBd"></tbody>
+    </table>
+  </div>
+  <div class="r2" style="margin-top:7px">
+    <button class="sbtn sbtn-b" onclick="aETR()">+ Add Row</button>
+    <button class="sbtn sbtn-r" onclick="dETR()">− Remove</button>
+  </div>
+</div>
+<div class="card">
+  <div class="ct">📣 Important Instructions</div>
+  <textarea id="etIns" placeholder="1. Bring Admit Card&#10;2. No mobile phones&#10;3. Arrive 30 minutes early&#10;4. Write Roll No on answer sheet"></textarea>
+</div>
+<div class="card">
+  <div class="ct">🖼️ Images</div>
+  <div class="irow">
+    <div class="ib" id="etMBox" onclick="document.getElementById('etMF').click()"><div class="ii">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rImg('etM',event)">✕</button></div>
+    <div class="ib" id="etSBox" onclick="document.getElementById('etSF').click()"><div class="ii">✍️</div><div class="il">Principal Sign</div><button class="rim" onclick="rImg('etS',event)">✕</button></div>
+  </div>
+  <input type="file" id="etMF" accept="image/*" onchange="ldImg('etM',this)">
+  <input type="file" id="etSF" accept="image/*" onchange="ldImg('etS',this)">
+</div>
+<button class="gbtn" onclick="genETT()">📅 Generate Exam Schedule</button>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 4 — TIMETABLE
+═══════════════════════════════ -->
+<div id="tab-tt" class="sec">
+<div class="stl">🗓️ Timetable Creator</div>
+<div class="card">
+  <div class="ct">Type</div>
+  <div class="ltab">
+    <button class="lt on" id="ttT" onclick="sTT('t')">👩‍🏫 Teacher Period</button>
+    <button class="lt" id="ttC" onclick="sTT('c')">🏫 Class Daily</button>
+  </div>
+</div>
+
+<!-- Teacher TT -->
+<div id="divT">
+  <div class="card">
+    <div class="ct">👩‍🏫 Teacher Info</div>
+    <div class="r2">
+      <div><label>Teacher Name</label><input type="text" id="ttTN" placeholder="Ms. Nadia Hussain"></div>
+      <div><label>Subject</label><input type="text" id="ttTS" placeholder="Mathematics"></div>
+    </div>
+    <label>Week</label><input type="text" id="ttTW" placeholder="April 14–18, 2025">
+  </div>
+  <div class="card">
+    <div class="ct">📋 Period Schedule</div>
+    <div style="overflow-x:auto">
+      <table class="ttgrid">
+        <thead><tr><th>P#</th><th>Time</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>
+        <tbody id="ttTBd"></tbody>
+      </table>
+    </div>
+    <div class="r2" style="margin-top:7px">
+      <button class="sbtn sbtn-b" onclick="aTR('t')">+ Row</button>
+      <button class="sbtn sbtn-r" onclick="dTR('t')">− Row</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">🖼️ Images</div>
+    <div class="irow">
+      <div class="ib" id="ttTMBox" onclick="document.getElementById('ttTMF').click()"><div class="ii">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rImg('ttTM',event)">✕</button></div>
+      <div class="ib" id="ttTSBox" onclick="document.getElementById('ttTSF').click()"><div class="ii">✍️</div><div class="il">Sign</div><button class="rim" onclick="rImg('ttTS',event)">✕</button></div>
+    </div>
+    <input type="file" id="ttTMF" accept="image/*" onchange="ldImg('ttTM',this)">
+    <input type="file" id="ttTSF" accept="image/*" onchange="ldImg('ttTS',this)">
+  </div>
+  <button class="gbtn" onclick="genTTT()">📅 Generate Teacher Timetable</button>
+</div>
+
+<!-- Class TT -->
+<div id="divC" style="display:none">
+  <div class="card">
+    <div class="ct">🏫 Class Info</div>
+    <div class="r2">
+      <div><label>Class</label>
+        <select id="ttCC"><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+      </div>
+      <div><label>Class Teacher</label><input type="text" id="ttCT" placeholder="Ms. Fatima"></div>
+    </div>
+    <label>Academic Year</label><input type="text" id="ttCY" placeholder="2025-26">
+  </div>
+  <div class="card">
+    <div class="ct">📋 Class Schedule</div>
+    <div style="overflow-x:auto">
+      <table class="ttgrid">
+        <thead><tr><th>P#</th><th>Time</th><th>Subject</th><th>Teacher</th><th>M</th><th>T</th><th>W</th><th>Th</th><th>F</th><th>S</th></tr></thead>
+        <tbody id="ttCBd"></tbody>
+      </table>
+    </div>
+    <div class="r2" style="margin-top:7px">
+      <button class="sbtn sbtn-b" onclick="aTR('c')">+ Row</button>
+      <button class="sbtn sbtn-r" onclick="dTR('c')">− Row</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">🖼️ Images</div>
+    <div class="irow">
+      <div class="ib" id="ttCMBox" onclick="document.getElementById('ttCMF').click()"><div class="ii">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rImg('ttCM',event)">✕</button></div>
+      <div class="ib" id="ttCSBox" onclick="document.getElementById('ttCSF').click()"><div class="ii">✍️</div><div class="il">Sign</div><button class="rim" onclick="rImg('ttCS',event)">✕</button></div>
+    </div>
+    <input type="file" id="ttCMF" accept="image/*" onchange="ldImg('ttCM',this)">
+    <input type="file" id="ttCSF" accept="image/*" onchange="ldImg('ttCS',this)">
+  </div>
+  <button class="gbtn" onclick="genCTT()">📅 Generate Class Timetable</button>
+</div>
+</div>
+
+<!-- OVERLAY -->
+<div id="ov">
+  <div class="ovbar">
+    <button class="ovbk" onclick="cOv()">← Back</button>
+    <button class="ovbp" onclick="window.print()">🖨️ Print / PDF</button>
+    <button class="ovbw" onclick="sWA()">💬 WhatsApp</button>
+  </div>
+  <div id="ovbd"></div>
+  <div id="waS" style="display:none"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ STATE ═══
+var gL='';
+var Im={pM:'',pS:'',epLM:'',epRM:'',epSG:'',etM:'',etS:'',ttTM:'',ttTS:'',ttCM:'',ttCS:'',cM:'',cS:''};
+var epLang='en', pLang='en', curPub='', curCert='', certLang='en', aFld=null;
+var qCount=0, qList=[];
+var etRows=0, ttTRows=0, ttCRows=0;
+
+// Months
+var eM=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var uM=['\u062c\u0646\u0648\u0631\u06cc','\u0641\u0631\u0648\u0631\u06cc','\u0645\u0627\u0631\u0686','\u0627\u067e\u0631\u06cc\u0644','\u0645\u0626\u06cc','\u062c\u0648\u0646','\u062c\u0648\u0644\u0627\u0626\u06cc','\u0627\u06af\u0633\u062a','\u0633\u062a\u0645\u0628\u0631','\u0627\u06a9\u062a\u0648\u0628\u0631','\u0646\u0648\u0645\u0628\u0631','\u062f\u0633\u0645\u0628\u0631'];
+
+function fD(v){if(!v)return '-';var p=v.split('-'),m=parseInt(p[1])-1,d=parseInt(p[2]),y=p[0];return d+' '+eM[m]+' '+y;}
+function fT(v){if(!v)return '';var p=v.split(':'),h=parseInt(p[0]),mn=p[1],ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+mn+' '+ap;}
+function tdy(){var d=new Date();return d.getDate()+' '+eM[d.getMonth()]+' '+d.getFullYear();}
+
+// ═══ TABS ═══
+function sTab(t){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.tb').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('tab-'+t).classList.add('on');
+  var ts=['pub','hw','paper','cert','ett','tt'];
+  document.querySelectorAll('.tb')[ts.indexOf(t)].classList.add('on');
+}
+
+// ═══ GLOBAL LOGO ═══
+function ldGL(inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    gL=e.target.result;
+    var i=document.getElementById('gli');
+    i.src=gL; i.style.display='block';
+    document.getElementById('glt').style.display='none';
+    var keys=['pM','epLM','epRM','etM','ttTM','ttCM'];
+    keys.forEach(function(k){ if(!Im[k]){Im[k]=gL; updIb(k,gL); } });
+    // Also fill HW logos
+    ldHWLogoData('L',gL);
+    ldHWLogoData('R',gL);
+  };
+  r.readAsDataURL(inp.files[0]);
+}
+
+// ═══ HOMEWORK FUNCTIONS ═══
+var hwEntries=[];
+var hwActiveSub='';
+
+function ldHWLogo(side,inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){ldHWLogoData(side,e.target.result);};
+  r.readAsDataURL(inp.files[0]);
+}
+function ldHWLogoData(side,d){
+  var img=document.getElementById('hwLogo'+side+'I');
+  var txt=document.getElementById('hwLogo'+side+'T');
+  img.src=d; img.style.display='block'; txt.style.display='none';
+}
+
+function selHWSub(el){
+  document.querySelectorAll('.hwsub').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+  hwActiveSub=el.getAttribute('data-s');
+  document.getElementById('hwActiveSubLbl').textContent=hwActiveSub;
+  document.getElementById('hwInputArea').style.display='block';
+  document.getElementById('hwInput').value='';
+  document.getElementById('hwInput').focus();
+}
+
+function addHWEntry(){
+  if(!hwActiveSub){showT('Subject select karen!');return;}
+  var txt=document.getElementById('hwInput').value.trim();
+  if(!txt){showT('Homework text likhein!');return;}
+  var cls=document.getElementById('hwClass').value;
+  hwEntries.push({cls:cls,sub:hwActiveSub,hw:txt});
+  renderHWTable();
+  document.getElementById('hwInput').value='';
+  showT(hwActiveSub+' homework added!');
+}
+
+function renderHWTable(){
+  var tbody=document.getElementById('hwBody');
+  if(!hwEntries.length){
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:#aaa;border:1px solid #ddd">Koi homework nahi</td></tr>';
+    return;
+  }
+  var html='';
+  hwEntries.forEach(function(e,i){
+    html+='<tr style="background:'+(i%2===0?'#fff':'#f9f9f9')+'">'+
+      '<td style="padding:10px 8px;border:2px solid #000;font-weight:700;font-size:12px;vertical-align:top">'+e.cls+'</td>'+
+      '<td style="padding:10px 8px;border:2px solid #000;font-weight:700;font-size:12px;vertical-align:top;white-space:nowrap">'+e.sub+'</td>'+
+      '<td style="padding:10px 8px;border:2px solid #000;font-size:12px;vertical-align:top">'+e.hw+'</td>'+
+      '<td style="padding:6px 4px;border:2px solid #000;text-align:center;vertical-align:middle">'+
+      '<button onclick="delHW('+i+')" style="background:var(--red);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer">✕</button></td>'+
+      '</tr>';
+  });
+  tbody.innerHTML=html;
+}
+
+function delHW(i){
+  hwEntries.splice(i,1);
+  renderHWTable();
+}
+
+function clearHW(){
+  hwEntries=[];
+  renderHWTable();
+  document.querySelectorAll('.hwsub').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('hwInputArea').style.display='none';
+}
+
+function genHW(){
+  var dt=document.getElementById('hwDate').value;
+  var cls=document.getElementById('hwClass').value;
+  var ph1=document.getElementById('hwPhone1').value;
+  var ph2=document.getElementById('hwPhone2').value;
+  var addr=document.getElementById('hwAddr').value;
+  var displayDate=dt?fD(dt):tdy();
+
+  var logoLI=document.getElementById('hwLogoLI');
+  var logoRI=document.getElementById('hwLogoRI');
+  var lLH=logoLI.style.display!='none'?'<img src="'+logoLI.src+'" style="width:65px;height:65px;object-fit:contain;border-radius:50%">':'<div style="width:65px;height:65px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#c9a84c">AF</div>';
+  var lRH=logoRI.style.display!='none'?'<img src="'+logoRI.src+'" style="width:65px;height:65px;object-fit:contain;border-radius:50%">':'<div style="width:65px;height:65px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#c9a84c">AF</div>';
+
+  // Build table rows — empty rows if less than 9 entries
+  var rows=hwEntries.slice();
+  while(rows.length<9) rows.push(null);
+
+  var tableRows='';
+  rows.forEach(function(e,i){
+    var isFirst=true;
+    if(i===0||e===null||(i>0&&rows[i-1]!==null&&rows[i-1].cls!==e.cls)||i===0){isFirst=true;}
+    tableRows+='<tr style="height:52px">'+
+      '<td style="border:2px solid #000;padding:4px 6px;font-weight:700;font-size:12px;vertical-align:middle;white-space:nowrap">'+(e?e.cls:'')+'</td>'+
+      '<td style="border:2px solid #000;padding:4px 6px;font-weight:700;font-size:12px;vertical-align:middle">'+(e?e.sub:'')+'</td>'+
+      '<td style="border:2px solid #000;padding:4px 6px;font-size:12px;vertical-align:middle">'+(e?e.hw:'')+'</td>'+
+      '</tr>';
+  });
+
+  var html=
+    '<div style="max-width:620px;margin:0 auto;background:#0d5c3a;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(13,92,58,.4)">'+
+    // School header
+    '<div style="padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:4px solid #c9a84c">'+
+    lLH+
+    '<div style="flex:1;text-align:center">'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:20px;font-weight:900;color:#fff;line-height:1.1">AL - Fareed Public School</div>'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:18px;font-weight:900;color:#c9a84c">Tandojam</div>'+
+    '</div>'+lRH+'</div>'+
+    // Date + Diary + Class row
+    '<div style="padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:#0a4f2e;border-bottom:3px solid #c9a84c">'+
+    '<div style="background:#fff;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:700"><span style="color:#888">Date: </span><strong>'+displayDate+'</strong></div>'+
+    '<div style="background:#ffff00;color:#000;font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;padding:6px 22px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3)">Diary</div>'+
+    '<div style="background:#fff;border-radius:7px;padding:5px 10px;font-size:12px;font-weight:700"><span style="color:#888">Class: </span><strong>'+cls+'</strong></div>'+
+    '</div>'+
+    // Homework table
+    '<div style="background:#fff;margin:0">'+
+    '<table style="width:100%;border-collapse:collapse">'+
+    '<thead><tr style="background:#0d5c3a"><th style="padding:10px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;font-size:13px;letter-spacing:1px;color:#fff">Class</th><th style="padding:10px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;font-size:13px;letter-spacing:1px;color:#fff">Subject</th><th style="padding:10px 8px;border:2px solid #000;text-align:left;font-family:Arial,sans-serif;font-size:13px;letter-spacing:1px;color:#fff">Home Work</th></tr></thead>'+
+    '<tbody>'+tableRows+'</tbody>'+
+    '</table></div>'+
+    // Footer
+    '<div style="padding:12px 16px;background:#0d5c3a;border-top:4px solid #c9a84c;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
+    '<div style="color:#fff">'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900;margin-bottom:5px">PHONE / Whatsaap</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px">📞</div>'+
+    '<div><div style="font-family:Arial Black,Arial,sans-serif;font-size:14px;font-weight:900;color:#fff">'+ph1+'</div>'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:14px;font-weight:900;color:#fff">'+ph2+'</div></div>'+
+    '</div></div>'+
+    '<div style="display:flex;align-items:center;gap:8px;color:#fff">'+
+    '<div style="width:32px;height:32px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px">📍</div>'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900">'+addr+'</div>'+
+    '</div></div></div>';
+
+  // WA text
+  var waText='*AL-FAREED PUBLIC SCHOOL*\n*TANDOJAM*\n\n*HOMEWORK DIARY*\nDate: '+displayDate+'\nClass: '+cls+'\n\n';
+  hwEntries.forEach(function(e){
+    waText+='*'+e.sub+'*: '+e.hw+'\n';
+  });
+  waText+='\nPHONE: '+ph1+' / '+ph2+'\n'+addr;
+
+  showOv(html,waText);
+}
+
+// ═══ IMAGE HELPERS ═══
+var iLbl={pM:'School Monogram',pS:'Principal Sign',epLM:'Left Monogram',epRM:'Right Logo',epSG:'Principal Sign',etM:'Monogram',etS:'Principal Sign',ttTM:'Monogram',ttTS:'Sign',ttCM:'Monogram',ttCS:'Sign',cM:'School Monogram',cS:'Principal Sign'};
+var iIco={pM:'🏫',pS:'✍️',epLM:'🏫',epRM:'🏫',epSG:'✍️',etM:'🏫',etS:'✍️',ttTM:'🏫',ttTS:'✍️',ttCM:'🏫',ttCS:'✍️',cM:'🏫',cS:'✍️'};
+
+function ldImg(k,inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){Im[k]=e.target.result; updIb(k,e.target.result);};
+  r.readAsDataURL(inp.files[0]);
+}
+function updIb(k,d){
+  var b=document.getElementById(k+'Box'); if(!b)return;
+  b.innerHTML='<img src="'+d+'" style="width:100%;height:44px;object-fit:contain;border-radius:4px"><div class="il">'+iLbl[k]+'</div><button class="rim" onclick="rImg(\''+k+'\',event)">\u2715</button>';
+  b.classList.add('has');
+}
+function rImg(k,e){
+  if(e)e.stopPropagation(); Im[k]='';
+  var b=document.getElementById(k+'Box'); if(!b)return;
+  b.innerHTML='<div class="ii">'+iIco[k]+'</div><div class="il">'+iLbl[k]+'</div><button class="rim" onclick="rImg(\''+k+'\',event)">\u2715</button>';
+  b.classList.remove('has');
+}
+
+// ═══ PUBLICITY CONTENT ═══
+var pData={
+  admission:{
+    en:'Dear Parents / Guardians,\n\nAl-Fareed Public School, Tando Jam\n\u0627\u0644\u0641\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u060c \u0679\u0646\u0688\u0648 \u062c\u0627\u0645\n\nis pleased to announce that ADMISSIONS are NOW OPEN.\n\nAvailable Classes: [CLASSES]\n\nWhy Al-Fareed Public School?\n✅ Highly qualified & experienced teachers\n✅ English, Urdu & Sindhi medium\n✅ Safe, disciplined environment\n✅ Co-curricular & sports activities\n✅ Affordable & reasonable fee\n✅ Special attention to every student\n\n📞 For admission & information:\nContact: 0300-XXXXXXX\nAddress: Tando Jam, Sindh\n\nLimited seats — Register now!\n\nSir Ghulam Hussain\nPrincipal\nAl-Fareed Public School, Tando Jam',
+    ur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646 / \u0633\u0631\u067e\u0631\u0633\u062a\u060c\n\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645 \u0645\u06cc\u06ba \u0646\u0626\u06d2 \u062a\u0639\u0644\u06cc\u0645\u06cc \u0633\u06cc\u0634\u0646 \u06a9\u06d2 \u0644\u06cc\u06d2 \u062f\u0627\u062e\u0644\u06d2 \u06a9\u06be\u0644\u06d2 \u06c1\u06cc\u06ba\u0964\n\n\u062f\u0633\u062a\u06cc\u0627\u0628 \u062c\u0645\u0627\u0639\u062a\u06cc\u06ba:\n\u0646\u0631\u0633\u0631\u06cc\u060c KG-1\u060c KG-2\u060c \u062c\u0645\u0627\u0639\u062a 1 \u062a\u0627 \u062c\u0645\u0627\u0639\u062a 10\n\n\u06c1\u0645\u0627\u0631\u06cc \u0627\u0633\u06a9\u0648\u0644 \u06a9\u06cc\u0648\u06ba \u0645\u0646\u062a\u062e\u0628 \u06a9\u0631\u06cc\u06ba?\n\u2705 \u062a\u062c\u0631\u0628\u06d2\u06a9\u0627\u0631 \u0627\u0633\u0627\u062a\u0630\u06c1\n\u2705 \u0627\u0646\u06af\u0631\u06cc\u0632\u06cc \u060c \u0627\u0631\u062f\u0648 \u0627\u0648\u0631 \u0633\u0646\u062f\u06be\u06cc \u0645\u06cc\u0688\u06cc\u0645\n\u2705 \u0645\u0639\u06cc\u0627\u0631\u06cc \u062a\u0639\u0644\u06cc\u0645\n\u2705 \u0645\u0639\u0642\u0648\u0644 \u0641\u06cc\u0633\n\u2705 \u06c1\u0631 \u0637\u0627\u0644\u0628 \u0639\u0644\u0645 \u067e\u0631 \u0630\u0627\u062a\u06cc \u062a\u0648\u062c\u06c1\n\n\u0631\u0627\u0628\u0637\u06c1 \u06a9\u06cc\u0644\u06cc\u06d2: 0300-XXXXXXX\n\u067e\u062a\u06c1: \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645\u060c \u0633\u0646\u062f\u06be\n\n\u0633\u06cc\u0679\u06cc\u06ba \u0645\u062d\u062f\u0648\u062f \u06c1\u06cc\u06ba \u2014 \u0641\u0648\u0631\u06cc \u0631\u062c\u0633\u0679\u0631\u06cc\u0634\u0646 \u06a9\u0631\u0627\u0626\u06cc\u06ba!\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645'
+  },
+  result:{en:'Dear Parents,\n\nResults of [Exam Name] are ready.\n\nResult cards will be distributed on [Date] between 8 AM - 2 PM. Parents must come personally to collect.\n\nTop students will be awarded at Prize Distribution.\n\nCongratulations to all students!\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646\u060c\n\n[\u0627\u0645\u062a\u062d\u0627\u0646 \u0646\u0627\u0645] \u06a9\u06d2 \u0646\u062a\u0627\u0626\u062c \u062a\u06cc\u0627\u0631 \u06c1\u06cc\u06ba\u0964\n\u0646\u062a\u06cc\u062c\u06c1 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u062f\u06cc\u0627 \u062c\u0627\u0626\u06d2 \u06af\u0627\u0964 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0630\u0627\u062a\u06cc \u0637\u0648\u0631 \u067e\u0631 \u0622\u0626\u06cc\u06ba\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  sports:{en:'Dear Parents,\n\nAnnual Sports Day will be held on [Date] at [Time] at School Ground.\n\nAll students must participate actively. Parents are cordially invited.\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0633\u0627\u0644\u0627\u0646\u06c1 \u06a9\u06be\u06cc\u0644\u0648\u06ba \u06a9\u0627 \u062f\u0646 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2\u0964 \u0648\u0627\u0644\u062f\u06cc\u0646 \u0628\u06be\u06cc \u062a\u0634\u0631\u06cc\u0641 \u0644\u0627\u0626\u06cc\u06ba\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  prize:{en:'Dear Parents,\n\nAnnual Prize Distribution Ceremony will be held on [Date] at [Time] at School Hall.\n\nYour presence will be an honour for us.\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0633\u0627\u0644\u0627\u0646\u06c1 \u062a\u0642\u0633\u06cc\u0645 \u0627\u0646\u0639\u0627\u0645\u0627\u062a [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2\u0964 \u0622\u067e \u06a9\u06cc \u0634\u0631\u06a9\u062a \u0628\u0627\u0639\u062b \u0639\u0632\u062a \u06c1\u06d2\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  holiday:{en:'Dear Parents,\n\nSchool will remain closed from [Date] to [Date] due to [Reason].\n\nSchool will reopen on [Date]. Holiday homework must be completed.\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0627\u0633\u06a9\u0648\u0644 [\u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 [\u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 [\u0648\u062c\u06c1] \u06a9\u06cc \u0628\u0646\u0627\u062f \u067e\u0631 \u0628\u0646\u062f \u0631\u06c1\u06d2 \u06af\u0627\u0964 [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 \u06a9\u06be\u0644\u06d2 \u06af\u0627\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  exam:{en:'Dear Parents,\n\nExaminations will be held from [Date] to [Date].\n\n• Students must bring Admit Card every day\n• Arrive 30 minutes before time\n• Mobile phones strictly prohibited\n• Write Roll Number clearly on answer sheet\n\nBest of luck to all students!\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a [\u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 [\u062a\u0627\u0631\u06cc\u062e] \u062a\u06a9 \u06c1\u0648\u06ba\u06af\u06d2\u0964\n\n\u2022 \u0627\u06cc\u0688\u0645\u0679 \u06a9\u0627\u0631\u0688 \u0644\u0627\u0632\u0645\u06cc \u0644\u0627\u0626\u06cc\u06ba\n\u2022 \u0645\u0648\u0628\u0627\u0626\u0644 \u0641\u0648\u0646 \u0645\u0645\u0646\u0648\u0639 \u06c1\u06d2\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  meeting:{en:'Dear Parents,\n\nParent-Teacher Meeting is scheduled on [Date] at [Time].\n\nYour presence is mandatory to discuss your child\'s academic progress.\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0648\u0627\u0644\u062f\u06cc\u0646 \u0627\u0633\u0627\u062a\u0630\u06c1 \u0645\u0644\u0627\u0642\u0627\u062a [\u062a\u0627\u0631\u06cc\u062e] \u06a9\u0648 [\u0648\u0642\u062a] \u0628\u062c\u06d2 \u0645\u0646\u0639\u0642\u062f \u06c1\u06d2\u0964 \u0622\u067e \u06a9\u06cc \u0634\u0631\u06a9\u062a \u0644\u0627\u0632\u0645\u06cc \u06c1\u06d2\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  fee:{en:'Dear Parents,\n\nThis is a reminder that monthly school fee is due by [Date].\n\nLate payment will incur additional charges. Office hours: 8 AM - 2 PM (Mon-Sat).\n\nSir Ghulam Hussain\nPrincipal',ur:'\u0645\u0627\u06c1\u0627\u0646\u06c1 \u0641\u06cc\u0633 \u06a9\u06cc \u0622\u062e\u0631\u06cc \u062a\u0627\u0631\u06cc\u062e [\u062a\u0627\u0631\u06cc\u062e] \u06c1\u06d2\u0964 \u062a\u0627\u062e\u06cc\u0631 \u067e\u0631 \u062c\u0631\u0645\u0627\u0646\u06c1 \u0639\u0627\u0626\u062f \u06c1\u0648\u06af\u0627\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  uniform:{en:'Dear Parents,\n\nAll students must wear complete school uniform from [Date]. Students without uniform will not be allowed entry.\n\nSir Ghulam Hussain\nPrincipal',ur:'[\u062a\u0627\u0631\u06cc\u062e] \u0633\u06d2 \u062a\u0645\u0627\u0645 \u0637\u0644\u0628\u0627\u0621 \u0645\u06a9\u0645\u0644 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u0645\u06cc\u06ba \u0622\u0626\u06cc\u06ba\u0964 \u0628\u063a\u06cc\u0631 \u06cc\u0648\u0646\u06cc\u0641\u0627\u0631\u0645 \u062f\u0627\u062e\u0644\u06c1 \u0646\u06c1\u06cc\u06ba\u0964\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644'},
+  general:{en:'Dear Parents / Students,\n\nThis is to inform you regarding an important matter:\n\n[Write your message here]\n\nKindly note and act accordingly.\n\nSir Ghulam Hussain\nPrincipal\nAl-Fareed Public School, Tando Jam',ur:'\u0645\u062d\u062a\u0631\u0645 \u0648\u0627\u0644\u062f\u06cc\u0646 / \u0637\u0644\u0628\u0627\u0621\u060c\n\n[\u0622\u067e \u06a9\u0627 \u067e\u06cc\u063a\u0627\u0645 \u06cc\u06c1\u0627\u06ba \u0644\u06a9\u06be\u06cc\u06ba]\n\n\u0633\u0631 \u063a\u0644\u0627\u0645 \u062d\u0633\u06cc\u0646\n\u067e\u0631\u0646\u0633\u067e\u0644\n\u0627\u0644\u0641\u0627\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u062a\u0627\u0646\u0688\u0648 \u062c\u0627\u0645'}
+};
+
+function selAllCls(v){document.querySelectorAll('.admCls').forEach(function(cb){cb.checked=v;});}
+
+function sPub(el){
+  document.querySelectorAll('.chip[data-t]').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  curPub=el.getAttribute('data-t');
+  document.getElementById('pubForm').style.display='block';
+  document.getElementById('admFields').style.display=curPub==='admission'?'block':'none';
+  var d=pData[curPub];
+  if(d) document.getElementById('pText').value=d.en;
+}
+
+// ═══ NOTICE PRINT HEADER ═══
+function pHdr(logoKey,title,subtitle){
+  var lg=Im[logoKey]||gL;
+  var lH=lg?'<img src="'+lg+'" style="width:100%;height:100%;object-fit:contain;border-radius:50%">':'<span style="font-family:Playfair Display,serif;font-size:17px;font-weight:900;color:#c9a84c">AF</span>';
+  return '<div style="max-width:600px;margin:0 auto;background:#fff;border:2px solid #0d5c3a;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(13,92,58,.13)">'+
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:13px 15px;display:flex;align-items:center;gap:11px;border-bottom:3px solid #c9a84c">'+
+    '<div style="width:56px;height:56px;border-radius:50%;border:2px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+lH+'</div>'+
+    '<div style="flex:1"><div style="font-family:Playfair Display,serif;font-size:15px;font-weight:900;color:#fff">AL-FAREED <span style="color:#c9a84c">PUBLIC SCHOOL</span></div>'+
+    '<div style="font-family:Noto Nastaliq Urdu,serif;font-size:13px;color:rgba(255,255,255,.9);direction:rtl">الفرید پبلک اسکول ، ٹنڈو جام</div>'+
+    '<div style="font-size:10px;color:rgba(255,255,255,.75)">Tando Jam, Sindh, Pakistan</div></div></div>'+
+    '<div style="background:#c9a84c;color:#0a1a0f;font-size:11px;font-weight:700;padding:4px 14px;text-align:center;letter-spacing:1px">'+title+'</div>'+
+    (subtitle?'<div style="background:#e8f5ee;padding:5px 14px;font-size:12px;font-weight:600;color:#0d5c3a;text-align:center">'+subtitle+'</div>':'')+
+    '<div style="padding:13px 15px">';
+}
+function pFtr(signKey,dt){
+  var sg=Im[signKey]||'';
+  var sH=sg?'<img src="'+sg+'" style="max-height:37px;max-width:95px;object-fit:contain;display:block;margin:0 auto 3px">':'';
+  return '<div style="border-top:1px solid #e8d5a3;padding-top:10px;margin-top:9px;display:flex;justify-content:space-between;align-items:flex-end">'+
+    '<div style="text-align:center">'+sH+'<div style="width:105px;height:1px;background:#0a1a0f;margin:3px auto"></div>'+
+    '<div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="text-align:center;font-size:11px;color:#888">'+dt+'</div>'+
+    '<div style="width:56px;height:56px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3">SCHOOL<br>STAMP</div>'+
+    '</div></div></div>';
+}
+
+function genPub(){
+  if(!curPub){showT('Pehle type select karen!');return;}
+  var txt=document.getElementById('pText').value.trim();
+  var dt=fD(document.getElementById('pDate').value)||tdy();
+  var ex=document.getElementById('pExtra').value.trim();
+  var contact=document.getElementById('pContact').value.trim();
+  if(curPub==='admission'){
+    var selCls=[];
+    document.querySelectorAll('.admCls:checked').forEach(function(cb){selCls.push(cb.value);});
+    txt=txt.replace('[CLASSES]',selCls.length?selCls.join(', '):'Nursery to Class 10');
+    txt=txt.replace('[CONTACT]',contact||'0300-XXXXXXX');
+  }
+  var fmt=txt.replace(/\n/g,'<br>');
+  var contactHtml=contact?'<div style="margin-top:8px;padding:7px 10px;background:#e8f5ee;border-radius:6px;font-size:12px;font-weight:700;color:#0d5c3a;border-left:3px solid #0d5c3a">&#128222; Contact: '+contact+'</div>':'';
+  var html=pHdr('pM','OFFICIAL NOTICE')+'<div style="font-size:11px;color:#888;margin-bottom:9px">Date: <strong>'+dt+'</strong>'+(ex?' &nbsp;|&nbsp; <strong>'+ex+'</strong>':'')+'</div>'+
+    '<div style="font-size:13px;line-height:1.8;color:#0a1a0f;padding:11px;background:#faf7f0;border-radius:7px;border:1px solid #e8d5a3;margin-bottom:9px;">'+fmt+'</div>'+
+    contactHtml+pFtr('pS',dt);
+  showOv(html,'*AL-FAREED PUBLIC SCHOOL*\n*\u0627\u0644\u0641\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u060c \u0679\u0646\u0688\u0648 \u062c\u0627\u0645*\n\n'+txt+(contact?'\n\n\uD83D\uDCDE Contact: '+contact:'')+'\n\nPrincipal: Sir Ghulam Hussain');
+}
+
+// ═══ EDITOR FUNCTIONS (GBELS style) ═══
+var editorLang='en';
+var wmData='';
+
+function ins2(s){
+  var ed=document.getElementById('epEditor');
+  ed.focus();
+  var sel=window.getSelection();
+  if(sel.rangeCount){
+    var r=sel.getRangeAt(0);
+    r.deleteContents();
+    r.insertNode(document.createTextNode(s));
+    r.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }else{
+    ed.textContent+=s;
+  }
+}
+
+function fmtDoc(cmd){document.execCommand(cmd,false,null);document.getElementById('epEditor').focus();}
+
+function chgFont(){
+  var fonts=['Arial','Times New Roman','Courier New','Georgia','Verdana'];
+  var cur=0;
+  var sel=window.getSelection();
+  if(sel&&sel.rangeCount){document.execCommand('fontName',false,fonts[cur%fonts.length]);}
+}
+
+function applyFont(){
+  var f=document.getElementById('fontFam').value;
+  if(f) document.execCommand('fontName',false,f);
+  document.getElementById('epEditor').focus();
+}
+
+function chgSz(d){
+  var ed=document.getElementById('epEditor');
+  var cur=parseFloat(ed.style.fontSize)||11.5;
+  ed.style.fontSize=(cur+d)+'pt';
+}
+
+function adjLines(d){
+  var ed=document.getElementById('epEditor');
+  var cur=parseFloat(ed.style.lineHeight)||1.1;
+  ed.style.lineHeight=Math.max(1,cur+d).toFixed(1);
+}
+
+function toggleDual(){
+  var ed=document.getElementById('epEditor');
+  if(ed.style.columnCount==='2'){ed.style.columnCount='1';}
+  else{ed.style.columnCount='2';ed.style.columnGap='20px';}
+}
+
+function setEdLang(l){
+  editorLang=l;
+  var ed=document.getElementById('epEditor');
+  ['btnEN','btnSD','btnUR'].forEach(function(id){
+    var b=document.getElementById(id);
+    b.style.background='#f9f9f9';b.style.borderColor='#ddd';b.style.color='#555';
+  });
+  var map={'en':'btnEN','sd':'btnSD','ur':'btnUR'};
+  var btn=document.getElementById(map[l]);
+  btn.style.background='#ebf5fb';btn.style.borderColor='#2980b9';btn.style.color='#2980b9';
+  if(l==='ur'||l==='sd'){
+    ed.style.direction='rtl';
+    ed.style.fontFamily='Noto Nastaliq Urdu,serif';
+    ed.style.fontSize='14pt';
+    ed.style.lineHeight='2';
+  }else{
+    ed.style.direction='ltr';
+    ed.style.fontFamily='Arial,sans-serif';
+    ed.style.fontSize='11.5pt';
+    ed.style.lineHeight='1.1';
+  }
+}
+
+function insertBreak(){
+  document.execCommand('insertHTML',false,'<hr style="border:1px solid #000;margin:8px 0">');
+  document.getElementById('epEditor').focus();
+}
+
+function insertTable(){
+  var cols=parseInt(document.getElementById('gCols').value)||3;
+  var rows2=parseInt(document.getElementById('gRows').value)||3;
+  var html='<table style="width:100%;border-collapse:collapse;margin:8px 0">';
+  for(var r=0;r<rows2;r++){
+    html+='<tr>';
+    for(var c=0;c<cols;c++){
+      html+='<td style="border:1px solid #000;padding:5px 8px;min-width:30px">&nbsp;</td>';
+    }
+    html+='</tr>';
+  }
+  html+='</table>';
+  document.execCommand('insertHTML',false,html);
+  document.getElementById('epEditor').focus();
+}
+
+function insertCols(){
+  var n=parseInt(document.getElementById('gCols').value)||2;
+  var ed=document.getElementById('epEditor');
+  ed.style.columnCount=n;
+  ed.style.columnGap='18px';
+  ed.focus();
+}
+
+function insertImg(inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var html='<img src="'+e.target.result+'" style="max-width:100%;height:auto;display:block;margin:6px auto">';
+    document.execCommand('insertHTML',false,html);
+    document.getElementById('epEditor').focus();
+  };
+  r.readAsDataURL(inp.files[0]);
+}
+
+function addStar(){
+  document.execCommand('insertText',false,'★ ');
+  document.getElementById('epEditor').focus();
+}
+
+function polishText(){
+  showT('Text polished!');
+}
+
+function aiGen(){
+  showT('AI Generate — type your topic first');
+}
+
+function ldWatermark(){
+  showT('Watermark enabled');
+}
+
+function syncEditor(){}
+
+// ═══ GENERATE PAPER — EXACT IMAGE FORMAT ═══
+function genPaper(){
+  var subj=document.getElementById('epSubj').value;
+  var cls=document.getElementById('epCls').value;
+  var exNm=document.getElementById('epExNm').value;
+  var ses=document.getElementById('epSes').value||'2026-27';
+  var dt=fD(document.getElementById('epDt').value)||'-';
+  var tot=document.getElementById('epTot').value||'100';
+  var pas=document.getElementById('epPass').value||'33';
+  var tm=document.getElementById('epTm').value||'3 Hours';
+  var fs=document.getElementById('epFS').value||'11.5';
+  var ls=document.getElementById('epLS').value||'1.1';
+  var edContent=document.getElementById('epEditor').innerHTML||'';
+  var logoL=Im.epLM||gL;
+  var logoR=Im.epRM||gL;
+  var lLH=logoL?'<img src="'+logoL+'" style="width:58px;height:58px;object-fit:contain">':'<div style="width:58px;height:58px;border:2px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;font-family:Arial,sans-serif">AF</div>';
+  var lRH=logoR?'<img src="'+logoR+'" style="width:58px;height:58px;object-fit:contain">':'<div style="width:58px;height:58px;border:2px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;font-family:Arial,sans-serif">AF</div>';
+
+  // EXACT FORMAT MATCHING IMAGE
+  var html='<div style="max-width:720px;margin:0 auto;background:#fff;border:2px solid #000;font-family:Arial,sans-serif">';
+
+  // HEADER
+  html+='<div style="border-bottom:2px solid #000;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
+    lLH+
+    '<div style="flex:1;text-align:center;padding:0 8px">'+
+    '<div style="font-family:Arial Black,Arial,sans-serif;font-size:15px;font-weight:900;text-transform:uppercase;line-height:1.2">AL-FAREED PUBLIC SCHOOL TANDO JAM</div>'+
+    '<div style="font-size:11px;color:#333;margin-top:2px">Sindh (SEMIS: 362)</div>'+
+    '<div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:4px 16px;display:inline-block;margin-top:5px;letter-spacing:.5px">'+exNm+' '+ses+'</div>'+
+    '</div>'+lRH+'</div>';
+
+  // ROW 1
+  html+='<div style="display:flex;align-items:center;border-bottom:1px solid #000;padding:4px 10px;font-size:12px">'+
+    '<span style="font-weight:700;margin-right:4px">Class:</span><span style="font-weight:900;margin-right:18px">'+cls+'</span>'+
+    '<span style="font-weight:700;margin-right:4px">Subject:</span><span style="font-weight:900;color:#0d5c3a;margin-right:18px">'+subj+'</span>'+
+    '<span style="font-weight:700;margin-right:4px">Date:</span><span style="font-weight:900">'+dt+'</span>'+
+    '</div>';
+
+  // ROW 2
+  html+='<div style="display:flex;align-items:center;border-bottom:2px solid #000;padding:4px 10px;font-size:12px">'+
+    '<span style="font-weight:700;margin-right:4px">Time:</span><span style="font-weight:900;margin-right:18px">'+tm+'</span>'+
+    '<span style="font-weight:700;margin-right:4px">Total Marks:</span><span style="font-weight:900;margin-right:18px">'+tot+'</span>'+
+    '<span style="font-weight:700;margin-right:4px">Pass Marks:</span><span style="font-weight:900;color:#c0392b">'+pas+'</span>'+
+    '</div>';
+
+  // CONTENT (from contenteditable editor)
+  var contentStyle='padding:10px 12px;font-size:'+fs+'pt;line-height:'+ls+';font-family:Arial,sans-serif;min-height:200px;';
+  if(editorLang==='ur'||editorLang==='sd'){
+    contentStyle+='direction:rtl;font-family:Noto Nastaliq Urdu,serif;font-size:14pt;line-height:2;';
+  }
+  html+='<div style="'+contentStyle+'">'+
+    (edContent&&edContent.trim()&&edContent!='<br>'?edContent:
+    '<p style="color:#999;font-size:12px">Q. No 1</p>')+
+    '</div>';
+
+  html+='</div>';  // close epwrap
+
+  var wa='*EXAM PAPER*\n*Al-Fareed Public School Tando Jam*\nSEMIS: 362\n\n'+exNm+' '+ses+'\nClass: '+cls+'\nSubject: '+subj+'\nDate: '+dt+'\nTotal: '+tot+' | Pass: '+pas+'\nTime: '+tm+'\n\nPrincipal: Sir Ghulam Hussain';
+  showOv(html,wa);
+}
+
+// ═══ EXAM SCHEDULE ═══
+function aETR(){
+  etRows++;
+  var tr=document.createElement('tr');
+  tr.style.background=etRows%2===0?'#f9f9f9':'#fff';
+  tr.innerHTML='<td><input type="date" style="margin:0;font-size:10px;padding:3px;width:100%"></td>'+
+    '<td><input type="text" placeholder="Mon" style="margin:0;font-size:10px;padding:3px;width:100%"></td>'+
+    '<td><input type="text" placeholder="Mathematics" style="margin:0;font-size:10px;padding:3px;width:100%"></td>'+
+    '<td><input type="text" placeholder="Class 5" style="margin:0;font-size:10px;padding:3px;width:100%"></td>'+
+    '<td><input type="time" style="margin:0;font-size:10px;padding:3px;width:100%"></td>'+
+    '<td><input type="number" placeholder="100" style="margin:0;font-size:10px;padding:3px;width:100%"></td>';
+  document.getElementById('etBd').appendChild(tr);
+}
+function dETR(){var b=document.getElementById('etBd');if(b.lastElementChild)b.removeChild(b.lastElementChild);}
+for(var i=0;i<5;i++) aETR();
+
+function genETT(){
+  var nm=document.getElementById('etNm').value||'Examination';
+  var nmU=document.getElementById('etNmU').value||'';
+  var logo=Im.etM||gL; var sign=Im.etS;
+  var lH=logo?'<img src="'+logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:50%">':'<span style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#c9a84c">AF</span>';
+  var sH=sign?'<img src="'+sign+'" style="max-height:36px;max-width:95px;object-fit:contain;display:block;margin:0 auto 2px">':'';
+  var html=pHdr('etM','EXAMINATION TIMETABLE',nm+(nmU?' / '+nmU:''))+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px;font-size:12px">'+
+    '<div style="background:#e8f5ee;border-radius:6px;padding:6px 9px;border-left:3px solid #0d5c3a"><strong>Exam:</strong> '+nm+'</div>'+
+    '<div style="background:#e8f5ee;border-radius:6px;padding:6px 9px;border-left:3px solid #0d5c3a"><strong>Classes:</strong> '+document.getElementById('etCls').value+'</div>'+
+    '<div style="background:#e8f5ee;border-radius:6px;padding:6px 9px;border-left:3px solid #0d5c3a"><strong>From:</strong> '+fD(document.getElementById('etSt').value)+'</div>'+
+    '<div style="background:#e8f5ee;border-radius:6px;padding:6px 9px;border-left:3px solid #0d5c3a"><strong>To:</strong> '+fD(document.getElementById('etEn').value)+'</div></div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:9px">'+
+    '<tr style="background:#0d5c3a;color:#c9a84c"><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Date</th><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Day</th><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Subject</th><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Class</th><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Time</th><th style="padding:6px 5px;border:1px solid rgba(255,255,255,.2)">Marks</th></tr>';
+  var rows=document.getElementById('etBd').querySelectorAll('tr');
+  rows.forEach(function(row,idx){
+    var cells=row.querySelectorAll('td');var vals=[];
+    cells.forEach(function(td){var inp=td.querySelector('input');vals.push(inp?inp.value:'');});
+    var bg=idx%2===0?'#fff':'#f5f5f5';
+    html+='<tr style="background:'+bg+'"><td style="padding:6px 5px;border:1px solid #ddd;font-weight:600;text-align:center">'+fD(vals[0])+'</td><td style="padding:6px 5px;border:1px solid #ddd;text-align:center">'+vals[1]+'</td><td style="padding:6px 5px;border:1px solid #ddd;font-weight:700;color:#0d5c3a">'+vals[2]+'</td><td style="padding:6px 5px;border:1px solid #ddd;text-align:center">'+vals[3]+'</td><td style="padding:6px 5px;border:1px solid #ddd;text-align:center">'+fT(vals[4])+'</td><td style="padding:6px 5px;border:1px solid #ddd;text-align:center;font-weight:700;color:#c0392b">'+vals[5]+'</td></tr>';
+  });
+  html+='</table></div>';
+  var ins2=document.getElementById('etIns').value.trim();
+  if(ins2) html+='<div style="background:#fff3cd;border-radius:6px;padding:8px 10px;border-left:3px solid #c9a84c;font-size:12px;margin-bottom:9px"><strong>📣 Instructions:</strong><br>'+ins2.replace(/\n/g,'<br>')+'</div>';
+  html+=pFtr('etS',fD(document.getElementById('etSt').value)||tdy());
+  showOv(html,'*EXAM SCHEDULE*\n*'+nm+'*\nAl-Fareed Public School, Tando Jam\nPrincipal: Sir Ghulam Hussain');
+}
+
+// ═══ TIMETABLE ═══
+function sTT(t){
+  document.getElementById('ttT').classList.toggle('on',t==='t');
+  document.getElementById('ttC').classList.toggle('on',t==='c');
+  document.getElementById('divT').style.display=t==='t'?'block':'none';
+  document.getElementById('divC').style.display=t==='c'?'block':'none';
+}
+function aTR(type){
+  var n=type==='t'?++ttTRows:++ttCRows;
+  var tr=document.createElement('tr');
+  tr.style.background=n%2===0?'#f9f9f9':'#fff';
+  if(type==='t'){
+    tr.innerHTML='<td><input type="text" value="'+n+'" style="margin:0;width:26px;text-align:center;font-size:10px;padding:3px"></td>'+
+      '<td><input type="time" style="margin:0;font-size:10px;padding:3px;width:82px"></td>'+
+      ['Mon','Tue','Wed','Thu','Fri','Sat'].map(function(){return '<td><input type="text" placeholder="Class" style="margin:0;font-size:10px;padding:3px;min-width:60px"></td>';}).join('');
+    document.getElementById('ttTBd').appendChild(tr);
+  }else{
+    tr.innerHTML='<td><input type="text" value="'+n+'" style="margin:0;width:24px;text-align:center;font-size:10px;padding:3px"></td>'+
+      '<td><input type="time" style="margin:0;font-size:10px;padding:3px;width:78px"></td>'+
+      '<td><input type="text" placeholder="Subject" style="margin:0;font-size:10px;padding:3px;min-width:65px"></td>'+
+      '<td><input type="text" placeholder="Teacher" style="margin:0;font-size:10px;padding:3px;min-width:65px"></td>'+
+      ['M','T','W','Th','F','S'].map(function(){return '<td><input type="text" placeholder="✓" style="margin:0;font-size:10px;padding:3px;width:24px;text-align:center"></td>';}).join('');
+    document.getElementById('ttCBd').appendChild(tr);
+  }
+}
+function dTR(type){
+  var tb=document.getElementById(type==='t'?'ttTBd':'ttCBd');
+  if(tb.lastElementChild) tb.removeChild(tb.lastElementChild);
+  if(type==='t'&&ttTRows>0) ttTRows--;
+  else if(ttCRows>0) ttCRows--;
+}
+for(var i=0;i<6;i++){aTR('t');aTR('c');}
+
+function ttPrintWrap(logoKey,title,info){
+  var lg=Im[logoKey]||gL;
+  var lH=lg?'<img src="'+lg+'" style="width:100%;height:100%;object-fit:contain;border-radius:50%">':'<span style="font-weight:900;color:#c9a84c;font-size:16px">AF</span>';
+  return '<div style="max-width:680px;margin:0 auto;background:#fff;border:2px solid #0d5c3a;border-radius:11px;overflow:hidden">'+
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:10px 13px;display:flex;align-items:center;gap:10px;border-bottom:3px solid #c9a84c">'+
+    '<div style="width:50px;height:50px;border-radius:50%;border:2px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+lH+'</div>'+
+    '<div style="flex:1"><div style="font-family:Playfair Display,serif;font-size:14px;font-weight:900;color:#fff">AL-FAREED <span style="color:#c9a84c">PUBLIC SCHOOL</span></div>'+
+    '<div style="font-size:10px;color:rgba(255,255,255,.8)">Tando Jam, Sindh &bull; SEMIS: 362</div></div></div>'+
+    '<div style="background:#c9a84c;color:#0a1a0f;font-size:11px;font-weight:700;padding:4px 14px;text-align:center;letter-spacing:1px">'+title+'</div>'+
+    '<div style="padding:10px 12px"><div style="font-size:12px;margin-bottom:8px;display:flex;gap:12px;flex-wrap:wrap">'+info+'</div>';
+}
+function ttPrintClose(signKey){
+  var sg=Im[signKey]||'';
+  var sH=sg?'<img src="'+sg+'" style="max-height:34px;max-width:90px;object-fit:contain;display:block;margin:0 auto 2px">':'';
+  return '<div style="border-top:1px solid #e8d5a3;padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;align-items:flex-end">'+
+    '<div style="text-align:center">'+sH+'<div style="width:100px;height:1px;background:#0a1a0f;margin:3px auto"></div><div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="width:52px;height:52px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3">SCHOOL<br>STAMP</div>'+
+    '</div></div></div>';
+}
+
+function genTTT(){
+  var tn=document.getElementById('ttTN').value||'Teacher';
+  var ts=document.getElementById('ttTS').value||'Subject';
+  var tw=document.getElementById('ttTW').value||tdy();
+  var html=ttPrintWrap('ttTM','TEACHER PERIOD TIMETABLE','<span><strong>Teacher:</strong> '+tn+'</span><span><strong>Subject:</strong> '+ts+'</span><span><strong>Week:</strong> '+tw+'</span>')+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px">'+
+    '<tr style="background:#0d5c3a;color:#c9a84c"><th style="padding:6px 4px;border:1px solid rgba(255,255,255,.2)">P#</th><th style="padding:6px 4px;border:1px solid rgba(255,255,255,.2)">Time</th>'+
+    ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(function(d){return '<th style="padding:6px 4px;border:1px solid rgba(255,255,255,.2)">'+d+'</th>';}).join('')+'</tr>';
+  document.getElementById('ttTBd').querySelectorAll('tr').forEach(function(row,idx){
+    var bg=idx%2===0?'#fff':'#f5f5f5'; html+='<tr style="background:'+bg+'">';
+    row.querySelectorAll('td').forEach(function(td,ci){
+      var inp=td.querySelector('input'),val=inp?inp.value:'';
+      if(ci===1&&val) val=fT(val);
+      html+='<td style="padding:5px 4px;border:1px solid #ddd;text-align:center;font-weight:'+(val&&ci>1?'700':'400')+';color:'+(val&&ci>1?'#0d5c3a':'#333')+'">'+val+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</table></div>'+ttPrintClose('ttTS');
+  showOv(html,'Teacher Timetable\nTeacher: '+tn+'\nSubject: '+ts+'\nAl-Fareed Public School');
+}
+function genCTT(){
+  var cc=document.getElementById('ttCC').value;
+  var ct=document.getElementById('ttCT').value;
+  var cy=document.getElementById('ttCY').value||'2025-26';
+  var html=ttPrintWrap('ttCM','CLASS DAILY TIMETABLE','<span><strong>Class:</strong> '+cc+'</span>'+(ct?'<span><strong>Class Teacher:</strong> '+ct+'</span>':'')+' <span><strong>Year:</strong> '+cy+'</span>')+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10px">'+
+    '<tr style="background:#0d5c3a;color:#c9a84c"><th style="padding:5px 3px;border:1px solid rgba(255,255,255,.2)">P#</th><th style="padding:5px 3px;border:1px solid rgba(255,255,255,.2)">Time</th><th style="padding:5px 3px;border:1px solid rgba(255,255,255,.2)">Subject</th><th style="padding:5px 3px;border:1px solid rgba(255,255,255,.2)">Teacher</th>'+
+    ['M','T','W','Th','F','S'].map(function(d){return '<th style="padding:5px 3px;border:1px solid rgba(255,255,255,.2)">'+d+'</th>';}).join('')+'</tr>';
+  document.getElementById('ttCBd').querySelectorAll('tr').forEach(function(row,idx){
+    var bg=idx%2===0?'#fff':'#f5f5f5'; html+='<tr style="background:'+bg+'">';
+    row.querySelectorAll('td').forEach(function(td,ci){
+      var inp=td.querySelector('input'),val=inp?inp.value:'';
+      if(ci===1&&val) val=fT(val);
+      var clr=ci===2?'#0d5c3a':ci===3?'#2980b9':'#333';
+      html+='<td style="padding:4px 3px;border:1px solid #ddd;text-align:center;font-size:10px;font-weight:'+(val&&ci>1?'700':'400')+';color:'+clr+'">'+val+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</table></div>'+ttPrintClose('ttCS');
+  showOv(html,'Class Timetable\nClass: '+cc+'\nYear: '+cy+'\nAl-Fareed Public School');
+}
+
+
+// ═══ CERTIFICATE FUNCTIONS ═══
+var certTypes={
+  position1:{t:'FIRST POSITION CERTIFICATE',en:'This is to certify that [NAME] of Class [CLS] has secured FIRST POSITION in [ACH] at Al-Fareed Public School, Tando Jam. This outstanding achievement reflects exceptional dedication, hard work, and academic brilliance.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0627\u0648\u0644 \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964'},
+  position2:{t:'SECOND POSITION CERTIFICATE',en:'This certifies that [NAME] of Class [CLS] has secured SECOND POSITION in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062f\u0648\u0633\u0631\u06cc \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964'},
+  position3:{t:'THIRD POSITION CERTIFICATE',en:'This certifies that [NAME] of Class [CLS] has secured THIRD POSITION in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062a\u06cc\u0633\u0631\u06cc \u067e\u0648\u0632\u06cc\u0634\u0646 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964'},
+  beststu:{t:'BEST STUDENT AWARD',en:'This is to certify that [NAME] of Class [CLS] has been awarded the BEST STUDENT honour at Al-Fareed Public School, Tando Jam for [ACH]. This recognises outstanding character, discipline, and academic excellence.',ur:'[\u0646\u0627\u0645] \u062c\u0645\u0627\u0639\u062a [\u062c\u0645\u0627\u0639\u062a] \u06a9\u0648 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u06a9\u06d2 \u0644\u06cc\u06d2 \u0628\u06c1\u062a\u0631\u06cc\u0646 \u0637\u0627\u0644\u0628 \u0639\u0644\u0645 \u06a9\u0627 \u0627\u0639\u0632\u0627\u0632 \u062f\u06cc\u0627 \u062c\u0627\u062a\u0627 \u06c1\u06d2\u0964'},
+  bestteach:{t:'BEST TEACHER AWARD',en:'This is to certify that [NAME] has been awarded the BEST TEACHER honour at Al-Fareed Public School, Tando Jam for [ACH]. This recognises exceptional dedication, professionalism, and commitment to education.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0628\u06c1\u062a\u0631\u06cc\u0646 \u0627\u0633\u062a\u0627\u062f \u06a9\u0627 \u0627\u0639\u0632\u0627\u0632 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964'},
+  attend:{t:'BEST ATTENDANCE AWARD',en:'This certifies that [NAME] of Class [CLS] has maintained the BEST ATTENDANCE record at Al-Fareed Public School, Tando Jam during [ACH].',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0628\u06c1\u062a\u0631\u06cc\u0646 \u062d\u0627\u0636\u0631\u06cc \u06a9\u0627 \u0631\u06cc\u06a9\u0627\u0631\u0688 \u0628\u0646\u0627\u06cc\u0627\u0964'},
+  sports:{t:'SPORTS CHAMPION',en:'This certifies that [NAME] of Class [CLS] has won the SPORTS CHAMPION title in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u06a9\u06be\u06cc\u0644\u0648\u06ba \u06a9\u0627 \u0686\u06cc\u0645\u067e\u06cc\u0646 \u0642\u0631\u0627\u0631 \u062f\u06cc\u0627 \u06af\u06cc\u0627\u0964'},
+  debate:{t:'DEBATE WINNER',en:'This certifies that [NAME] of Class [CLS] has won the DEBATE COMPETITION in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0645\u0646\u0627\u0638\u0631\u06c1 \u0645\u0642\u0627\u0628\u0644\u06c1 \u062c\u06cc\u062a\u0627\u0964'},
+  quran:{t:'QURAN RECITATION AWARD',en:'This certifies that [NAME] of Class [CLS] has excelled in Quran Recitation in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u062a\u0644\u0627\u0648\u062a \u0642\u0631\u0622\u0646 \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u0645\u0642\u0627\u0645 \u062d\u0627\u0635\u0644 \u06a9\u06cc\u0627\u0964'},
+  art:{t:'ART EXCELLENCE AWARD',en:'This certifies that [NAME] of Class [CLS] has demonstrated outstanding creativity and talent in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0641\u0646\u06cc \u0635\u0644\u0627\u062d\u06cc\u062a \u06a9\u0627 \u0645\u0638\u0627\u06c1\u0631\u06c1 \u06a9\u06cc\u0627\u0964'},
+  science:{t:'SCIENCE EXCELLENCE AWARD',en:'This certifies that [NAME] of Class [CLS] has shown outstanding performance in Science in [ACH] at Al-Fareed Public School, Tando Jam.',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u0645\u06cc\u06ba \u0633\u0627\u0626\u0646\u0633 \u0645\u06cc\u06ba \u0646\u0645\u0627\u06cc\u0627\u06ba \u06a9\u0627\u0631\u06a9\u0631\u062f\u06af\u06cc \u062f\u06a9\u06be\u0627\u0626\u06cc\u0964'},
+  custom:{t:'CERTIFICATE OF ACHIEVEMENT',en:'This is to certify that [NAME] of Class [CLS] has been awarded [CTITLE] at Al-Fareed Public School, Tando Jam for [ACH].',ur:'[\u0646\u0627\u0645] \u0646\u06d2 [\u06a9\u0627\u0631\u0646\u0627\u0645\u06c1] \u06a9\u06d2 \u0644\u06cc\u06d2 \u0633\u0646\u062f \u062f\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06d2\u0964'}
+};
+
+function selCert(el){
+  document.querySelectorAll('.chip[data-ct]').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on');
+  curCert=el.getAttribute('data-ct');
+  document.getElementById('certForm').style.display='block';
+  document.getElementById('certGenBtn').style.display='block';
+}
+function setCL(l){
+  certLang=l;
+  document.getElementById('cEN').classList.toggle('on',l==='en');
+  document.getElementById('cUR').classList.toggle('on',l==='ur');
+}
+
+function genCert(){
+  if(!curCert){showT('Pehle certificate type select karen!');return;}
+  var name=document.getElementById('cName').value.trim()||'Student Name';
+  var cls=document.getElementById('cCls').value.trim()||'';
+  var father=document.getElementById('cFather').value.trim()||'';
+  var roll=document.getElementById('cRoll').value.trim()||'';
+  var ach=document.getElementById('cAch').value.trim()||'Annual Session 2025';
+  var ctitle=document.getElementById('cCustomTitle').value.trim();
+  var dt=fD(document.getElementById('cDate').value)||tdy();
+  var session=document.getElementById('cSession').value.trim()||'2024-25';
+  var isU=certLang==='ur';
+  var ct=certTypes[curCert];
+  var certTitle=curCert==='custom'&&ctitle?ctitle.toUpperCase():ct.t;
+  var bodyText=isU?ct.ur:ct.en;
+  bodyText=bodyText.replace(/\[NAME\]/g,name).replace(/\[CLS\]/g,cls).replace(/\[ACH\]/g,ach).replace(/\[CTITLE\]/g,certTitle);
+  var logo=Im.cM||gL;
+  var sign=Im.cS;
+  var lH=logo?'<img src="'+logo+'" style="width:100%;height:100%;object-fit:contain;border-radius:50%">':'<span style="font-family:Playfair Display,serif;font-size:20px;font-weight:900;color:#c9a84c">AF</span>';
+  var sH=sign?'<img src="'+sign+'" style="max-height:42px;max-width:110px;object-fit:contain;display:block;margin:0 auto 3px">':'';
+
+  var html=
+    '<div style="max-width:620px;margin:0 auto;background:linear-gradient(145deg,#fffdf5,#fdf8e8);border:3px solid #c9a84c;border-radius:16px;overflow:hidden;position:relative;box-shadow:0 8px 30px rgba(201,168,76,.3)">'+
+    '<div style="position:absolute;inset:8px;border:1px solid rgba(201,168,76,.4);border-radius:11px;pointer-events:none"></div>'+
+    // Header
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:14px 16px;display:flex;align-items:center;gap:13px;border-bottom:3px solid #c9a84c">'+
+    '<div style="width:72px;height:72px;border-radius:50%;border:3px solid #c9a84c;overflow:hidden;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+lH+'</div>'+
+    '<div style="flex:1;text-align:center">'+
+    '<div style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:.5px">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-family:Noto Nastaliq Urdu,serif;font-size:13px;color:#c9a84c;direction:rtl">\u0627\u0644\u0641\u0631\u06cc\u062f \u067e\u0628\u0644\u06a9 \u0627\u0633\u06a9\u0648\u0644 \u060c \u0679\u0646\u0688\u0648 \u062c\u0627\u0645</div>'+
+    '<div style="font-size:10px;color:rgba(255,255,255,.8)">Tando Jam, Sindh, Pakistan</div>'+
+    '</div></div>'+
+    // Title
+    '<div style="text-align:center;padding:14px 16px 6px">'+
+    '<div style="display:inline-block;background:linear-gradient(135deg,#c9a84c,#e8d5a3);color:#0a1a0f;padding:6px 22px;border-radius:25px;font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:8px">CERTIFICATE OF ACHIEVEMENT</div>'+
+    '<div style="font-family:Playfair Display,serif;font-size:19px;font-weight:900;color:#0d5c3a;letter-spacing:.8px;text-transform:uppercase">'+certTitle+'</div>'+
+    '</div>'+
+    // Presented to
+    '<div style="padding:5px 24px;text-align:center">'+
+    '<div style="font-size:12px;color:#777;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px">This Certificate is Proudly Presented to</div>'+
+    '<div style="font-family:Playfair Display,serif;font-size:26px;font-weight:900;color:#0d5c3a;border-bottom:2px solid #c9a84c;display:inline-block;padding:0 18px 3px;margin-bottom:4px">'+name+'</div>'+
+    (cls?'<div style="font-size:13px;font-weight:600;color:#555;margin-bottom:3px">'+cls+'</div>':'')+
+    (father?'<div style="font-size:12px;color:#888;margin-bottom:3px">S/D/O: '+father+'</div>':'')+
+    (roll?'<div style="font-size:12px;color:#888;margin-bottom:3px">Roll No: '+roll+'</div>':'')+
+    '</div>'+
+    // Body text
+    '<div style="padding:6px 22px 14px">'+
+    '<div style="font-size:13px;line-height:1.8;color:#333;padding:11px 15px;background:rgba(13,92,58,.05);border-radius:10px;border:1px solid rgba(201,168,76,.22);text-align:center;'+(isU?'font-family:Noto Nastaliq Urdu,serif;direction:rtl;font-size:15px;line-height:2.1;':'')+'">'+(isU?'<div style="text-align:right">':'')+bodyText+(isU?'</div>':'')+'</div>'+
+    '</div>'+
+    // Footer
+    '<div style="padding:0 22px 16px;display:flex;justify-content:space-between;align-items:flex-end">'+
+    '<div style="text-align:center"><div style="font-size:11px;color:#999;margin-bottom:3px">Session</div><div style="width:90px;height:1px;background:#0a1a0f;margin:0 auto 3px"></div><div style="font-size:12px;font-weight:700">'+session+'</div></div>'+
+    '<div style="text-align:center"><div style="font-size:11px;color:#999;margin-bottom:3px">Date</div><div style="width:90px;height:1px;background:#0a1a0f;margin:0 auto 3px"></div><div style="font-size:12px;font-weight:700">'+dt+'</div></div>'+
+    '<div style="text-align:center">'+sH+'<div style="width:120px;height:1px;background:#0a1a0f;margin:3px auto"></div><div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="width:64px;height:64px;border:2px dashed #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#c9a84c;font-weight:700;text-align:center;line-height:1.3;background:rgba(201,168,76,.05)">SCHOOL<br>STAMP</div>'+
+    '</div></div>';
+
+  var wa='*CERTIFICATE*\n*'+certTitle+'*\n\n'+bodyText+'\n\nDate: '+dt+'\nSession: '+session+'\n\nAl-Fareed Public School, Tando Jam\nPrincipal: Sir Ghulam Hussain';
+  showOv(html,wa);
+}
+
+// ═══ OVERLAY ═══
+function showOv(html,wa){
+  document.getElementById('ovbd').innerHTML=html;
+  document.getElementById('waS').textContent=wa||'';
+  document.getElementById('ov').style.display='block';
+  document.getElementById('ov').scrollTop=0;
+}
+function cOv(){document.getElementById('ov').style.display='none';}
+function sWA(){
+  var t=document.getElementById('waS').textContent;
+  var url='https://api.whatsapp.com/send?text='+encodeURIComponent(t);
+  window.open(url,'_blank');
+}
+function showT(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2500);}
+</script>
+</body>
+</html>
