@@ -103,6 +103,7 @@ textarea{min-height:68px;resize:vertical;}
 .att-student.present{border-color:#2e7d32;background:#e8f5e9;}
 .att-student.absent{border-color:#c62828;background:#ffebee;}
 .att-student.leave{border-color:#e65100;background:#fff3e0;}
+.att-student.late{border-color:#6a1b9a;background:#f3e5f5;}
 .att-name{font-size:11px;font-weight:700;color:var(--deep);}
 .att-roll{font-size:9px;color:#888;margin-top:2px;}
 .att-status{font-size:9px;font-weight:700;margin-top:4px;}
@@ -110,6 +111,7 @@ textarea{min-height:68px;resize:vertical;}
 .att-btn{padding:3px 7px;border:none;border-radius:5px;font-size:9px;font-weight:700;cursor:pointer;}
 .ab-p{background:#2e7d32;color:#fff;}
 .ab-a{background:#c62828;color:#fff;}
+.ab-lt{background:#6a1b9a;color:#fff;}
 .ab-l{background:#e65100;color:#fff;}
 
 /* ── IMAGE BOXES ── */
@@ -243,6 +245,7 @@ textarea{min-height:68px;resize:vertical;}
   <button class="nav-btn" onclick="sTab(5)">📄 Exam Paper</button>
   <button class="nav-btn" onclick="sTab(6)">🏆 Certificate</button>
   <button class="nav-btn" onclick="sTab(7)">📅 Schedule</button>
+  <button class="nav-btn" onclick="sTab(8)">📋 Syllabus</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -444,6 +447,7 @@ textarea{min-height:68px;resize:vertical;}
   <div class="r2">
     <div><label>Class</label>
       <select id="attSClass" onchange="loadStudentList()">
+        <option>Nursery</option><option>KG-1</option><option>KG-2</option>
         <option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
       </select>
     </div>
@@ -458,10 +462,12 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 <div class="card">
-  <div class="card-title">👨‍🎓 Mark Attendance — <span id="attSClassLbl">Class 1</span>
-    <div style="margin-left:auto;display:flex;gap:5px">
+  <div class="card-title">👨‍🎓 Mark Attendance — <span id="attSClassLbl">Nursery</span>
+    <div style="margin-left:auto;display:flex;gap:5px;flex-wrap:wrap">
       <button class="btn-sm" style="background:#2e7d32;color:#fff" onclick="markAllAtt('present')">All P</button>
       <button class="btn-sm bsr" onclick="markAllAtt('absent')">All A</button>
+      <button class="btn-sm" style="background:#e65100;color:#fff" onclick="markAllAtt('leave')">All L</button>
+      <button class="btn-sm" style="background:#6a1b9a;color:#fff" onclick="markAllAtt('late')">All Late</button>
     </div>
   </div>
   <div class="att-grid" id="attStudGrid">
@@ -614,34 +620,194 @@ textarea{min-height:68px;resize:vertical;}
 ══════════════════════════════ -->
 <div class="sec" id="s5">
 <div class="page-title">📄 Examination Paper</div>
-<div style="margin-bottom:9px"><label>EXAM NAME</label><select id="epExam" style="background:#fafafa"><option>MIDTERM EXAMINATION</option><option>ANNUAL EXAMINATION</option><option>MONTHLY TEST</option><option>FIRST TERM EXAMINATION</option><option>SECOND TERM EXAMINATION</option><option>HALF YEARLY EXAMINATION</option><option>UNIT TEST</option><option>WEEKLY TEST</option></select></div>
-<div style="margin-bottom:9px"><label>ACADEMIC YEAR</label><input type="text" id="epYear" value="2026-27" style="background:#fafafa;margin-bottom:0"></div>
-<div class="r2" style="margin-bottom:9px">
-  <div><label>SUBJECT</label><select id="epSubj" style="background:#fafafa;margin-bottom:0"><option>English</option><option>Urdu / اردو</option><option>Mathematics</option><option>Science</option><option>Islamiyat</option><option>Social Studies</option><option>Sindhi / سنڌي</option><option>Pakistan Studies</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Computer Science</option><option>General Science</option><option>Quran</option></select></div>
-  <div><label>CLASS</label><select id="epCls" style="background:#fafafa;margin-bottom:0"><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option selected>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+
+<!-- EXAM DETAILS — matching image 3 -->
+<div style="background:#f5f5f5;border-radius:12px;padding:13px;margin-bottom:10px">
+  <div style="font-size:12px;font-weight:700;color:#555;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">EXAM DETAILS</div>
+
+  <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">EXAM NAME</div>
+  <select id="epExam" style="background:#fff;border-radius:9px;font-size:14px;margin-bottom:11px;border:1.5px solid #ddd"><option>MIDTERM EXAMINATION</option><option>ANNUAL EXAMINATION</option><option>MONTHLY TEST</option><option>FIRST TERM EXAMINATION</option><option>SECOND TERM EXAMINATION</option><option>HALF YEARLY EXAMINATION</option><option>UNIT TEST</option><option>WEEKLY TEST</option></select>
+
+  <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">ACADEMIC YEAR</div>
+  <input type="text" id="epYear" value="2026-27" style="background:#fff;border-radius:9px;margin-bottom:11px;border:1.5px solid #ddd">
+
+  <div class="r2" style="margin-bottom:11px">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">SUBJECT</div>
+      <select id="epSubj" style="background:#fff;border-radius:9px;margin-bottom:0;border:1.5px solid #ddd"><option>English</option><option>Urdu / اردو</option><option>Mathematics</option><option>Science</option><option>Islamiyat</option><option>Social Studies</option><option>Sindhi / سنڌي</option><option>Pakistan Studies</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Computer Science</option><option>General Science</option><option>Quran</option></select>
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">CLASS</div>
+      <select id="epCls" style="background:#fff;border-radius:9px;margin-bottom:0;border:1.5px solid #ddd"><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option selected>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+    </div>
+  </div>
+
+  <div class="r2" style="margin-bottom:11px">
+    <div style="background:#fff;border-radius:9px;padding:11px;border:1.5px solid #ddd">
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">FONT SIZE: <span id="epFSv">11.5</span>PT</div>
+      <input type="range" id="epFS" min="9" max="18" step=".5" value="11.5" oninput="document.getElementById('epFSv').textContent=this.value" style="width:100%;accent-color:var(--blue);cursor:pointer;margin:0">
+    </div>
+    <div style="background:#fff;border-radius:9px;padding:11px;border:1.5px solid #ddd">
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">LINE SPACE: <span id="epLSv">1.4</span></div>
+      <input type="range" id="epLS" min="1" max="3" step=".1" value="1.4" oninput="document.getElementById('epLSv').textContent=parseFloat(this.value).toFixed(1)" style="width:100%;accent-color:var(--blue);cursor:pointer;margin:0">
+    </div>
+  </div>
+
+  <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">DATE</div>
+  <input type="date" id="epDate" style="background:#fff;border-radius:9px;margin-bottom:11px;border:1.5px solid #ddd">
+
+  <div class="r2" style="margin-bottom:11px">
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">TOTAL MARKS</div>
+      <input type="number" id="epTot" value="100" style="background:#fff;border-radius:9px;margin-bottom:0;border:1.5px solid #ddd">
+    </div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">PASS MARKS</div>
+      <input type="number" id="epPass" value="33" style="background:#fff;border-radius:9px;margin-bottom:0;border:1.5px solid #ddd">
+    </div>
+  </div>
+
+  <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">TIME</div>
+  <select id="epTime" style="background:#fff;border-radius:9px;margin-bottom:0;border:1.5px solid #ddd"><option>1 Hour</option><option>1:30 Hours</option><option>2 Hours</option><option>2:30 Hours</option><option selected>3 Hours</option></select>
 </div>
-<div style="margin-bottom:9px"><label>DATE</label><input type="date" id="epDate" style="background:#fafafa;margin-bottom:0"></div>
-<div class="r2" style="margin-bottom:9px"><div><label>TOTAL MARKS</label><input type="number" id="epTot" value="100" style="background:#fafafa;margin-bottom:0"></div><div><label>PASS MARKS</label><input type="number" id="epPass" value="33" style="background:#fafafa;margin-bottom:0"></div></div>
-<div style="margin-bottom:9px"><label>TIME</label><select id="epTime" style="background:#fafafa;margin-bottom:0"><option>1 Hour</option><option>1:30 Hours</option><option>2 Hours</option><option>2:30 Hours</option><option selected>3 Hours</option></select></div>
-<div style="background:#fff9ee;border:1.5px solid var(--gold);border-radius:11px;padding:10px;margin-bottom:9px">
-  <div style="font-size:11px;font-weight:700;color:#e67e22;margin-bottom:7px">🔢 MATH TOOLS</div>
+
+<!-- CONTENT EDITOR — matching image 2 (GBELS style) -->
+<div style="background:#eef3ff;border-radius:12px;padding:11px;margin-bottom:10px">
+  <div style="font-size:12px;font-weight:700;color:var(--deep);margin-bottom:9px;letter-spacing:.3px">CONTENT EDITOR</div>
+
+  <!-- Row 1: B Fonts Pic 3x3 -->
+  <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px">
+    <button style="padding:8px 12px;background:#fff;border:1px solid #ccc;border-radius:7px;font-weight:900;font-size:14px;cursor:pointer" onclick="epFmt('bold')"><b>B</b></button>
+    <button style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:12px;cursor:pointer" onclick="epChangeFont()">A Fonts</button>
+    <button style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:12px;cursor:pointer" onclick="document.getElementById('epImgF').click()">📸 Pic</button>
+    <input type="file" id="epImgF" accept="image/*" onchange="epInsImg(this)">
+    <div style="display:flex;align-items:center;gap:5px;margin-left:auto">
+      <input type="number" id="epGCols" value="3" min="1" max="8" style="width:40px;padding:6px 4px;border:1px solid #ccc;border-radius:5px;font-size:13px;margin:0;text-align:center;background:#fff">
+      <span style="font-size:12px;color:#888">x</span>
+      <input type="number" id="epGRows" value="3" min="1" max="20" style="width:40px;padding:6px 4px;border:1px solid #ccc;border-radius:5px;font-size:13px;margin:0;text-align:center;background:#fff">
+    </div>
+  </div>
+
+  <!-- Row 2: Table Polish AI Generate -->
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
+    <button style="padding:8px 10px;background:#fff;border:1px solid #ccc;border-radius:7px;font-size:12px;cursor:pointer" onclick="epInsTable()">⊞ Table</button>
+    <button style="padding:8px 10px;background:#fff;border:1.5px solid #27ae60;border-radius:7px;font-size:12px;cursor:pointer;color:#27ae60;font-weight:700">✓ Polish</button>
+    <button style="padding:8px 10px;background:#fff;border:1.5px solid #8e44ad;border-radius:7px;font-size:12px;cursor:pointer;color:#8e44ad;font-weight:700">✏️ AI Generate</button>
+  </div>
+
+  <!-- Language/Format bar -->
+  <div style="font-size:11px;color:#e67e22;font-weight:700;margin-bottom:6px">Select Language of Paper, Fonts, Size, Bold etc</div>
+  <div style="background:#fff;border-radius:9px;padding:9px;border:1px solid #e0e0e0">
+    <!-- Undo/Redo B A+ A- EN SD UR -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <button style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:13px;cursor:pointer" onclick="epFmt('undo')">↩</button>
+      <button style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:13px;cursor:pointer" onclick="epFmt('redo')">↪</button>
+      <button style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-weight:900;font-size:13px;cursor:pointer" onclick="epFmt('bold')">B</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:13px;cursor:pointer" onclick="epBigger()">A+</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:13px;cursor:pointer" onclick="epSmaller()">A-</button>
+      <button id="epEN" style="padding:6px 9px;border:1.5px solid var(--blue);border-radius:6px;background:#ebf5fb;font-size:12px;font-weight:700;cursor:pointer;color:var(--blue)" onclick="epSetLang('en')">EN</button>
+      <button id="epSD" style="padding:6px 9px;border:1.5px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;font-weight:700;cursor:pointer;color:#555" onclick="epSetLang('sd')">SD</button>
+      <button id="epUR" style="padding:6px 9px;border:1.5px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;font-weight:700;cursor:pointer;color:#555" onclick="epSetLang('ur')">UR</button>
+    </div>
+    <!-- Auto-Mix Fonts Lines Dual -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <select id="epFontSel" onchange="epApplyFont()" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;margin:0">
+        <option value="">⚡ Auto-Mix</option>
+        <option value="Arial">Arial</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Noto Nastaliq Urdu">Urdu Font</option>
+        <option value="monospace">Mono</option>
+      </select>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epAdjLines(.1)">≡ Lines</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epToggleDual()">⊡ Dual</button>
+    </div>
+    <!-- Break Align A,B,C -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px">
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epInsBreak()">✂ Break</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:14px;cursor:pointer" onclick="epFmt('justifyLeft')">≡</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:14px;cursor:pointer" onclick="epFmt('justifyCenter')">≡</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:14px;cursor:pointer" onclick="epFmt('justifyRight')">≡</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epFmt('insertOrderedList')">1≡</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:11px;cursor:pointer" onclick="epFmt('insertUnorderedList')">A,B,C</button>
+    </div>
+    <!-- Cols Table Pic -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px">
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:14px;cursor:pointer" onclick="epInsStar()">⭐</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epInsCols()">⊞ Cols</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="epInsTable()">⊟ Table</button>
+      <button style="padding:6px 9px;border:1px solid #ddd;border-radius:6px;background:#f5f5f5;font-size:12px;cursor:pointer" onclick="document.getElementById('epImgF2').click()">📸 Pic</button>
+      <input type="file" id="epImgF2" accept="image/*" onchange="epInsImg(this)">
+    </div>
+  </div>
+</div>
+
+<!-- ENABLE SCHOOL WATERMARK -->
+<div style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:11px 13px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:9px">
+    <input type="checkbox" id="epWM" style="width:18px;height:18px;cursor:pointer;margin:0">
+    <span style="font-size:11px;font-weight:700;color:#888;letter-spacing:.8px;text-transform:uppercase">ENABLE SCHOOL WATERMARK</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px">
+    <select id="epWMStyle" style="padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px;margin:0;background:#f5f5f5">
+      <option>Light</option><option>Medium</option><option>Dark</option>
+    </select>
+    <button style="padding:8px 13px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">📂 Load</button>
+  </div>
+</div>
+
+<!-- MATH TOOLS — matching image 1 -->
+<div style="background:#fff9ee;border:1.5px solid var(--gold);border-radius:11px;padding:11px;margin-bottom:10px">
+  <div style="font-size:13px;font-weight:700;color:#e67e22;margin-bottom:9px;letter-spacing:.5px">MATH TOOLS</div>
+  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px">
+    <button class="mkey" onclick="epIns('÷')">÷</button>
+    <button class="mkey" onclick="epIns('×')">×</button>
+    <button class="mkey" onclick="epIns('°')">°</button>
+    <button class="mkey" onclick="epIns('π')">π</button>
+    <button class="mkey" onclick="epIns('∠')">∠</button>
+    <button class="mkey" onclick="epIns('Δ')">Δ</button>
+    <button class="mkey" onclick="epIns('θ')">θ</button>
+    <button class="mkey" onclick="epIns('∞')">∞</button>
+    <button class="mkey" onclick="epIns('≠')">≠</button>
+  </div>
   <div style="display:flex;flex-wrap:wrap;gap:5px">
-    <button class="mkey" onclick="epIns('×')">×</button><button class="mkey" onclick="epIns('÷')">÷</button><button class="mkey" onclick="epIns('±')">±</button><button class="mkey" onclick="epIns('≠')">≠</button><button class="mkey" onclick="epIns('≤')">≤</button><button class="mkey" onclick="epIns('≥')">≥</button><button class="mkey" onclick="epIns('²')">²</button><button class="mkey" onclick="epIns('³')">³</button><button class="mkey" onclick="epIns('√')">√</button><button class="mkey" onclick="epIns('½')">½</button><button class="mkey" onclick="epIns('¼')">¼</button><button class="mkey" onclick="epIns('∠')">∠</button><button class="mkey" onclick="epIns('°')">°</button><button class="mkey" onclick="epIns('π')">π</button><button class="mkey" onclick="epIns('∞')">∞</button><button class="mkey" onclick="epIns('∈')">∈</button><button class="mkey" onclick="epIns('∩')">∩</button><button class="mkey" onclick="epIns('∪')">∪</button><button class="mkey" onclick="epIns('α')">α</button><button class="mkey" onclick="epIns('θ')">θ</button><button class="mkey" onclick="epIns('∑')">∑</button><button class="mkey" onclick="epIns('∫')">∫</button>
+    <button class="mkey" onclick="epIns('≤')">≤</button>
+    <button class="mkey" onclick="epIns('≥')">≥</button>
+    <button class="mkey" onclick="epIns('a/b')">a/b</button>
+    <button class="mkey" onclick="epIns('√')">√x</button>
+    <button class="mkey" onclick="epIns('²')">x²</button>
+    <button class="mkey" onclick="epIns('₂')">x₂</button>
+    <button class="mkey" onclick="epIns('△')">△</button>
+    <button class="mkey" onclick="epIns('±')">±</button>
+    <button class="mkey" onclick="epIns('∑')">∑</button>
+    <button class="mkey" onclick="epIns('∫')">∫</button>
+    <button class="mkey" onclick="epIns('∂')">∂</button>
+    <button class="mkey" onclick="epIns('∈')">∈</button>
+    <button class="mkey" onclick="epIns('∩')">∩</button>
+    <button class="mkey" onclick="epIns('∪')">∪</button>
+    <button class="mkey" onclick="epIns('³')">x³</button>
+    <button class="mkey" onclick="epIns('½')">½</button>
+    <button class="mkey" onclick="epIns('→')">→</button>
+    <button class="mkey" onclick="epIns('α')">α</button>
+    <button class="mkey" onclick="epIns('β')">β</button>
+    <button class="mkey" onclick="epIns('⊥')">⊥</button>
+    <button class="mkey" onclick="epIns('∥')">∥</button>
+    <button class="mkey" onclick="epIns('sin')">sin</button>
+    <button class="mkey" onclick="epIns('cos')">cos</button>
+    <button class="mkey" onclick="epIns('tan')">tan</button>
+    <button class="mkey" onclick="epIns('log')">log</button>
   </div>
 </div>
-<div style="background:#eef3ff;border-radius:11px;padding:10px;margin-bottom:9px">
-  <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:8px">📝 CONTENT EDITOR</div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
-    <button class="btn-sm bsb" onclick="epFmt('bold')"><b>B</b></button>
-    <button class="btn-sm bsb" onclick="epFmt('justifyLeft')">L</button>
-    <button class="btn-sm bsb" onclick="epFmt('justifyCenter')">C</button>
-    <button class="btn-sm bsb" onclick="epFmt('justifyRight')">R</button>
-    <button class="btn-sm" style="background:var(--gold);color:#000" onclick="epBigger()">A+</button>
-    <button class="btn-sm" style="background:var(--gold);color:#000" onclick="epSmaller()">A-</button>
-    <button class="btn-sm bsg" onclick="epInsTable()">⊞ Table</button>
+
+<!-- BIG CONTENT EDITOR — matching image 1 (Type your paper here) -->
+<div style="background:#fff;border:1.5px solid #ddd;border-radius:11px;overflow:hidden;margin-bottom:10px">
+  <div id="epEditor" contenteditable="true"
+    style="min-height:300px;padding:14px;font-size:11.5pt;line-height:1.4;outline:none;font-family:Arial,sans-serif;color:#111"
+    data-placeholder="Type your paper here...">
   </div>
-  <div id="epEditor" contenteditable="true" style="min-height:230px;background:#fff;border:1.5px solid #ddd;border-radius:8px;padding:12px;font-size:11.5pt;line-height:1.5;outline:none;font-family:Arial,sans-serif" placeholder="Type paper here..."></div>
 </div>
+<style>#epEditor:empty:before{content:attr(data-placeholder);color:#aaa;pointer-events:none;}</style>
+
+<!-- Monogram -->
 <div class="irow">
   <div class="ib" id="epLMib" onclick="document.getElementById('epLMf').click()"><div style="font-size:18px">🏫</div><div class="il">Left Monogram</div><button class="rim" onclick="rIb('epLM',event)">✕</button></div>
   <div class="ib" id="epRMib" onclick="document.getElementById('epRMf').click()"><div style="font-size:18px">🏫</div><div class="il">Right Logo</div><button class="rim" onclick="rIb('epRM',event)">✕</button></div>
@@ -715,6 +881,175 @@ textarea{min-height:68px;resize:vertical;}
 <button class="btn-g btn-full" onclick="genEtt()">📅 Generate Schedule</button>
 </div>
 
+
+<!-- TAB 8 — SYLLABUS / EXAM SCHEME -->
+<div class="sec" id="s8">
+<div class="page-title">📋 Syllabus & Exam Timetable</div>
+
+<!-- Sub tabs -->
+<div style="display:flex;gap:8px;margin-bottom:12px">
+  <button id="sylTab0" onclick="sylSwitch(0)" style="flex:1;padding:10px;background:var(--g);color:var(--gold);border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📚 Midterm Syllabus</button>
+  <button id="sylTab1" onclick="sylSwitch(1)" style="flex:1;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📚 Annual Syllabus</button>
+  <button id="sylTab2" onclick="sylSwitch(2)" style="flex:1;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📅 Timetable</button>
+</div>
+
+<!-- ════ MIDTERM SYLLABUS ════ -->
+<div id="sylMid">
+<div class="card">
+  <div class="card-title">📚 Midterm Examination Syllabus</div>
+  <div class="r2">
+    <div><label>Class</label>
+      <select id="midCls"><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+    </div>
+    <div><label>Session</label><input type="text" id="midSess" placeholder="2025-26" value="2025-26"></div>
+  </div>
+  <div class="r2">
+    <div><label>Exam Date (Start)</label><input type="date" id="midDt1"></div>
+    <div><label>Exam Date (End)</label><input type="date" id="midDt2"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📖 Subject-wise Syllabus
+    <button class="btn-sm bsg" onclick="sylAddRow('mid')" style="margin-left:auto">+ Add Subject</button>
+    <button class="btn-sm bsr" onclick="sylDelRow('mid')" style="margin-left:5px">- Remove</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--g);color:#fff">
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:100px">Subject</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:80px">Total Marks</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left">Syllabus / Topics</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:50px">Ch./Pg.</th>
+      </tr></thead>
+      <tbody id="midBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📝 Important Notes</div>
+  <textarea id="midNote" placeholder="e.g. Students must prepare all exercises. Past paper practice recommended..."></textarea>
+</div>
+
+<div class="irow">
+  <div class="ib" id="midMib" onclick="document.getElementById('midMf').click()"><div style="font-size:18px">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rIb('midM',event)">x</button></div>
+  <div class="ib" id="midSib" onclick="document.getElementById('midSf').click()"><div style="font-size:18px">✍️</div><div class="il">Principal Sign</div><button class="rim" onclick="rIb('midS',event)">x</button></div>
+</div>
+<input type="file" id="midMf" accept="image/*" onchange="ldIb('midM',this)">
+<input type="file" id="midSf" accept="image/*" onchange="ldIb('midS',this)">
+<button class="btn-g btn-full" style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f)" onclick="genSyllabus('mid')">📚 Generate Midterm Syllabus & Print</button>
+</div>
+
+<!-- ════ ANNUAL SYLLABUS ════ -->
+<div id="sylAnn" style="display:none">
+<div class="card">
+  <div class="card-title">📚 Annual Examination Syllabus</div>
+  <div class="r2">
+    <div><label>Class</label>
+      <select id="annCls"><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+    </div>
+    <div><label>Session</label><input type="text" id="annSess" placeholder="2025-26" value="2025-26"></div>
+  </div>
+  <div class="r2">
+    <div><label>Exam Date (Start)</label><input type="date" id="annDt1"></div>
+    <div><label>Exam Date (End)</label><input type="date" id="annDt2"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📖 Subject-wise Syllabus (Full Year)
+    <button class="btn-sm bsg" onclick="sylAddRow('ann')" style="margin-left:auto">+ Add Subject</button>
+    <button class="btn-sm bsr" onclick="sylDelRow('ann')" style="margin-left:5px">- Remove</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--blue);color:#fff">
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:100px">Subject</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:80px">Total Marks</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:left">Syllabus / Topics</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:50px">Ch./Pg.</th>
+      </tr></thead>
+      <tbody id="annBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📝 Important Notes</div>
+  <textarea id="annNote" placeholder="e.g. Full year course. All chapters included. Students must practice exercises..."></textarea>
+</div>
+
+<div class="irow">
+  <div class="ib" id="annMib" onclick="document.getElementById('annMf').click()"><div style="font-size:18px">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rIb('annM',event)">x</button></div>
+  <div class="ib" id="annSib" onclick="document.getElementById('annSf').click()"><div style="font-size:18px">✍️</div><div class="il">Principal Sign</div><button class="rim" onclick="rIb('annS',event)">x</button></div>
+</div>
+<input type="file" id="annMf" accept="image/*" onchange="ldIb('annM',this)">
+<input type="file" id="annSf" accept="image/*" onchange="ldIb('annS',this)">
+<button class="btn-g btn-full" style="background:linear-gradient(135deg,var(--blue),#0d47a1)" onclick="genSyllabus('ann')">📚 Generate Annual Syllabus & Print</button>
+</div>
+
+<!-- ════ EXAM TIMETABLE ════ -->
+<div id="sylTT" style="display:none">
+<div class="card">
+  <div class="card-title">📅 Exam Timetable Details</div>
+  <div class="r2">
+    <div><label>Exam Type</label>
+      <select id="ttExType">
+        <option value="MIDTERM EXAMINATION">Midterm Examination</option>
+        <option value="ANNUAL EXAMINATION">Annual Examination</option>
+        <option value="HALF YEARLY EXAMINATION">Half Yearly Examination</option>
+        <option value="FIRST TERM EXAMINATION">First Term Examination</option>
+        <option value="PRE-BOARD EXAMINATION">Pre-Board Examination</option>
+      </select>
+    </div>
+    <div><label>Session</label><input type="text" id="ttSess" placeholder="2025-26" value="2025-26"></div>
+  </div>
+  <div class="r2">
+    <div><label>Classes</label><input type="text" id="ttClasses" placeholder="Nursery to Class 10"></div>
+    <div><label>Time</label><input type="text" id="ttTime" placeholder="8:00 AM - 11:00 AM"></div>
+  </div>
+  <div class="r2">
+    <div><label>Start Date</label><input type="date" id="ttDt1"></div>
+    <div><label>End Date</label><input type="date" id="ttDt2"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📋 Timetable Rows
+    <button class="btn-sm bsg" onclick="ttExAdd()" style="margin-left:auto">+ Add Row</button>
+    <button class="btn-sm bsr" onclick="ttExDel()" style="margin-left:5px">- Remove</button>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:var(--g);color:#fff">
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:80px">Date</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:70px">Day</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:100px">Subject</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:90px">Class</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:70px">Marks</th>
+        <th style="padding:8px 7px;border:1px solid rgba(255,255,255,.2);min-width:70px">Time</th>
+      </tr></thead>
+      <tbody id="ttExBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📌 Instructions for Students</div>
+  <textarea id="ttIns" placeholder="1. Bring Admit Card daily&#10;2. No mobile phones allowed&#10;3. Arrive 30 minutes before exam&#10;4. Write Roll Number clearly"></textarea>
+</div>
+
+<div class="irow">
+  <div class="ib" id="ttExMib" onclick="document.getElementById('ttExMf').click()"><div style="font-size:18px">🏫</div><div class="il">Monogram</div><button class="rim" onclick="rIb('ttExM',event)">x</button></div>
+  <div class="ib" id="ttExSib" onclick="document.getElementById('ttExSf').click()"><div style="font-size:18px">✍️</div><div class="il">Principal Sign</div><button class="rim" onclick="rIb('ttExS',event)">x</button></div>
+</div>
+<input type="file" id="ttExMf" accept="image/*" onchange="ldIb('ttExM',this)">
+<input type="file" id="ttExSf" accept="image/*" onchange="ldIb('ttExS',this)">
+<button class="btn-g btn-full" onclick="genTTEx()">📅 Generate Exam Timetable & Print</button>
+</div>
+
+</div>
 </div><!-- end mainApp -->
 
 <!-- OVERLAY -->
@@ -762,7 +1097,7 @@ function ls_set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 //  STATE
 // ═══════════════════════════════════════════
 var gL=ls_get(SK.GLOGO)||'';
-var imgs={pM:'',pS:'',epLM:'',epRM:'',etM:'',etS:'',cM:'',cS:''};
+var imgs={pM:'',pS:'',epLM:'',epRM:'',etM:'',etS:'',cM:'',cS:'',schM:'',schS:'',midM:'',midS:'',annM:'',annS:'',ttExM:'',ttExS:''};
 var currentRole=''; // 'admin' or 'teacher'
 var currentTeacher=null;
 var hwEntries=[], hwActiveSub='';
@@ -888,16 +1223,14 @@ function loadTeacherDropdown(){
 function sTab(n){
   var secs=document.querySelectorAll('.sec');
   var btns=document.querySelectorAll('.nav-btn');
-  var visible=[];
-  btns.forEach(function(b){if(b.offsetParent!==null)visible.push(b);});
   secs.forEach(function(s){s.classList.remove('on');});
-  visible.forEach(function(b){b.classList.remove('on');});
+  btns.forEach(function(b){b.classList.remove('on');});
   if(secs[n])secs[n].classList.add('on');
-  // find matching visible button
-  var allBtns=document.querySelectorAll('.nav-btn');
-  if(allBtns[n])allBtns[n].classList.add('on');
+  if(btns[n])btns[n].classList.add('on');
   if(n===0)updateDashboard();
   if(n===3&&currentRole==='admin')renderTeacherList();
+  if(n===7)etInit();
+  if(n===8)sylInitRows();
 }
 
 // ═══════════════════════════════════════════
@@ -927,8 +1260,8 @@ function loadGLogo(inp){
 // ═══════════════════════════════════════════
 //  IMAGE BOXES
 // ═══════════════════════════════════════════
-var ibL={pM:'Monogram',pS:'Sign',epLM:'L. Monogram',epRM:'R. Logo',etM:'Monogram',etS:'Sign',cM:'Monogram',cS:'Sign'};
-var ibI={pM:'🏫',pS:'✍️',epLM:'🏫',epRM:'🏫',etM:'🏫',etS:'✍️',cM:'🏫',cS:'✍️'};
+var ibL={pM:'Monogram',pS:'Sign',epLM:'L. Monogram',epRM:'R. Logo',etM:'Monogram',etS:'Sign',cM:'Monogram',cS:'Sign',schM:'Monogram',schS:'Sign',midM:'Monogram',midS:'Sign',annM:'Monogram',annS:'Sign',ttExM:'Monogram',ttExS:'Sign'};
+var ibI={pM:'🏫',pS:'✍️',epLM:'🏫',epRM:'🏫',etM:'🏫',etS:'✍️',cM:'🏫',cS:'✍️',schM:'🏫',schS:'✍️',midM:'🏫',midS:'✍️',annM:'🏫',annS:'✍️',ttExM:'🏫',ttExS:'✍️'};
 function ldIb(k,inp){
   if(!inp.files||!inp.files[0])return;
   var r=new FileReader();
@@ -1093,26 +1426,33 @@ function addStudent(){
   updateStudentStats();
   toast(name+' add! ✅');
 }
+function stColor(st){return st==='present'?'#2e7d32':st==='absent'?'#c62828':st==='leave'?'#e65100':'#6a1b9a';}
+function stLabel(st){return st==='present'?'✅ P':st==='absent'?'❌ A':st==='leave'?'🕐 L':'⏰ Late';}
+function stClass(st){return st==='present'?'present':st==='absent'?'absent':st==='leave'?'leave':'late';}
+
+// ─── Student Attendance ───
 function renderStudentAttGrid(cls,students){
   var grid=document.getElementById('attStudGrid');
   if(!students.length){
-    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Is class mein koi student nahi — upar naam add karo</div>';
-    document.getElementById('attSummaryCard').style.display='none';
-    return;
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Koi student nahi — upar naam add karo</div>';
+    document.getElementById('attSummaryCard').style.display='none';return;
   }
   var h='';
   students.forEach(function(s,i){
     var st=s.status||'present';
-    var cls2=st==='present'?'present':st==='absent'?'absent':'leave';
-    var stLabel=st==='present'?'✅ P':st==='absent'?'❌ A':'🕐 L';
-    h+='<div class="att-student '+cls2+'" id="asc_'+i+'">'+
+    h+='<div class="att-student '+stClass(st)+'" id="asc_'+i+'">'+
       '<div class="att-name">'+s.name+'</div>'+
       '<div class="att-roll">Roll: '+s.roll+'</div>'+
-      '<div class="att-status">'+stLabel+'</div>'+
+      '<div class="att-status" style="color:'+stColor(st)+'">'+stLabel(st)+'</div>'+
       '<div class="att-btn-row">'+
       '<button class="att-btn ab-p" onclick="setStudAtt('+i+',\'present\')">P</button>'+
       '<button class="att-btn ab-a" onclick="setStudAtt('+i+',\'absent\')">A</button>'+
       '<button class="att-btn" style="background:#e65100;color:#fff" onclick="setStudAtt('+i+',\'leave\')">L</button>'+
+      '<button class="att-btn ab-lt" onclick="setStudAtt('+i+',\'late\')">Late</button>'+
+      '</div>'+
+      '<div style="display:flex;gap:4px;justify-content:center;margin-top:4px">'+
+      '<button onclick="editStudent('+i+')" style="padding:2px 7px;background:#1565c0;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">✏️</button>'+
+      '<button onclick="deleteStudent('+i+')" style="padding:2px 7px;background:#c0392b;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">🗑️</button>'+
       '</div>'+
       '</div>';
   });
@@ -1123,35 +1463,54 @@ function renderStudentAttGrid(cls,students){
 function setStudAtt(i,status){
   var cls=document.getElementById('attSClass').value;
   var allStudents=ls_get(SK.STUDENTS)||{};
-  if(allStudents[cls]&&allStudents[cls][i]){
-    allStudents[cls][i].status=status;
-    ls_set(SK.STUDENTS,allStudents);
-  }
-  // Update UI
+  if(allStudents[cls]&&allStudents[cls][i]){allStudents[cls][i].status=status;ls_set(SK.STUDENTS,allStudents);}
   var el=document.getElementById('asc_'+i);
   if(el){
-    el.className='att-student '+(status==='present'?'present':status==='absent'?'absent':'leave');
-    el.querySelector('.att-status').textContent=status==='present'?'✅ P':status==='absent'?'❌ A':'🕐 L';
+    el.className='att-student '+stClass(status);
+    el.querySelector('.att-status').textContent=stLabel(status);
+    el.querySelector('.att-status').style.color=stColor(status);
   }
-  updateAttSummary(allStudents[cls]||[]);
+  var allSt=ls_get(SK.STUDENTS)||{};
+  updateAttSummary((allSt[cls])||[]);
+}
+function editStudent(i){
+  var cls=document.getElementById('attSClass').value;
+  var allStudents=ls_get(SK.STUDENTS)||{};
+  var s=allStudents[cls]&&allStudents[cls][i];
+  if(!s)return;
+  var newName=prompt('Naam edit karo:',s.name);
+  if(newName===null)return;
+  var newRoll=prompt('Roll No edit karo:',s.roll);
+  if(newRoll===null)return;
+  allStudents[cls][i].name=newName.trim()||s.name;
+  allStudents[cls][i].roll=newRoll.trim()||s.roll;
+  ls_set(SK.STUDENTS,allStudents);
+  loadStudentList();toast('Student updated! ✅');
+}
+function deleteStudent(i){
+  if(!confirm('Is student ko delete karo?'))return;
+  var cls=document.getElementById('attSClass').value;
+  var allStudents=ls_get(SK.STUDENTS)||{};
+  if(allStudents[cls])allStudents[cls].splice(i,1);
+  ls_set(SK.STUDENTS,allStudents);
+  loadStudentList();updateStudentStats();toast('Student deleted!');
 }
 function markAllAtt(status){
   var cls=document.getElementById('attSClass').value;
   var allStudents=ls_get(SK.STUDENTS)||{};
-  if(allStudents[cls]){
-    allStudents[cls].forEach(function(s){s.status=status;});
-    ls_set(SK.STUDENTS,allStudents);
-    renderStudentAttGrid(cls,allStudents[cls]);
-  }
+  if(allStudents[cls]){allStudents[cls].forEach(function(s){s.status=status;});ls_set(SK.STUDENTS,allStudents);renderStudentAttGrid(cls,allStudents[cls]);}
 }
 function updateAttSummary(students){
-  var p=0,a=0,l=0;
-  students.forEach(function(s){if(s.status==='present')p++;else if(s.status==='absent')a++;else l++;});
+  var p=0,a=0,l=0,lt=0;
+  students.forEach(function(s){
+    if(s.status==='present')p++;else if(s.status==='absent')a++;else if(s.status==='leave')l++;else lt++;
+  });
   var el=document.getElementById('attSummary');
   el.innerHTML=
     '<div class="att-sum-item" style="border-color:#2e7d32"><div class="att-sum-val" style="color:#2e7d32">'+p+'</div><div class="att-sum-lbl">Present</div></div>'+
     '<div class="att-sum-item" style="border-color:#c62828"><div class="att-sum-val" style="color:#c62828">'+a+'</div><div class="att-sum-lbl">Absent</div></div>'+
     '<div class="att-sum-item" style="border-color:#e65100"><div class="att-sum-val" style="color:#e65100">'+l+'</div><div class="att-sum-lbl">Leave</div></div>'+
+    '<div class="att-sum-item" style="border-color:#6a1b9a"><div class="att-sum-val" style="color:#6a1b9a">'+lt+'</div><div class="att-sum-lbl">Late</div></div>'+
     '<div class="att-sum-item"><div class="att-sum-val">'+students.length+'</div><div class="att-sum-lbl">Total</div></div>';
 }
 function saveStudAtt(){
@@ -1161,22 +1520,20 @@ function saveStudAtt(){
   var students=allStudents[cls]||[];
   if(!students.length){toast('Pehle students add karo!');return;}
   var allAtt=ls_get(SK.STUD_ATT)||[];
-  // Remove existing for same date+class
   allAtt=allAtt.filter(function(a){return !(a.date===dt&&a.cls===cls);});
   allAtt.push({date:dt,cls:cls,students:JSON.parse(JSON.stringify(students)),savedBy:currentTeacher?currentTeacher.name:'Admin'});
   ls_set(SK.STUD_ATT,allAtt);
   updateDashboard();
-  // Generate printable
-  var p=0,a=0,l=0;
-  students.forEach(function(s){if(s.status==='present')p++;else if(s.status==='absent')a++;else l++;});
+  var p=0,a=0,l=0,lt=0;
+  students.forEach(function(s){if(s.status==='present')p++;else if(s.status==='absent')a++;else if(s.status==='leave')l++;else lt++;});
   var rows='';
   students.forEach(function(s,i){
-    var st=s.status;
+    var st=s.status||'present';
     rows+='<tr style="background:'+(i%2?'#f5f5f5':'#fff')+'">'+
       '<td style="padding:7px 9px;border:1px solid #ddd;text-align:center">'+s.roll+'</td>'+
       '<td style="padding:7px 9px;border:1px solid #ddd;font-weight:600">'+s.name+'</td>'+
-      '<td style="padding:7px 9px;border:1px solid #ddd;text-align:center;font-weight:700;color:'+(st==='present'?'#2e7d32':st==='absent'?'#c62828':'#e65100')+'">'+
-      (st==='present'?'Present':st==='absent'?'Absent':'Leave')+'</td></tr>';
+      '<td style="padding:7px 9px;border:1px solid #ddd;text-align:center;font-weight:700;color:'+stColor(st)+'">'+
+      (st==='present'?'Present':st==='absent'?'Absent':st==='leave'?'Leave':'Late')+'</td></tr>';
   });
   var html=
     '<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;border:2px solid #0d5c3a;border-radius:11px;overflow:hidden">'+
@@ -1184,56 +1541,106 @@ function saveStudAtt(){
     '<div style="font-size:16px;font-weight:900;color:#fff">AL-FAREED PUBLIC SCHOOL</div>'+
     '<div style="font-size:13px;color:#c9a84c">Tando Jam, Sindh</div></div>'+
     '<div style="background:#c9a84c;color:#000;text-align:center;padding:5px;font-size:12px;font-weight:700;letter-spacing:1px">STUDENT ATTENDANCE REGISTER</div>'+
-    '<div style="display:flex;gap:0;background:#f0f7ff;border-bottom:1px solid #ddd">'+
+    '<div style="display:flex;background:#f0f7ff;border-bottom:1px solid #ddd">'+
     '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Class</div><strong>'+cls+'</strong></div>'+
     '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Date</div><strong>'+fmtDate(dt)+'</strong></div>'+
-    '<div style="flex:1;padding:8px 12px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Teacher</div><strong>'+(currentTeacher?currentTeacher.name:'Admin')+'</strong></div>'+
-    '</div>'+
-    '<table style="width:100%;border-collapse:collapse"><thead><tr style="background:#0d5c3a;color:#fff"><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:center">Roll</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:left">Student Name</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:center">Status</th></tr></thead>'+
+    '<div style="flex:1;padding:8px 12px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Teacher</div><strong>'+(currentTeacher?currentTeacher.name:'Admin')+'</strong></div></div>'+
+    '<table style="width:100%;border-collapse:collapse"><thead><tr style="background:#0d5c3a;color:#fff"><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:center">Roll</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:left">Name</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:center">Status</th></tr></thead>'+
     '<tbody>'+rows+'</tbody></table>'+
-    '<div style="display:flex;gap:0;background:#f5f5f5;border-top:2px solid #0d5c3a;font-size:13px;font-weight:700">'+
-    '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd;color:#2e7d32">✅ Present: '+p+'</div>'+
-    '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd;color:#c62828">❌ Absent: '+a+'</div>'+
-    '<div style="flex:1;padding:8px 12px;color:#e65100">🕐 Leave: '+l+'</div>'+
+    '<div style="display:flex;background:#f5f5f5;border-top:2px solid #0d5c3a;font-size:12px;font-weight:700;flex-wrap:wrap">'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#2e7d32">✅ P: '+p+'</div>'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#c62828">❌ A: '+a+'</div>'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#e65100">🕐 L: '+l+'</div>'+
+    '<div style="flex:1;padding:7px 10px;color:#6a1b9a">⏰ Late: '+lt+'</div>'+
     '</div></div>';
-  var wa='*STUDENT ATTENDANCE*\n*Al-Fareed Public School*\nClass: '+cls+' | '+fmtDate(dt)+'\nTeacher: '+(currentTeacher?currentTeacher.name:'Admin')+'\n\n';
-  students.forEach(function(s,i){wa+=(i+1)+'. '+s.name+' (Roll: '+s.roll+') — '+(s.status==='present'?'✅ Present':s.status==='absent'?'❌ Absent':'🕐 Leave')+'\n';});
-  wa+='\nPresent: '+p+' | Absent: '+a+' | Leave: '+l+'\nTotal: '+students.length;
+  var wa='*STUDENT ATTENDANCE*\n*Al-Fareed Public School*\nClass: '+cls+' | '+fmtDate(dt)+'\nBy: '+(currentTeacher?currentTeacher.name:'Admin')+'\n\n';
+  students.forEach(function(s,i){var st=s.status||'present';wa+=(i+1)+'. '+s.name+' — '+(st==='present'?'✅ Present':st==='absent'?'❌ Absent':st==='leave'?'🕐 Leave':'⏰ Late')+'\n';});
+  wa+='\nPresent: '+p+' | Absent: '+a+' | Leave: '+l+' | Late: '+lt+'\nTotal: '+students.length;
   showOv(html,wa);
 }
 
 // ─── Teacher Attendance ───
+var attTeachList=[]; // local list for attendance tab (from SK.TEACHERS + manual)
+
+function attAddTeacher(){
+  var name=document.getElementById('attTName').value.trim();
+  var subj=document.getElementById('attTSubj').value.trim()||'Teacher';
+  if(!name){toast('Naam likhein!');return;}
+  // Add to teachers list if not already there
+  var teachers=ls_get(SK.TEACHERS)||[];
+  var exists=teachers.some(function(t){return t.name.toLowerCase()===name.toLowerCase();});
+  if(!exists){
+    var id='t_att_'+Date.now();
+    teachers.push({id:id,name:name,subject:subj,password:'teacher123',phone:'',status:'active',addedOn:todayFmt()});
+    ls_set(SK.TEACHERS,teachers);
+    loadTeacherDropdown();
+    renderTeacherList();
+    toast(name+' add ho gaya! ✅');
+  }else{
+    toast(name+' already hai!');
+  }
+  document.getElementById('attTName').value='';document.getElementById('attTSubj').value='';
+  renderTeachAttGrid();
+}
+
 function renderTeachAttGrid(){
   var teachers=ls_get(SK.TEACHERS)||[];
   var active=teachers.filter(function(t){return t.status==='active';});
   var grid=document.getElementById('attTeachGrid');
   if(!active.length){
-    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Admin panel mein teachers add karo</div>';
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Upar teacher add karo</div>';
     return;
   }
   var h='';
   active.forEach(function(t,i){
     var st=teacherAttData[t.id]||'present';
-    var cls2=st==='present'?'present':st==='absent'?'absent':'leave';
-    var stLabel=st==='present'?'✅ P':st==='absent'?'❌ A':'🕐 L';
-    h+='<div class="att-student '+cls2+'" id="tac_'+i+'">'+
+    h+='<div class="att-student '+stClass(st)+'" id="tac_'+i+'">'+
       '<div class="att-name">'+t.name+'</div>'+
       '<div class="att-roll">'+t.subject+'</div>'+
-      '<div class="att-status">'+stLabel+'</div>'+
+      '<div class="att-status" style="color:'+stColor(st)+'">'+stLabel(st)+'</div>'+
       '<div class="att-btn-row">'+
       '<button class="att-btn ab-p" onclick="setTeachAtt('+i+',\'present\',\''+t.id+'\')">P</button>'+
       '<button class="att-btn ab-a" onclick="setTeachAtt('+i+',\'absent\',\''+t.id+'\')">A</button>'+
       '<button class="att-btn" style="background:#e65100;color:#fff" onclick="setTeachAtt('+i+',\'leave\',\''+t.id+'\')">L</button>'+
-      '</div></div>';
+      '<button class="att-btn ab-lt" onclick="setTeachAtt('+i+',\'late\',\''+t.id+'\')">Late</button>'+
+      '</div>'+
+      '<div style="display:flex;gap:4px;justify-content:center;margin-top:4px">'+
+      '<button onclick="editTeacherName(\''+t.id+'\')" style="padding:2px 7px;background:#1565c0;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">✏️</button>'+
+      '<button onclick="deleteTeacherFromAtt(\''+t.id+'\')" style="padding:2px 7px;background:#c0392b;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">🗑️</button>'+
+      '</div>'+
+      '</div>';
   });
   grid.innerHTML=h;
+}
+function editTeacherName(id){
+  var teachers=ls_get(SK.TEACHERS)||[];
+  var idx=teachers.findIndex(function(t){return t.id===id;});
+  if(idx<0)return;
+  var t=teachers[idx];
+  var newName=prompt('Teacher naam edit karo:',t.name);
+  if(newName===null)return;
+  var newSubj=prompt('Subject edit karo:',t.subject);
+  if(newSubj===null)return;
+  teachers[idx].name=newName.trim()||t.name;
+  teachers[idx].subject=newSubj.trim()||t.subject;
+  ls_set(SK.TEACHERS,teachers);
+  renderTeachAttGrid();renderTeacherList();loadTeacherDropdown();toast('Teacher updated! ✅');
+}
+function deleteTeacherFromAtt(id){
+  if(!confirm('Is teacher ko delete karo?'))return;
+  var teachers=ls_get(SK.TEACHERS)||[];
+  teachers=teachers.filter(function(t){return t.id!==id;});
+  ls_set(SK.TEACHERS,teachers);
+  delete teacherAttData[id];
+  renderTeachAttGrid();renderTeacherList();loadTeacherDropdown();toast('Teacher deleted!');
 }
 function setTeachAtt(i,status,id){
   teacherAttData[id]=status;
   var el=document.getElementById('tac_'+i);
   if(el){
-    el.className='att-student '+(status==='present'?'present':status==='absent'?'absent':'leave');
-    el.querySelector('.att-status').textContent=status==='present'?'✅ P':status==='absent'?'❌ A':'🕐 L';
+    el.className='att-student '+stClass(status);
+    el.querySelector('.att-status').textContent=stLabel(status);
+    el.querySelector('.att-status').style.color=stColor(status);
   }
 }
 function markAllTeachAtt(status){
@@ -1245,25 +1652,22 @@ function saveTeachAtt(){
   var dt=document.getElementById('attTDate').value||today();
   var teachers=ls_get(SK.TEACHERS)||[];
   var active=teachers.filter(function(t){return t.status==='active';});
-  if(!active.length){toast('Koi active teacher nahi!');return;}
+  if(!active.length){toast('Koi teacher nahi!');return;}
   var allAtt=ls_get(SK.TEACH_ATT)||[];
   allAtt=allAtt.filter(function(a){return a.date!==dt;});
   var rec={date:dt,records:{}};
   active.forEach(function(t){rec.records[t.id]=teacherAttData[t.id]||'present';});
   allAtt.push(rec);ls_set(SK.TEACH_ATT,allAtt);
-  var p=0,a=0,l=0;
-  active.forEach(function(t){
-    var st=teacherAttData[t.id]||'present';
-    if(st==='present')p++;else if(st==='absent')a++;else l++;
-  });
+  var p=0,a=0,l=0,lt=0;
+  active.forEach(function(t){var st=teacherAttData[t.id]||'present';if(st==='present')p++;else if(st==='absent')a++;else if(st==='leave')l++;else lt++;});
   var rows='';
   active.forEach(function(t,i){
     var st=teacherAttData[t.id]||'present';
     rows+='<tr style="background:'+(i%2?'#f5f5f5':'#fff')+'">'+
       '<td style="padding:7px 9px;border:1px solid #ddd;font-weight:600">'+t.name+'</td>'+
       '<td style="padding:7px 9px;border:1px solid #ddd">'+t.subject+'</td>'+
-      '<td style="padding:7px 9px;border:1px solid #ddd;text-align:center;font-weight:700;color:'+(st==='present'?'#2e7d32':st==='absent'?'#c62828':'#e65100')+'">'+
-      (st==='present'?'Present':st==='absent'?'Absent':'Leave')+'</td></tr>';
+      '<td style="padding:7px 9px;border:1px solid #ddd;text-align:center;font-weight:700;color:'+stColor(st)+'">'+
+      (st==='present'?'Present':st==='absent'?'Absent':st==='leave'?'Leave':'Late')+'</td></tr>';
   });
   var html=
     '<div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;border:2px solid #1565c0;border-radius:11px;overflow:hidden">'+
@@ -1273,17 +1677,16 @@ function saveTeachAtt(){
     '<div style="background:#f0f4ff;padding:8px 13px;border-bottom:1px solid #ddd;font-size:12px"><strong>Date: </strong>'+fmtDate(dt)+'</div>'+
     '<table style="width:100%;border-collapse:collapse"><thead><tr style="background:#1565c0;color:#fff"><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:left">Teacher</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:left">Subject</th><th style="padding:8px;border:1px solid rgba(255,255,255,.2);text-align:center">Status</th></tr></thead>'+
     '<tbody>'+rows+'</tbody></table>'+
-    '<div style="display:flex;gap:0;background:#f5f5f5;border-top:2px solid #1565c0;font-size:13px;font-weight:700">'+
-    '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd;color:#2e7d32">✅ Present: '+p+'</div>'+
-    '<div style="flex:1;padding:8px 12px;border-right:1px solid #ddd;color:#c62828">❌ Absent: '+a+'</div>'+
-    '<div style="flex:1;padding:8px 12px;color:#e65100">🕐 Leave: '+l+'</div>'+
+    '<div style="display:flex;background:#f5f5f5;border-top:2px solid #1565c0;font-size:12px;font-weight:700;flex-wrap:wrap">'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#2e7d32">✅ P: '+p+'</div>'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#c62828">❌ A: '+a+'</div>'+
+    '<div style="flex:1;padding:7px 10px;border-right:1px solid #ddd;color:#e65100">🕐 L: '+l+'</div>'+
+    '<div style="flex:1;padding:7px 10px;color:#6a1b9a">⏰ Late: '+lt+'</div>'+
     '</div></div>';
   var wa='*TEACHER ATTENDANCE*\n*Al-Fareed Public School*\n'+fmtDate(dt)+'\n\n';
-  active.forEach(function(t){wa+=t.name+' ('+t.subject+') — '+(teacherAttData[t.id]==='present'?'✅ Present':teacherAttData[t.id]==='absent'?'❌ Absent':'🕐 Leave')+'\n';});
-  wa+='\nPresent: '+p+' | Absent: '+a+' | Leave: '+l;
-  showOv(html,wa);
-  updateDashboard();
-  toast('Teacher attendance saved! ✅');
+  active.forEach(function(t){var st=teacherAttData[t.id]||'present';wa+=t.name+' — '+(st==='present'?'✅ Present':st==='absent'?'❌ Absent':st==='leave'?'🕐 Leave':'⏰ Late')+'\n';});
+  wa+='\nPresent: '+p+' | Absent: '+a+' | Leave: '+l+' | Late: '+lt;
+  showOv(html,wa);updateDashboard();toast('Teacher attendance saved! ✅');
 }
 
 // ═══════════════════════════════════════════
@@ -1512,7 +1915,7 @@ function dwAddRow(){
     '<div class="r2" style="margin-bottom:7px"><div><label>Subject</label><select id="dws'+n+'"><option>English</option><option>Urdu</option><option>Mathematics</option><option>Science</option><option>Social Studies</option><option>Islamiat</option><option>Computer</option><option>Sindhi</option><option>Chemistry</option><option>Biology</option><option>Physics</option><option>Other</option></select></div>'+
     '<div><label>Period/Time</label><input type="text" id="dwp'+n+'" placeholder="1st / 8:00 AM" style="margin-bottom:0"></div></div>'+
     '<label>Work Done</label><textarea id="dwt'+n+'" placeholder="e.g. Chapter 3 parhaya..." style="min-height:58px;margin-bottom:0"></textarea>';
-  document.getElementById('dwRows').appendChild(d);
+  var dwr=document.getElementById('dwRows');if(dwr)dwr.appendChild(d);
 }
 function genDW(){
   var tch=document.getElementById('dwTch').value.trim()||'Teacher';
@@ -1619,21 +2022,123 @@ function genPub(){
 // ═══════════════════════════════════════════
 //  EXAM PAPER
 // ═══════════════════════════════════════════
+// ── Exam Paper Editor JS ──
 function epIns(s){
-  var ed=document.getElementById('epEditor');ed.focus();
+  var ed=document.getElementById('epEditor');
+  ed.focus();
   var sel=window.getSelection();
-  if(sel&&sel.rangeCount>0){var r=sel.getRangeAt(0);r.deleteContents();r.insertNode(document.createTextNode(s));r.collapse(false);}
-  else{ed.innerHTML+=s;}
+  if(sel&&sel.rangeCount>0){
+    var r=sel.getRangeAt(0);r.deleteContents();
+    r.insertNode(document.createTextNode(s));r.collapse(false);
+  }else{ed.innerHTML+=s;}
 }
-function epFmt(cmd){document.execCommand(cmd,false,null);}
-function epBigger(){var ed=document.getElementById('epEditor');ed.style.fontSize=(parseFloat(ed.style.fontSize)||11.5)+0.5+'pt';}
-function epSmaller(){var ed=document.getElementById('epEditor');ed.style.fontSize=(parseFloat(ed.style.fontSize)||11.5)-0.5+'pt';}
+function epFmt(cmd){
+  var ed=document.getElementById('epEditor');ed.focus();
+  document.execCommand(cmd,false,null);
+}
+function epBigger(){
+  var ed=document.getElementById('epEditor');
+  var fs=parseFloat(ed.style.fontSize)||11.5;
+  ed.style.fontSize=(fs+0.5)+'pt';
+}
+function epSmaller(){
+  var ed=document.getElementById('epEditor');
+  var fs=parseFloat(ed.style.fontSize)||11.5;
+  ed.style.fontSize=Math.max(7,fs-0.5)+'pt';
+}
 function epInsTable(){
-  var c=3,r=3;
-  var h='<table style="width:100%;border-collapse:collapse;margin:6px 0">';
-  for(var i=0;i<r;i++){h+='<tr>';for(var j=0;j<c;j++)h+='<td style="border:1px solid #000;padding:5px 8px;min-width:30px">&nbsp;</td>';h+='</tr>';}
-  h+='</table>';document.execCommand('insertHTML',false,h);
+  var cols=parseInt(document.getElementById('epGCols').value)||3;
+  var rows=parseInt(document.getElementById('epGRows').value)||3;
+  var h='<table style="width:100%;border-collapse:collapse;margin:8px 0">';
+  for(var i=0;i<rows;i++){
+    h+='<tr>';
+    for(var j=0;j<cols;j++)h+='<td style="border:1px solid #000;padding:6px 9px;min-width:28px">&nbsp;</td>';
+    h+='</tr>';
+  }
+  h+='</table><p><br></p>';
+  document.execCommand('insertHTML',false,h);
 }
+function epInsImg(inp){
+  if(!inp||!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    document.execCommand('insertHTML',false,'<img src="'+e.target.result+'" style="max-width:100%;height:auto;display:block;margin:6px auto">');
+  };
+  r.readAsDataURL(inp.files[0]);
+  inp.value='';
+}
+function epChangeFont(){
+  var fonts=['Arial','Times New Roman','Courier New','Georgia','Verdana'];
+  var ed=document.getElementById('epEditor');
+  var cur=ed.style.fontFamily||'Arial';
+  var idx=fonts.indexOf(cur);
+  var next=fonts[(idx+1)%fonts.length];
+  ed.style.fontFamily=next;
+  toast('Font: '+next);
+}
+function epSetLang(lang){
+  var ed=document.getElementById('epEditor');
+  var btns={en:'epEN',sd:'epSD',ur:'epUR'};
+  Object.keys(btns).forEach(function(k){
+    var b=document.getElementById(btns[k]);
+    if(!b)return;
+    if(k===lang){
+      b.style.borderColor='var(--blue)';b.style.background='#ebf5fb';b.style.color='var(--blue)';
+    }else{
+      b.style.borderColor='#ddd';b.style.background='#f5f5f5';b.style.color='#555';
+    }
+  });
+  if(lang==='ur'){
+    ed.setAttribute('dir','rtl');
+    ed.style.fontFamily='Noto Nastaliq Urdu,serif';
+    ed.style.fontSize='14pt';
+  }else if(lang==='sd'){
+    ed.setAttribute('dir','rtl');
+    ed.style.fontFamily='Noto Nastaliq Urdu,serif';
+    ed.style.fontSize='13pt';
+  }else{
+    ed.setAttribute('dir','ltr');
+    ed.style.fontFamily='Arial,sans-serif';
+    ed.style.fontSize='11.5pt';
+  }
+  toast(lang.toUpperCase()+' mode set');
+}
+function epApplyFont(){
+  var f=document.getElementById('epFontSel').value;
+  var ed=document.getElementById('epEditor');
+  if(f)ed.style.fontFamily=f;
+}
+function epAdjLines(delta){
+  var ed=document.getElementById('epEditor');
+  var ls=parseFloat(ed.style.lineHeight)||1.4;
+  ls=Math.max(1,Math.min(3,ls+delta));
+  ed.style.lineHeight=ls.toFixed(1);
+  toast('Line space: '+ls.toFixed(1));
+}
+function epToggleDual(){
+  var ed=document.getElementById('epEditor');
+  if(ed.style.columnCount==='2'){
+    ed.style.columnCount='1';ed.style.columnGap='';
+    toast('Single column');
+  }else{
+    ed.style.columnCount='2';ed.style.columnGap='20px';
+    toast('Dual column');
+  }
+}
+function epInsBreak(){
+  document.execCommand('insertHTML',false,'<hr style="border:none;border-top:1px solid #999;margin:10px 0"><p><br></p>');
+}
+function epInsCols(){
+  document.execCommand('insertHTML',false,
+    '<table style="width:100%;border-collapse:collapse;margin:8px 0"><tr>'+
+    '<td style="width:50%;padding:6px 8px;border:1px solid #ccc;vertical-align:top;min-height:40px">&nbsp;</td>'+
+    '<td style="width:50%;padding:6px 8px;border:1px solid #ccc;vertical-align:top;min-height:40px">&nbsp;</td>'+
+    '</tr></table><p><br></p>');
+}
+function epInsStar(){
+  document.execCommand('insertHTML',false,'<span style="color:#e67e22;font-size:1.2em">★</span>&nbsp;');
+}
+
 function genPaper(){
   var exam=document.getElementById('epExam').value;
   var yr=document.getElementById('epYear').value||'2026-27';
@@ -1643,25 +2148,52 @@ function genPaper(){
   var tot=document.getElementById('epTot').value||'100';
   var pas=document.getElementById('epPass').value||'33';
   var tm=document.getElementById('epTime').value||'3 Hours';
-  var content=document.getElementById('epEditor').innerHTML||'<p>Q. No 1</p>';
+  // Read font size & line spacing from sliders
+  var fs=document.getElementById('epFS').value||'11.5';
+  var ls=document.getElementById('epLS').value||'1.4';
+  var content=document.getElementById('epEditor').innerHTML||'';
+  if(!content.trim()||content==='<br>'){toast('Paper content likhein!');return;}
   var ll=imgs.epLM||gL;var lr=imgs.epRM||gL;
-  var lLH=ll?('<img src="'+ll+'" style="width:60px;height:60px;object-fit:contain;border-radius:50%">'):'<div style="width:60px;height:60px;border-radius:50%;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-weight:900">AF</div>';
-  var lRH=lr?('<img src="'+lr+'" style="width:60px;height:60px;object-fit:contain;border-radius:50%">'):'<div style="width:60px;height:60px;border-radius:50%;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-weight:900">AF</div>';
+  var lLH=ll?('<img src="'+ll+'" style="width:62px;height:62px;object-fit:contain;border-radius:50%;border:2px solid #c9a84c">'):'<div style="width:62px;height:62px;border-radius:50%;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px">AF</div>';
+  var lRH=lr?('<img src="'+lr+'" style="width:62px;height:62px;object-fit:contain;border-radius:50%;border:2px solid #c9a84c">'):'<div style="width:62px;height:62px;border-radius:50%;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px">AF</div>';
+
   var html=
     '<div style="max-width:720px;margin:0 auto;background:#fff;border:2px solid #000;font-family:Arial,sans-serif">'+
-    '<div style="border-bottom:2px solid #000;padding:7px 10px;display:flex;align-items:center;gap:10px">'+lLH+
-    '<div style="flex:1;text-align:center"><div style="font-size:15px;font-weight:900;text-transform:uppercase;line-height:1.2">AL-FAREED PUBLIC SCHOOL TANDO JAM</div>'+
-    '<div style="background:#000;color:#fff;font-size:11px;font-weight:700;padding:4px 16px;display:inline-block;margin-top:5px;letter-spacing:.5px">'+exam+' '+yr+'</div></div>'+lRH+'</div>'+
-    '<div style="display:flex;border-bottom:1px solid #000;padding:4px 10px;font-size:12px">'+
-    '<span style="font-weight:700;margin-right:5px">Class:</span><span style="font-weight:900;margin-right:18px">'+cls+'</span>'+
-    '<span style="font-weight:700;margin-right:5px">Subject:</span><span style="font-weight:900;color:#0d5c3a;margin-right:18px">'+subj+'</span>'+
-    '<span style="font-weight:700;margin-right:5px">Date:</span><span style="font-weight:900">'+dt+'</span></div>'+
-    '<div style="display:flex;border-bottom:2px solid #000;padding:4px 10px;font-size:12px">'+
-    '<span style="font-weight:700;margin-right:5px">Time:</span><span style="font-weight:900;margin-right:18px">'+tm+'</span>'+
-    '<span style="font-weight:700;margin-right:5px">Total Marks:</span><span style="font-weight:900;margin-right:18px">'+tot+'</span>'+
-    '<span style="font-weight:700;margin-right:5px">Pass Marks:</span><span style="font-weight:900;color:#c0392b">'+pas+'</span></div>'+
-    '<div style="padding:10px 12px;font-size:11.5pt;line-height:1.5;font-family:Arial,sans-serif;min-height:200px">'+content+'</div></div>';
-  showOv(html,'*EXAM PAPER*\n*Al-Fareed Public School*\n'+exam+' '+yr+'\nClass: '+cls+' | '+subj+'\nDate: '+dt+'\nTotal: '+tot+' | Pass: '+pas+' | Time: '+tm);
+    // Header with logos
+    '<div style="border-bottom:2px solid #000;padding:8px 11px;display:flex;align-items:center;gap:11px">'+
+    lLH+
+    '<div style="flex:1;text-align:center;line-height:1.3">'+
+    '<div style="font-size:16px;font-weight:900;text-transform:uppercase;letter-spacing:.5px">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-size:12px;font-weight:700;color:#555">Tando Jam, Sindh, Pakistan</div>'+
+    '<div style="background:#000;color:#fff;font-size:12px;font-weight:700;padding:4px 18px;display:inline-block;margin-top:5px;letter-spacing:.5px">'+exam+' — '+yr+'</div>'+
+    '</div>'+
+    lRH+'</div>'+
+    // Info row: Class Subject Date
+    '<div style="display:flex;border-bottom:1px solid #000;padding:5px 11px;font-size:12px;flex-wrap:wrap;gap:4px">'+
+    '<span><b>Class:</b> <b style="font-size:13px">'+cls+'</b></span>'+
+    '<span style="margin:0 12px;color:#ccc">|</span>'+
+    '<span><b>Subject:</b> <b style="color:#0d5c3a;font-size:13px">'+subj+'</b></span>'+
+    '<span style="margin:0 12px;color:#ccc">|</span>'+
+    '<span><b>Date:</b> <b>'+dt+'</b></span>'+
+    '</div>'+
+    // Info row: Time Marks
+    '<div style="display:flex;border-bottom:2px solid #000;padding:5px 11px;font-size:12px;flex-wrap:wrap;gap:4px">'+
+    '<span><b>Time Allowed:</b> <b>'+tm+'</b></span>'+
+    '<span style="margin:0 12px;color:#ccc">|</span>'+
+    '<span><b>Total Marks:</b> <b style="color:#000;font-size:13px">'+tot+'</b></span>'+
+    '<span style="margin:0 12px;color:#ccc">|</span>'+
+    '<span><b>Pass Marks:</b> <b style="color:#c0392b;font-size:13px">'+pas+'</b></span>'+
+    '</div>'+
+    // Paper content
+    '<div style="padding:12px 14px;font-size:'+fs+'pt;line-height:'+ls+';font-family:Arial,sans-serif;min-height:250px">'+content+'</div>'+
+    // Footer
+    '<div style="border-top:1px solid #000;padding:5px 11px;display:flex;justify-content:space-between;font-size:11px;color:#555">'+
+    '<span>Al-Fareed Public School, Tando Jam</span>'+
+    '<span>Principal: Sir Ghulam Hussain</span>'+
+    '</div>'+
+    '</div>';
+
+  showOv(html,'*EXAM PAPER*\n*Al-Fareed Public School, Tando Jam*\n\n'+exam+' '+yr+'\nClass: '+cls+' | Subject: '+subj+'\nDate: '+dt+'\nTotal: '+tot+' | Pass: '+pas+' | Time: '+tm+'\n\nPrincipal: Sir Ghulam Hussain');
 }
 
 // ═══════════════════════════════════════════
@@ -1728,10 +2260,381 @@ function genCert(){
   showOv(html,'*'+title+'*\n'+name+' '+body+'\n\nDate: '+dt+' | Session: '+sess+'\nAl-Fareed Public School, Tando Jam');
 }
 
+
 // ═══════════════════════════════════════════
-//  EXAM SCHEDULE
+//  SYLLABUS & TIMETABLE (TAB 8)
 // ═══════════════════════════════════════════
+var midRowN=0, annRowN=0, ttExRowN=0;
+var DEF_SUBJ=['English','Urdu / اردو','Mathematics','Science / سائنس','Islamiyat','Social Studies','Sindhi / سنڌي','Pakistan Studies'];
+
+function sylSwitch(n){
+  ['sylMid','sylAnn','sylTT'].forEach(function(id,i){
+    document.getElementById(id).style.display=i===n?'block':'none';
+  });
+  ['sylTab0','sylTab1','sylTab2'].forEach(function(id,i){
+    var b=document.getElementById(id);
+    b.style.background=i===n?'var(--g)':'#fff';
+    b.style.color=i===n?'var(--gold)':'var(--g)';
+    b.style.border=i===n?'none':'2px solid var(--g)';
+  });
+}
+
+function sylAddRow(type,defSubj){
+  var n,bodyId;
+  if(type==='mid'){midRowN++;n=midRowN;bodyId='midBody';}
+  else{annRowN++;n=annRowN;bodyId='annBody';}
+  var body=document.getElementById(bodyId);
+  if(!body)return;
+  var prefix=type+'r';
+  var tr=document.createElement('tr');
+  tr.id=prefix+n;tr.style.background=n%2?'#f5f5f5':'#fff';
+  var opts=['English','Urdu / اردو','Mathematics','Science','Islamiyat','Social Studies','Sindhi / سنڌي','Pakistan Studies','Physics','Chemistry','Biology','Computer Science','General Science','Quran','Drawing'];
+  var optHtml=opts.map(function(o){
+    return '<option'+(o===defSubj?' selected':'')+'>'+o+'</option>';
+  }).join('');
+  tr.innerHTML=
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+
+    '<select id="'+type+'sub'+n+'" style="margin:0;padding:4px;font-size:11px;width:100%;border:1px solid #ddd;border-radius:4px;background:#fff">'+optHtml+'</select></td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0"><input type="number" id="'+type+'tot'+n+'" value="100" style="margin:0;padding:4px;font-size:11px;width:70px;border:1px solid #ddd;border-radius:4px;background:#fff"></td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0"><textarea id="'+type+'syl'+n+'" placeholder="Topics, chapters, pages..." style="margin:0;padding:4px;font-size:11px;width:100%;min-height:50px;border:1px solid #ddd;border-radius:4px;resize:vertical;font-family:Inter,sans-serif"></textarea></td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0"><input type="text" id="'+type+'ch'+n+'" placeholder="Ch.1-5" style="margin:0;padding:4px;font-size:11px;width:55px;border:1px solid #ddd;border-radius:4px;background:#fff"></td>';
+  body.appendChild(tr);
+}
+function sylDelRow(type){
+  if(type==='mid'){var b=document.getElementById('midBody');if(b&&b.lastChild){b.removeChild(b.lastChild);if(midRowN>0)midRowN--;}}
+  else{var b2=document.getElementById('annBody');if(b2&&b2.lastChild){b2.removeChild(b2.lastChild);if(annRowN>0)annRowN--;}}
+}
+
+function genSyllabus(type){
+  var isMid=type==='mid';
+  var clsEl=document.getElementById(isMid?'midCls':'annCls');
+  var sessEl=document.getElementById(isMid?'midSess':'annSess');
+  var dt1El=document.getElementById(isMid?'midDt1':'annDt1');
+  var dt2El=document.getElementById(isMid?'midDt2':'annDt2');
+  var noteEl=document.getElementById(isMid?'midNote':'annNote');
+  var bodyId=isMid?'midBody':'annBody';
+  var rowN=isMid?midRowN:annRowN;
+  var logo=imgs[isMid?'midM':'annM']||gL;
+  var sign=imgs[isMid?'midS':'annS'];
+  var cls=clsEl.value;
+  var sess=sessEl.value||'2025-26';
+  var dt1=fmtDate(dt1El.value);
+  var dt2=fmtDate(dt2El.value);
+  var note=noteEl.value.trim();
+  var examType=isMid?'MIDTERM EXAMINATION':'ANNUAL EXAMINATION';
+  var headerColor=isMid?'#0d5c3a':'#1565c0';
+  var accentColor=isMid?'#c9a84c':'#c9a84c';
+  var lH=mkLogo(logo,56,56);
+  var sH=sign?'<img src="'+sign+'" style="max-height:36px;max-width:90px;object-fit:contain;display:block;margin:0 auto 2px">':'';
+
+  // Build subject rows
+  var rows='';var grandTotal=0;
+  for(var i=1;i<=rowN;i++){
+    var se=document.getElementById(type+'sub'+i);if(!se)continue;
+    var subj=se.value;
+    var tot=parseInt(document.getElementById(type+'tot'+i).value)||100;
+    var syl=document.getElementById(type+'syl'+i).value.trim()||'—';
+    var ch=document.getElementById(type+'ch'+i).value.trim()||'—';
+    grandTotal+=tot;
+    rows+='<tr style="background:'+(i%2?'#f9f9f9':'#fff')+'">'+
+      '<td style="padding:9px 10px;border:1px solid #ddd;font-weight:700;font-size:13px;min-width:100px">'+subj+'</td>'+
+      '<td style="padding:9px 10px;border:1px solid #ddd;text-align:center;font-weight:700;font-size:13px;color:'+headerColor+'">'+tot+'</td>'+
+      '<td style="padding:9px 10px;border:1px solid #ddd;font-size:13px;line-height:1.6">'+syl.replace(/\n/g,'<br>')+'</td>'+
+      '<td style="padding:9px 10px;border:1px solid #ddd;text-align:center;font-size:12px;color:#666">'+ch+'</td>'+
+      '</tr>';
+  }
+  if(!rows){toast('Pehle subjects add karo!');return;}
+
+  var html=
+    '<div style="max-width:680px;margin:0 auto;font-family:Arial,sans-serif;border:2px solid '+headerColor+';border-radius:12px;overflow:hidden">'+
+    // Header
+    '<div style="background:linear-gradient(135deg,'+headerColor+','+headerColor+'cc);padding:13px 15px;display:flex;align-items:center;gap:13px;border-bottom:3px solid '+accentColor+'">'+
+    lH+
+    '<div style="flex:1;text-align:center;line-height:1.3">'+
+    '<div style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#fff">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-family:Noto Nastaliq Urdu,serif;font-size:13px;color:'+accentColor+';direction:rtl">الفرید پبلک اسکول ، ٹنڈو جام</div>'+
+    '<div style="font-size:10px;color:rgba(255,255,255,.7)">Tando Jam, Sindh, Pakistan</div>'+
+    '</div></div>'+
+    // Title
+    '<div style="background:'+accentColor+';color:#000;text-align:center;padding:7px;font-size:13px;font-weight:900;letter-spacing:1.5px">'+examType+' SYLLABUS</div>'+
+    // Info
+    '<div style="display:flex;flex-wrap:wrap;background:#f8f9ff;border-bottom:1px solid #ddd">'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Class</div><strong style="font-size:14px">'+cls+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Session</div><strong style="font-size:13px">'+sess+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">From</div><strong style="font-size:12px">'+dt1+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">To</div><strong style="font-size:12px">'+dt2+'</strong></div>'+
+    '</div>'+
+    // Table
+    '<table style="width:100%;border-collapse:collapse">'+
+    '<thead><tr style="background:'+headerColor+';color:#fff">'+
+    '<th style="padding:10px 9px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:100px">Subject</th>'+
+    '<th style="padding:10px 9px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:70px">Marks</th>'+
+    '<th style="padding:10px 9px;border:1px solid rgba(255,255,255,.2);text-align:left">Syllabus / Topics</th>'+
+    '<th style="padding:10px 9px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:60px">Ch./Pg.</th>'+
+    '</tr></thead>'+
+    '<tbody>'+rows+
+    '<tr style="background:#e8f5ee;border-top:2px solid '+headerColor+'">'+
+    '<td style="padding:9px 10px;border:1px solid #ccc;font-weight:900;color:'+headerColor+'">TOTAL</td>'+
+    '<td style="padding:9px 10px;border:1px solid #ccc;text-align:center;font-weight:900;font-size:15px;color:'+headerColor+'">'+grandTotal+'</td>'+
+    '<td colspan="2" style="padding:9px 10px;border:1px solid #ccc;font-size:12px;color:#666">—</td>'+
+    '</tr>'+
+    '</tbody></table>'+
+    // Note
+    (note?'<div style="padding:9px 12px;background:#fff9ee;border-top:2px solid '+accentColor+';font-size:13px"><strong>📝 Note: </strong>'+note.replace(/\n/g,'<br>')+'</div>':'')+
+    // Signatures
+    '<div style="padding:12px 14px;background:#f8f9ff;border-top:2px solid '+headerColor+';display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">'+
+    '<div style="text-align:center">'+sH+'<div style="width:110px;height:1px;background:#000;margin:3px auto"></div><div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="text-align:center"><div style="width:100px;height:1px;background:#000;margin:22px auto 3px"></div><div style="font-size:11px;font-weight:700">Class Teacher</div></div>'+
+    '<div style="width:55px;height:55px;border:2px dashed '+headerColor+';border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:'+headerColor+';font-weight:700;text-align:center;line-height:1.3">SCHOOL<br>STAMP</div>'+
+    '</div></div>';
+
+  var wa='*AL-FAREED PUBLIC SCHOOL*\n*'+examType+' SYLLABUS*\nClass: '+cls+' | Session: '+sess+'\nFrom: '+dt1+' To: '+dt2+'\n================================\n\n';
+  for(var j=1;j<=rowN;j++){
+    var sje=document.getElementById(type+'sub'+j);if(!sje)continue;
+    var syle=document.getElementById(type+'syl'+j);
+    wa+=sje.value+' ('+document.getElementById(type+'tot'+j).value+' Marks)\n'+(syle?syle.value.trim():'')+'\n\n';
+  }
+  if(note)wa+='Note: '+note+'\n\n';
+  wa+='Principal: Sir Ghulam Hussain\nAl-Fareed Public School, Tando Jam';
+  showOv(html,wa);
+}
+
+// ─── Exam Timetable ───
+function ttExAdd(){
+  ttExRowN++;var n=ttExRowN;
+  var tr=document.createElement('tr');
+  tr.id='ttexr'+n;tr.style.background=n%2?'#f5f5f5':'#fff';
+  function inp(ph,w,tp){return '<input type="'+(tp||'text')+'" placeholder="'+ph+'" style="margin:0;padding:4px 5px;font-size:10px;width:'+(w||'100%')+';border:1px solid #e0e0e0;border-radius:4px;background:#fff;font-family:Inter,sans-serif">';}
+  tr.innerHTML=
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('','',  'date')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('Mon','70px')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('Math','')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('Class 5','')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('100','60px')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+inp('8 AM','70px')+'</td>';
+  var tb2=document.getElementById('ttExBody');if(!tb2)return;tb2.appendChild(tr);
+}
+function ttExDel(){var b=document.getElementById('ttExBody');if(b&&b.lastChild){b.removeChild(b.lastChild);if(ttExRowN>0)ttExRowN--;}}
+
+function genTTEx(){
+  var exType=document.getElementById('ttExType').value;
+  var sess=document.getElementById('ttSess').value||'2025-26';
+  var classes=document.getElementById('ttClasses').value||'Nursery to Class 10';
+  var time=document.getElementById('ttTime').value||'8:00 AM';
+  var dt1=fmtDate(document.getElementById('ttDt1').value);
+  var dt2=fmtDate(document.getElementById('ttDt2').value);
+  var ins=document.getElementById('ttIns').value.trim();
+  var logo=imgs.ttExM||gL;var sign=imgs.ttExS;
+  var lH=mkLogo(logo,54,54);
+  var sH=sign?'<img src="'+sign+'" style="max-height:34px;max-width:88px;object-fit:contain;display:block;margin:0 auto 2px">':'';
+
+  var rows=document.getElementById('ttExBody').querySelectorAll('tr');
+  var trs='';
+  rows.forEach(function(row,idx){
+    var inps=row.querySelectorAll('input');var v=[];
+    inps.forEach(function(i){v.push(i.value);});
+    var bg=idx%2?'#f5f5f5':'#fff';
+    trs+=
+      '<tr style="background:'+bg+'">'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;font-weight:700;white-space:nowrap">'+fmtDate(v[0])+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;text-align:center">'+v[1]+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;font-weight:700;color:#0d5c3a">'+v[2]+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;text-align:center">'+v[3]+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;text-align:center;font-weight:700;color:#c0392b">'+v[4]+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-size:12px;text-align:center">'+v[5]+'</td>'+
+      '</tr>';
+  });
+  if(!trs){toast('Pehle rows add karo!');return;}
+
+  var html=
+    '<div style="max-width:680px;margin:0 auto;font-family:Arial,sans-serif;border:2px solid #0d5c3a;border-radius:12px;overflow:hidden">'+
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #c9a84c">'+
+    lH+
+    '<div style="flex:1;text-align:center;line-height:1.3">'+
+    '<div style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#fff">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-family:Noto Nastaliq Urdu,serif;font-size:13px;color:#c9a84c;direction:rtl">الفرید پبلک اسکول ، ٹنڈو جام</div>'+
+    '<div style="font-size:10px;color:rgba(255,255,255,.7)">Tando Jam, Sindh, Pakistan</div>'+
+    '</div></div>'+
+    '<div style="background:#c9a84c;color:#000;text-align:center;padding:7px;font-size:13px;font-weight:900;letter-spacing:1.5px">'+exType+' TIMETABLE</div>'+
+    '<div style="display:flex;flex-wrap:wrap;background:#f0f7ff;border-bottom:1px solid #ddd">'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:100px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Session</div><strong>'+sess+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:100px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Classes</div><strong>'+classes+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">From</div><strong style="font-size:11px">'+dt1+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;min-width:90px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">To</div><strong style="font-size:11px">'+dt2+'</strong></div>'+
+    '</div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">'+
+    '<thead><tr style="background:#0d5c3a;color:#c9a84c">'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:left">Date</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center">Day</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:left">Subject</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center">Class</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center">Marks</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center">Time</th>'+
+    '</tr></thead>'+
+    '<tbody>'+trs+'</tbody></table></div>'+
+    (ins?'<div style="padding:9px 12px;background:#fff9ee;border-top:2px solid #c9a84c;font-size:12px"><strong>📌 Instructions: </strong>'+ins.replace(/\n/g,' &bull; ')+'</div>':'')+
+    '<div style="padding:12px 14px;background:#f0f7ff;border-top:2px solid #0d5c3a;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">'+
+    '<div style="text-align:center">'+sH+'<div style="width:110px;height:1px;background:#000;margin:3px auto"></div><div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="width:55px;height:55px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3">SCHOOL<br>STAMP</div>'+
+    '</div></div>';
+
+  var wa='*AL-FAREED PUBLIC SCHOOL*\n*'+exType+' TIMETABLE*\nSession: '+sess+' | Classes: '+classes+'\nFrom: '+dt1+' To: '+dt2+'\n================================\n\n';
+  rows.forEach(function(row,i){
+    var inps=row.querySelectorAll('input');var v=[];
+    inps.forEach(function(inp){v.push(inp.value);});
+    if(v[2])wa+=fmtDate(v[0])+' ('+v[1]+') — '+v[2]+' | Class: '+v[3]+' | Marks: '+v[4]+' | Time: '+v[5]+'\n';
+  });
+  if(ins)wa+='\nInstructions: '+ins;
+  wa+='\n\nPrincipal: Sir Ghulam Hussain\nAl-Fareed Public School, Tando Jam';
+  showOv(html,wa);
+}
+
+
+// ═══════════════════════════════════════════
+//  EXAM SCHEME (old - kept for compatibility)
+// ═══════════════════════════════════════════
+var schRowN=0;
+var DEFAULT_SUBJECTS=['English','Urdu / اردو','Mathematics','Science / سائنس','Islamiyat','Social Studies','Sindhi / سنڌي','Pakistan Studies'];
+var sylMidInited=false,sylAnnInited=false;
+
+// Called when Tab 8 (Syllabus) opens
+function sylInitRows(){
+  if(!sylMidInited){
+    sylMidInited=true;
+    DEFAULT_SUBJECTS.forEach(function(s){sylAddRow('mid',s);});
+  }
+}
+
+function schInitRows(){
+  var b=document.getElementById('schBody');
+  if(!b)return; // schBody removed — safe exit
+  if(schRowN===0){
+    DEFAULT_SUBJECTS.forEach(function(s){schAddRow(s);});
+  }
+}
+function schAddRow(defSubj){
+  var b=document.getElementById('schBody');
+  if(!b)return;
+  schRowN++;var n=schRowN;
+  var tr=document.createElement('tr');
+  tr.id='schr'+n;
+  tr.style.background=n%2?'#f5f5f5':'#fff';
+  function ni(id,ph,w,val){return '<input type="'+(id.indexOf('Tot')>-1||id.indexOf('Pass')>-1||id.indexOf('Th')>-1||id.indexOf('Pr')>-1||id.indexOf('Or')>-1?'number':'text')+'" id="'+id+'" placeholder="'+ph+'" value="'+(val||'')+'" style="margin:0;padding:4px 6px;font-size:11px;width:'+(w||'100%')+';border:1px solid #e0e0e0;border-radius:4px;background:#fff;font-family:Inter,sans-serif">';}
+  tr.innerHTML=
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('schs'+n,'Subject','',(defSubj||''))+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('scht'+n,'100','70px','100')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('schp'+n,'33','70px','33')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('schth'+n,'75','60px','75')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('schpr'+n,'25','60px','25')+'</td>'+
+    '<td style="padding:4px 5px;border:1px solid #e0e0e0">'+ni('schor'+n,'0','50px','0')+'</td>';
+  b.appendChild(tr);
+}
+function schDelRow(){
+  var b=document.getElementById('schBody');
+  if(b&&b.lastChild){b.removeChild(b.lastChild);if(schRowN>0)schRowN--;}
+}
+
+function genScheme(){
+  var exam=document.getElementById('schExam').value||'Midterm Examination';
+  var cls=document.getElementById('schCls').value;
+  var sess=document.getElementById('schSess').value||'2025-26';
+  var dt=fmtDate(document.getElementById('schDate').value)||todayFmt();
+  var ins=document.getElementById('schIns').value.trim();
+  var logo=imgs.schM||gL;var sign=imgs.schS;
+  var lH=mkLogo(logo,56,56);
+  var sH=sign?'<img src="'+sign+'" style="max-height:36px;max-width:90px;object-fit:contain;display:block;margin:0 auto 2px">':'';
+
+  var rows='';var grandTotal=0;var grandPass=0;
+  for(var i=1;i<=schRowN;i++){
+    var se=document.getElementById('schs'+i);if(!se)continue;
+    var subj=se.value.trim();if(!subj)continue;
+    var tot=parseInt(document.getElementById('scht'+i).value)||0;
+    var pas=parseInt(document.getElementById('schp'+i).value)||0;
+    var th=parseInt(document.getElementById('schth'+i).value)||0;
+    var pr=parseInt(document.getElementById('schpr'+i).value)||0;
+    var or=parseInt(document.getElementById('schor'+i).value)||0;
+    grandTotal+=tot;grandPass+=pas;
+    rows+='<tr style="background:'+(i%2?'#f5f5f5':'#fff')+'">'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;font-weight:600;font-size:13px">'+subj+'</td>'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;text-align:center;font-size:13px;font-weight:700">'+tot+'</td>'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;text-align:center;font-size:13px;color:#c0392b;font-weight:700">'+pas+'</td>'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;text-align:center;font-size:12px">'+th+'</td>'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;text-align:center;font-size:12px">'+pr+'</td>'+
+      '<td style="padding:8px 9px;border:1px solid #ddd;text-align:center;font-size:12px">'+or+'</td>'+
+      '</tr>';
+  }
+  if(!rows){toast('Pehle subjects add karo!');return;}
+
+  var html=
+    '<div style="max-width:680px;margin:0 auto;font-family:Arial,sans-serif;border:2px solid #0d5c3a;border-radius:12px;overflow:hidden">'+
+    // Header
+    '<div style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);padding:12px 14px;display:flex;align-items:center;gap:12px;border-bottom:3px solid #c9a84c">'+
+    lH+
+    '<div style="flex:1;text-align:center;line-height:1.3">'+
+    '<div style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#fff">AL-FAREED PUBLIC SCHOOL</div>'+
+    '<div style="font-family:Noto Nastaliq Urdu,serif;font-size:13px;color:#c9a84c;direction:rtl">الفرید پبلک اسکول ، ٹنڈو جام</div>'+
+    '<div style="font-size:11px;color:rgba(255,255,255,.7)">Tando Jam, Sindh, Pakistan</div>'+
+    '</div></div>'+
+    // Title band
+    '<div style="background:#c9a84c;color:#000;text-align:center;padding:6px;font-size:12px;font-weight:900;letter-spacing:1.5px">EXAMINATION SCHEME</div>'+
+    // Info row
+    '<div style="display:flex;background:#f0f7ff;border-bottom:1px solid #ddd;flex-wrap:wrap">'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:120px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Exam</div><strong style="font-size:13px">'+exam+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:80px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Class</div><strong style="font-size:13px">'+cls+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;border-right:1px solid #ddd;min-width:80px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Session</div><strong style="font-size:13px">'+sess+'</strong></div>'+
+    '<div style="flex:1;padding:9px 12px;min-width:100px"><div style="font-size:9px;color:#777;font-weight:700;text-transform:uppercase">Date</div><strong style="font-size:12px">'+dt+'</strong></div>'+
+    '</div>'+
+    // Table
+    '<table style="width:100%;border-collapse:collapse">'+
+    '<thead><tr style="background:#0d5c3a;color:#c9a84c">'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:left;min-width:100px">Subject</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:65px">Total</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:65px">Pass</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:55px">Theory</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:55px">Pract.</th>'+
+    '<th style="padding:9px 8px;border:1px solid rgba(255,255,255,.2);text-align:center;min-width:50px">Oral</th>'+
+    '</tr></thead>'+
+    '<tbody>'+rows+
+    // Grand total row
+    '<tr style="background:#e8f5ee;border-top:2px solid #0d5c3a">'+
+    '<td style="padding:9px 9px;border:1px solid #ccc;font-weight:900;font-size:13px;color:#0d5c3a">GRAND TOTAL</td>'+
+    '<td style="padding:9px 9px;border:1px solid #ccc;text-align:center;font-weight:900;font-size:14px;color:#0d5c3a">'+grandTotal+'</td>'+
+    '<td style="padding:9px 9px;border:1px solid #ccc;text-align:center;font-weight:900;font-size:14px;color:#c0392b">'+grandPass+'</td>'+
+    '<td colspan="3" style="padding:9px 9px;border:1px solid #ccc;text-align:center;font-size:12px;color:#666">—</td>'+
+    '</tr>'+
+    '</tbody></table>'+
+    // Grading
+    '<div style="padding:10px 12px;border-top:1px solid #ddd">'+
+    '<div style="font-size:11px;font-weight:700;color:#0d5c3a;margin-bottom:7px;letter-spacing:.5px">GRADING SCALE</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px">'+
+    '<div style="background:#e8f5e9;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#2e7d32">A+ = 90-100%</div>'+
+    '<div style="background:#e8f5e9;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#388e3c">A = 80-89%</div>'+
+    '<div style="background:#f1f8e9;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#558b2f">B+ = 70-79%</div>'+
+    '<div style="background:#fffde7;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#f57f17">B = 60-69%</div>'+
+    '<div style="background:#fff3e0;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#e65100">C = 50-59%</div>'+
+    '<div style="background:#ffebee;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;color:#c62828">F = Below 33%</div>'+
+    '</div></div>'+
+    // Instructions
+    (ins?'<div style="padding:8px 12px;background:#fff9ee;border-top:2px solid #c9a84c;font-size:12px"><strong>Instructions: </strong>'+ins.replace(/\n/g,' | ')+'</div>':'')+
+    // Signatures
+    '<div style="padding:12px 14px;background:#f0f7ff;border-top:2px solid #0d5c3a;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px">'+
+    '<div style="text-align:center">'+sH+'<div style="width:110px;height:1px;background:#000;margin:3px auto"></div><div style="font-size:11px;font-weight:700">Sir Ghulam Hussain</div><div style="font-size:10px;color:#888">Principal</div></div>'+
+    '<div style="text-align:center"><div style="width:100px;height:1px;background:#000;margin:22px auto 3px"></div><div style="font-size:11px;font-weight:700">Paper Setter</div></div>'+
+    '<div style="width:55px;height:55px;border:2px dashed #0d5c3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#0d5c3a;font-weight:700;text-align:center;line-height:1.3">SCHOOL<br>STAMP</div>'+
+    '</div></div>';
+
+  var wa='*EXAM SCHEME*\n*Al-Fareed Public School*\n'+exam+'\nClass: '+cls+' | Session: '+sess+'\n================================\n\n';
+  for(var j=1;j<=schRowN;j++){
+    var sje=document.getElementById('schs'+j);if(!sje||!sje.value.trim())continue;
+    wa+=sje.value+' — Total: '+document.getElementById('scht'+j).value+' | Pass: '+document.getElementById('schp'+j).value+'\n';
+  }
+  wa+='\nGrand Total: '+grandTotal+' | Pass: '+grandPass+'\n\nPrincipal: Sir Ghulam Hussain';
+  showOv(html,wa);
+}
+var etInited=false;
+function etInit(){if(!etInited){etInited=true;for(var _ei=0;_ei<5;_ei++)etAdd();}}
 function etAdd(){
+  var tbody=document.getElementById('etBody');if(!tbody)return;
   etRowN++;var tr=document.createElement('tr');
   tr.style.background=etRowN%2?'#f5f5f5':'#fff';
   function inp(ph,w){return '<td><input type="text" placeholder="'+ph+'" style="margin:0;padding:3px 5px;font-size:10px;width:'+(w||'100%')+';border:1px solid #e0e0e0;border-radius:4px;background:#fafafa;font-family:Inter,sans-serif"></td>';}
@@ -1740,10 +2643,9 @@ function etAdd(){
     inp('Mon')+inp('Math')+inp('5')+
     '<td><input type="time" style="margin:0;padding:3px 5px;font-size:10px;width:80px;border:1px solid #e0e0e0;border-radius:4px;background:#fafafa"></td>'+
     inp('100','60px');
-  document.getElementById('etBody').appendChild(tr);
+  tbody.appendChild(tr);
 }
-function etDel(){var b=document.getElementById('etBody');if(b.lastChild)b.removeChild(b.lastChild);}
-for(var _i=0;_i<5;_i++)etAdd();
+function etDel(){var b=document.getElementById('etBody');if(b&&b.lastChild)b.removeChild(b.lastChild);}
 function genEtt(){
   var nm=document.getElementById('etNm').value||'Examination';
   var cls=document.getElementById('etCls').value;
@@ -1753,7 +2655,8 @@ function genEtt(){
   var logo=imgs.etM||gL;var sign=imgs.etS;
   var lH=mkLogo(logo,50,50);
   var sH=sign?'<img src="'+sign+'" style="max-height:32px;max-width:85px;object-fit:contain;display:block;margin:0 auto 2px">':'';
-  var rows=document.getElementById('etBody').querySelectorAll('tr');
+  var etb=document.getElementById('etBody');if(!etb){toast('Schedule tab pe ja ke rows add karo!');return;}
+  var rows=etb.querySelectorAll('tr');
   var trs='';
   rows.forEach(function(row,idx){
     var ins2=row.querySelectorAll('input');var v=[];
