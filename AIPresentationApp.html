@@ -1,202 +1,211 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Presentation Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a1a;--card:#12122a;--card2:#1a1a3a;--a1:#ff6b6b;--a2:#ffd93d;--a3:#6bcb77;--a4:#4d96ff;--a5:#c77dff;--a6:#ff9f43;--a7:#00d4ff;--a8:#ff6eb4;--text:#f0f0ff;--muted:#8888aa;--bdr:#2a2a4a}
+:root{--bg:#0a0a1a;--card:#12122a;--card2:#1a1a3a;--a1:#ff6b6b;--a2:#ffd93d;--a3:#6bcb77;--a4:#4d96ff;--a5:#c77dff;--a6:#ff9f43;--a7:#00d4ff;--text:#f0f0ff;--muted:#8888aa;--bdr:#2a2a4a}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(77,150,255,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(199,125,255,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
-header{position:relative;z-index:10;background:linear-gradient(135deg,#0d0d2b,#12122a);border-bottom:1px solid var(--bdr);padding:13px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;background:linear-gradient(90deg,var(--a4),var(--a5),var(--a1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1;min-width:150px}
-.logo span{display:block;font-size:.62rem;font-family:'Nunito',sans-serif;font-weight:600;color:var(--muted);-webkit-text-fill-color:var(--muted)}
-.tabs{display:flex;gap:5px;flex-wrap:wrap}
-.tab{padding:6px 12px;border-radius:20px;font-size:.76rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:transparent;color:var(--muted);transition:all .2s}
+body{background:var(--bg);color:var(--text);font-family:"Nunito",sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(77,150,255,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 80%,rgba(199,125,255,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+header{position:relative;z-index:10;background:linear-gradient(135deg,#0d0d2b,#12122a);border-bottom:1px solid var(--bdr);padding:11px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:900;background:linear-gradient(90deg,var(--a4),var(--a5),var(--a1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1;min-width:140px}
+.logo span{display:block;font-size:.58rem;font-family:"Nunito",sans-serif;font-weight:600;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{padding:5px 11px;border-radius:20px;font-size:.73rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:transparent;color:var(--muted);transition:all .2s}
 .tab:hover{color:var(--text);border-color:var(--a4)}
 .tab.active{background:var(--a4);color:#fff;border-color:var(--a4)}
-main{position:relative;z-index:2;padding:16px 12px;max-width:1100px;margin:0 auto}
+main{position:relative;z-index:2;padding:14px 11px;max-width:1100px;margin:0 auto}
 .panel{display:none}.panel.active{display:block}
-.creator-grid{display:grid;grid-template-columns:1fr;gap:14px}
-@media(min-width:700px){.creator-grid{grid-template-columns:300px 1fr}}
-.sidebar{background:var(--card);border-radius:16px;border:1px solid var(--bdr);padding:14px}
-.sidebar h3{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-.fgrp{margin-bottom:12px}
-.fgrp label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px}
-input[type=text],input[type=password],select,textarea{width:100%;background:var(--card2);border:1.5px solid var(--bdr);border-radius:10px;color:var(--text);padding:8px 11px;font-family:'Nunito',sans-serif;font-size:.86rem;outline:none;transition:border-color .2s}
+.cgrid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:700px){.cgrid{grid-template-columns:290px 1fr}}
+.sidebar{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:13px}
+.sidebar h3{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:.76rem;color:var(--muted);margin-bottom:3px}
+input[type=text],input[type=password],select,textarea{width:100%;background:var(--card2);border:1.5px solid var(--bdr);border-radius:9px;color:var(--text);padding:7px 10px;font-family:"Nunito",sans-serif;font-size:.84rem;outline:none;transition:border-color .2s}
 input[type=text]:focus,input[type=password]:focus,select:focus,textarea:focus{border-color:var(--a4)}
-textarea{min-height:80px;resize:vertical}
-.subj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px}
-.sbtn{padding:7px 3px;border-radius:9px;font-size:.72rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--muted);text-align:center;transition:all .2s}
+textarea{min-height:78px;resize:vertical}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:11px}
+.sbtn{padding:6px 3px;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--muted);text-align:center;transition:all .2s}
 .sbtn:hover{color:var(--text);transform:scale(1.04)}
 .sbtn.sel{color:#fff;border-color:transparent}
-.lang-row{display:flex;gap:6px;margin-bottom:12px}
-.lbtn{flex:1;padding:8px;border-radius:9px;font-size:.78rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--muted);transition:all .2s;text-align:center}
+.lrow{display:flex;gap:5px;margin-bottom:11px}
+.lbtn{flex:1;padding:7px;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--muted);transition:all .2s;text-align:center}
 .lbtn.active{background:var(--a5);color:#fff;border-color:var(--a5)}
-.gbtn{width:100%;padding:12px;border-radius:12px;font-size:.92rem;font-weight:800;cursor:pointer;border:none;background:linear-gradient(135deg,var(--a4),var(--a5));color:#fff;box-shadow:0 4px 18px rgba(77,150,255,.3);transition:transform .15s,box-shadow .15s}
-.gbtn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(77,150,255,.4)}
+.gbtn{width:100%;padding:11px;border-radius:11px;font-size:.9rem;font-weight:800;cursor:pointer;border:none;background:linear-gradient(135deg,var(--a4),var(--a5));color:#fff;box-shadow:0 4px 16px rgba(77,150,255,.3);transition:transform .15s}
+.gbtn:hover{transform:translateY(-2px)}
 .gbtn:disabled{opacity:.5;cursor:not-allowed}
-.slide-area{display:flex;flex-direction:column;gap:12px}
+.sarea{display:flex;flex-direction:column;gap:11px}
 .sh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.sh h2{font-family:'Playfair Display',serif;font-size:1.15rem;flex:1}
-.snav{display:flex;gap:5px}
-.nbtn{padding:6px 12px;border-radius:9px;font-size:.78rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--text);transition:all .2s}
+.sh h2{font-family:"Playfair Display",serif;font-size:1.1rem;flex:1}
+.snav{display:flex;gap:4px}
+.nbtn{padding:5px 11px;border-radius:8px;font-size:.76rem;font-weight:700;cursor:pointer;border:1.5px solid var(--bdr);background:var(--card2);color:var(--text);transition:all .2s}
 .nbtn:hover{background:var(--a4);border-color:var(--a4)}
-.stage{border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5);min-height:320px;position:relative;animation:sIn .35s ease}
-@keyframes sIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.sinner{padding:28px 24px;min-height:320px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
-.snum{position:absolute;top:12px;right:16px;font-size:.72rem;color:rgba(255,255,255,.35);font-weight:700}
-.sbadge{display:inline-block;padding:3px 11px;border-radius:20px;font-size:.7rem;font-weight:800;letter-spacing:1px;margin-bottom:10px;text-transform:uppercase}
-.stitle{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:900;line-height:1.2;margin-bottom:7px}
-.stitle-ur{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;font-size:clamp(1.1rem,3vw,1.6rem);line-height:2;margin-bottom:10px;color:rgba(255,255,255,.82)}
-.sbody{font-size:.9rem;line-height:1.85;color:rgba(255,255,255,.88);flex:1}
-.sbody-ur{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;font-size:.95rem;line-height:2.2;color:rgba(255,255,255,.83)}
-.term{display:inline-block;padding:1px 6px;border-radius:5px;font-weight:800;cursor:pointer;transition:transform .15s;text-decoration:underline dotted}
-.term:hover{transform:scale(1.07)}
-.sdeco{position:absolute;right:20px;bottom:20px;font-size:3.5rem;opacity:.1;user-select:none;pointer-events:none}
-.dots{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;padding:6px 0}
-.dot{width:9px;height:9px;border-radius:50%;cursor:pointer;opacity:.3;transition:all .2s;flex-shrink:0}
-.dot.active{opacity:1;transform:scale(1.45)}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:12px;opacity:0;pointer-events:none;transition:opacity .25s}
+.stage{border-radius:16px;overflow:hidden;box-shadow:0 8px 36px rgba(0,0,0,.5);min-height:300px;animation:sIn .35s ease}
+@keyframes sIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.sinner{padding:24px 20px;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.snum{position:absolute;top:10px;right:14px;font-size:.7rem;color:rgba(255,255,255,.3);font-weight:700}
+.sbadge{display:inline-block;padding:3px 10px;border-radius:18px;font-size:.68rem;font-weight:800;letter-spacing:1px;margin-bottom:9px;text-transform:uppercase}
+.stitle{font-family:"Playfair Display",serif;font-size:clamp(1.2rem,4vw,1.9rem);font-weight:900;line-height:1.2;margin-bottom:6px}
+.stitle-ur{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;text-align:right;font-size:clamp(1rem,3vw,1.5rem);line-height:2;margin-bottom:9px;color:rgba(255,255,255,.82)}
+.sbody{font-size:.88rem;line-height:1.85;color:rgba(255,255,255,.88);flex:1}
+.sbody-ur{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;text-align:right;font-size:.92rem;line-height:2.2;color:rgba(255,255,255,.83)}
+.term{display:inline-block;padding:1px 5px;border-radius:4px;font-weight:800;cursor:pointer;transition:transform .15s;text-decoration:underline dotted}
+.term:hover{transform:scale(1.08)}
+.sdeco{position:absolute;right:18px;bottom:18px;font-size:3rem;opacity:.1;user-select:none;pointer-events:none}
+.dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;padding:5px 0}
+.dot{width:8px;height:8px;border-radius:50%;cursor:pointer;opacity:.3;transition:all .2s;flex-shrink:0}
+.dot.active{opacity:1;transform:scale(1.5)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:10px;opacity:0;pointer-events:none;transition:opacity .25s}
 .ov.open{opacity:1;pointer-events:all}
-.pop{background:var(--card2);border-radius:22px 22px 18px 18px;border:1.5px solid var(--bdr);padding:22px 18px 18px;max-width:560px;width:100%;max-height:82vh;overflow-y:auto;transform:translateY(28px);transition:transform .25s;box-shadow:0 -6px 40px rgba(0,0,0,.5)}
+.pop{background:var(--card2);border-radius:20px 20px 16px 16px;border:1.5px solid var(--bdr);padding:20px 16px 16px;max-width:560px;width:100%;max-height:82vh;overflow-y:auto;transform:translateY(26px);transition:transform .25s;box-shadow:0 -6px 36px rgba(0,0,0,.5)}
 .ov.open .pop{transform:translateY(0)}
-.ph{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
-.ptitle{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;flex:1}
-.pcls{width:30px;height:30px;border-radius:50%;background:var(--bdr);border:none;color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.ph{display:flex;align-items:flex-start;gap:9px;margin-bottom:11px}
+.ptitle{font-family:"Playfair Display",serif;font-size:1.25rem;font-weight:900;flex:1}
+.pcls{width:28px;height:28px;border-radius:50%;background:var(--bdr);border:none;color:var(--text);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
 .pcls:hover{background:var(--a1)}
-.pur{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;font-size:1.1rem;line-height:2.2;color:var(--a2);margin-bottom:10px;border-bottom:1px solid var(--bdr);padding-bottom:9px}
-.pbody{font-size:.88rem;line-height:1.85;color:rgba(255,255,255,.85);margin-bottom:13px}
-.pacts{display:flex;gap:7px;flex-wrap:wrap}
-.pab{flex:1;min-width:110px;padding:9px 12px;border-radius:11px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;color:#fff;transition:transform .15s;display:flex;align-items:center;gap:5px;justify-content:center}
+.pur{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;text-align:right;font-size:1.05rem;line-height:2.2;color:var(--a2);margin-bottom:9px;border-bottom:1px solid var(--bdr);padding-bottom:8px}
+.pbody{font-size:.86rem;line-height:1.85;color:rgba(255,255,255,.85);margin-bottom:12px}
+.pacts{display:flex;gap:6px;flex-wrap:wrap}
+.pab{flex:1;min-width:108px;padding:8px 11px;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;color:#fff;transition:transform .15s;display:flex;align-items:center;gap:4px;justify-content:center}
 .pab:hover{transform:translateY(-2px)}
-.pab.bl{background:linear-gradient(135deg,#4d96ff,#1e6fff);box-shadow:0 3px 14px rgba(77,150,255,.4)}
-.pab.pu{background:linear-gradient(135deg,#c77dff,#9a00ff);box-shadow:0 3px 14px rgba(199,125,255,.4)}
-.pab.gr{background:linear-gradient(135deg,#6bcb77,#2ea043);box-shadow:0 3px 14px rgba(107,203,119,.4)}
-.pab.or{background:linear-gradient(135deg,#ff9f43,#e67e00);box-shadow:0 3px 14px rgba(255,159,67,.4)}
-.pair{margin-top:12px;background:var(--card);border-radius:13px;border:1px solid var(--bdr);padding:13px;font-size:.87rem;line-height:1.85;color:rgba(255,255,255,.87);display:none}
+.pab.bl{background:linear-gradient(135deg,#4d96ff,#1e6fff);box-shadow:0 3px 12px rgba(77,150,255,.4)}
+.pab.pu{background:linear-gradient(135deg,#c77dff,#9a00ff);box-shadow:0 3px 12px rgba(199,125,255,.4)}
+.pab.gr{background:linear-gradient(135deg,#6bcb77,#2ea043);box-shadow:0 3px 12px rgba(107,203,119,.4)}
+.pab.or{background:linear-gradient(135deg,#ff9f43,#e67e00);box-shadow:0 3px 12px rgba(255,159,67,.4)}
+.pair{margin-top:11px;background:var(--card);border-radius:12px;border:1px solid var(--bdr);padding:12px;font-size:.85rem;line-height:1.85;color:rgba(255,255,255,.87);display:none}
 .pair.show{display:block;animation:sIn .3s ease}
-.pair .ur{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;font-size:.95rem;line-height:2.2}
-.varea{margin-top:10px;background:#000;border-radius:13px;overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:.83rem;color:var(--muted)}
+.varea{margin-top:9px;background:#000;border-radius:12px;overflow:hidden;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted)}
 .ldots{display:flex;gap:5px;align-items:center;justify-content:center;padding:12px}
 .ldots span{width:8px;height:8px;border-radius:50%;background:var(--a4);animation:bounce .8s infinite}
 .ldots span:nth-child(2){animation-delay:.15s;background:var(--a5)}
 .ldots span:nth-child(3){animation-delay:.3s;background:var(--a1)}
 @keyframes bounce{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1.2);opacity:1}}
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px}
-.tcard{background:var(--card);border-radius:14px;border:1.5px solid var(--bdr);padding:15px 11px;text-align:center;cursor:pointer;transition:all .2s}
-.tcard:hover{transform:translateY(-3px);border-color:var(--a4);box-shadow:0 6px 20px rgba(77,150,255,.22)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:9px;margin-bottom:16px}
+.tcard{background:var(--card);border-radius:13px;border:1.5px solid var(--bdr);padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.tcard:hover{transform:translateY(-3px);border-color:var(--a4);box-shadow:0 5px 18px rgba(77,150,255,.2)}
 .tcard.active{border-color:var(--a4);background:rgba(77,150,255,.1)}
-.ticon{font-size:1.9rem;margin-bottom:6px}
-.tname{font-size:.78rem;font-weight:700;color:var(--text)}
-.tdesc{font-size:.68rem;color:var(--muted);margin-top:2px}
-.tws{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:17px;display:none}
+.ticon{font-size:1.8rem;margin-bottom:5px}
+.tname{font-size:.76rem;font-weight:700;color:var(--text)}
+.tdesc{font-size:.67rem;color:var(--muted);margin-top:1px}
+.tws{background:var(--card);border-radius:13px;border:1px solid var(--bdr);padding:16px;display:none}
 .tws.active{display:block;animation:sIn .3s ease}
-.tws h3{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:12px}
-.twin{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
-.twin input{flex:1;min-width:150px}
-.trun{padding:9px 16px;border-radius:9px;background:var(--a4);border:none;color:#fff;font-weight:700;cursor:pointer;font-size:.83rem;transition:transform .15s;white-space:nowrap}
+.tws h3{font-family:"Playfair Display",serif;font-size:1rem;margin-bottom:11px}
+.twin{display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap}
+.twin input{flex:1;min-width:140px}
+.trun{padding:8px 14px;border-radius:8px;background:var(--a4);border:none;color:#fff;font-weight:700;cursor:pointer;font-size:.81rem;transition:transform .15s;white-space:nowrap}
 .trun:hover{transform:scale(1.04)}
-.tres{background:var(--card2);border-radius:11px;border:1px solid var(--bdr);padding:13px;font-size:.87rem;line-height:1.85;min-height:80px;color:rgba(255,255,255,.85)}
+.tres{background:var(--card2);border-radius:10px;border:1px solid var(--bdr);padding:12px;font-size:.85rem;line-height:1.85;min-height:78px;color:rgba(255,255,255,.85)}
 .tres .hl{display:inline;padding:1px 5px;border-radius:4px;font-weight:700;cursor:pointer}
 .tres .hl:hover{opacity:.8}
-.tres .sh{color:var(--a2);font-weight:700;display:block;margin-top:8px}
-.qq{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:17px;margin-bottom:10px}
-.qq h4{font-size:.92rem;margin-bottom:12px;line-height:1.6}
-.qopts{display:grid;gap:7px}
-.qo{padding:10px 13px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--card2);color:var(--text);cursor:pointer;font-size:.83rem;text-align:left;transition:all .2s}
+.qq{background:var(--card);border-radius:13px;border:1px solid var(--bdr);padding:16px;margin-bottom:9px}
+.qq h4{font-size:.9rem;margin-bottom:11px;line-height:1.6}
+.qopts{display:grid;gap:6px}
+.qo{padding:9px 12px;border-radius:8px;border:1.5px solid var(--bdr);background:var(--card2);color:var(--text);cursor:pointer;font-size:.81rem;text-align:left;transition:all .2s}
 .qo:hover{border-color:var(--a4);background:rgba(77,150,255,.1)}
 .qo.correct{border-color:var(--a3);background:rgba(107,203,119,.15);color:var(--a3)}
 .qo.wrong{border-color:var(--a1);background:rgba(255,107,107,.1);color:var(--a1)}
 .fcc{perspective:1000px}
-.fc{position:relative;height:200px;cursor:pointer;transform-style:preserve-3d;transition:transform .5s;border-radius:14px}
+.fc{position:relative;height:195px;cursor:pointer;transform-style:preserve-3d;transition:transform .5s;border-radius:13px}
 .fc.flipped{transform:rotateY(180deg)}
-.fcf{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;backface-visibility:hidden;border:1.5px solid var(--bdr)}
+.fcf{position:absolute;inset:0;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;backface-visibility:hidden;border:1.5px solid var(--bdr)}
 .fcfront{background:var(--card2)}.fcback{background:linear-gradient(135deg,var(--card),var(--card2));transform:rotateY(180deg)}
-.fcw{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;text-align:center}
-.fch{font-size:.78rem;color:var(--muted);margin-top:7px}
-.tag{display:inline-block;padding:3px 8px;border-radius:18px;font-size:.7rem;font-weight:700;margin:2px}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--card)}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.fcw{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:900;text-align:center}
+.fch{font-size:.76rem;color:var(--muted);margin-top:6px}
+.tag{display:inline-block;padding:2px 7px;border-radius:16px;font-size:.68rem;font-weight:700;margin:2px}
+.sim-preset{padding:8px 5px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--card2);color:var(--text);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.sim-preset:hover{border-color:var(--a5);background:rgba(199,125,255,.12);transform:translateY(-2px)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--card)}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">🌟 AI Presentation Studio
-    <span>Urdu • English • Sindhi • All Subjects • AI Powered</span>
+  <div class="logo">AI Presentation Studio
+    <span>Urdu English Sindhi All Subjects AI Powered</span>
   </div>
   <nav class="tabs">
-    <button class="tab active" onclick="showPanel('slides')">📊 Slides</button>
-    <button class="tab" onclick="showPanel('tools')">🤖 AI Tools</button>
-    <button class="tab" onclick="showPanel('quiz')">🧠 Quiz</button>
-    <button class="tab" onclick="showPanel('fc')">🃏 Flashcards</button>
+    <button class="tab active" onclick="showPanel('slides')">Slides</button>
+    <button class="tab" onclick="showPanel('tools')">AI Tools</button>
+    <button class="tab" onclick="showPanel('sim')">Simulations</button>
+    <button class="tab" onclick="showPanel('quiz')">Quiz</button>
+    <button class="tab" onclick="showPanel('fc')">Flashcards</button>
   </nav>
 </header>
 <main>
 
 <!-- SLIDES -->
 <div class="panel active" id="panel-slides">
-  <div class="creator-grid">
+  <div class="cgrid">
     <div class="sidebar">
-      <h3>📚 Subject</h3>
-      <div class="subj-grid" id="sGrid">
-        <button class="sbtn sel" style="background:linear-gradient(135deg,#4d96ff,#1e6fff)" onclick="selSubj(this,'Physics','⚛️','#4d96ff')">⚛️ Physics</button>
-        <button class="sbtn" onclick="selSubj(this,'Chemistry','🧪','#ff6b6b')">🧪 Chemistry</button>
-        <button class="sbtn" onclick="selSubj(this,'Biology','🧬','#6bcb77')">🧬 Biology</button>
-        <button class="sbtn" onclick="selSubj(this,'Mathematics','📐','#ffd93d')">📐 Math</button>
-        <button class="sbtn" onclick="selSubj(this,'History','🏛️','#c77dff')">🏛️ History</button>
-        <button class="sbtn" onclick="selSubj(this,'Geography','🌍','#ff9f43')">🌍 Geo</button>
-        <button class="sbtn" onclick="selSubj(this,'Computer Science','💻','#4d96ff')">💻 CS</button>
-        <button class="sbtn" onclick="selSubj(this,'English','📖','#6bcb77')">📖 English</button>
-        <button class="sbtn" onclick="selSubj(this,'Islamic Studies','🕌','#ffd93d')">🕌 Islam</button>
-        <button class="sbtn" onclick="selSubj(this,'Urdu','📝','#ff6b6b')">📝 Urdu</button>
-        <button class="sbtn" onclick="selSubj(this,'Economics','💰','#c77dff')">💰 Econ</button>
-        <button class="sbtn" onclick="selSubj(this,'Psychology','🧠','#ff9f43')">🧠 Psych</button>
+      <h3>Subject</h3>
+      <div class="sgrid" id="sGrid">
+        <button class="sbtn sel" style="background:linear-gradient(135deg,#4d96ff,#1e6fff)" onclick="selSubj(this,'Physics','Physics','#4d96ff')">Physics</button>
+        <button class="sbtn" onclick="selSubj(this,'Chemistry','Chemistry','#ff6b6b')">Chemistry</button>
+        <button class="sbtn" onclick="selSubj(this,'Biology','Biology','#6bcb77')">Biology</button>
+        <button class="sbtn" onclick="selSubj(this,'Mathematics','Math','#ffd93d')">Math</button>
+        <button class="sbtn" onclick="selSubj(this,'History','History','#c77dff')">History</button>
+        <button class="sbtn" onclick="selSubj(this,'Geography','Geo','#ff9f43')">Geography</button>
+        <button class="sbtn" onclick="selSubj(this,'Computer Science','CS','#4d96ff')">CS</button>
+        <button class="sbtn" onclick="selSubj(this,'English','English','#6bcb77')">English</button>
+        <button class="sbtn" onclick="selSubj(this,'Islamic Studies','Islam','#ffd93d')">Islam</button>
+        <button class="sbtn" onclick="selSubj(this,'Urdu','Urdu','#ff6b6b')">Urdu</button>
+        <button class="sbtn" onclick="selSubj(this,'Economics','Econ','#c77dff')">Economics</button>
+        <button class="sbtn" onclick="selSubj(this,'Psychology','Psych','#ff9f43')">Psych</button>
       </div>
-      <h3>🌐 Language</h3>
-      <div class="lang-row">
-        <button class="lbtn active" id="lEn" onclick="setLang('en')">🇬🇧 EN</button>
-        <button class="lbtn" id="lBi" onclick="setLang('bi')">🔀 Both</button>
-        <button class="lbtn" id="lUr" onclick="setLang('ur')">🇵🇰 اردو</button>
-        <button class="lbtn" id="lSi" onclick="setLang('si')">سنڌي</button>
+      <h3>Language</h3>
+      <div class="lrow">
+        <button class="lbtn active" id="lEn" onclick="setLang('en')">English</button>
+        <button class="lbtn" id="lBi" onclick="setLang('bi')">Both</button>
+        <button class="lbtn" id="lUr" onclick="setLang('ur')">Urdu</button>
+        <button class="lbtn" id="lSi" onclick="setLang('si')">Sindhi</button>
       </div>
-      <div class="fgrp">
-        <label>📝 Topic — or Image se Topic</label>
-        <div style="display:flex;gap:6px;align-items:center">
-          <input type="text" id="topicIn" value="Newton's Laws of Motion" style="flex:1">
-          <label title="Gallery se image chunen" style="width:36px;height:36px;border-radius:9px;background:var(--a3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0">
-            🖼️<input type="file" accept="image/*" id="galleryPick" style="display:none" onchange="readImageTopic(this,'gallery')">
+      <div class="fg">
+        <label>Topic + Image</label>
+        <div style="display:flex;gap:5px;align-items:center">
+          <input type="text" id="topicIn" value="Newton Laws of Motion" style="flex:1">
+          <label title="Gallery" style="width:34px;height:34px;border-radius:8px;background:var(--a3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;flex-shrink:0">
+            <span>G</span><input type="file" accept="image/*" id="galPick" style="display:none" onchange="readImg(this)">
           </label>
-          <label title="Camera se photo len" style="width:36px;height:36px;border-radius:9px;background:var(--a6);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0">
-            📷<input type="file" accept="image/*" capture="environment" id="cameraPick" style="display:none" onchange="readImageTopic(this,'camera')">
+          <label title="Camera" style="width:34px;height:34px;border-radius:8px;background:var(--a6);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;flex-shrink:0">
+            <span>C</span><input type="file" accept="image/*" capture="environment" id="camPick" style="display:none" onchange="readImg(this)">
           </label>
         </div>
-        <div id="imgPreview" style="display:none;margin-top:7px;border-radius:10px;overflow:hidden;max-height:120px;text-align:center;background:var(--card2);padding:4px">
-          <img id="imgThumb" style="max-height:112px;border-radius:8px;object-fit:contain">
-          <div id="imgStatus" style="font-size:.72rem;color:var(--a2);margin-top:4px">Analyzing image...</div>
+        <div id="imgPrev" style="display:none;margin-top:6px;border-radius:9px;overflow:hidden;max-height:110px;text-align:center;background:var(--card2);padding:4px">
+          <img id="imgThumb" style="max-height:100px;border-radius:7px;object-fit:contain">
+          <div id="imgStat" style="font-size:.7rem;color:var(--a2);margin-top:3px">Analyzing...</div>
         </div>
       </div>
-      <div class="fgrp"><label>📊 Slides</label><select id="slideN"><option value="4">4</option><option value="6" selected>6</option><option value="8">8</option><option value="10">10</option></select></div>
-      <div class="fgrp"><label>🎨 Style</label><select id="slideS"><option value="educational">📚 Educational</option><option value="colorful">🌈 Colorful</option><option value="professional">💼 Professional</option><option value="story">📖 Story</option></select></div>
-      <button class="gbtn" id="genBtn" onclick="generateSlides()">✨ Generate AI Slides</button>
-      <div class="fgrp" style="margin-top:12px">
-        <label>🔑 Groq API Key <a href="https://console.groq.com/keys" target="_blank" style="color:var(--a4);font-size:.7rem">(Free)</a></label>
+      <div class="fg">
+        <label>Number of Slides</label>
+        <select id="slideN"><option value="4">4</option><option value="6" selected>6</option><option value="8">8</option><option value="10">10</option></select>
+      </div>
+      <div class="fg">
+        <label>Style</label>
+        <select id="slideS"><option value="educational">Educational</option><option value="colorful">Colorful</option><option value="professional">Professional</option><option value="story">Story</option></select>
+      </div>
+      <button class="gbtn" id="genBtn" onclick="generateSlides()">Generate AI Slides</button>
+      <div class="fg" style="margin-top:11px">
+        <label>Groq API Key <a href="https://console.groq.com/keys" target="_blank" style="color:var(--a4);font-size:.68rem">(Free)</a></label>
         <input type="password" id="groqKey" placeholder="gsk_...">
       </div>
     </div>
-    <div class="slide-area">
+    <div class="sarea">
       <div class="sh">
-        <h2 id="deckTitle">Newton's Laws of Motion</h2>
+        <h2 id="deckTitle">Newton Laws of Motion</h2>
         <div class="snav">
-          <button class="nbtn" onclick="prevSlide()">◀</button>
-          <span id="sCtr" style="padding:6px 10px;font-size:.8rem;color:var(--muted)">1/6</span>
-          <button class="nbtn" onclick="nextSlide()">▶</button>
+          <button class="nbtn" onclick="prevSlide()">Prev</button>
+          <span id="sCtr" style="padding:5px 9px;font-size:.78rem;color:var(--muted)">1/6</span>
+          <button class="nbtn" onclick="nextSlide()">Next</button>
         </div>
       </div>
       <div class="stage" id="stage"></div>
       <div class="dots" id="dots"></div>
-      <div style="text-align:center;color:var(--muted);font-size:.75rem;margin-top:2px">Colored <span style="color:var(--a2);font-weight:700">terms</span> pe click karein mazeed jannay ke liye</div>
+      <div style="text-align:center;color:var(--muted);font-size:.73rem;margin-top:2px">Colored terms pe click karein mazeed jannay ke liye</div>
     </div>
   </div>
 </div>
@@ -206,9 +215,9 @@ textarea{min-height:80px;resize:vertical}
   <div class="tgrid">
     <div class="tcard active" onclick="openTool('explain')"><div class="ticon">🔍</div><div class="tname">Explain Anything</div><div class="tdesc">Human style deep</div></div>
     <div class="tcard" onclick="openTool('wordmeaning')"><div class="ticon">📖</div><div class="tname">Word Meaning</div><div class="tdesc">Urdu Eng Sindhi</div></div>
-    <div class="tcard" onclick="openTool('wordhistory')"><div class="ticon">🕰️</div><div class="tname">Word History</div><div class="tdesc">Origin + evolution</div></div>
+    <div class="tcard" onclick="openTool('wordhistory')"><div class="ticon">🕰️</div><div class="tname">Word History</div><div class="tdesc">Origin and evolution</div></div>
     <div class="tcard" onclick="openTool('sciterm')"><div class="ticon">🔬</div><div class="tname">Sci Term Break</div><div class="tdesc">Root by root</div></div>
-    <div class="tcard" onclick="openTool('scientist')"><div class="ticon">👨‍🔬</div><div class="tname">Scientist Life</div><div class="tdesc">Bio + achievements</div></div>
+    <div class="tcard" onclick="openTool('scientist')"><div class="ticon">👨‍🔬</div><div class="tname">Scientist Life</div><div class="tdesc">Bio and achievements</div></div>
     <div class="tcard" onclick="openTool('translate')"><div class="ticon">🔄</div><div class="tname">Translator</div><div class="tdesc">Multi-language</div></div>
     <div class="tcard" onclick="openTool('summarize')"><div class="ticon">📋</div><div class="tname">Summarizer</div><div class="tdesc">Paste and get</div></div>
     <div class="tcard" onclick="openTool('essay')"><div class="ticon">✍️</div><div class="tname">Essay Writer</div><div class="tdesc">Auto essay</div></div>
@@ -217,140 +226,98 @@ textarea{min-height:80px;resize:vertical}
     <div class="tcard" onclick="openTool('compare')"><div class="ticon">⚖️</div><div class="tname">Compare</div><div class="tdesc">Side by side</div></div>
     <div class="tcard" onclick="openTool('story')"><div class="ticon">📚</div><div class="tname">Story Mode</div><div class="tdesc">Learn via stories</div></div>
   </div>
-  <div class="tws active" id="tw-explain">
-    <h3>🔍 Explain Anything</h3>
-    <div class="twin"><input type="text" id="q-explain" placeholder="Koi bhi concept likhen..."><button class="trun" onclick="runTool('explain')">Samjhao</button></div>
-    <div class="tres" id="r-explain" style="color:var(--muted)">Kuch bhi likho — insani andaz mein samjhaunga...</div>
-  </div>
-  <div class="tws" id="tw-wordmeaning">
-    <h3>📖 Word Meaning</h3>
-    <div class="twin">
-      <input type="text" id="q-wordmeaning" placeholder="e.g. محبت / Science / خوشي">
-      <select id="wmlang" style="width:auto;flex-shrink:0">
-        <option value="Urdu to Urdu">اردو ← اردو</option>
-        <option value="English to Urdu">English ← اردو</option>
-        <option value="Urdu to English">اردو ← English</option>
-        <option value="Sindhi to Sindhi">سنڌي ← سنڌي</option>
-        <option value="Sindhi to Urdu">سنڌي ← اردو</option>
-        <option value="Urdu to Sindhi">اردو ← سنڌي</option>
-        <option value="English to Sindhi">English ← سنڌي</option>
-        <option value="Sindhi to English">سنڌي ← English</option>
-      </select>
-      <button class="trun" onclick="runTool('wordmeaning')">معنی</button>
+  <div class="tws active" id="tw-explain"><h3>🔍 Explain Anything</h3><div class="twin"><input type="text" id="q-explain" placeholder="Koi bhi concept likhen..."><button class="trun" onclick="runTool('explain')">Explain</button></div><div class="tres" id="r-explain" style="color:var(--muted)">Kuch bhi likho...</div></div>
+  <div class="tws" id="tw-wordmeaning"><h3>📖 Word Meaning</h3><div class="twin"><input type="text" id="q-wordmeaning" placeholder="e.g. محبت / Science"><select id="wmlang" style="width:auto;flex-shrink:0"><option value="Urdu to Urdu">اردو to اردو</option><option value="English to Urdu">English to اردو</option><option value="Urdu to English">اردو to English</option><option value="Sindhi to Sindhi">سنڌي to سنڌي</option><option value="Sindhi to Urdu">سنڌي to اردو</option><option value="Urdu to Sindhi">اردو to سنڌي</option><option value="English to Sindhi">English to سنڌي</option><option value="Sindhi to English">سنڌي to English</option></select><button class="trun" onclick="runTool('wordmeaning')">Meaning</button></div><div class="tres" id="r-wordmeaning" style="color:var(--muted)">Lafz likho...</div></div>
+  <div class="tws" id="tw-wordhistory"><h3>🕰️ Word History and Origin</h3><div class="twin"><input type="text" id="q-wordhistory" placeholder="e.g. Democracy / محبت"><button class="trun" onclick="runTool('wordhistory')">History</button></div><div class="tres" id="r-wordhistory" style="color:var(--muted)">Word ki kahani...</div></div>
+  <div class="tws" id="tw-sciterm"><h3>🔬 Scientific Term Breakdown</h3><div class="twin"><input type="text" id="q-sciterm" placeholder="e.g. Photosynthesis / Mitochondria"><button class="trun" onclick="runTool('sciterm')">Breakdown</button></div><div class="tres" id="r-sciterm" style="color:var(--muted)">Term ka har hissa...</div></div>
+  <div class="tws" id="tw-scientist"><h3>👨‍🔬 Scientist Life and Achievements</h3><div class="twin"><input type="text" id="q-scientist" placeholder="e.g. Einstein / Ibn Sina / Newton"><button class="trun" onclick="runTool('scientist')">Learn</button></div><div class="tres" id="r-scientist" style="color:var(--muted)">Scientist ka naam likhen...</div></div>
+  <div class="tws" id="tw-translate"><h3>🔄 Translator</h3><div class="twin"><input type="text" id="q-translate" placeholder="Text likhen..."><select id="tlang" style="width:auto;flex-shrink:0"><option value="English to Urdu">English to اردو</option><option value="Urdu to English">اردو to English</option><option value="English to Sindhi">English to سنڌي</option><option value="Sindhi to Urdu">سنڌي to اردو</option><option value="Urdu to Sindhi">اردو to سنڌي</option><option value="Sindhi to English">سنڌي to English</option></select><button class="trun" onclick="runTool('translate')">Translate</button></div><div class="tres" id="r-translate" style="color:var(--muted)">Translation yahan...</div></div>
+  <div class="tws" id="tw-summarize"><h3>📋 Summarizer</h3><div class="fg"><textarea id="q-summarize" placeholder="Text paste karein..." style="min-height:90px"></textarea></div><button class="trun" style="margin-bottom:9px" onclick="runTool('summarize')">Summarize</button><div class="tres" id="r-summarize" style="color:var(--muted)">Summary yahan...</div></div>
+  <div class="tws" id="tw-essay"><h3>✍️ Essay Writer</h3><div class="twin"><input type="text" id="q-essay" placeholder="Topic..."><select id="elang" style="width:auto;flex-shrink:0"><option>English</option><option>Urdu</option><option>Bilingual</option></select><button class="trun" onclick="runTool('essay')">Write</button></div><div class="tres" id="r-essay" style="color:var(--muted)">Essay yahan...</div></div>
+  <div class="tws" id="tw-formula"><h3>🧮 Formula Bank</h3><div class="twin"><input type="text" id="q-formula" placeholder="e.g. Force, Quadratic"><button class="trun" onclick="runTool('formula')">Formulas</button></div><div class="tres" id="r-formula" style="color:var(--muted)">Formulas yahan...</div></div>
+  <div class="tws" id="tw-timeline"><h3>📅 Historical Timeline</h3><div class="twin"><input type="text" id="q-timeline" placeholder="e.g. Pakistan History"><button class="trun" onclick="runTool('timeline')">Timeline</button></div><div class="tres" id="r-timeline" style="color:var(--muted)">Timeline yahan...</div></div>
+  <div class="tws" id="tw-compare"><h3>⚖️ Compare Topics</h3><div class="twin"><input type="text" id="q-compare" placeholder="e.g. Plant vs Animal cell"><button class="trun" onclick="runTool('compare')">Compare</button></div><div class="tres" id="r-compare" style="color:var(--muted)">Comparison yahan...</div></div>
+  <div class="tws" id="tw-story"><h3>📚 Story Mode Learning</h3><div class="twin"><input type="text" id="q-story" placeholder="e.g. Gravity, Osmosis"><button class="trun" onclick="runTool('story')">Story</button></div><div class="tres" id="r-story" style="color:var(--muted)">Kahani yahan...</div></div>
+</div>
+
+<!-- SIMULATIONS -->
+<div class="panel" id="panel-sim">
+  <div style="margin-bottom:12px">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
+      <input type="text" id="simTopic" placeholder="Custom topic e.g. Osmosis, Friction..." style="flex:1;min-width:160px">
+      <select id="simSubj" style="width:auto"><option value="Physics">Physics</option><option value="Biology">Biology</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="General Science">General Science</option></select>
+      <button class="gbtn" style="width:auto;padding:9px 18px;font-size:.82rem" onclick="generateSim()">Build Simulation</button>
     </div>
-    <div class="tres" id="r-wordmeaning" style="color:var(--muted)">Lafz likho aur zaban chunno...</div>
-  </div>
-  <div class="tws" id="tw-wordhistory">
-    <h3>🕰️ Word History and Origin</h3>
-    <div class="twin"><input type="text" id="q-wordhistory" placeholder="e.g. Democracy / Science / محبت"><button class="trun" onclick="runTool('wordhistory')">Taareekh</button></div>
-    <div class="tres" id="r-wordhistory" style="color:var(--muted)">Lafz ki puri kahani janiye...</div>
-  </div>
-  <div class="tws" id="tw-sciterm">
-    <h3>🔬 Scientific Term Breakdown</h3>
-    <div class="twin"><input type="text" id="q-sciterm" placeholder="e.g. Photosynthesis / Mitochondria"><button class="trun" onclick="runTool('sciterm')">Todnaa</button></div>
-    <div class="tres" id="r-sciterm" style="color:var(--muted)">Scientific term ka har hissa tod ke samjhaunga...</div>
-  </div>
-  <div class="tws" id="tw-scientist">
-    <h3>👨‍🔬 Scientist Life and Achievements</h3>
-    <div class="twin"><input type="text" id="q-scientist" placeholder="e.g. Einstein / Ibn Sina / Newton / Marie Curie"><button class="trun" onclick="runTool('scientist')">Janiye</button></div>
-    <div class="tres" id="r-scientist" style="color:var(--muted)">Kisi bhi scientist ka naam likhen...</div>
-  </div>
-  <div class="tws" id="tw-translate">
-    <h3>🔄 Translator</h3>
-    <div class="twin">
-      <input type="text" id="q-translate" placeholder="Text likhen...">
-      <select id="tlang" style="width:auto;flex-shrink:0">
-        <option value="English to Urdu">English to اردو</option>
-        <option value="Urdu to English">اردو to English</option>
-        <option value="English to Sindhi">English to سنڌي</option>
-        <option value="Sindhi to Urdu">سنڌي to اردو</option>
-        <option value="Urdu to Sindhi">اردو to سنڌي</option>
-        <option value="Sindhi to English">سنڌي to English</option>
-      </select>
-      <button class="trun" onclick="runTool('translate')">Translate</button>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:7px;margin-bottom:12px">
+      <button class="sim-preset" onclick="loadSim('pendulum')">🔵 Pendulum</button>
+      <button class="sim-preset" onclick="loadSim('projectile')">🚀 Projectile</button>
+      <button class="sim-preset" onclick="loadSim('wave')">🌊 Wave Motion</button>
+      <button class="sim-preset" onclick="loadSim('dna')">🧬 DNA Helix</button>
+      <button class="sim-preset" onclick="loadSim('cell')">🔵 Cell Division</button>
+      <button class="sim-preset" onclick="loadSim('acid')">🧪 Acid Base</button>
+      <button class="sim-preset" onclick="loadSim('periodic')">⚗️ Periodic Table</button>
+      <button class="sim-preset" onclick="loadSim('graph')">📐 Graph Plotter</button>
+      <button class="sim-preset" onclick="loadSim('solar')">🌞 Solar System</button>
+      <button class="sim-preset" onclick="loadSim('circuit')">💡 Circuit Ohm</button>
+      <button class="sim-preset" onclick="loadSim('heart')">❤️ Heartbeat</button>
+      <button class="sim-preset" onclick="loadSim('newton')">🍎 Newton Laws</button>
     </div>
-    <div class="tres" id="r-translate" style="color:var(--muted)">Translation yahan ayega...</div>
   </div>
-  <div class="tws" id="tw-summarize">
-    <h3>📋 Summarizer</h3>
-    <div class="fgrp"><textarea id="q-summarize" placeholder="Text paste karein..." style="min-height:100px"></textarea></div>
-    <button class="trun" style="margin-bottom:10px" onclick="runTool('summarize')">Summarize</button>
-    <div class="tres" id="r-summarize" style="color:var(--muted)">Summary yahan...</div>
-  </div>
-  <div class="tws" id="tw-essay">
-    <h3>✍️ Essay Writer</h3>
-    <div class="twin">
-      <input type="text" id="q-essay" placeholder="Topic...">
-      <select id="elang" style="width:auto;flex-shrink:0"><option>English</option><option>Urdu</option><option>Bilingual</option></select>
-      <button class="trun" onclick="runTool('essay')">Likho</button>
+  <div id="simLoad" style="display:none;text-align:center;padding:28px"><div class="ldots" style="justify-content:center"><span></span><span></span><span></span></div><div style="color:var(--muted);font-size:.83rem;margin-top:7px">Simulation ban rahi hai...</div></div>
+  <div id="simFrame" style="display:none;background:var(--card);border-radius:14px;border:1px solid var(--bdr);overflow:hidden">
+    <div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--bdr);flex-wrap:wrap">
+      <span id="simTitle" style="font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;flex:1">Simulation</span>
+      <button onclick="resetSim()" style="padding:5px 11px;border-radius:7px;background:var(--a3);border:none;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer">Reset</button>
+      <button onclick="fullSim()" style="padding:5px 11px;border-radius:7px;background:var(--a4);border:none;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer">Full</button>
     </div>
-    <div class="tres" id="r-essay" style="color:var(--muted)">Essay yahan...</div>
-  </div>
-  <div class="tws" id="tw-formula">
-    <h3>🧮 Formula Bank</h3>
-    <div class="twin"><input type="text" id="q-formula" placeholder="e.g. Force, Quadratic"><button class="trun" onclick="runTool('formula')">Formulas</button></div>
-    <div class="tres" id="r-formula" style="color:var(--muted)">Formulas yahan...</div>
-  </div>
-  <div class="tws" id="tw-timeline">
-    <h3>📅 Historical Timeline</h3>
-    <div class="twin"><input type="text" id="q-timeline" placeholder="e.g. Pakistan History"><button class="trun" onclick="runTool('timeline')">Timeline</button></div>
-    <div class="tres" id="r-timeline" style="color:var(--muted)">Timeline yahan...</div>
-  </div>
-  <div class="tws" id="tw-compare">
-    <h3>⚖️ Compare Topics</h3>
-    <div class="twin"><input type="text" id="q-compare" placeholder="e.g. Plant cell vs Animal cell"><button class="trun" onclick="runTool('compare')">Compare</button></div>
-    <div class="tres" id="r-compare" style="color:var(--muted)">Comparison yahan...</div>
-  </div>
-  <div class="tws" id="tw-story">
-    <h3>📚 Story Mode Learning</h3>
-    <div class="twin"><input type="text" id="q-story" placeholder="e.g. Gravity, Osmosis"><button class="trun" onclick="runTool('story')">Kahani</button></div>
-    <div class="tres" id="r-story" style="color:var(--muted)">Kahani yahan...</div>
+    <iframe id="simIframe" style="width:100%;height:480px;border:none;background:#fff" sandbox="allow-scripts allow-same-origin"></iframe>
+    <div id="simDesc" style="padding:10px 14px;font-size:.81rem;color:var(--muted);border-top:1px solid var(--bdr);line-height:1.7"></div>
   </div>
 </div>
 
 <!-- QUIZ -->
 <div class="panel" id="panel-quiz">
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-    <input type="text" id="qTopic" placeholder="Quiz topic..." style="flex:1;min-width:140px">
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px">
+    <input type="text" id="qTopic" placeholder="Quiz topic..." style="flex:1;min-width:130px">
     <select id="qSubj" style="width:auto"><option>Physics</option><option>Chemistry</option><option>Biology</option><option>History</option><option>Geography</option><option>Math</option><option>CS</option><option>Islamic Studies</option></select>
     <select id="qLang" style="width:auto"><option>English</option><option>Urdu</option><option>Bilingual</option></select>
-    <button class="gbtn" style="width:auto;padding:9px 18px" onclick="generateQuiz()">🧠 Generate</button>
+    <button class="gbtn" style="width:auto;padding:9px 16px" onclick="generateQuiz()">Generate Quiz</button>
   </div>
-  <div id="qArea" style="color:var(--muted);text-align:center;padding:36px">Quiz generate karein</div>
-  <div id="qScore" style="display:none;text-align:center;padding:13px;background:var(--card);border-radius:13px;margin-top:10px;font-size:1.05rem;font-weight:700"></div>
+  <div id="qArea" style="color:var(--muted);text-align:center;padding:34px">Quiz generate karein</div>
+  <div id="qScore" style="display:none;text-align:center;padding:12px;background:var(--card);border-radius:12px;margin-top:9px;font-size:1rem;font-weight:700"></div>
 </div>
 
 <!-- FLASHCARDS -->
 <div class="panel" id="panel-fc">
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-    <input type="text" id="fcTopic" placeholder="Flashcard topic..." style="flex:1;min-width:140px">
-    <button class="gbtn" style="width:auto;padding:9px 18px" onclick="generateFC()">🃏 Generate</button>
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:13px">
+    <input type="text" id="fcTopic" placeholder="Flashcard topic..." style="flex:1;min-width:130px">
+    <button class="gbtn" style="width:auto;padding:9px 16px" onclick="generateFC()">Generate Cards</button>
   </div>
-  <div id="fcArea" style="color:var(--muted);text-align:center;padding:36px">Flashcards generate karein</div>
-  <div id="fcNav" style="display:none;text-align:center;margin-top:10px">
-    <button class="nbtn" onclick="prevFC()">◀</button>
-    <span id="fcCtr" style="margin:0 10px;color:var(--muted);font-size:.83rem">1/1</span>
-    <button class="nbtn" onclick="nextFC()">▶</button>
-    <div style="margin-top:6px;font-size:.75rem;color:var(--muted)">Card pe click karein paltnay ke liye</div>
+  <div id="fcArea" style="color:var(--muted);text-align:center;padding:34px">Flashcards generate karein</div>
+  <div id="fcNav" style="display:none;text-align:center;margin-top:9px">
+    <button class="nbtn" onclick="prevFC()">Prev</button>
+    <span id="fcCtr" style="margin:0 9px;color:var(--muted);font-size:.81rem">1/1</span>
+    <button class="nbtn" onclick="nextFC()">Next</button>
+    <div style="margin-top:5px;font-size:.73rem;color:var(--muted)">Card pe click karein paltnay ke liye</div>
   </div>
 </div>
 
 </main>
 
-<!-- TERM POPUP -->
+<!-- POPUP -->
 <div class="ov" id="tPop">
   <div class="pop">
     <div class="ph">
-      <div><div class="ptitle" id="pTitle">Term</div><div style="margin-top:4px" id="pTags"></div></div>
+      <div><div class="ptitle" id="pTitle">Term</div><div style="margin-top:3px" id="pTags"></div></div>
       <button class="pcls" onclick="closePop()">x</button>
     </div>
     <div class="pur" id="pUr"></div>
     <div class="pbody" id="pBody"></div>
     <div class="pacts">
-      <button class="pab bl" onclick="popAct('deepexplain')">🔍 Deep Explain</button>
-      <button class="pab pu" onclick="popAct('video')">🎬 Video</button>
-      <button class="pab gr" onclick="popAct('examples')">💡 Examples</button>
-      <button class="pab or" onclick="popAct('quiz')">🧠 Quick Quiz</button>
+      <button class="pab bl" onclick="popAct('deepexplain')">Deep Explain</button>
+      <button class="pab pu" onclick="popAct('video')">Video</button>
+      <button class="pab gr" onclick="popAct('examples')">Examples</button>
+      <button class="pab or" onclick="popAct('quiz')">Quick Quiz</button>
     </div>
     <div class="pair" id="pAI"></div>
     <div class="varea" id="pVid" style="display:none"></div>
@@ -358,342 +325,402 @@ textarea{min-height:80px;resize:vertical}
 </div>
 
 <script>
-var GROQ_KEY = '';
-var GM = 'llama-3.3-70b-versatile';
-var TC = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f43','#00d4ff','#ff6eb4'];
+var SD = {
+  "pendulum": {
+    t: "Simple Pendulum — Physics",
+    d: "لمبائی اور کشش ثقل بدل کر دیکھیں — Drag bob to set angle",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1uO2FsaWduLWl0ZW1zOmNlbnRlcjtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmZ9Y2FudmFze2Rpc3BsYXk6YmxvY2s7bWF4LXdpZHRoOjEwMCV9I2Mye2Rpc3BsYXk6ZmxleDtnYXA6OHB4O3BhZGRpbmc6OHB4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXI7Zm9udC1zaXplOjEycHh9bGFiZWx7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtnYXA6NHB4O2NvbG9yOiNhYWF9aW5wdXRbdHlwZT1yYW5nZV17YWNjZW50LWNvbG9yOiM0ZDk2ZmY7d2lkdGg6ODBweH0udmx7Y29sb3I6IzRkOTZmZjtmb250LXdlaWdodDo3MDA7bWluLXdpZHRoOjI2cHh9PC9zdHlsZT48L2hlYWQ+PGJvZHk+PGNhbnZhcyBpZD0iYyI+PC9jYW52YXM+PGRpdiBpZD0iYzIiPjxsYWJlbD5MZW5ndGg8aW5wdXQgdHlwZT0icmFuZ2UiIGlkPSJsZW4iIG1pbj0iNjAiIG1heD0iMjAwIiB2YWx1ZT0iMTQwIj48c3BhbiBjbGFzcz0idmwiIGlkPSJsdiI+MTQwPC9zcGFuPnB4PC9sYWJlbD48bGFiZWw+R3Jhdml0eTxpbnB1dCB0eXBlPSJyYW5nZSIgaWQ9ImdydiIgbWluPSIxIiBtYXg9IjIwIiB2YWx1ZT0iOSIgc3RlcD0iMC41Ij48c3BhbiBjbGFzcz0idmwiIGlkPSJndiI+OTwvc3Bhbj48L2xhYmVsPjxsYWJlbD5EYW1wPGlucHV0IHR5cGU9InJhbmdlIiBpZD0iZG1wIiBtaW49IjAiIG1heD0iNSIgdmFsdWU9IjEiIHN0ZXA9IjAuMSI+PHNwYW4gY2xhc3M9InZsIiBpZD0iZHYiPjE8L3NwYW4+JTwvbGFiZWw+PC9kaXY+PHNjcmlwdD52YXIgY3Y9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImMiKSxjdHg9Y3YuZ2V0Q29udGV4dCgiMmQiKTtjdi53aWR0aD1NYXRoLm1pbih3aW5kb3cuaW5uZXJXaWR0aCw1MDApO2N2LmhlaWdodD0zMDA7dmFyIG94PWN2LndpZHRoLzIsb3k9NTAsbGVuPTE0MCxhbmdsZT1NYXRoLlBJLzQsdmVsPTAsZ3Jhdj05LGRhbXA9MC4wMSxkcmFnPWZhbHNlLHRyYWlsPVtdO2Z1bmN0aW9uIHVwZCgpe2xlbj0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImxlbiIpLnZhbHVlO2dyYXY9K2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJncnYiKS52YWx1ZTtkYW1wPStkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZG1wIikudmFsdWUvMTAwO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJsdiIpLnRleHRDb250ZW50PWxlbjtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZ3YiKS50ZXh0Q29udGVudD1ncmF2O2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJkdiIpLnRleHRDb250ZW50PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJkbXAiKS52YWx1ZTt9ZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgiaW5wdXQiKS5mb3JFYWNoKGZ1bmN0aW9uKGkpe2kub25pbnB1dD11cGQ7fSk7ZnVuY3Rpb24gZHJhdygpe2N0eC5jbGVhclJlY3QoMCwwLGN2LndpZHRoLGN2LmhlaWdodCk7dmFyIGJ4PW94K01hdGguc2luKGFuZ2xlKSpsZW4sYnk9b3krTWF0aC5jb3MoYW5nbGUpKmxlbjt0cmFpbC5wdXNoKHt4OmJ4LHk6Ynl9KTtpZih0cmFpbC5sZW5ndGg+NjApdHJhaWwuc2hpZnQoKTtjdHguYmVnaW5QYXRoKCk7Zm9yKHZhciBpPTA7aTx0cmFpbC5sZW5ndGg7aSsrKXtjdHguZ2xvYmFsQWxwaGE9aS90cmFpbC5sZW5ndGgqMC41O2lmKGk9PT0wKWN0eC5tb3ZlVG8odHJhaWxbaV0ueCx0cmFpbFtpXS55KTtlbHNlIGN0eC5saW5lVG8odHJhaWxbaV0ueCx0cmFpbFtpXS55KTt9Y3R4LnN0cm9rZVN0eWxlPSIjNGQ5NmZmIjtjdHgubGluZVdpZHRoPTI7Y3R4LnN0cm9rZSgpO2N0eC5nbG9iYWxBbHBoYT0xO2N0eC5iZWdpblBhdGgoKTtjdHgubW92ZVRvKG94LG95KTtjdHgubGluZVRvKGJ4LGJ5KTtjdHguc3Ryb2tlU3R5bGU9IiM1NTUiO2N0eC5saW5lV2lkdGg9MjtjdHguc3Ryb2tlKCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMob3gsb3ksNSwwLDYuMjgpO2N0eC5maWxsU3R5bGU9IiM4ODgiO2N0eC5maWxsKCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMoYngsYnksMTYsMCw2LjI4KTt2YXIgZz1jdHguY3JlYXRlUmFkaWFsR3JhZGllbnQoYngtNCxieS00LDIsYngsYnksMTYpO2cuYWRkQ29sb3JTdG9wKDAsIiM2YmNiNzciKTtnLmFkZENvbG9yU3RvcCgxLCIjMmVhMDQzIik7Y3R4LmZpbGxTdHlsZT1nO2N0eC5maWxsKCk7Y3R4LmZpbGxTdHlsZT0iI2ZmZiI7Y3R4LmZvbnQ9IjEycHggc2Fucy1zZXJpZiI7Y3R4LnRleHRBbGlnbj0ibGVmdCI7Y3R4LmZpbGxUZXh0KCJUPSIrKDIqTWF0aC5QSSpNYXRoLnNxcnQobGVuLyhncmF2KjEwKSkpLnRvRml4ZWQoMikrInMgIEFuZ2xlPSIrKGFuZ2xlKjE4MC9NYXRoLlBJKS50b0ZpeGVkKDEpKyJkZWciLDgsMjApO2lmKCFkcmFnKXt2YXIgYWNjPS1ncmF2LzEwKk1hdGguc2luKGFuZ2xlKTt2ZWwrPWFjYyowLjA1O3ZlbCo9KDEtZGFtcCk7YW5nbGUrPXZlbDt9cmVxdWVzdEFuaW1hdGlvbkZyYW1lKGRyYXcpO31jdi5hZGRFdmVudExpc3RlbmVyKCJtb3VzZWRvd24iLGZ1bmN0aW9uKGUpe3ZhciByPWN2LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLGJ4PW94K01hdGguc2luKGFuZ2xlKSpsZW4sYnk9b3krTWF0aC5jb3MoYW5nbGUpKmxlbjtpZihNYXRoLmh5cG90KGUuY2xpZW50WC1yLmxlZnQtYngsZS5jbGllbnRZLXIudG9wLWJ5KTwzMCl7ZHJhZz10cnVlO3ZlbD0wO319KTtjdi5hZGRFdmVudExpc3RlbmVyKCJtb3VzZW1vdmUiLGZ1bmN0aW9uKGUpe2lmKGRyYWcpe3ZhciByPWN2LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpO2FuZ2xlPU1hdGguYXRhbjIoZS5jbGllbnRYLXIubGVmdC1veCxlLmNsaWVudFktci50b3Atb3kpO319KTtjdi5hZGRFdmVudExpc3RlbmVyKCJtb3VzZXVwIixmdW5jdGlvbigpe2RyYWc9ZmFsc2U7fSk7Y3YuYWRkRXZlbnRMaXN0ZW5lcigidG91Y2hzdGFydCIsZnVuY3Rpb24oZSl7ZS5wcmV2ZW50RGVmYXVsdCgpO3ZhciB0PWUudG91Y2hlc1swXSxyPWN2LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpLGJ4PW94K01hdGguc2luKGFuZ2xlKSpsZW4sYnk9b3krTWF0aC5jb3MoYW5nbGUpKmxlbjtpZihNYXRoLmh5cG90KHQuY2xpZW50WC1yLmxlZnQtYngsdC5jbGllbnRZLXIudG9wLWJ5KTw0MCl7ZHJhZz10cnVlO3ZlbD0wO319LHtwYXNzaXZlOmZhbHNlfSk7Y3YuYWRkRXZlbnRMaXN0ZW5lcigidG91Y2htb3ZlIixmdW5jdGlvbihlKXtlLnByZXZlbnREZWZhdWx0KCk7dmFyIHQ9ZS50b3VjaGVzWzBdLHI9Y3YuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7aWYoZHJhZylhbmdsZT1NYXRoLmF0YW4yKHQuY2xpZW50WC1yLmxlZnQtb3gsdC5jbGllbnRZLXIudG9wLW95KTt9LHtwYXNzaXZlOmZhbHNlfSk7Y3YuYWRkRXZlbnRMaXN0ZW5lcigidG91Y2hlbmQiLGZ1bmN0aW9uKCl7ZHJhZz1mYWxzZTt9KTtkcmF3KCk7PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4="
+  },
+  "projectile": {
+    t: "Projectile Motion — Physics",
+    d: "زاویہ اور رفتار بدلیں — Set angle speed then Launch",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbn1jYW52YXN7ZGlzcGxheTpibG9jaztmbGV4OjF9I2N0e2Rpc3BsYXk6ZmxleDtnYXA6OHB4O3BhZGRpbmc6N3B4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXI7Zm9udC1zaXplOjEycHg7YWxpZ24taXRlbXM6Y2VudGVyfWxhYmVse2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOjRweDtjb2xvcjojYWFhfWlucHV0W3R5cGU9cmFuZ2Vde2FjY2VudC1jb2xvcjojZmY5ZjQzO3dpZHRoOjcwcHh9LnZse2NvbG9yOiNmZjlmNDM7Zm9udC13ZWlnaHQ6NzAwO21pbi13aWR0aDoyNHB4fS5idG57cGFkZGluZzo3cHggMTRweDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMzVkZWcsI2ZmOWY0MywjZTY3ZTAwKTtib3JkZXI6bm9uZTtib3JkZXItcmFkaXVzOjhweDtjb2xvcjojZmZmO2ZvbnQtd2VpZ2h0OjcwMDtjdXJzb3I6cG9pbnRlcjtmb250LXNpemU6MTJweH08L3N0eWxlPjwvaGVhZD48Ym9keT48ZGl2IGlkPSJjdCI+PGxhYmVsPkFuZ2xlPGlucHV0IHR5cGU9InJhbmdlIiBpZD0iYW5nIiBtaW49IjUiIG1heD0iODUiIHZhbHVlPSI0NSI+PHNwYW4gY2xhc3M9InZsIiBpZD0iYXYiPjQ1PC9zcGFuPmRlZzwvbGFiZWw+PGxhYmVsPlNwZWVkPGlucHV0IHR5cGU9InJhbmdlIiBpZD0ic3BkIiBtaW49IjEwIiBtYXg9IjgwIiB2YWx1ZT0iNDAiPjxzcGFuIGNsYXNzPSJ2bCIgaWQ9InN2Ij40MDwvc3Bhbj48L2xhYmVsPjxidXR0b24gY2xhc3M9ImJ0biIgb25jbGljaz0ibGF1bmNoKCkiPkxhdW5jaDwvYnV0dG9uPjxidXR0b24gY2xhc3M9ImJ0biIgc3R5bGU9ImJhY2tncm91bmQ6IzQ0NCIgb25jbGljaz0icGF0aHM9W107cHJvaj1udWxsIj5SZXNldDwvYnV0dG9uPjwvZGl2PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIikscGF0aHM9W10scHJvaj1udWxsLGNvbHM9WyIjZmY2YjZiIiwiIzRkOTZmZiIsIiM2YmNiNzciLCIjYzc3ZGZmIiwiI2ZmZDkzZCJdO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJhbmciKS5vbmlucHV0PWZ1bmN0aW9uKCl7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImF2IikudGV4dENvbnRlbnQ9dGhpcy52YWx1ZTt9O2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJzcGQiKS5vbmlucHV0PWZ1bmN0aW9uKCl7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInN2IikudGV4dENvbnRlbnQ9dGhpcy52YWx1ZTt9O2N2LndpZHRoPXdpbmRvdy5pbm5lcldpZHRoO2N2LmhlaWdodD13aW5kb3cuaW5uZXJIZWlnaHQtNTU7ZnVuY3Rpb24gbGF1bmNoKCl7dmFyIGFuZz0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImFuZyIpLnZhbHVlKk1hdGguUEkvMTgwLHNwZD0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInNwZCIpLnZhbHVlO3Byb2o9e3g6NDAseTpjdi5oZWlnaHQtNDAsdng6TWF0aC5jb3MoYW5nKSpzcGQqNSx2eTotTWF0aC5zaW4oYW5nKSpzcGQqNSx0cmFpbDpbXSxjb2w6Y29sc1twYXRocy5sZW5ndGglNV19O31mdW5jdGlvbiBkcmF3KCl7Y3R4LmZpbGxTdHlsZT0icmdiYSgxMCwxMCwyNiwwLjM1KSI7Y3R4LmZpbGxSZWN0KDAsMCxjdi53aWR0aCxjdi5oZWlnaHQpO2N0eC5iZWdpblBhdGgoKTtjdHgubW92ZVRvKDAsY3YuaGVpZ2h0LTI4KTtjdHgubGluZVRvKGN2LndpZHRoLGN2LmhlaWdodC0yOCk7Y3R4LnN0cm9rZVN0eWxlPSIjMzMzIjtjdHgubGluZVdpZHRoPTI7Y3R4LnN0cm9rZSgpO3BhdGhzLmZvckVhY2goZnVuY3Rpb24ocCl7Y3R4LmJlZ2luUGF0aCgpO3AuZm9yRWFjaChmdW5jdGlvbihwdCxpKXtpZihpPT09MCljdHgubW92ZVRvKHB0LngscHQueSk7ZWxzZSBjdHgubGluZVRvKHB0LngscHQueSk7fSk7Y3R4LnN0cm9rZVN0eWxlPXAuY29sKyI4OCI7Y3R4LmxpbmVXaWR0aD0yO2N0eC5zdHJva2UoKTt9KTtpZihwcm9qKXtwcm9qLnRyYWlsLnB1c2goe3g6cHJvai54LHk6cHJvai55fSk7Y3R4LmJlZ2luUGF0aCgpO3Byb2oudHJhaWwuZm9yRWFjaChmdW5jdGlvbihwdCxpKXtpZihpPT09MCljdHgubW92ZVRvKHB0LngscHQueSk7ZWxzZSBjdHgubGluZVRvKHB0LngscHQueSk7fSk7Y3R4LnN0cm9rZVN0eWxlPXByb2ouY29sO2N0eC5saW5lV2lkdGg9Mi41O2N0eC5zdHJva2UoKTtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhwcm9qLngscHJvai55LDEwLDAsNi4yOCk7dmFyIGc9Y3R4LmNyZWF0ZVJhZGlhbEdyYWRpZW50KHByb2oueC0zLHByb2oueS0zLDEscHJvai54LHByb2oueSwxMCk7Zy5hZGRDb2xvclN0b3AoMCwiI2ZmZiIpO2cuYWRkQ29sb3JTdG9wKDEscHJvai5jb2wpO2N0eC5maWxsU3R5bGU9ZztjdHguZmlsbCgpO3Byb2oueCs9cHJvai52eCowLjA1O3Byb2oueSs9cHJvai52eSowLjA1O3Byb2oudnkrPTUwKjAuMDU7aWYocHJvai55Pj1jdi5oZWlnaHQtMjgpe3ZhciB0PXByb2oudHJhaWw7dC5jb2w9cHJvai5jb2w7cGF0aHMucHVzaCh0KTtwcm9qPW51bGw7fX1yZXF1ZXN0QW5pbWF0aW9uRnJhbWUoZHJhdyk7fWRyYXcoKTs8L3NjcmlwdD48L2JvZHk+PC9odG1sPg=="
+  },
+  "wave": {
+    t: "Wave Motion — Physics",
+    d: "لہروں کا تعامل — Adjust frequency and amplitude",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbn1jYW52YXN7ZGlzcGxheTpibG9jaztmbGV4OjF9I2N0e2Rpc3BsYXk6ZmxleDtnYXA6OHB4O3BhZGRpbmc6N3B4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXI7Zm9udC1zaXplOjEycHh9bGFiZWx7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtnYXA6NHB4O2NvbG9yOiNhYWF9aW5wdXRbdHlwZT1yYW5nZV17YWNjZW50LWNvbG9yOiMwMGQ0ZmY7d2lkdGg6NjhweH0udmx7Y29sb3I6IzAwZDRmZjtmb250LXdlaWdodDo3MDA7bWluLXdpZHRoOjI0cHh9LnRvZ3twYWRkaW5nOjZweCAxMHB4O2JvcmRlci1yYWRpdXM6N3B4O2JvcmRlcjoxLjVweCBzb2xpZCAjMmEyYTRhO2JhY2tncm91bmQ6dHJhbnNwYXJlbnQ7Y29sb3I6I2FhYTtjdXJzb3I6cG9pbnRlcjtmb250LXNpemU6MTFweDtmb250LXdlaWdodDo3MDB9LnRvZy5vbntiYWNrZ3JvdW5kOiMwMGQ0ZmY7Y29sb3I6IzAwMDtib3JkZXItY29sb3I6IzAwZDRmZn08L3N0eWxlPjwvaGVhZD48Ym9keT48ZGl2IGlkPSJjdCI+PGxhYmVsPkYxPGlucHV0IHR5cGU9InJhbmdlIiBpZD0iZjEiIG1pbj0iMC41IiBtYXg9IjUiIHZhbHVlPSIyIiBzdGVwPSIwLjEiPjxzcGFuIGNsYXNzPSJ2bCIgaWQ9ImZ2MSI+Mjwvc3Bhbj5IejwvbGFiZWw+PGxhYmVsPkExPGlucHV0IHR5cGU9InJhbmdlIiBpZD0iYTEiIG1pbj0iMTAiIG1heD0iODAiIHZhbHVlPSI0MCI+PHNwYW4gY2xhc3M9InZsIiBpZD0iYXYxIj40MDwvc3Bhbj48L2xhYmVsPjxsYWJlbD5GMjxpbnB1dCB0eXBlPSJyYW5nZSIgaWQ9ImYyIiBtaW49IjAuNSIgbWF4PSI1IiB2YWx1ZT0iMyIgc3RlcD0iMC4xIj48c3BhbiBjbGFzcz0idmwiIGlkPSJmdjIiPjM8L3NwYW4+SHo8L2xhYmVsPjxsYWJlbD5BMjxpbnB1dCB0eXBlPSJyYW5nZSIgaWQ9ImEyIiBtaW49IjEwIiBtYXg9IjgwIiB2YWx1ZT0iMzAiPjxzcGFuIGNsYXNzPSJ2bCIgaWQ9ImF2MiI+MzA8L3NwYW4+PC9sYWJlbD48YnV0dG9uIGNsYXNzPSJ0b2cgb24iIG9uY2xpY2s9InNzPSFzczt0aGlzLmNsYXNzTGlzdC50b2dnbGUoJ29uJykiPlN1bTwvYnV0dG9uPjwvZGl2PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIiksc3M9dHJ1ZSx0PTA7Y3Yud2lkdGg9d2luZG93LmlubmVyV2lkdGg7Y3YuaGVpZ2h0PXdpbmRvdy5pbm5lckhlaWdodC01NTtmdW5jdGlvbiB1cGQoKXtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZnYxIikudGV4dENvbnRlbnQ9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImYxIikudmFsdWU7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImF2MSIpLnRleHRDb250ZW50PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJhMSIpLnZhbHVlO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJmdjIiKS50ZXh0Q29udGVudD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZjIiKS52YWx1ZTtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiYXYyIikudGV4dENvbnRlbnQ9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImEyIikudmFsdWU7fWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoImlucHV0IikuZm9yRWFjaChmdW5jdGlvbihpKXtpLm9uaW5wdXQ9dXBkO30pO2Z1bmN0aW9uIGRyYXcoKXtjdHguY2xlYXJSZWN0KDAsMCxjdi53aWR0aCxjdi5oZWlnaHQpO3ZhciBjeT1jdi5oZWlnaHQvMixmMT0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImYxIikudmFsdWUsYTE9K2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJhMSIpLnZhbHVlLGYyPStkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiZjIiKS52YWx1ZSxhMj0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImEyIikudmFsdWU7ZnVuY3Rpb24gd2F2ZShmLGEsY29sLG9mZil7Y3R4LmJlZ2luUGF0aCgpO2N0eC5zdHJva2VTdHlsZT1jb2w7Y3R4LmxpbmVXaWR0aD0yLjU7Zm9yKHZhciB4PTA7eDxjdi53aWR0aDt4Kyspe3ZhciB5PWN5K29mZitNYXRoLnNpbih4KmYqMC4wMi10KSphO2lmKHg9PT0wKWN0eC5tb3ZlVG8oeCx5KTtlbHNlIGN0eC5saW5lVG8oeCx5KTt9Y3R4LnN0cm9rZSgpO313YXZlKGYxLGExLCIjNGQ5NmZmIiwtODApO3dhdmUoZjIsYTIsIiNmZjZiNmIiLDgwKTtpZihzcyl7Y3R4LmJlZ2luUGF0aCgpO2N0eC5zdHJva2VTdHlsZT0iIzZiY2I3NyI7Y3R4LmxpbmVXaWR0aD0zO2Zvcih2YXIgeD0wO3g8Y3Yud2lkdGg7eCsrKXt2YXIgeT1jeStNYXRoLnNpbih4KmYxKjAuMDItdCkqYTErTWF0aC5zaW4oeCpmMiowLjAyLXQpKmEyO2lmKHg9PT0wKWN0eC5tb3ZlVG8oeCx5KTtlbHNlIGN0eC5saW5lVG8oeCx5KTt9Y3R4LnN0cm9rZSgpO31jdHguZm9udD0iMTJweCBzYW5zLXNlcmlmIjtjdHgudGV4dEFsaWduPSJsZWZ0IjtjdHguZmlsbFN0eWxlPSIjNGQ5NmZmIjtjdHguZmlsbFRleHQoIldhdmUxIGY9IitmMSsiSHoiLDgsMTgpO2N0eC5maWxsU3R5bGU9IiNmZjZiNmIiO2N0eC5maWxsVGV4dCgiV2F2ZTIgZj0iK2YyKyJIeiIsOCwzNCk7aWYoc3Mpe2N0eC5maWxsU3R5bGU9IiM2YmNiNzciO2N0eC5maWxsVGV4dCgiU3VtIiw4LDUwKTt9dCs9MC4wNTtyZXF1ZXN0QW5pbWF0aW9uRnJhbWUoZHJhdyk7fWRyYXcoKTs8L3NjcmlwdD48L2JvZHk+PC9odG1sPg=="
+  },
+  "dna": {
+    t: "DNA Double Helix — Biology",
+    d: "ڈی ای نی اے کی ساخت — Base pairs A-T and G-C",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1uO2FsaWduLWl0ZW1zOmNlbnRlcjtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmZ9Y2FudmFze2Rpc3BsYXk6YmxvY2s7bWF4LXdpZHRoOjEwMCV9I2luZntwYWRkaW5nOjZweDtmb250LXNpemU6MTFweDtkaXNwbGF5OmZsZXg7Z2FwOjEycHg7ZmxleC13cmFwOndyYXA7anVzdGlmeS1jb250ZW50OmNlbnRlcn0uZHt3aWR0aDoxMHB4O2hlaWdodDoxMHB4O2JvcmRlci1yYWRpdXM6NTAlO2Rpc3BsYXk6aW5saW5lLWJsb2NrO21hcmdpbi1yaWdodDozcHh9c3BhbntkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6Y2VudGVyfTwvc3R5bGU+PC9oZWFkPjxib2R5PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxkaXYgaWQ9ImluZiI+PHNwYW4+PHNwYW4gY2xhc3M9ImQiIHN0eWxlPSJiYWNrZ3JvdW5kOiNmZjZiNmIiPjwvc3Bhbj5BZGVuaW5lIEE8L3NwYW4+PHNwYW4+PHNwYW4gY2xhc3M9ImQiIHN0eWxlPSJiYWNrZ3JvdW5kOiM0ZDk2ZmYiPjwvc3Bhbj5UaHltaW5lIFQ8L3NwYW4+PHNwYW4+PHNwYW4gY2xhc3M9ImQiIHN0eWxlPSJiYWNrZ3JvdW5kOiM2YmNiNzciPjwvc3Bhbj5HdWFuaW5lIEc8L3NwYW4+PHNwYW4+PHNwYW4gY2xhc3M9ImQiIHN0eWxlPSJiYWNrZ3JvdW5kOiNmZmQ5M2QiPjwvc3Bhbj5DeXRvc2luZSBDPC9zcGFuPjwvZGl2PjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIik7Y3Yud2lkdGg9TWF0aC5taW4od2luZG93LmlubmVyV2lkdGgsNTAwKTtjdi5oZWlnaHQ9d2luZG93LmlubmVySGVpZ2h0LTYwO3ZhciB0PTAsYmFzZXM9W1siQSIsIlQiXSxbIkciLCJDIl0sWyJUIiwiQSJdLFsiQyIsIkciXSxbIkEiLCJUIl0sWyJHIiwiQyJdLFsiVCIsIkEiXSxbIkMiLCJHIl1dLGNvbHM9e0E6IiNmZjZiNmIiLFQ6IiM0ZDk2ZmYiLEc6IiM2YmNiNzciLEM6IiNmZmQ5M2QifTtmdW5jdGlvbiBkcmF3KCl7Y3R4LmNsZWFyUmVjdCgwLDAsY3Yud2lkdGgsY3YuaGVpZ2h0KTt2YXIgY3g9Y3Yud2lkdGgvMixuPTgsc3RlcD1jdi5oZWlnaHQvbjtmb3IodmFyIHM9MDtzPDI7cysrKXtjdHguYmVnaW5QYXRoKCk7Zm9yKHZhciBqPTA7ajwxMDA7aisrKXt2YXIgeXk9aiooY3YuaGVpZ2h0LzEwMCkrdCVjdi5oZWlnaHQ7dmFyIHh4PWN4KyhzPT09MD8tMToxKSpNYXRoLnNpbih5eSowLjA0KSoxMDA7aWYoaj09PTApY3R4Lm1vdmVUbyh4eCx5eSk7ZWxzZSBjdHgubGluZVRvKHh4LHl5KTt9Y3R4LnN0cm9rZVN0eWxlPXM9PT0wPyJyZ2JhKDc3LDE1MCwyNTUsMC42KSI6InJnYmEoMTA3LDIwMywxMTksMC42KSI7Y3R4LmxpbmVXaWR0aD0zO2N0eC5zdHJva2UoKTt9Zm9yKHZhciBpPTA7aTxuO2krKyl7dmFyIHk9aSpzdGVwK3N0ZXAvMit0JWN2LmhlaWdodDtpZih5PDB8fHk+Y3YuaGVpZ2h0KWNvbnRpbnVlO3ZhciBwaGFzZT15KjAuMDQseDE9Y3grTWF0aC5zaW4ocGhhc2UpKjEwMCx4Mj1jeCtNYXRoLnNpbihwaGFzZStNYXRoLlBJKSoxMDAsYj1iYXNlc1tpJWJhc2VzLmxlbmd0aF07Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oeDEseSk7Y3R4LmxpbmVUbyh4Mix5KTtjdHguc3Ryb2tlU3R5bGU9InJnYmEoMTUwLDE1MCwyNTUsMC4yKSI7Y3R4LmxpbmVXaWR0aD0xLjU7Y3R4LnN0cm9rZSgpO1t7eDp4MSxiOmJbMF19LHt4OngyLGI6YlsxXX1dLmZvckVhY2goZnVuY3Rpb24oaXRlbSl7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMoaXRlbS54LHksMTAsMCw2LjI4KTtjdHguZmlsbFN0eWxlPWNvbHNbaXRlbS5iXTtjdHguZmlsbCgpO2N0eC5maWxsU3R5bGU9IiNmZmYiO2N0eC5mb250PSJib2xkIDEwcHggc2Fucy1zZXJpZiI7Y3R4LnRleHRBbGlnbj0iY2VudGVyIjtjdHgudGV4dEJhc2VsaW5lPSJtaWRkbGUiO2N0eC5maWxsVGV4dChpdGVtLmIsaXRlbS54LHkpO30pO310Kz0wLjQ7cmVxdWVzdEFuaW1hdGlvbkZyYW1lKGRyYXcpO31kcmF3KCk7PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4="
+  },
+  "cell": {
+    t: "Cell Division Mitosis — Biology",
+    d: "خلیے کی تقسیم — Click stages to see Mitosis",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I2xie2ZvbnQtc2l6ZToxcmVtO2ZvbnQtd2VpZ2h0OjcwMDtwYWRkaW5nOjhweDtjb2xvcjojYzc3ZGZmO2xldHRlci1zcGFjaW5nOjJweH1jYW52YXN7ZGlzcGxheTpibG9ja30jYnR7ZGlzcGxheTpmbGV4O2dhcDo1cHg7cGFkZGluZzo4cHg7ZmxleC13cmFwOndyYXA7anVzdGlmeS1jb250ZW50OmNlbnRlcn0uc2J7cGFkZGluZzo3cHggMTJweDtib3JkZXItcmFkaXVzOjhweDtib3JkZXI6MS41cHggc29saWQgIzJhMmE0YTtiYWNrZ3JvdW5kOiMxYTFhM2E7Y29sb3I6I2ZmZjtjdXJzb3I6cG9pbnRlcjtmb250LXdlaWdodDo3MDA7Zm9udC1zaXplOjExcHh9LnNiLm9ue2JhY2tncm91bmQ6I2M3N2RmZjtib3JkZXItY29sb3I6I2M3N2RmZn08L3N0eWxlPjwvaGVhZD48Ym9keT48ZGl2IGlkPSJsYiI+SU5URVJQSEFTRTwvZGl2PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxkaXYgaWQ9ImJ0Ij48YnV0dG9uIGNsYXNzPSJzYiBvbiIgb25jbGljaz0ic2V0UygwKSI+SW50ZXJwaGFzZTwvYnV0dG9uPjxidXR0b24gY2xhc3M9InNiIiBvbmNsaWNrPSJzZXRTKDEpIj5Qcm9waGFzZTwvYnV0dG9uPjxidXR0b24gY2xhc3M9InNiIiBvbmNsaWNrPSJzZXRTKDIpIj5NZXRhcGhhc2U8L2J1dHRvbj48YnV0dG9uIGNsYXNzPSJzYiIgb25jbGljaz0ic2V0UygzKSI+QW5hcGhhc2U8L2J1dHRvbj48YnV0dG9uIGNsYXNzPSJzYiIgb25jbGljaz0ic2V0Uyg0KSI+VGVsb3BoYXNlPC9idXR0b24+PC9kaXY+PHNjcmlwdD52YXIgY3Y9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImMiKSxjdHg9Y3YuZ2V0Q29udGV4dCgiMmQiKTtjdi53aWR0aD1NYXRoLm1pbih3aW5kb3cuaW5uZXJXaWR0aCw0MDApO2N2LmhlaWdodD0yNTA7dmFyIHN0YWdlPTAsdD0wLG5hbWVzPVsiSU5URVJQSEFTRSIsIlBST1BIQVNFIiwiTUVUQVBIQVNFIiwiQU5BUEhBU0UiLCJURUxPUEhBU0UiXTtmdW5jdGlvbiBzZXRTKHMpe3N0YWdlPXM7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImxiIikudGV4dENvbnRlbnQ9bmFtZXNbc107ZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgiLnNiIikuZm9yRWFjaChmdW5jdGlvbihiLGkpe2IuY2xhc3NMaXN0LnRvZ2dsZSgib24iLGk9PT1zKTt9KTt9ZnVuY3Rpb24gZHJhdygpe2N0eC5jbGVhclJlY3QoMCwwLGN2LndpZHRoLGN2LmhlaWdodCk7dmFyIGN4PWN2LndpZHRoLzIsY3k9Y3YuaGVpZ2h0LzI7aWYoc3RhZ2U9PT0wKXtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhjeCxjeSw4NSwwLDYuMjgpO2N0eC5maWxsU3R5bGU9InJnYmEoMTA3LDIwMywxMTksMC4wOCkiO2N0eC5maWxsKCk7Y3R4LnN0cm9rZVN0eWxlPSIjNmJjYjc3IjtjdHgubGluZVdpZHRoPTM7Y3R4LnN0cm9rZSgpO2N0eC5iZWdpblBhdGgoKTtjdHguYXJjKGN4LGN5LDI4LDAsNi4yOCk7Y3R4LmZpbGxTdHlsZT0icmdiYSgxOTksMTI1LDI1NSwwLjMpIjtjdHguZmlsbCgpO2N0eC5zdHJva2VTdHlsZT0iI2M3N2RmZiI7Y3R4LmxpbmVXaWR0aD0yO2N0eC5zdHJva2UoKTtmb3IodmFyIGk9MDtpPDY7aSsrKXt2YXIgYT1pKk1hdGguUEkvMyt0O2N0eC5iZWdpblBhdGgoKTtjdHguZWxsaXBzZShjeCtNYXRoLmNvcyhhKSoxNixjeStNYXRoLnNpbihhKSoxNiw3LDMuNSxhLDAsNi4yOCk7Y3R4LmZpbGxTdHlsZT0iI2M3N2RmZiI7Y3R4LmZpbGwoKTt9fWVsc2UgaWYoc3RhZ2U9PT0xKXtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhjeCxjeSw4NSwwLDYuMjgpO2N0eC5zdHJva2VTdHlsZT0iIzZiY2I3NyI7Y3R4LmxpbmVXaWR0aD0zO2N0eC5zdHJva2UoKTtbWy0yOCwtMThdLFsyOCwtMThdLFstMTgsMTBdLFsxOCwxMF0sWzAsLTI4XSxbMCwxOF1dLmZvckVhY2goZnVuY3Rpb24oYyl7Y3R4LmJlZ2luUGF0aCgpO2N0eC5lbGxpcHNlKGN4K2NbMF0sY3krY1sxXSw5LDQuNSxNYXRoLlBJLzQsMCw2LjI4KTtjdHguZmlsbFN0eWxlPSIjYzc3ZGZmIjtjdHguZmlsbCgpO30pO31lbHNlIGlmKHN0YWdlPT09Mil7Y3R4LnNldExpbmVEYXNoKFs1LDVdKTtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbyhjeCxjeS04NSk7Y3R4LmxpbmVUbyhjeCxjeSs4NSk7Y3R4LnN0cm9rZVN0eWxlPSJyZ2JhKDI1NSwyMTUsNjEsMC4zKSI7Y3R4LmxpbmVXaWR0aD0yO2N0eC5zdHJva2UoKTtjdHguc2V0TGluZURhc2goW10pO1tbLTE4LDBdLFsxOCwwXSxbLTE0LC0xMF0sWzE0LC0xMF0sWy0xNCwxMF0sWzE0LDEwXV0uZm9yRWFjaChmdW5jdGlvbihjKXtjdHguYmVnaW5QYXRoKCk7Y3R4LmVsbGlwc2UoY3grY1swXSxjeStjWzFdLDksNC41LDAsMCw2LjI4KTtjdHguZmlsbFN0eWxlPSIjZmY2YjZiIjtjdHguZmlsbCgpO2N0eC5iZWdpblBhdGgoKTtjdHgubW92ZVRvKGN4LGN5KTtjdHgubGluZVRvKGN4K2NbMF0sY3krY1sxXSk7Y3R4LnN0cm9rZVN0eWxlPSJyZ2JhKDI1NSwyMTUsNjEsMC40KSI7Y3R4LmxpbmVXaWR0aD0xO2N0eC5zdHJva2UoKTt9KTt9ZWxzZSBpZihzdGFnZT09PTMpe3ZhciBzZXA9NDUrTWF0aC5zaW4odCkqODtbLTEsMV0uZm9yRWFjaChmdW5jdGlvbihkKXt2YXIgb3k9ZCpzZXA7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMoY3gsY3krb3ksNDgsMCw2LjI4KTtjdHguc3Ryb2tlU3R5bGU9IiM2YmNiNzciO2N0eC5saW5lV2lkdGg9MjtjdHguc3Ryb2tlKCk7W1stMTMsMF0sWzEzLDBdLFswLC0xMV0sWzAsMTFdXS5mb3JFYWNoKGZ1bmN0aW9uKGMpe2N0eC5iZWdpblBhdGgoKTtjdHguZWxsaXBzZShjeCtjWzBdLGN5K295K2NbMV0sNiwzLDAsMCw2LjI4KTtjdHguZmlsbFN0eWxlPSIjYzc3ZGZmIjtjdHguZmlsbCgpO30pO30pO31lbHNle1stNjUsNjVdLmZvckVhY2goZnVuY3Rpb24ocCxpKXt2YXIgb3g9Y3grcCsoaT09PTA/LTg6OCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMob3gsY3ksMzgsMCw2LjI4KTtjdHguZmlsbFN0eWxlPSJyZ2JhKDEwNywyMDMsMTE5LDAuMDgpIjtjdHguZmlsbCgpO2N0eC5zdHJva2VTdHlsZT0iIzZiY2I3NyI7Y3R4LmxpbmVXaWR0aD0yO2N0eC5zdHJva2UoKTtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhveCxjeSwxMSwwLDYuMjgpO2N0eC5maWxsU3R5bGU9InJnYmEoMTk5LDEyNSwyNTUsMC4zKSI7Y3R4LmZpbGwoKTtjdHguc3Ryb2tlU3R5bGU9IiNjNzdkZmYiO2N0eC5saW5lV2lkdGg9MS41O2N0eC5zdHJva2UoKTt9KTt9dCs9MC4wMztyZXF1ZXN0QW5pbWF0aW9uRnJhbWUoZHJhdyk7fWRyYXcoKTs8L3NjcmlwdD48L2JvZHk+PC9odG1sPg=="
+  },
+  "acid": {
+    t: "Acid Base Titration — Chemistry",
+    d: "تیزاب قلعی ردعمل — Add NaOH and watch pH change",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I2N0e3BhZGRpbmc6MTBweDtkaXNwbGF5OmZsZXg7Z2FwOjEwcHg7YWxpZ24taXRlbXM6Y2VudGVyO2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXJ9Y2FudmFze2Rpc3BsYXk6YmxvY2t9I2luZntmb250LXNpemU6MTJweDtjb2xvcjojYWFhO3BhZGRpbmc6NnB4O3RleHQtYWxpZ246Y2VudGVyfS5hYntwYWRkaW5nOjhweCAxOHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDEzNWRlZywjNGQ5NmZmLCMxZTZmZmYpO2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OXB4O2NvbG9yOiNmZmY7Zm9udC13ZWlnaHQ6NzAwO2N1cnNvcjpwb2ludGVyO2ZvbnQtc2l6ZToxMnB4fS5yYntwYWRkaW5nOjhweCAxOHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDEzNWRlZywjZmY2YjZiLCNjYzAwMDApO2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OXB4O2NvbG9yOiNmZmY7Zm9udC13ZWlnaHQ6NzAwO2N1cnNvcjpwb2ludGVyO2ZvbnQtc2l6ZToxMnB4fTwvc3R5bGU+PC9oZWFkPjxib2R5PjxkaXYgaWQ9ImN0Ij48YnV0dG9uIGNsYXNzPSJhYiIgb25jbGljaz0iYWRkQmFzZSgpIj5BZGQgTmFPSCBCYXNlPC9idXR0b24+PGJ1dHRvbiBjbGFzcz0icmIiIG9uY2xpY2s9InJlc2V0VCgpIj5SZXNldDwvYnV0dG9uPjwvZGl2PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxkaXYgaWQ9ImluZiI+cEggMS4wIFN0cm9uZ2x5IEFjaWRpYzwvZGl2PjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIiksdm9sPTAsbWF4PTUwO2N2LndpZHRoPU1hdGgubWluKHdpbmRvdy5pbm5lcldpZHRoLDM4MCk7Y3YuaGVpZ2h0PTI2MDtmdW5jdGlvbiBnYyhwSCl7aWYocEg8NClyZXR1cm4iI2ZmMjIyMiI7aWYocEg8NilyZXR1cm4iI2ZmODgwMCI7aWYocEg8NylyZXR1cm4iI2ZmZmYwMCI7aWYocEg8OClyZXR1cm4iIzg4ZmYwMCI7aWYocEg8MTApcmV0dXJuIiMwMGNjNDQiO3JldHVybiIjMDA0NGZmIjt9ZnVuY3Rpb24gZ3Aodil7aWYodjwyNClyZXR1cm4gMSt2KjAuMTtpZih2PDI2KXJldHVybiAzKyh2LTI0KSoxLjU7cmV0dXJuIDcrKHYtMjYpKjAuMzt9ZnVuY3Rpb24gYWRkQmFzZSgpe2lmKHZvbDxtYXgpe3ZvbCsrO2RyYXcoKTt9fWZ1bmN0aW9uIHJlc2V0VCgpe3ZvbD0wO2RyYXcoKTt9ZnVuY3Rpb24gZHJhdygpe2N0eC5jbGVhclJlY3QoMCwwLGN2LndpZHRoLGN2LmhlaWdodCk7dmFyIHBIPWdwKHZvbCksY29sPWdjKHBIKSxieD1jdi53aWR0aC8yLTUwLGJ3PTEwMCxsaD0xNzAqKHZvbC9tYXgrMC4wOCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5yZWN0KGJ4LDMwLGJ3LDIxMCk7Y3R4LmZpbGxTdHlsZT0iIzFhMWEzYSI7Y3R4LmZpbGwoKTtjdHguc3Ryb2tlU3R5bGU9IiM0ZDk2ZmYiO2N0eC5saW5lV2lkdGg9MjtjdHguc3Ryb2tlKCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5yZWN0KGJ4KzIsMjQwLWxoLGJ3LTQsbGgpO2N0eC5maWxsU3R5bGU9Y29sO2N0eC5nbG9iYWxBbHBoYT0wLjg1O2N0eC5maWxsKCk7Y3R4Lmdsb2JhbEFscGhhPTE7Y3R4LmZpbGxTdHlsZT0iI2ZmZiI7Y3R4LmZvbnQ9ImJvbGQgMTNweCBzYW5zLXNlcmlmIjtjdHgudGV4dEFsaWduPSJjZW50ZXIiO2N0eC5maWxsVGV4dCgicEggIitwSC50b0ZpeGVkKDEpLGN2LndpZHRoLzIsMjU4KTt2YXIgcHc9KHZvbC9tYXgpKihjdi53aWR0aC0zMCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5yZWN0KDE1LGN2LmhlaWdodC04LHB3LDcpO3ZhciBnPWN0eC5jcmVhdGVMaW5lYXJHcmFkaWVudCgxNSwwLGN2LndpZHRoLTE1LDApO2cuYWRkQ29sb3JTdG9wKDAsIiNmZjIyMjIiKTtnLmFkZENvbG9yU3RvcCgwLjUsIiNmZmZmMDAiKTtnLmFkZENvbG9yU3RvcCgxLCIjMDA0NGZmIik7Y3R4LmZpbGxTdHlsZT1nO2N0eC5maWxsKCk7dmFyIGxiPXBIPDQ/IlN0cm9uZ2x5IEFjaWRpYyI6cEg8Nj8iV2Vha2x5IEFjaWRpYyI6cEg8OD8iTmV1dHJhbCI6cEg8MTA/IldlYWtseSBCYXNpYyI6IlN0cm9uZ2x5IEJhc2ljIjtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiaW5mIikudGV4dENvbnRlbnQ9InBIOiAiK3BILnRvRml4ZWQoMikrIiAtICIrbGIrIiB8IE5hT0g6ICIrdm9sKyJtTCI7fWRyYXcoKTs8L3NjcmlwdD48L2JvZHk+PC9odG1sPg=="
+  },
+  "periodic": {
+    t: "Interactive Periodic Table — Chemistry",
+    d: "عناصر کی دوری جدول — Click element to see details",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7b3ZlcmZsb3c6YXV0b30jaW5me2JhY2tncm91bmQ6IzFhMWEzYTtib3JkZXI6MXB4IHNvbGlkICMyYTJhNGE7Ym9yZGVyLXJhZGl1czoxMHB4O3BhZGRpbmc6MTBweDttYXJnaW46OHB4O2ZvbnQtc2l6ZToxMnB4O21pbi1oZWlnaHQ6NDBweDt0ZXh0LWFsaWduOmNlbnRlcn0jcHR7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMTgsMWZyKTtnYXA6MXB4O3BhZGRpbmc6NnB4fS5lbHtwYWRkaW5nOjJweCAxcHg7Ym9yZGVyLXJhZGl1czozcHg7Y3Vyc29yOnBvaW50ZXI7dGV4dC1hbGlnbjpjZW50ZXI7Ym9yZGVyOjFweCBzb2xpZCB0cmFuc3BhcmVudDt0cmFuc2l0aW9uOnRyYW5zZm9ybSAwLjE1c30uZWw6aG92ZXJ7dHJhbnNmb3JtOnNjYWxlKDEuNCk7ei1pbmRleDoxMDtwb3NpdGlvbjpyZWxhdGl2ZTtib3JkZXItY29sb3I6I2ZmZn0uc3lte2ZvbnQtc2l6ZTpjbGFtcCg2cHgsMS40dncsMTFweCk7Zm9udC13ZWlnaHQ6NzAwfS5udW17Zm9udC1zaXplOmNsYW1wKDVweCwwLjl2dyw4cHgpO29wYWNpdHk6MC43fTwvc3R5bGU+PC9oZWFkPjxib2R5PjxkaXYgaWQ9ImluZiI+RWxlbWVudCBwZSBjbGljayBrYXJlaW48L2Rpdj48ZGl2IGlkPSJwdCI+PC9kaXY+PHNjcmlwdD52YXIgZWxzPVt7bjoxLHM6IkgiLG5tOiJIeWRyb2dlbiIsbToxLjAwOCxnOiJOb25tZXRhbCIscjoxLGM6MSxjb2w6IiM0ZDk2ZmYifSx7bjoyLHM6IkhlIixubToiSGVsaXVtIixtOjQuMDAzLGc6Ik5vYmxlIEdhcyIscjoxLGM6MTgsY29sOiIjYzc3ZGZmIn0se246MyxzOiJMaSIsbm06IkxpdGhpdW0iLG06Ni45NDEsZzoiQWxrYWxpIE1ldGFsIixyOjIsYzoxLGNvbDoiI2ZmNmI2YiJ9LHtuOjQsczoiQmUiLG5tOiJCZXJ5bGxpdW0iLG06OS4wMTIsZzoiQWxrYWxpbmUgRWFydGgiLHI6MixjOjIsY29sOiIjZmY5ZjQzIn0se246NSxzOiJCIixubToiQm9yb24iLG06MTAuODExLGc6Ik1ldGFsbG9pZCIscjoyLGM6MTMsY29sOiIjNmJjYjc3In0se246NixzOiJDIixubToiQ2FyYm9uIixtOjEyLjAxMSxnOiJOb25tZXRhbCIscjoyLGM6MTQsY29sOiIjNGQ5NmZmIn0se246NyxzOiJOIixubToiTml0cm9nZW4iLG06MTQuMDA3LGc6Ik5vbm1ldGFsIixyOjIsYzoxNSxjb2w6IiM0ZDk2ZmYifSx7bjo4LHM6Ik8iLG5tOiJPeHlnZW4iLG06MTUuOTk5LGc6Ik5vbm1ldGFsIixyOjIsYzoxNixjb2w6IiM0ZDk2ZmYifSx7bjo5LHM6IkYiLG5tOiJGbHVvcmluZSIsbToxOC45OTgsZzoiSGFsb2dlbiIscjoyLGM6MTcsY29sOiIjZmZkOTNkIn0se246MTAsczoiTmUiLG5tOiJOZW9uIixtOjIwLjE4LGc6Ik5vYmxlIEdhcyIscjoyLGM6MTgsY29sOiIjYzc3ZGZmIn0se246MTEsczoiTmEiLG5tOiJTb2RpdW0iLG06MjIuOTksZzoiQWxrYWxpIE1ldGFsIixyOjMsYzoxLGNvbDoiI2ZmNmI2YiJ9LHtuOjEyLHM6Ik1nIixubToiTWFnbmVzaXVtIixtOjI0LjMwNSxnOiJBbGthbGluZSBFYXJ0aCIscjozLGM6Mixjb2w6IiNmZjlmNDMifSx7bjoxMyxzOiJBbCIsbm06IkFsdW1pbml1bSIsbToyNi45ODIsZzoiTWV0YWwiLHI6MyxjOjEzLGNvbDoiIzAwZDRmZiJ9LHtuOjE0LHM6IlNpIixubToiU2lsaWNvbiIsbToyOC4wODYsZzoiTWV0YWxsb2lkIixyOjMsYzoxNCxjb2w6IiM2YmNiNzcifSx7bjoxNSxzOiJQIixubToiUGhvc3Bob3J1cyIsbTozMC45NzQsZzoiTm9ubWV0YWwiLHI6MyxjOjE1LGNvbDoiIzRkOTZmZiJ9LHtuOjE2LHM6IlMiLG5tOiJTdWxwaHVyIixtOjMyLjA2NSxnOiJOb25tZXRhbCIscjozLGM6MTYsY29sOiIjNGQ5NmZmIn0se246MTcsczoiQ2wiLG5tOiJDaGxvcmluZSIsbTozNS40NTMsZzoiSGFsb2dlbiIscjozLGM6MTcsY29sOiIjZmZkOTNkIn0se246MTgsczoiQXIiLG5tOiJBcmdvbiIsbTozOS45NDgsZzoiTm9ibGUgR2FzIixyOjMsYzoxOCxjb2w6IiNjNzdkZmYifSx7bjoxOSxzOiJLIixubToiUG90YXNzaXVtIixtOjM5LjA5OCxnOiJBbGthbGkgTWV0YWwiLHI6NCxjOjEsY29sOiIjZmY2YjZiIn0se246MjAsczoiQ2EiLG5tOiJDYWxjaXVtIixtOjQwLjA3OCxnOiJBbGthbGluZSBFYXJ0aCIscjo0LGM6Mixjb2w6IiNmZjlmNDMifSx7bjoyNixzOiJGZSIsbm06Iklyb24iLG06NTUuODQ1LGc6IlRyYW5zIE1ldGFsIixyOjQsYzo4LGNvbDoiIzg4OCJ9LHtuOjI5LHM6IkN1IixubToiQ29wcGVyIixtOjYzLjU0NixnOiJUcmFucyBNZXRhbCIscjo0LGM6MTEsY29sOiIjODg4In0se246MzAsczoiWm4iLG5tOiJaaW5jIixtOjY1LjM4LGc6IlRyYW5zIE1ldGFsIixyOjQsYzoxMixjb2w6IiM4ODgifSx7bjo0NyxzOiJBZyIsbm06IlNpbHZlciIsbToxMDcuODY4LGc6IlRyYW5zIE1ldGFsIixyOjUsYzoxMSxjb2w6IiM4ODgifSx7bjo3OSxzOiJBdSIsbm06IkdvbGQiLG06MTk2Ljk2NyxnOiJUcmFucyBNZXRhbCIscjo2LGM6MTEsY29sOiIjZmZkOTNkIn0se246ODIsczoiUGIiLG5tOiJMZWFkIixtOjIwNy4yLGc6Ik1ldGFsIixyOjYsYzoxNCxjb2w6IiMwMGQ0ZmYifSx7bjo5MixzOiJVIixubToiVXJhbml1bSIsbToyMzguMDI5LGc6IkFjdGluaWRlIixyOjcsYzozLGNvbDoiI2ZmNmViNCJ9XTt2YXIgZ3JpZD17fTtlbHMuZm9yRWFjaChmdW5jdGlvbihlKXtncmlkW2UucisiLCIrZS5jXT1lO30pO3ZhciBwdD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicHQiKTtmb3IodmFyIHI9MTtyPD03O3IrKyl7Zm9yKHZhciBjb2w9MTtjb2w8PTE4O2NvbCsrKXt2YXIgZT1ncmlkW3IrIiwiK2NvbF07dmFyIGRpdj1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJkaXYiKTtpZihlKXtkaXYuY2xhc3NOYW1lPSJlbCI7ZGl2LnN0eWxlLmJhY2tncm91bmQ9ZS5jb2wrIjIyIjtkaXYuc3R5bGUuYm9yZGVyQ29sb3I9ZS5jb2wrIjQ0Ijt2YXIgbmQ9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgiZGl2Iik7bmQuY2xhc3NOYW1lPSJudW0iO25kLnRleHRDb250ZW50PWUubjt2YXIgc2Q9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgiZGl2Iik7c2QuY2xhc3NOYW1lPSJzeW0iO3NkLnN0eWxlLmNvbG9yPWUuY29sO3NkLnRleHRDb250ZW50PWUucztkaXYuYXBwZW5kQ2hpbGQobmQpO2Rpdi5hcHBlbmRDaGlsZChzZCk7KGZ1bmN0aW9uKGVsKXtkaXYub25jbGljaz1mdW5jdGlvbigpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJpbmYiKS5pbm5lckhUTUw9IjxiIHN0eWxlPWNvbG9yOiIrZWwuY29sKyI+IitlbC5zKyIgLSAiK2VsLm5tKyI8L2I+IE5vOiIrZWwubisiIE1hc3M6IitlbC5tKyIgIitlbC5nO307fSkoZSk7fXB0LmFwcGVuZENoaWxkKGRpdik7fX07PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4="
+  },
+  "graph": {
+    t: "Function Graph Plotter — Mathematics",
+    d: "ریاضی کے افعال — Type any function and plot",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I2N0e3BhZGRpbmc6OHB4O2Rpc3BsYXk6ZmxleDtnYXA6NnB4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXI7d2lkdGg6MTAwJX1pbnB1dFt0eXBlPXRleHRde2JhY2tncm91bmQ6IzFhMWEzYTtib3JkZXI6MS41cHggc29saWQgIzJhMmE0YTtib3JkZXItcmFkaXVzOjhweDtjb2xvcjojZmZmO3BhZGRpbmc6N3B4IDEwcHg7Zm9udC1zaXplOjEzcHg7d2lkdGg6MTYwcHg7b3V0bGluZTpub25lfS5wYntwYWRkaW5nOjhweCAxNHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDEzNWRlZywjNGQ5NmZmLCMxZTZmZmYpO2JvcmRlcjpub25lO2JvcmRlci1yYWRpdXM6OHB4O2NvbG9yOiNmZmY7Zm9udC13ZWlnaHQ6NzAwO2N1cnNvcjpwb2ludGVyO2ZvbnQtc2l6ZToxMnB4fS5yYntwYWRkaW5nOjhweCAxMnB4O2JhY2tncm91bmQ6IzMzMztib3JkZXI6bm9uZTtib3JkZXItcmFkaXVzOjhweDtjb2xvcjojZmZmO2N1cnNvcjpwb2ludGVyO2ZvbnQtc2l6ZToxMnB4fSNleHtkaXNwbGF5OmZsZXg7Z2FwOjVweDtmbGV4LXdyYXA6d3JhcDtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyO3BhZGRpbmc6MCA4cHggNnB4fS5leHtwYWRkaW5nOjRweCA4cHg7Ym9yZGVyLXJhZGl1czo2cHg7YmFja2dyb3VuZDojMWExYTNhO2JvcmRlcjoxcHggc29saWQgIzJhMmE0YTtjb2xvcjojYWFhO2N1cnNvcjpwb2ludGVyO2ZvbnQtc2l6ZToxMXB4fS5leDpob3Zlcntib3JkZXItY29sb3I6IzRkOTZmZjtjb2xvcjojNGQ5NmZmfWNhbnZhc3tkaXNwbGF5OmJsb2NrfTwvc3R5bGU+PC9oZWFkPjxib2R5PjxkaXYgaWQ9ImN0Ij48aW5wdXQgdHlwZT0idGV4dCIgaWQ9ImZuIiB2YWx1ZT0ic2luKHgpIj48YnV0dG9uIGNsYXNzPSJwYiIgb25jbGljaz0icGxvdCgpIj5QbG90PC9idXR0b24+PGJ1dHRvbiBjbGFzcz0icmIiIG9uY2xpY2s9ImZucz1bXTtkcmF3KCkiPkNsZWFyPC9idXR0b24+PC9kaXY+PGRpdiBpZD0iZXgiPjxzcGFuIGNsYXNzPSJleCIgb25jbGljaz0ic2YoJ3Npbih4KScpIj5zaW4oeCk8L3NwYW4+PHNwYW4gY2xhc3M9ImV4IiBvbmNsaWNrPSJzZignY29zKHgpJykiPmNvcyh4KTwvc3Bhbj48c3BhbiBjbGFzcz0iZXgiIG9uY2xpY2s9InNmKCd4KngnKSI+eDI8L3NwYW4+PHNwYW4gY2xhc3M9ImV4IiBvbmNsaWNrPSJzZignTWF0aC5zcXJ0KE1hdGguYWJzKHgpKScpIj5zcXJ0PC9zcGFuPjxzcGFuIGNsYXNzPSJleCIgb25jbGljaz0ic2YoJ01hdGgubG9nKE1hdGguYWJzKHgpKzAuMDEpJykiPmxvZzwvc3Bhbj48c3BhbiBjbGFzcz0iZXgiIG9uY2xpY2s9InNmKCd4KngqeC0zKngnKSI+eDM8L3NwYW4+PC9kaXY+PGNhbnZhcyBpZD0iYyI+PC9jYW52YXM+PHNjcmlwdD52YXIgY3Y9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImMiKSxjdHg9Y3YuZ2V0Q29udGV4dCgiMmQiKSxmbnM9W10sY29scz1bIiM0ZDk2ZmYiLCIjZmY2YjZiIiwiIzZiY2I3NyIsIiNmZmQ5M2QiLCIjYzc3ZGZmIiwiI2ZmOWY0MyJdO2N2LndpZHRoPU1hdGgubWluKHdpbmRvdy5pbm5lcldpZHRoLDcwMCk7Y3YuaGVpZ2h0PXdpbmRvdy5pbm5lckhlaWdodC0xMjA7ZnVuY3Rpb24gc2Yodil7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImZuIikudmFsdWU9djtwbG90KCk7fWZ1bmN0aW9uIHNlKGV4cHIseCl7dHJ5e3JldHVybiBGdW5jdGlvbigieCIsInJldHVybiAiK2V4cHIpKHgpO31jYXRjaChlKXtyZXR1cm4gTmFOO319ZnVuY3Rpb24gcGxvdCgpe3ZhciBleHByPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJmbiIpLnZhbHVlLnRyaW0oKTtpZighZXhwcilyZXR1cm47Zm5zLnB1c2goe2V4cHI6ZXhwcixjb2w6Y29sc1tmbnMubGVuZ3RoJWNvbHMubGVuZ3RoXX0pO2lmKGZucy5sZW5ndGg+NilmbnMuc2hpZnQoKTtkcmF3KCk7fWZ1bmN0aW9uIGRyYXcoKXtjdHguY2xlYXJSZWN0KDAsMCxjdi53aWR0aCxjdi5oZWlnaHQpO3ZhciBjeD1jdi53aWR0aC8yLGN5PWN2LmhlaWdodC8yLHNjPTQwO2N0eC5zdHJva2VTdHlsZT0iIzFhMWEzYSI7Y3R4LmxpbmVXaWR0aD0xO2Zvcih2YXIgaT0tMjA7aTw9MjA7aSsrKXtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbyhjeCtpKnNjLDApO2N0eC5saW5lVG8oY3graSpzYyxjdi5oZWlnaHQpO2N0eC5zdHJva2UoKTtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbygwLGN5K2kqc2MpO2N0eC5saW5lVG8oY3Yud2lkdGgsY3kraSpzYyk7Y3R4LnN0cm9rZSgpO31jdHguc3Ryb2tlU3R5bGU9IiMyYTJhNGEiO2N0eC5saW5lV2lkdGg9MjtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbygwLGN5KTtjdHgubGluZVRvKGN2LndpZHRoLGN5KTtjdHguc3Ryb2tlKCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oY3gsMCk7Y3R4LmxpbmVUbyhjeCxjdi5oZWlnaHQpO2N0eC5zdHJva2UoKTtjdHguZmlsbFN0eWxlPSIjNDQ0IjtjdHguZm9udD0iMTBweCBzYW5zLXNlcmlmIjtjdHgudGV4dEFsaWduPSJjZW50ZXIiO2Zvcih2YXIgaT0tOTtpPD05O2krKyl7aWYoaSE9PTApY3R4LmZpbGxUZXh0KGksY3graSpzYyxjeSsxMyk7fWZucy5mb3JFYWNoKGZ1bmN0aW9uKGYsZmkpe2N0eC5iZWdpblBhdGgoKTtjdHguc3Ryb2tlU3R5bGU9Zi5jb2w7Y3R4LmxpbmVXaWR0aD0yLjU7dmFyIGZpcnN0PXRydWU7Zm9yKHZhciBweD0wO3B4PGN2LndpZHRoO3B4Kyspe3ZhciB4PShweC1jeCkvc2M7dmFyIHk9c2UoZi5leHByLHgpO2lmKGlzTmFOKHkpfHwhaXNGaW5pdGUoeSl8fE1hdGguYWJzKHkpPjEwMCl7Zmlyc3Q9dHJ1ZTtjb250aW51ZTt9dmFyIHB5PWN5LXkqc2M7aWYoZmlyc3Qpe2N0eC5tb3ZlVG8ocHgscHkpO2ZpcnN0PWZhbHNlO31lbHNlIGN0eC5saW5lVG8ocHgscHkpO31jdHguc3Ryb2tlKCk7Y3R4LmZpbGxTdHlsZT1mLmNvbDtjdHguZm9udD0iMTFweCBzYW5zLXNlcmlmIjtjdHgudGV4dEFsaWduPSJsZWZ0IjtjdHguZmlsbFRleHQoInk9IitmLmV4cHIsNixmaSoxNisxNik7fSk7fWRyYXcoKTs8L3NjcmlwdD48L2JvZHk+PC9odG1sPg=="
+  },
+  "solar": {
+    t: "Solar System — Science",
+    d: "شمسی نظام — Tap planet to see name and distance",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzAzMDMwODtvdmVyZmxvdzpoaWRkZW47Zm9udC1mYW1pbHk6c2Fucy1zZXJpZn1jYW52YXN7ZGlzcGxheTpibG9ja30jdGlwe3Bvc2l0aW9uOmFic29sdXRlO3RvcDo4cHg7bGVmdDo1MCU7dHJhbnNmb3JtOnRyYW5zbGF0ZVgoLTUwJSk7YmFja2dyb3VuZDpyZ2JhKDAsMCwwLDAuOCk7Ym9yZGVyOjFweCBzb2xpZCAjMmEyYTRhO2JvcmRlci1yYWRpdXM6MTBweDtwYWRkaW5nOjdweCAxNHB4O2ZvbnQtc2l6ZToxMnB4O2NvbG9yOiNmZmY7cG9pbnRlci1ldmVudHM6bm9uZTt0ZXh0LWFsaWduOmNlbnRlcjt3aGl0ZS1zcGFjZTpub3dyYXB9PC9zdHlsZT48L2hlYWQ+PGJvZHk+PGNhbnZhcyBpZD0iYyI+PC9jYW52YXM+PGRpdiBpZD0idGlwIj5QbGFuZXQgcGUgdGFwIGthcmVpbjwvZGl2PjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIik7Y3Yud2lkdGg9d2luZG93LmlubmVyV2lkdGg7Y3YuaGVpZ2h0PXdpbmRvdy5pbm5lckhlaWdodDt2YXIgY3g9Y3Yud2lkdGgvMixjeT1jdi5oZWlnaHQvMix0PTAsc2M9Y3Yud2lkdGg8NTAwPzAuNzoxO3ZhciBwbD1be246Ik1lcmN1cnkiLHI6NSxvcmI6NTUqc2Msc3BkOjQuMSxjb2w6IiNhYWEiLGRpc3Q6IjU3LjlNIGttIn0se246IlZlbnVzIixyOjksb3JiOjg1KnNjLHNwZDoxLjYsY29sOiIjZmY5ZjQzIixkaXN0OiIxMDhNIGttIn0se246IkVhcnRoIixyOjEwLG9yYjoxMTgqc2Msc3BkOjEsY29sOiIjNGQ5NmZmIixkaXN0OiIxNDlNIGttIn0se246Ik1hcnMiLHI6NyxvcmI6MTU1KnNjLHNwZDowLjUzLGNvbDoiI2ZmNmI2YiIsZGlzdDoiMjI4TSBrbSJ9LHtuOiJKdXBpdGVyIixyOjIwLG9yYjoyMTAqc2Msc3BkOjAuMDgsY29sOiIjYzc3ZGZmIixkaXN0OiI3NzhNIGttIn0se246IlNhdHVybiIscjoxNixvcmI6MjY1KnNjLHNwZDowLjAzNCxjb2w6IiNmZmQ5M2QiLGRpc3Q6IjEuNDNCIGttIn0se246IlVyYW51cyIscjoxMixvcmI6MzEwKnNjLHNwZDowLjAxMixjb2w6IiMwMGQ0ZmYiLGRpc3Q6IjIuODdCIGttIn0se246Ik5lcHR1bmUiLHI6MTEsb3JiOjM1MCpzYyxzcGQ6MC4wMDYsY29sOiIjMWU2ZmZmIixkaXN0OiI0LjVCIGttIn1dO3ZhciBzdGFycz1bXTtmb3IodmFyIGk9MDtpPDIwMDtpKyspc3RhcnMucHVzaCh7eDpNYXRoLnJhbmRvbSgpKmN2LndpZHRoLHk6TWF0aC5yYW5kb20oKSpjdi5oZWlnaHQscjpNYXRoLnJhbmRvbSgpKjEuNX0pO2Z1bmN0aW9uIGRyYXcoKXtjdHguZmlsbFN0eWxlPSJyZ2JhKDMsMyw4LDAuNCkiO2N0eC5maWxsUmVjdCgwLDAsY3Yud2lkdGgsY3YuaGVpZ2h0KTtzdGFycy5mb3JFYWNoKGZ1bmN0aW9uKHMpe2N0eC5iZWdpblBhdGgoKTtjdHguYXJjKHMueCxzLnkscy5yLDAsNi4yOCk7Y3R4LmZpbGxTdHlsZT0icmdiYSgyNTUsMjU1LDI1NSwwLjUpIjtjdHguZmlsbCgpO30pO3ZhciBzZz1jdHguY3JlYXRlUmFkaWFsR3JhZGllbnQoY3gsY3ksMCxjeCxjeSwyNik7c2cuYWRkQ29sb3JTdG9wKDAsIiNmZmY5ZDAiKTtzZy5hZGRDb2xvclN0b3AoMC40LCIjZmZkOTNkIik7c2cuYWRkQ29sb3JTdG9wKDEsIiNmZjlmNDMiKTtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhjeCxjeSwyMiwwLDYuMjgpO2N0eC5maWxsU3R5bGU9c2c7Y3R4LnNoYWRvd0NvbG9yPSIjZmZkOTNkIjtjdHguc2hhZG93Qmx1cj0yMjtjdHguZmlsbCgpO2N0eC5zaGFkb3dCbHVyPTA7cGwuZm9yRWFjaChmdW5jdGlvbihwKXtjdHguYmVnaW5QYXRoKCk7Y3R4LmFyYyhjeCxjeSxwLm9yYiwwLDYuMjgpO2N0eC5zdHJva2VTdHlsZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA2KSI7Y3R4LmxpbmVXaWR0aD0xO2N0eC5zdHJva2UoKTt2YXIgYW5nPXQqcC5zcGQscHg9Y3grTWF0aC5jb3MoYW5nKSpwLm9yYixweT1jeStNYXRoLnNpbihhbmcpKnAub3JiO2lmKHAubj09PSJTYXR1cm4iKXtjdHguYmVnaW5QYXRoKCk7Y3R4LmVsbGlwc2UocHgscHkscC5yKzksNCxhbmcsMCw2LjI4KTtjdHguc3Ryb2tlU3R5bGU9cC5jb2wrIjg4IjtjdHgubGluZVdpZHRoPTM7Y3R4LnN0cm9rZSgpO312YXIgcGc9Y3R4LmNyZWF0ZVJhZGlhbEdyYWRpZW50KHB4LXAuciowLjMscHktcC5yKjAuMywxLHB4LHB5LHAucik7cGcuYWRkQ29sb3JTdG9wKDAsIiNmZmYiKTtwZy5hZGRDb2xvclN0b3AoMSxwLmNvbCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMocHgscHkscC5yLDAsNi4yOCk7Y3R4LmZpbGxTdHlsZT1wZztjdHguZmlsbCgpO30pO3QrPTAuMDA0O3JlcXVlc3RBbmltYXRpb25GcmFtZShkcmF3KTt9Y3YuYWRkRXZlbnRMaXN0ZW5lcigiY2xpY2siLGZ1bmN0aW9uKGUpe3ZhciBmPWZhbHNlO3BsLmZvckVhY2goZnVuY3Rpb24ocCl7dmFyIGFuZz10KnAuc3BkLHB4PWN4K01hdGguY29zKGFuZykqcC5vcmIscHk9Y3krTWF0aC5zaW4oYW5nKSpwLm9yYjtpZihNYXRoLmh5cG90KGUuY2xpZW50WC1weCxlLmNsaWVudFktcHkpPHAucisxNCl7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInRpcCIpLnRleHRDb250ZW50PXAubisiIC0gIitwLmRpc3Q7Zj10cnVlO319KTtpZighZilkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgidGlwIikudGV4dENvbnRlbnQ9IlBsYW5ldCBwZSB0YXAga2FyZWluIjt9KTtkcmF3KCk7PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4="
+  },
+  "circuit": {
+    t: "Electric Circuit Ohm Law — Physics",
+    d: "اوہم کا قانون V=IR — Adjust voltage and resistance",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I2N0e3BhZGRpbmc6MTBweDtkaXNwbGF5OmZsZXg7Z2FwOjEycHg7ZmxleC13cmFwOndyYXA7anVzdGlmeS1jb250ZW50OmNlbnRlcn1sYWJlbHtkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6Y2VudGVyO2dhcDo1cHg7Y29sb3I6I2FhYTtmb250LXNpemU6MTJweH1pbnB1dFt0eXBlPXJhbmdlXXthY2NlbnQtY29sb3I6I2ZmZDkzZDt3aWR0aDo5MHB4fS52bHtjb2xvcjojZmZkOTNkO2ZvbnQtd2VpZ2h0OjcwMDttaW4td2lkdGg6MzJweH1jYW52YXN7ZGlzcGxheTpibG9ja30jdmx7ZGlzcGxheTpmbGV4O2dhcDoxMnB4O3BhZGRpbmc6OHB4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXI7Zm9udC1zaXplOjEzcHh9LnZ7YmFja2dyb3VuZDojMWExYTNhO2JvcmRlci1yYWRpdXM6MTBweDtwYWRkaW5nOjdweCAxMnB4O3RleHQtYWxpZ246Y2VudGVyO2JvcmRlcjoxcHggc29saWQgIzJhMmE0YX0udnR7Zm9udC1zaXplOjAuN3JlbTtjb2xvcjojODg4fS52dntmb250LXNpemU6MXJlbTtmb250LXdlaWdodDo3MDB9PC9zdHlsZT48L2hlYWQ+PGJvZHk+PGRpdiBpZD0iY3QiPjxsYWJlbD5Wb2x0YWdlPGlucHV0IHR5cGU9InJhbmdlIiBpZD0idm9sdCIgbWluPSIxIiBtYXg9IjI0IiB2YWx1ZT0iMTIiPjxzcGFuIGNsYXNzPSJ2bCIgaWQ9InZ2Ij4xMjwvc3Bhbj5WPC9sYWJlbD48bGFiZWw+UmVzaXN0YW5jZTxpbnB1dCB0eXBlPSJyYW5nZSIgaWQ9InJlcyIgbWluPSIxIiBtYXg9IjEwMCIgdmFsdWU9IjEwIj48c3BhbiBjbGFzcz0idmwiIGlkPSJydiI+MTA8L3NwYW4+b2htPC9sYWJlbD48L2Rpdj48Y2FudmFzIGlkPSJjIj48L2NhbnZhcz48ZGl2IGlkPSJ2bCI+PGRpdiBjbGFzcz0idiI+PGRpdiBjbGFzcz0idnQiPkN1cnJlbnQgSTwvZGl2PjxkaXYgY2xhc3M9InZ2IiBpZD0iY3VyciIgc3R5bGU9ImNvbG9yOiNmZjZiNmIiPjEuMiBBPC9kaXY+PC9kaXY+PGRpdiBjbGFzcz0idiI+PGRpdiBjbGFzcz0idnQiPlBvd2VyIFA8L2Rpdj48ZGl2IGNsYXNzPSJ2diIgaWQ9InBvd3IiIHN0eWxlPSJjb2xvcjojNmJjYjc3Ij4xNC40IFc8L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPSJ2Ij48ZGl2IGNsYXNzPSJ2dCI+Vj1JeFI8L2Rpdj48ZGl2IGNsYXNzPSJ2diIgc3R5bGU9ImNvbG9yOiNmZmQ5M2Q7Zm9udC1zaXplOjAuOHJlbSI+T2htIExhdzwvZGl2PjwvZGl2PjwvZGl2PjxzY3JpcHQ+dmFyIGN2PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJjIiksY3R4PWN2LmdldENvbnRleHQoIjJkIiksdD0wO2N2LndpZHRoPU1hdGgubWluKHdpbmRvdy5pbm5lcldpZHRoLDQyMCk7Y3YuaGVpZ2h0PTE4NTtmdW5jdGlvbiB1cGQoKXt2YXIgdj0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInZvbHQiKS52YWx1ZSxyPStkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicmVzIikudmFsdWU7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInZ2IikudGV4dENvbnRlbnQ9djtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgicnYiKS50ZXh0Q29udGVudD1yO3ZhciBJPXYvcixQPXYqSTtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiY3VyciIpLnRleHRDb250ZW50PUkudG9GaXhlZCgzKSsiIEEiO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJwb3dyIikudGV4dENvbnRlbnQ9UC50b0ZpeGVkKDIpKyIgVyI7fWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoImlucHV0IikuZm9yRWFjaChmdW5jdGlvbihpKXtpLm9uaW5wdXQ9dXBkO30pO2Z1bmN0aW9uIGRyYXcoKXtjdHguY2xlYXJSZWN0KDAsMCxjdi53aWR0aCxjdi5oZWlnaHQpO3ZhciB2PStkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgidm9sdCIpLnZhbHVlLHI9K2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJyZXMiKS52YWx1ZSxJPXYvcixzcGQ9TWF0aC5taW4oSSowLjUsOCk7Y3R4LnN0cm9rZVN0eWxlPSIjMmEyYTRhIjtjdHgubGluZVdpZHRoPTc7Y3R4LmxpbmVKb2luPSJyb3VuZCI7Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oNTUsNDApO2N0eC5saW5lVG8oY3Yud2lkdGgtNTUsNDApO2N0eC5saW5lVG8oY3Yud2lkdGgtNTUsMTQ1KTtjdHgubGluZVRvKDU1LDE0NSk7Y3R4LmxpbmVUbyg1NSw0MCk7Y3R4LnN0cm9rZSgpO2N0eC5zdHJva2VTdHlsZT0iI2ZmZDkzZCI7Y3R4LmxpbmVXaWR0aD0yLjU7Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oNTUsNDApO2N0eC5saW5lVG8oY3Yud2lkdGgtNTUsNDApO2N0eC5saW5lVG8oY3Yud2lkdGgtNTUsMTQ1KTtjdHgubGluZVRvKDU1LDE0NSk7Y3R4LmxpbmVUbyg1NSw0MCk7Y3R4LnN0cm9rZSgpO2N0eC5maWxsU3R5bGU9IiMxYTFhM2EiO2N0eC5zdHJva2VTdHlsZT0iI2ZmNmI2YiI7Y3R4LmxpbmVXaWR0aD0yO2N0eC5iZWdpblBhdGgoKTtjdHgucmVjdCgzNSw3NSw0MCw1MCk7Y3R4LmZpbGwoKTtjdHguc3Ryb2tlKCk7Y3R4LmZpbGxTdHlsZT0iI2ZmNmI2YiI7Y3R4LmZvbnQ9ImJvbGQgMTBweCBzYW5zLXNlcmlmIjtjdHgudGV4dEFsaWduPSJjZW50ZXIiO2N0eC5maWxsVGV4dCh2KyJWIiw1NSwxMDMpO2N0eC5maWxsVGV4dCgiQkFUIiw1NSw4OSk7Y3R4LmZpbGxTdHlsZT0iIzFhMWEzYSI7Y3R4LnN0cm9rZVN0eWxlPSIjNmJjYjc3IjtjdHgubGluZVdpZHRoPTI7Y3R4LmJlZ2luUGF0aCgpO2N0eC5yZWN0KGN2LndpZHRoLTkyLDk0LDcyLDM1KTtjdHguZmlsbCgpO2N0eC5zdHJva2UoKTtmb3IodmFyIGk9MDtpPDQ7aSsrKXtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbyhjdi53aWR0aC04OCtpKjE0LDk4KTtjdHgubGluZVRvKGN2LndpZHRoLTgzK2kqMTQsMTI5KTtjdHguc3Ryb2tlU3R5bGU9IiM2YmNiNzciO2N0eC5saW5lV2lkdGg9MS41O2N0eC5zdHJva2UoKTt9Y3R4LmZpbGxTdHlsZT0iIzZiY2I3NyI7Y3R4LmZvbnQ9IjEwcHggc2Fucy1zZXJpZiI7Y3R4LmZpbGxUZXh0KHIrIm9obSIsY3Yud2lkdGgtNTUsOTEpO3ZhciBkb3RzPTg7Zm9yKHZhciBkPTA7ZDxkb3RzO2QrKyl7dmFyIHBvcz0oZC9kb3RzK3QpJTEscHgscHk7aWYocG9zPDAuMjUpe3B4PTU1K3Bvcyo0Kihjdi53aWR0aC0xMTApO3B5PTQwO31lbHNlIGlmKHBvczwwLjUpe3B4PWN2LndpZHRoLTU1O3B5PTQwKyhwb3MtMC4yNSkqNCoxMDU7fWVsc2UgaWYocG9zPDAuNzUpe3B4PWN2LndpZHRoLTU1LShwb3MtMC41KSo0Kihjdi53aWR0aC0xMTApO3B5PTE0NTt9ZWxzZXtweD01NTtweT0xNDUtKHBvcy0wLjc1KSo0KjEwNTt9Y3R4LmJlZ2luUGF0aCgpO2N0eC5hcmMocHgscHksNSwwLDYuMjgpO2N0eC5maWxsU3R5bGU9InJnYmEoMjU1LDIyMCw1MCwiK01hdGgubWluKEkvMiwxKSsiKSI7Y3R4LnNoYWRvd0NvbG9yPSIjZmZkOTNkIjtjdHguc2hhZG93Qmx1cj04O2N0eC5maWxsKCk7Y3R4LnNoYWRvd0JsdXI9MDt9dCs9c3BkKjAuMDAyO3JlcXVlc3RBbmltYXRpb25GcmFtZShkcmF3KTt9dXBkKCk7ZHJhdygpOzwvc2NyaXB0PjwvYm9keT48L2h0bWw+"
+  },
+  "heart": {
+    t: "Heartbeat Simulation — Biology",
+    d: "دل کی دھڑکن — Adjust BPM and watch ECG",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I2N0e3BhZGRpbmc6OHB4O2Rpc3BsYXk6ZmxleDtnYXA6MTJweDthbGlnbi1pdGVtczpjZW50ZXI7ZmxleC13cmFwOndyYXA7anVzdGlmeS1jb250ZW50OmNlbnRlcjtmb250LXNpemU6MTJweH1sYWJlbHtkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6Y2VudGVyO2dhcDo1cHg7Y29sb3I6I2FhYX1pbnB1dFt0eXBlPXJhbmdlXXthY2NlbnQtY29sb3I6I2ZmNmI2Yjt3aWR0aDo5MHB4fS52bHtjb2xvcjojZmY2YjZiO2ZvbnQtd2VpZ2h0OjcwMDttaW4td2lkdGg6MzJweH1jYW52YXN7ZGlzcGxheTpibG9ja30jYmR7Zm9udC1zaXplOjEuMnJlbTtmb250LXdlaWdodDo3MDA7Y29sb3I6I2ZmNmI2Yjt0ZXh0LWFsaWduOmNlbnRlcjtwYWRkaW5nOjRweH08L3N0eWxlPjwvaGVhZD48Ym9keT48ZGl2IGlkPSJjdCI+PGxhYmVsPkhlYXJ0IFJhdGU8aW5wdXQgdHlwZT0icmFuZ2UiIGlkPSJicG0iIG1pbj0iNDAiIG1heD0iMTgwIiB2YWx1ZT0iNzIiPjxzcGFuIGNsYXNzPSJ2bCIgaWQ9ImJ2Ij43Mjwvc3Bhbj5CUE08L2xhYmVsPjwvZGl2PjxkaXYgaWQ9ImJkIj5IZWFydCA3MiBCUE08L2Rpdj48Y2FudmFzIGlkPSJjIj48L2NhbnZhcz48c2NyaXB0PnZhciBjdj1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiYyIpLGN0eD1jdi5nZXRDb250ZXh0KCIyZCIpLHQ9MCxlY2c9W107Y3Yud2lkdGg9TWF0aC5taW4od2luZG93LmlubmVyV2lkdGgsNDIwKTtjdi5oZWlnaHQ9MjE1O2Zvcih2YXIgaT0wO2k8MTkwO2krKyllY2cucHVzaCgwKTtkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiYnBtIikub25pbnB1dD1mdW5jdGlvbigpe2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJidiIpLnRleHRDb250ZW50PXRoaXMudmFsdWU7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImJkIikudGV4dENvbnRlbnQ9IkhlYXJ0ICIrdGhpcy52YWx1ZSsiIEJQTSI7fTtmdW5jdGlvbiBnRShwaCl7aWYocGg8MC4xKXJldHVybiBwaCo1O2lmKHBoPDAuMTUpcmV0dXJuIDAuNS1waCozO2lmKHBoPDAuMilyZXR1cm4gcGgqMTUtMi41O2lmKHBoPDAuMjUpcmV0dXJuIDMuNzUtcGgqMTU7aWYocGg8MC4zNSlyZXR1cm4gTWF0aC5zaW4oKHBoLTAuMjUpKk1hdGguUEkqMTApKjAuNztyZXR1cm4gMDt9ZnVuY3Rpb24gZHJhdygpe2N0eC5jbGVhclJlY3QoMCwwLGN2LndpZHRoLGN2LmhlaWdodCk7dmFyIGJwbT0rZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImJwbSIpLnZhbHVlLHBlcmlvZD02MC9icG0scGhhc2U9dCVwZXJpb2QvcGVyaW9kLGJlYXQ9TWF0aC5tYXgoMCwxLU1hdGguYWJzKHBoYXNlLTAuMikqMjApLHN6PTU2K2JlYXQqMTY7dmFyIGh4PWN2LndpZHRoKjAuMzIsaHk9MTAwO3ZhciBoZz1jdHguY3JlYXRlUmFkaWFsR3JhZGllbnQoaHgsaHktc3oqMC4xLHN6KjAuMSxoeCxoeSxzeiowLjU1KTtoZy5hZGRDb2xvclN0b3AoMCwiI2ZmOTk5OSIpO2hnLmFkZENvbG9yU3RvcCgwLjUsIiNmZjMzMzMiKTtoZy5hZGRDb2xvclN0b3AoMSwiI2FhMDAwMCIpO2N0eC5maWxsU3R5bGU9aGc7Y3R4LnNoYWRvd0NvbG9yPSIjZmYwMDAwIjtjdHguc2hhZG93Qmx1cj0xNSpiZWF0O2N0eC5iZWdpblBhdGgoKTtjdHgubW92ZVRvKGh4LGh5LXN6KjAuMjgpO2N0eC5iZXppZXJDdXJ2ZVRvKGh4LXN6KjAuNSxoeS1zeiowLjY1LGh4LXN6KjAuODUsaHktMC4xKnN6LGh4LGh5K3N6KjAuMzgpO2N0eC5iZXppZXJDdXJ2ZVRvKGh4K3N6KjAuODUsaHktMC4xKnN6LGh4K3N6KjAuNSxoeS1zeiowLjY1LGh4LGh5LXN6KjAuMjgpO2N0eC5maWxsKCk7Y3R4LnNoYWRvd0JsdXI9MDtlY2cuc2hpZnQoKTtlY2cucHVzaCgxMDArZ0UocGhhc2UpKjUwKTt2YXIgZXgwPWN2LndpZHRoKjAuNTtjdHguYmVnaW5QYXRoKCk7Y3R4LnN0cm9rZVN0eWxlPSIjZmY2YjZiIjtjdHgubGluZVdpZHRoPTIuNTtmb3IodmFyIGk9MDtpPGVjZy5sZW5ndGg7aSsrKXt2YXIgZXg9ZXgwK2ksZXk9ZWNnW2ldO2lmKGk9PT0wKWN0eC5tb3ZlVG8oZXgsZXkpO2Vsc2UgY3R4LmxpbmVUbyhleCxleSk7fWN0eC5zdHJva2UoKTtjdHguc3Ryb2tlU3R5bGU9IiMxYTFhM2EiO2N0eC5saW5lV2lkdGg9MTtmb3IodmFyIGc9MDtnPDQ7ZysrKXtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbyhleDAsNTIrZyozNyk7Y3R4LmxpbmVUbyhjdi53aWR0aCw1MitnKjM3KTtjdHguc3Ryb2tlKCk7fWN0eC5maWxsU3R5bGU9IiNmZmYiO2N0eC5mb250PSJib2xkIDExcHggc2Fucy1zZXJpZiI7Y3R4LnRleHRBbGlnbj0ibGVmdCI7Y3R4LmZpbGxUZXh0KGJlYXQ+MC4zPyJQVU1QSU5HIjoiYXQgcmVzdCIsaHgtMjUsaHkrc3oqMC4zOCsxOCk7dCs9MC4wMTY7cmVxdWVzdEFuaW1hdGlvbkZyYW1lKGRyYXcpO31kcmF3KCk7PC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4="
+  },
+  "newton": {
+    t: "Newton 3 Laws — Physics",
+    d: "نیوٹن کے قوانین — Tap canvas to apply force",
+    b: "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgY2hhcnNldD0iVVRGLTgiPjxzdHlsZT5ib2R5e21hcmdpbjowO2JhY2tncm91bmQ6IzBhMGExYTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2NvbG9yOiNmZmY7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXJ9I3Rie2Rpc3BsYXk6ZmxleDtnYXA6NXB4O3BhZGRpbmc6OHB4O2ZsZXgtd3JhcDp3cmFwO2p1c3RpZnktY29udGVudDpjZW50ZXJ9LnRie3BhZGRpbmc6N3B4IDEycHg7Ym9yZGVyLXJhZGl1czo4cHg7Ym9yZGVyOjEuNXB4IHNvbGlkICMyYTJhNGE7YmFja2dyb3VuZDojMWExYTNhO2NvbG9yOiNhYWE7Y3Vyc29yOnBvaW50ZXI7Zm9udC13ZWlnaHQ6NzAwO2ZvbnQtc2l6ZToxMXB4fS50Yi5vbntiYWNrZ3JvdW5kOiM0ZDk2ZmY7Y29sb3I6I2ZmZjtib3JkZXItY29sb3I6IzRkOTZmZn1jYW52YXN7ZGlzcGxheTpibG9ja30jZHN7cGFkZGluZzo4cHggMTRweDtmb250LXNpemU6MTFweDtjb2xvcjojYWFhO3RleHQtYWxpZ246Y2VudGVyO2xpbmUtaGVpZ2h0OjEuNn08L3N0eWxlPjwvaGVhZD48Ym9keT48ZGl2IGlkPSJ0YiI+PGJ1dHRvbiBjbGFzcz0idGIgb24iIG9uY2xpY2s9InNldEwoMCkiPkxhdyAxIEluZXJ0aWE8L2J1dHRvbj48YnV0dG9uIGNsYXNzPSJ0YiIgb25jbGljaz0ic2V0TCgxKSI+TGF3IDIgRj1tYTwvYnV0dG9uPjxidXR0b24gY2xhc3M9InRiIiBvbmNsaWNrPSJzZXRMKDIpIj5MYXcgMyBSZWFjdGlvbjwvYnV0dG9uPjwvZGl2PjxjYW52YXMgaWQ9ImMiPjwvY2FudmFzPjxkaXYgaWQ9ImRzIj5PYmplY3Qgc3RheXMgYXQgcmVzdCB1bnRpbCBmb3JjZSBhY3RzLiBUYXAgY2FudmFzIHRvIHB1c2guPC9kaXY+PHNjcmlwdD52YXIgY3Y9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImMiKSxjdHg9Y3YuZ2V0Q29udGV4dCgiMmQiKTtjdi53aWR0aD1NYXRoLm1pbih3aW5kb3cuaW5uZXJXaWR0aCw0MjApO2N2LmhlaWdodD0xODU7dmFyIGxhdz0wLHQ9MCxvYmpzPVtdO3ZhciBkcz1bIkxhdyAxIEluZXJ0aWE6IE9iamVjdCBoYXJha2FhdCBtZWluIHJlaHRhIGhhaSBqYWIgdGFrIGZvcmNlIG5hIGxhZ2UuIFRhcCBjYW52YXMuIiwiTGF3IDIgRj1tYTogR3JlYXRlciBtYXNzIG5lZWRzIGdyZWF0ZXIgZm9yY2UgZm9yIHNhbWUgYWNjZWxlcmF0aW9uLiIsIkxhdyAzOiBFdmVyeSBhY3Rpb24gaGFzIGVxdWFsIGFuZCBvcHBvc2l0ZSByZWFjdGlvbi4iXTtmdW5jdGlvbiBzZXRMKGwpe2xhdz1sO29ianM9W107dD0wO2RvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoIi50YiIpLmZvckVhY2goZnVuY3Rpb24oYixpKXtiLmNsYXNzTGlzdC50b2dnbGUoIm9uIixpPT09bCk7fSk7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoImRzIikudGV4dENvbnRlbnQ9ZHNbbF07aWYobD09PTApe29ianMucHVzaCh7eDo1NSx5OjkyLHZ4OjAscjoyMCxjb2w6IiM0ZDk2ZmYiLGxhYmVsOiJtPTEifSk7fWVsc2UgaWYobD09PTEpe29ianMucHVzaCh7eDo1MCx5OjYyLHZ4OjAscjoxNCxjb2w6IiNmZjZiNmIiLGxhYmVsOiJtPTEifSk7b2Jqcy5wdXNoKHt4OjUwLHk6MTMyLHZ4OjAscjoyMixjb2w6IiM2YmNiNzciLGxhYmVsOiJtPTMifSk7fWVsc2V7b2Jqcy5wdXNoKHt4OjkwLHk6OTIsdng6MCxyOjIwLGNvbDoiI2ZmOWY0MyIsbGFiZWw6IkEifSk7b2Jqcy5wdXNoKHt4OjI5MCx5OjkyLHZ4OjAscjoyMCxjb2w6IiNjNzdkZmYiLGxhYmVsOiJCIn0pO319c2V0TCgwKTtjdi5hZGRFdmVudExpc3RlbmVyKCJjbGljayIsZnVuY3Rpb24oKXtpZihsYXc9PT0wJiZvYmpzWzBdLnZ4PT09MClvYmpzWzBdLnZ4PTM7aWYobGF3PT09MSl7b2Jqc1swXS52eD0zLjU7b2Jqc1sxXS52eD0xLjI7fWlmKGxhdz09PTIpe29ianNbMF0udng9Mi41O29ianNbMV0udng9LTIuNTt9fSk7ZnVuY3Rpb24gZHJhdygpe2N0eC5jbGVhclJlY3QoMCwwLGN2LndpZHRoLGN2LmhlaWdodCk7Y3R4LnN0cm9rZVN0eWxlPSIjMWExYTNhIjtjdHgubGluZVdpZHRoPTE7Zm9yKHZhciBpPTA7aTw1O2krKyl7Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oMCxpKjQwKTtjdHgubGluZVRvKGN2LndpZHRoLGkqNDApO2N0eC5zdHJva2UoKTt9b2Jqcy5mb3JFYWNoKGZ1bmN0aW9uKG8pe28ueCs9by52eDtpZihvLng+Y3Yud2lkdGgtby5yLTV8fG8ueDxvLnIrNSlvLnZ4Kj0tMC44Mjt2YXIgZz1jdHguY3JlYXRlUmFkaWFsR3JhZGllbnQoby54LW8uciowLjMsby55LW8uciowLjMsMSxvLngsby55LG8ucik7Zy5hZGRDb2xvclN0b3AoMCwiI2ZmZiIpO2cuYWRkQ29sb3JTdG9wKDEsby5jb2wpO2N0eC5iZWdpblBhdGgoKTtjdHguYXJjKG8ueCxvLnksby5yLDAsNi4yOCk7Y3R4LmZpbGxTdHlsZT1nO2N0eC5maWxsKCk7aWYoby52eCE9PTApe3ZhciBheD1vLngrby52eCoxNDtjdHguYmVnaW5QYXRoKCk7Y3R4Lm1vdmVUbyhvLngsby55KTtjdHgubGluZVRvKGF4LG8ueSk7Y3R4LnN0cm9rZVN0eWxlPSIjZmZkOTNkIjtjdHgubGluZVdpZHRoPTIuNTtjdHguc3Ryb2tlKCk7Y3R4LmJlZ2luUGF0aCgpO2N0eC5tb3ZlVG8oYXgsby55LTUpO2N0eC5saW5lVG8oYXgrKG8udng+MD84Oi04KSxvLnkpO2N0eC5saW5lVG8oYXgsby55KzUpO2N0eC5maWxsU3R5bGU9IiNmZmQ5M2QiO2N0eC5maWxsKCk7fWN0eC5maWxsU3R5bGU9IiNmZmYiO2N0eC5mb250PSJib2xkIDEwcHggc2Fucy1zZXJpZiI7Y3R4LnRleHRBbGlnbj0iY2VudGVyIjtjdHguZmlsbFRleHQoby5sYWJlbCxvLngsby55K28ucisxMik7fSk7dCsrO3JlcXVlc3RBbmltYXRpb25GcmFtZShkcmF3KTt9ZHJhdygpOzwvc2NyaXB0PjwvYm9keT48L2h0bWw+"
+  },
+};
+
+var GROQ_KEY = "";
+var GM = "llama-3.3-70b-versatile";
+var TC = ["#ff6b6b","#ffd93d","#6bcb77","#4d96ff","#c77dff","#ff9f43","#00d4ff","#ff6eb4"];
 
 function ai(prompt, maxTok, cb) {
-  if (!GROQ_KEY || GROQ_KEY.length < 10) { cb(null,'Pehle Groq API key enter karein (sidebar mein)'); return; }
-  fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-    body:JSON.stringify({model:GM,max_tokens:maxTok||800,messages:[{role:'user',content:prompt}]})
+  if (!GROQ_KEY || GROQ_KEY.length < 10) { cb(null, "Pehle Groq API key enter karein"); return; }
+  fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {"Content-Type":"application/json","Authorization":"Bearer "+GROQ_KEY},
+    body: JSON.stringify({model:GM, max_tokens:maxTok||800, messages:[{role:"user",content:prompt}]})
   })
-  .then(function(r){return r.json()})
-  .then(function(d){ if(d.error){cb(null,d.error.message);return} cb(d.choices[0].message.content,null); })
-  .catch(function(e){cb(null,'Network error: '+e.message)});
+  .then(function(r){return r.json();})
+  .then(function(d){if(d.error){cb(null,d.error.message);return;}cb(d.choices[0].message.content,null);})
+  .catch(function(e){cb(null,"Network error: "+e.message);});
 }
 
-// Style text: **bold** -> colorful clickable spans, remove markdown symbols
+function aiVision(prompt, b64img, mime, cb) {
+  if (!GROQ_KEY || GROQ_KEY.length < 10) { cb(null, "Pehle Groq API key enter karein"); return; }
+  fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {"Content-Type":"application/json","Authorization":"Bearer "+GROQ_KEY},
+    body: JSON.stringify({model:"meta-llama/llama-4-scout-17b-16e-instruct", max_tokens:200,
+      messages:[{role:"user",content:[{type:"image_url",image_url:{url:"data:"+mime+";base64,"+b64img}},{type:"text",text:prompt}]}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){if(d.error){cb(null,d.error.message);return;}cb(d.choices[0].message.content,null);})
+  .catch(function(e){cb(null,e.message);});
+}
+
 function styleText(txt) {
-  if (!txt) return '';
-  var ci = 0;
-  // **bold** -> colorful clickable
-  txt = txt.replace(/\*\*([^*\n]+)\*\*/g, function(m, w) {
-    var c = TC[ci++ % TC.length];
-    return '<span class="hl" style="color:'+c+';background:'+c+'22;border-radius:4px;padding:1px 5px;cursor:pointer;font-weight:700" onclick="openTerm(\''+w.replace(/['"\\]/g,'_')+'\')" >'+w+'</span>';
+  if(!txt)return "";
+  var ci=0;
+  txt = txt.replace(/\*\*([^*\n]+)\*\*/g, function(m,w){
+    var c=TC[ci++%TC.length];
+    var ws=w.replace(/['"\\]/g,"_");
+    return "<span class='hl' style='color:"+c+";background:"+c+"22;border-radius:4px;padding:1px 5px;cursor:pointer;font-weight:700' onclick='openTerm(\""+ws+"\")'>" + w + "</span>";
   });
-  // Remove leftover * _ # symbols
-  txt = txt.replace(/\*{1,3}/g,'').replace(/_{1,2}/g,'').replace(/^#{1,4}\s*/gm,'');
-  // Line breaks for readability
-  txt = txt.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  txt = txt.replace(/\*{1,3}/g,"").replace(/_{1,2}/g,"").replace(/^#{1,4}\s*/gm,"");
+  txt = txt.replace(/\n\n/g,"<br><br>").replace(/\n/g,"<br>");
   return txt;
 }
 
-// Wrap {{term}} for slides
 function wrapTerms(txt) {
-  if (!txt) return '';
-  var ci = 0;
-  return txt.replace(/\{\{([^}]+)\}\}/g, function(m, w) {
-    var c = TC[ci++ % TC.length];
-    return '<span class="term" style="color:'+c+';background:'+c+'22" onclick="openTerm(\''+w.replace(/['"\\]/g,'_')+'\')" >'+w+'</span>';
+  if(!txt)return "";
+  var ci=0;
+  return txt.replace(/\{\{([^}]+)\}\}/g, function(m,w){
+    var c=TC[ci++%TC.length];
+    var ws=w.replace(/['"\\]/g,"_");
+    return "<span class='term' style='color:"+c+";background:"+c+"22' onclick='openTerm(\""+ws+"\")'>" + w + "</span>";
   });
 }
 
-var curSubj='Physics', curIcon='⚛️', curColor='#4d96ff';
-var curLang='en', slides=[], curSlide=0, curTerm='';
-var qData=[], qAns=[], fcData=[], fcIdx=0;
+var curSubj="Physics",curIcon="Physics",curColor="#4d96ff",curLang="en";
+var slides=[],curSlide=0,curTerm="";
+var qData=[],qAns=[],fcData=[],fcIdx=0;
+var curSimHTML="";
 
-function selSubj(btn,name,icon,color) {
-  document.querySelectorAll('.sbtn').forEach(function(b){b.classList.remove('sel');b.style.background='';b.style.color='';});
-  btn.classList.add('sel'); btn.style.background='linear-gradient(135deg,'+color+','+color+'aa)'; btn.style.color='#fff';
-  curSubj=name; curIcon=icon; curColor=color;
+function selSubj(btn,name,icon,color){
+  document.querySelectorAll(".sbtn").forEach(function(b){b.classList.remove("sel");b.style.background="";b.style.color="";});
+  btn.classList.add("sel");btn.style.background="linear-gradient(135deg,"+color+","+color+"aa)";btn.style.color="#fff";
+  curSubj=name;curIcon=icon;curColor=color;
 }
-function setLang(l) {
+function setLang(l){
   curLang=l;
-  document.getElementById('lEn').classList.toggle('active',l==='en');
-  document.getElementById('lBi').classList.toggle('active',l==='bi');
-  document.getElementById('lUr').classList.toggle('active',l==='ur');
-  document.getElementById('lSi').classList.toggle('active',l==='si');
+  ["lEn","lBi","lUr","lSi"].forEach(function(id,i){document.getElementById(id).classList.toggle("active",["en","bi","ur","si"][i]===l);});
 }
-function showPanel(n) {
-  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
-  document.getElementById('panel-'+n).classList.add('active');
-  var m={slides:0,tools:1,quiz:2,fc:3};
-  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===m[n])});
+function showPanel(n){
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+  document.getElementById("panel-"+n).classList.add("active");
+  var m={slides:0,tools:1,sim:2,quiz:3,fc:4};
+  document.querySelectorAll(".tab").forEach(function(t,i){t.classList.toggle("active",i===m[n]);});
 }
 
 var PAL=[
-  {bg:'linear-gradient(135deg,#0a1628,#0d2137)',ac:'#4d96ff',ba:'rgba(77,150,255,.18)',bt:'#4d96ff'},
-  {bg:'linear-gradient(135deg,#1a0a2e,#2d0045)',ac:'#c77dff',ba:'rgba(199,125,255,.18)',bt:'#c77dff'},
-  {bg:'linear-gradient(135deg,#0a2000,#0d3300)',ac:'#6bcb77',ba:'rgba(107,203,119,.18)',bt:'#6bcb77'},
-  {bg:'linear-gradient(135deg,#2a0a00,#3d1000)',ac:'#ff9f43',ba:'rgba(255,159,67,.18)',bt:'#ff9f43'},
-  {bg:'linear-gradient(135deg,#2a0010,#3d0020)',ac:'#ff6b6b',ba:'rgba(255,107,107,.18)',bt:'#ff6b6b'},
-  {bg:'linear-gradient(135deg,#1a1a00,#2a2a00)',ac:'#ffd93d',ba:'rgba(255,217,61,.18)',bt:'#ffd93d'},
-  {bg:'linear-gradient(135deg,#001a2a,#002a3d)',ac:'#00d4ff',ba:'rgba(0,212,255,.18)',bt:'#00d4ff'},
-  {bg:'linear-gradient(135deg,#1a0a1a,#2d1a2d)',ac:'#ff6eb4',ba:'rgba(255,110,180,.18)',bt:'#ff6eb4'}
+  {bg:"linear-gradient(135deg,#0a1628,#0d2137)",ac:"#4d96ff",ba:"rgba(77,150,255,.18)",bt:"#4d96ff"},
+  {bg:"linear-gradient(135deg,#1a0a2e,#2d0045)",ac:"#c77dff",ba:"rgba(199,125,255,.18)",bt:"#c77dff"},
+  {bg:"linear-gradient(135deg,#0a2000,#0d3300)",ac:"#6bcb77",ba:"rgba(107,203,119,.18)",bt:"#6bcb77"},
+  {bg:"linear-gradient(135deg,#2a0a00,#3d1000)",ac:"#ff9f43",ba:"rgba(255,159,67,.18)",bt:"#ff9f43"},
+  {bg:"linear-gradient(135deg,#2a0010,#3d0020)",ac:"#ff6b6b",ba:"rgba(255,107,107,.18)",bt:"#ff6b6b"},
+  {bg:"linear-gradient(135deg,#1a1a00,#2a2a00)",ac:"#ffd93d",ba:"rgba(255,217,61,.18)",bt:"#ffd93d"},
+  {bg:"linear-gradient(135deg,#001a2a,#002a3d)",ac:"#00d4ff",ba:"rgba(0,212,255,.18)",bt:"#00d4ff"},
+  {bg:"linear-gradient(135deg,#1a0a1a,#2d1a2d)",ac:"#ff6eb4",ba:"rgba(255,110,180,.18)",bt:"#ff6eb4"}
 ];
 
-function generateSlides() {
-  var topic=document.getElementById('topicIn').value.trim();
-  if(!topic){alert('Topic likhen!');return;}
-  var cnt=parseInt(document.getElementById('slideN').value);
-  var style=document.getElementById('slideS').value;
-  var btn=document.getElementById('genBtn');
-  btn.disabled=true; btn.textContent='Generating...';
-  document.getElementById('deckTitle').textContent=topic;
-  var li=curLang==='ur'?'All content in proper Urdu script only. No Roman Urdu. No Hindi.':
-    curLang==='si'?'All content in proper Sindhi script only. No Roman. No Hindi. No Urdu.':
-    curLang==='bi'?'English and proper Urdu script both. No Roman Urdu. No Hindi.':
-    'English only, with key terms Urdu translation in parentheses using Urdu script.';
-  var p='Create '+cnt+' slides on "'+topic+'" for '+curSubj+'. Style: '+style+'. '+li+'\nReturn ONLY JSON array no markdown:\n[{"title":"","titleUrdu":"","titleSindhi":"","badge":"","body":"text with {{key terms}} in double braces","bodyUrdu":"","bodySindhi":"","emoji":"","terms":["t1","t2","t3"]}]\nPut 3-5 key terms in {{double braces}} per slide. Fill titleSindhi and bodySindhi with proper Sindhi script.';
+function generateSlides(){
+  var topic=document.getElementById("topicIn").value.trim();
+  if(!topic){alert("Topic likhen!");return;}
+  var cnt=parseInt(document.getElementById("slideN").value);
+  var style=document.getElementById("slideS").value;
+  var btn=document.getElementById("genBtn");
+  btn.disabled=true;btn.textContent="Generating...";
+  document.getElementById("deckTitle").textContent=topic;
+  var li=curLang==="ur"?"All in proper Urdu script only. No Roman Urdu. No Hindi.":
+    curLang==="si"?"All in proper Sindhi script only.":
+    curLang==="bi"?"English and proper Urdu script both. No Roman Urdu.":
+    "English only with key terms Urdu in parentheses.";
+  var p="Create "+cnt+" slides on \""+topic+"\" for "+curSubj+". Style: "+style+". "+li+"\nReturn ONLY JSON array no markdown:\n[{\"title\":\"\",\"titleUrdu\":\"\",\"badge\":\"\",\"body\":\"text with {{key terms}} in double braces\",\"bodyUrdu\":\"\",\"emoji\":\"\",\"terms\":[\"t1\",\"t2\"]}]";
   ai(p,3000,function(txt,err){
-    btn.disabled=false; btn.textContent='✨ Generate AI Slides';
+    btn.disabled=false;btn.textContent="Generate AI Slides";
     if(err||!txt){slides=demoSlides(topic,cnt);}
-    else { try{slides=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());}catch(e){slides=demoSlides(topic,cnt);} }
-    curSlide=0; renderSlide(); renderDots();
+    else{try{slides=JSON.parse(txt.replace(/```json/g,"").replace(/```/g,"").trim());}catch(e){slides=demoSlides(topic,cnt);}}
+    curSlide=0;renderSlide();renderDots();
   });
 }
 
-function demoSlides(topic,cnt) {
-  var tits=['Introduction','Key Concepts','How It Works','Important Terms','Applications','Summary'];
-  var tur=['\u062a\u0639\u0627\u0631\u0641','\u0628\u0646\u06cc\u0627\u062f\u06cc \u062a\u0635\u0648\u0631\u0627\u062a','\u0637\u0631\u06cc\u0642\u06c1 \u06a9\u0627\u0631','\u0627\u06c1\u0645 \u0627\u0635\u0637\u0644\u0627\u062d\u0627\u062a','\u0639\u0645\u0644\u06cc \u0627\u0633\u062a\u0639\u0645\u0627\u0644','\u062e\u0644\u0627\u0635\u06c1'];
+function demoSlides(topic,cnt){
+  var tits=["Introduction","Key Concepts","How It Works","Important Terms","Applications","Summary"];
+  var tur=["تعارف","بنیادی تصورات","طریقہ کار","اہم اصطلاحات","عملی استعمال","خلاصہ"];
   var arr=[];
   for(var i=0;i<Math.min(cnt,6);i++){
-    arr.push({title:tits[i]+': '+topic,titleUrdu:topic+' '+tur[i],badge:tits[i],
-      body:'This slide covers the {{'+tits[i].toLowerCase()+'}} of {{'+topic+'}}. Key {{concepts}} build on each other for complete {{mastery}}.',
-      bodyUrdu:'\u06cc\u06c1 \u0633\u0644\u0627\u0626\u06cc\u0688 '+topic+' \u06a9\u06d2 {{'+tur[i]+'}} \u0628\u06cc\u0627\u0646 \u06a9\u0631\u062a\u06cc \u06c1\u06d2\u06d4',
-      emoji:curIcon||'📚',terms:[tits[i].toLowerCase(),topic,'concepts','mastery']});
+    arr.push({title:tits[i]+": "+topic,titleUrdu:topic+" "+tur[i],badge:tits[i],
+      body:"This slide covers {{"+tits[i].toLowerCase()+"}} of {{"+topic+"}}. Key {{concepts}} build on each other for complete {{mastery}}.",
+      bodyUrdu:"یہ سلائیڈ "+topic+" کے {{بنیادی تصورات}} بیان کرتی ہے۔",
+      emoji:"📚",terms:[tits[i].toLowerCase(),topic,"concepts","mastery"]});
   }
   return arr;
 }
 
-function renderSlide() {
+function renderSlide(){
   if(!slides.length)return;
-  var s=slides[curSlide]; var p=PAL[curSlide%PAL.length];
-  document.getElementById('sCtr').textContent=(curSlide+1)+'/'+slides.length;
-  var bh=wrapTerms(s.body||''); var buh=wrapTerms(s.bodyUrdu||'');
-  var tB=curLang==='ur'?'<div class="stitle-ur">'+(s.titleUrdu||s.title)+'</div>':
-    curLang==='si'?'<div class="stitle-ur">'+(s.titleSindhi||s.titleUrdu||s.title)+'</div>':
-    curLang==='bi'?'<div class="stitle" style="color:'+p.ac+'">'+s.title+'</div><div class="stitle-ur" style="color:'+p.ac+'cc">'+(s.titleUrdu||'')+'</div>':
-    '<div class="stitle" style="color:'+p.ac+'">'+s.title+'</div>';
-  var bdB=curLang==='ur'?'<div class="sbody-ur">'+buh+'</div>':
-    curLang==='si'?'<div class="sbody-ur">'+(s.bodySindhi?wrapTerms(s.bodySindhi):buh)+'</div>':
-    curLang==='bi'?'<div class="sbody">'+bh+'</div>'+(s.bodyUrdu?'<div class="sbody-ur" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1)">'+buh+'</div>':''):
-    '<div class="sbody">'+bh+'</div>';
-  var tags=(s.terms||[]).slice(0,5).map(function(t,i){var c=TC[i%TC.length];return '<span class="tag" style="background:'+c+'22;color:'+c+';cursor:pointer" onclick="openTerm(\''+t.replace(/['"\\]/g,'_')+'\')" >'+t+'</span>';}).join('');
-  document.getElementById('stage').innerHTML='<div class="sinner" style="background:'+p.bg+'"><div class="snum">'+(curSlide+1)+'/'+slides.length+'</div><div><div class="sbadge" style="background:'+p.ba+';color:'+p.bt+'">'+(s.badge||curSubj)+'</div>'+tB+'</div><div style="flex:1;margin:8px 0">'+bdB+'</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px">'+tags+'</div><div class="sdeco">'+(s.emoji||curIcon||'📚')+'</div></div>';
+  var s=slides[curSlide],p=PAL[curSlide%PAL.length];
+  document.getElementById("sCtr").textContent=(curSlide+1)+"/"+slides.length;
+  var bh=wrapTerms(s.body||""),buh=wrapTerms(s.bodyUrdu||"");
+  var tB=curLang==="ur"?"<div class='stitle-ur'>"+(s.titleUrdu||s.title)+"</div>":
+    curLang==="si"?"<div class='stitle-ur'>"+(s.titleUrdu||s.title)+"</div>":
+    curLang==="bi"?"<div class='stitle' style='color:"+p.ac+"'>"+s.title+"</div><div class='stitle-ur' style='color:"+p.ac+"cc'>"+(s.titleUrdu||"")+"</div>":
+    "<div class='stitle' style='color:"+p.ac+"'>"+s.title+"</div>";
+  var bdB=curLang==="ur"?"<div class='sbody-ur'>"+buh+"</div>":
+    curLang==="si"?"<div class='sbody-ur'>"+buh+"</div>":
+    curLang==="bi"?"<div class='sbody'>"+bh+"</div>"+(s.bodyUrdu?"<div class='sbody-ur' style='margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.1)'>"+buh+"</div>":""):
+    "<div class='sbody'>"+bh+"</div>";
+  var tags=(s.terms||[]).slice(0,5).map(function(t,i){var c=TC[i%TC.length];return "<span class='tag' style='background:"+c+"22;color:"+c+";cursor:pointer' onclick='openTerm(\""+t.replace(/['"\\]/g,"_")+"\")'>" + t + "</span>";}).join("");
+  document.getElementById("stage").innerHTML="<div class='sinner' style='background:"+p.bg+"'>"+
+    "<div class='snum'>"+(curSlide+1)+"/"+slides.length+"</div>"+
+    "<div><div class='sbadge' style='background:"+p.ba+";color:"+p.bt+"'>"+(s.badge||curSubj)+"</div>"+tB+"</div>"+
+    "<div style='flex:1;margin:7px 0'>"+bdB+"</div>"+
+    "<div style='display:flex;gap:4px;flex-wrap:wrap;margin-top:5px'>"+tags+"</div>"+
+    "<div class='sdeco'>"+(s.emoji||"📚")+"</div></div>";
 }
-
-function renderDots() {
-  document.getElementById('dots').innerHTML=slides.map(function(s,i){return '<div class="dot'+(i===curSlide?' active':'')+'" style="background:'+PAL[i%PAL.length].ac+'" onclick="goSlide('+i+')"></div>';}).join('');
-}
+function renderDots(){document.getElementById("dots").innerHTML=slides.map(function(s,i){return "<div class='dot"+(i===curSlide?" active":"")+"' style='background:"+PAL[i%PAL.length].ac+"' onclick='goSlide("+i+")\'></div>";}).join("");}
 function goSlide(n){curSlide=n;renderSlide();renderDots();}
 function nextSlide(){if(curSlide<slides.length-1)goSlide(curSlide+1);}
 function prevSlide(){if(curSlide>0)goSlide(curSlide-1);}
 
-function openTerm(term) {
-  curTerm=term;
-  document.getElementById('pTitle').textContent=term;
-  document.getElementById('pUr').innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
-  document.getElementById('pBody').innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
-  document.getElementById('pAI').classList.remove('show'); document.getElementById('pAI').innerHTML='';
-  document.getElementById('pVid').style.display='none'; document.getElementById('pVid').innerHTML='';
-  document.getElementById('pTags').innerHTML='';
-  document.getElementById('tPop').classList.add('open');
-  ai('For "'+term+'" in '+curSubj+':\n1. Urdu translation (2-3 words)\n2. One clear sentence\n3. Three tags\nJSON only: {"urdu":"","english":"","tags":["",""]}',
-  300,function(txt,err){
-    if(err||!txt){document.getElementById('pUr').textContent=term;document.getElementById('pBody').textContent=curSubj+' ka ek aham concept. Deep Explain dabao.';return;}
-    try{
-      var d=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());
-      document.getElementById('pUr').textContent=d.urdu||term;
-      document.getElementById('pBody').textContent=d.english||'An important concept.';
-      document.getElementById('pTags').innerHTML=(d.tags||[]).map(function(t){return '<span class="tag" style="background:var(--a4)22;color:var(--a4)">'+t+'</span>';}).join('');
-    }catch(e){document.getElementById('pUr').textContent=term;document.getElementById('pBody').textContent=txt.substring(0,160);}
-  });
-}
-
-function closePop(){document.getElementById('tPop').classList.remove('open');}
-
-function popAct(action) {
-  var res=document.getElementById('pAI'); var vid=document.getElementById('pVid');
-  res.classList.add('show'); vid.style.display='none';
-  res.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
-  if(action==='video'){
-    res.classList.remove('show'); vid.style.display='flex';
-    var q=encodeURIComponent(curTerm+' '+curSubj+' explained');
-    vid.innerHTML='<div style="text-align:center;padding:18px;color:var(--muted)">Video dekhnay ke liye:<br><br><a href="https://www.youtube.com/results?search_query='+q+'" target="_blank" style="color:var(--a1);font-weight:700;font-size:1rem;text-decoration:none">YouTube pe dekhein</a><br><br><a href="https://www.khanacademy.org/search?page_search_query='+encodeURIComponent(curTerm)+'" target="_blank" style="color:var(--a3);font-weight:700">Khan Academy</a> &nbsp; <a href="https://en.wikipedia.org/wiki/'+encodeURIComponent(curTerm)+'" target="_blank" style="color:var(--a4);font-weight:700">Wikipedia</a></div>';
-    return;
-  }
-  var ps={
-    deepexplain:'You are a warm, knowledgeable teacher. Explain "'+curTerm+'" for a student studying '+curSubj+'.\nWrite ONLY in two sections:\nSection 1 — English: A friendly, clear explanation in 3-4 sentences. Use **bold** on 4-5 key terms. No bullet points, no symbols, flowing paragraphs only.\nSection 2 — اردو میں وضاحت: Write 3-4 sentences explaining the same concept fully in proper Urdu script (not Roman Urdu, not Hindi). Use **bold** on key Urdu terms.\nDo NOT use Roman Urdu. Do NOT use Hindi. Only English and Urdu script.',
-    examples:'Give 4 real-world examples of "'+curTerm+'" from '+curSubj+' that students can relate to.\nWrite ONLY in two sections:\nSection 1 — English: 4 examples in clear English. Use **bold** on the key concept in each.\nSection 2 — اردو مثالیں: Write 2 examples fully in proper Urdu script (not Roman Urdu, not Hindi).\nNo bullet points. Friendly tone. Do NOT use Roman Urdu or Hindi.',
-    quiz:'Create 3 MCQ questions about "'+curTerm+'" in '+curSubj+'.\nWrite questions in English.\nFormat:\nQ1. Question?\nA) option  B) option  C) option  D) option\nAnswer: X — Because: brief reason in English.\n\nThen repeat all 3 questions in proper Urdu script only (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi anywhere.'
-  };
-  ai(ps[action],900,function(txt,err){
-    if(err||!txt){res.innerHTML='<span style="color:var(--a1)">'+(err||'Error')+'</span>';return;}
-    res.innerHTML='<div>'+styleText(txt)+'</div>';
-  });
-}
-
-function openTool(name) {
-  document.querySelectorAll('.tcard').forEach(function(c){c.classList.remove('active')});
-  document.querySelectorAll('.tws').forEach(function(w){w.classList.remove('active')});
-  var tw=document.getElementById('tw-'+name); if(tw)tw.classList.add('active');
-  document.querySelectorAll('.tcard').forEach(function(c){if(c.getAttribute('onclick')&&c.getAttribute('onclick').indexOf("'"+name+"'")!==-1)c.classList.add('active');});
-}
-
-function runTool(tool) {
-  var el=document.getElementById('q-'+tool); if(!el)return;
-  var q=el.value.trim(); if(!q){alert('Kuch likhen pehle!');return;}
-  var res=document.getElementById('r-'+tool);
-  res.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';
-  var ps={
-    explain:'Explain "'+q+'" in '+curSubj+' context.\nWrite ONLY in two sections:\nSection 1 — English: A warm, friendly explanation in 3-4 sentences as a knowledgeable teacher would speak. Use **bold** on 4-5 key terms. No bullet points, no symbols, natural paragraphs.\nSection 2 — اردو میں وضاحت: Write 3-4 sentences fully in proper Urdu script (not Roman Urdu, not Hindi). Use **bold** on important Urdu terms.\nDo NOT write in Roman Urdu. Do NOT write in Hindi.',
-
-    wordmeaning:'Explain the word "'+q+'" with direction: '+document.getElementById('wmlang').value+'.\nProvide:\n1. Direct meaning/translation\n2. Meanings in 3 different contexts\n3. One example sentence\n4. Two related words\nWrite ONLY in proper script matching the target language — if Urdu use Urdu script, if Sindhi use Sindhi script, if English use English. Do NOT use Roman Urdu or Roman Sindhi or Hindi. Use **bold** on the main word and its translation.',
-
-    wordhistory:'Tell the complete origin and history of the word "'+q+'".\nWrite ONLY in two sections:\nSection 1 — English: A storytelling-style explanation. Which language it came from, what it meant originally, how its meaning changed over time. Use **bold** on key historical terms and language names. 4-5 sentences, natural paragraphs, no symbols.\nSection 2 — اردو میں تاریخ: Write 3-4 sentences in proper Urdu script (not Roman Urdu, not Hindi) summarizing the same history.\nDo NOT use Roman Urdu or Hindi.',
-
-    sciterm:'Break down the scientific term "'+q+'" root by root.\nWrite ONLY in two sections:\nSection 1 — English: Explain each Greek or Latin root, what it means, and the combined meaning. Then explain the full scientific concept simply. Use **bold** on each root word. Natural paragraphs, no bullet symbols.\nSection 2 — اردو میں وضاحت: Write a 3-4 sentence explanation of the term and its roots in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.',
-
-    scientist:'Write about the scientist "'+q+'" as a fascinating human story.\nWrite ONLY in two sections:\nSection 1 — English: Cover early life, struggles, **key discoveries** (bold names), major achievements, and impact on the world. If relevant, mention Islamic or Pakistani scientific contributions. End with their most famous quote in English. 5-6 natural sentences, no bullet points.\nSection 2 — اردو میں سوانح: Write 4-5 sentences about the same scientist fully in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.',
-
-    translate:'Translate the following text.\nDirection: '+document.getElementById('tlang').value+'\nText: "'+q+'"\nProvide ONLY the translation. No explanation. Use proper script — if translating to Urdu use Urdu script, if Sindhi use Sindhi script. Do NOT use Roman Urdu or Roman Sindhi.',
-
-    summarize:'Summarize the following text.\nWrite ONLY in two sections:\nSection 1 — English Summary: 4-5 key points in clear English. Use **bold** on main ideas. Natural sentences.\nSection 2 — اردو خلاصہ: Write a 3-4 sentence summary in proper Urdu script (not Roman Urdu, not Hindi).\nText to summarize:\n'+q,
-
-    essay:'Write an essay on "'+q+'" in '+document.getElementById('elang').value+'.\nLength: 300-350 words. Introduction, 2-3 body paragraphs, conclusion. Use **bold** on key terms. Natural flowing style, no robotic headings or symbols.\nIf Urdu is selected: write fully in proper Urdu script, not Roman Urdu.\nIf Bilingual: write full essay in English, then full essay in proper Urdu script. No Roman Urdu.',
-
-    formula:'List the key formulas for "'+q+'".\nFor each formula write:\n**Formula Name** (bold)\nFormula with symbols\nWhat each symbol means in English\nاردو نام (Urdu name in Urdu script)\nExplain each in a friendly human way. No robotic symbols. Do NOT use Roman Urdu.',
-
-    timeline:'Create a timeline of "'+q+'" with 8 key events.\nWrite ONLY in two sections:\nSection 1 — English: Each event as: Year — **Event Name** — one clear sentence.\nSection 2 — اردو خلاصہ: Write a 4-5 sentence timeline summary in proper Urdu script (not Roman Urdu, not Hindi).',
-
-    compare:'Compare "'+q+'" clearly.\nWrite ONLY in two sections:\nSection 1 — English: Explain similarities, differences, and key features. Use **bold** on important points. Natural paragraphs, no symbols.\nSection 2 — اردو موازنہ: Write a 3-4 sentence comparison in proper Urdu script (not Roman Urdu, not Hindi).',
-
-    story:'Explain "'+q+'" as an engaging story for students.\nWrite ONLY in two sections:\nSection 1 — English Story: Use **bold** on key concepts. End with 3 learning points. Warm, natural storytelling style.\nSection 2 — اردو کہانی: Write a short version of the same story fully in proper Urdu script (not Roman Urdu, not Hindi).\nDo NOT use Roman Urdu or Hindi.'
-  };
-  var mx=(tool==='essay'||tool==='story'||tool==='scientist'||tool==='wordhistory')?1100:800;
-  ai(ps[tool],mx,function(txt,err){
-    if(err||!txt){res.innerHTML='<span style="color:var(--a1)">'+(err||'Error. API key check karein.')+'</span>';return;}
-    res.innerHTML='<div>'+styleText(txt)+'</div>';
-  });
-}
-
-function generateQuiz() {
-  var topic=document.getElementById('qTopic').value.trim()||document.getElementById('qSubj').value;
-  var subj=document.getElementById('qSubj').value; var lang=document.getElementById('qLang').value;
-  var area=document.getElementById('qArea');
-  area.innerHTML='<div class="ldots" style="justify-content:center;padding:36px"><span></span><span></span><span></span></div>';
-  document.getElementById('qScore').style.display='none'; qAns=[];
-  ai('Create 5 MCQ questions on "'+topic+'" for '+subj+'.\nLanguage: '+lang+'.\nIMPORTANT: If Urdu is selected, write questions fully in proper Urdu script (NOT Roman Urdu, NOT Hindi). If Bilingual, write each question in English then again in proper Urdu script.\nReturn ONLY JSON:\n[{"q":"","options":["","","",""],"answer":0,"explanation":""}]',
-  1000,function(txt,err){
-    if(err||!txt){area.innerHTML='<div style="color:var(--a1);text-align:center;padding:20px">'+(err||'Error')+'</div>';return;}
-    try{qData=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());renderQuiz();}
-    catch(e){area.innerHTML='<div style="color:var(--a1);padding:20px">Parse error. Try again.</div>';}
-  });
-}
-
-function renderQuiz() {
-  document.getElementById('qArea').innerHTML=qData.map(function(q,i){
-    return '<div class="qq" id="qq'+i+'"><h4>Q'+(i+1)+'. '+q.q+'</h4><div class="qopts">'+
-      q.options.map(function(o,j){return '<button class="qo" id="qo'+i+'_'+j+'" onclick="ansQ('+i+','+j+')">'+String.fromCharCode(65+j)+') '+o+'</button>';}).join('')+
-      '</div><div id="qe'+i+'" style="display:none;margin-top:7px;font-size:.78rem;color:var(--muted);padding:7px;background:var(--card2);border-radius:8px">'+(q.explanation||'')+'</div></div>';
-  }).join('');
-  qAns=new Array(qData.length).fill(-1);
-}
-
-function ansQ(qi,ans) {
-  if(qAns[qi]!==-1)return; qAns[qi]=ans;
-  var c=qData[qi].answer;
-  for(var j=0;j<4;j++){var b=document.getElementById('qo'+qi+'_'+j);if(!b)continue;if(j===c)b.classList.add('correct');else if(j===ans&&ans!==c)b.classList.add('wrong');b.disabled=true;}
-  document.getElementById('qe'+qi).style.display='block';
-  if(qAns.every(function(a){return a!==-1;})){
-    var sc=qAns.filter(function(a,i){return a===qData[i].answer;}).length;
-    var pct=Math.round(sc/qData.length*100);
-    var em=pct>=80?'🎉':pct>=60?'👍':'💪';
-    var el=document.getElementById('qScore'); el.style.display='block';
-    el.innerHTML=em+' Score: <span style="color:var(--a3)">'+sc+'/'+qData.length+'</span> ('+pct+'%) '+em;
-  }
-}
-
-function generateFC() {
-  var topic=document.getElementById('fcTopic').value.trim(); if(!topic){alert('Topic likhen!');return;}
-  var area=document.getElementById('fcArea');
-  area.innerHTML='<div class="ldots" style="justify-content:center;padding:36px"><span></span><span></span><span></span></div>';
-  ai('8 bilingual flashcards for "'+topic+'". ONLY JSON:\n[{"front":"English term/question","back":"Urdu + English answer"}]',
-  800,function(txt,err){
-    if(err||!txt){area.innerHTML='<div style="color:var(--a1);padding:20px">'+(err||'Error')+'</div>';return;}
-    try{fcData=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());fcIdx=0;renderFC();document.getElementById('fcNav').style.display='block';}
-    catch(e){area.innerHTML='<div style="color:var(--a1);padding:20px">Parse error.</div>';}
-  });
-}
-
-function renderFC() {
-  if(!fcData.length)return;
-  var c=fcData[fcIdx]; var col=TC[fcIdx%TC.length];
-  document.getElementById('fcArea').innerHTML='<div class="fcc"><div class="fc" onclick="this.classList.toggle(\'flipped\')"><div class="fcf fcfront" style="border-color:'+col+'44"><div style="color:'+col+';font-size:.72rem;font-weight:700;margin-bottom:7px">QUESTION</div><div class="fcw" style="color:'+col+'">'+c.front+'</div><div class="fch">Tap to flip</div></div><div class="fcf fcback" style="border-color:'+col+'44"><div style="color:'+col+';font-size:.72rem;font-weight:700;margin-bottom:7px">ANSWER</div><div class="fcw" style="color:#fff;font-size:1rem;line-height:1.8">'+c.back+'</div></div></div></div>';
-  document.getElementById('fcCtr').textContent=(fcIdx+1)+'/'+fcData.length;
-}
-function nextFC(){if(fcIdx<fcData.length-1){fcIdx++;renderFC();}}
-function prevFC(){if(fcIdx>0){fcIdx--;renderFC();}}
-
-document.addEventListener('keydown',function(e){
-  if(document.getElementById('tPop').classList.contains('open')){if(e.key==='Escape')closePop();return;}
-  if(document.getElementById('panel-slides').classList.contains('active')){if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();}
-});
-
-// ===== IMAGE TO TOPIC =====
-function readImageTopic(input, src) {
-  var file = input.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var b64 = e.target.result.split(',')[1];
-    var mime = file.type || 'image/jpeg';
-    // Show preview
-    document.getElementById('imgThumb').src = e.target.result;
-    document.getElementById('imgPreview').style.display = 'block';
-    document.getElementById('imgStatus').textContent = 'Image analyze ho rahi hai...';
-    document.getElementById('topicIn').value = '';
-    if (!GROQ_KEY || GROQ_KEY.length < 10) {
-      document.getElementById('imgStatus').textContent = 'Pehle Groq API key enter karein';
-      return;
-    }
-    // Use Groq vision model
-    fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
-      body: JSON.stringify({
-        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
-        max_tokens: 200,
-        messages: [{
-          role: 'user',
-          content: [
-            {type:'image_url', image_url:{url:'data:'+mime+';base64,'+b64}},
-            {type:'text', text:'Look at this image. What is the main educational topic, subject or concept shown? Reply with ONLY a short topic name (3-7 words) suitable for a presentation. No explanation, just the topic name.'}
-          ]
-        }]
-      })
-    })
-    .then(function(r){return r.json()})
-    .then(function(d){
-      if (d.error) { document.getElementById('imgStatus').textContent = 'Error: '+d.error.message; return; }
-      var topic = d.choices[0].message.content.trim().replace(/^["']|["']$/g,'');
-      document.getElementById('topicIn').value = topic;
-      document.getElementById('imgStatus').textContent = 'Topic mila: ' + topic;
-    })
-    .catch(function(e){
-      document.getElementById('imgStatus').textContent = 'Error: ' + e.message;
+function readImg(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(",")[1],mime=file.type||"image/jpeg";
+    document.getElementById("imgThumb").src=e.target.result;
+    document.getElementById("imgPrev").style.display="block";
+    document.getElementById("imgStat").textContent="Analyzing image...";
+    document.getElementById("topicIn").value="";
+    aiVision("What is the main educational topic shown? Reply with ONLY a short topic name 3-7 words.",b64,mime,function(txt,err){
+      if(err||!txt){document.getElementById("imgStat").textContent="Error: "+( err||"Try again");return;}
+      var topic=txt.trim().replace(/^["\'|\*]+|["\'|\*]+$/g,"");
+      document.getElementById("topicIn").value=topic;
+      document.getElementById("imgStat").textContent="Topic: "+topic;
     });
   };
   reader.readAsDataURL(file);
 }
 
+function openTerm(term){
+  curTerm=term;
+  document.getElementById("pTitle").textContent=term;
+  document.getElementById("pUr").innerHTML="<div class='ldots'><span></span><span></span><span></span></div>";
+  document.getElementById("pBody").innerHTML="<div class='ldots'><span></span><span></span><span></span></div>";
+  document.getElementById("pAI").classList.remove("show");document.getElementById("pAI").innerHTML="";
+  document.getElementById("pVid").style.display="none";document.getElementById("pVid").innerHTML="";
+  document.getElementById("pTags").innerHTML="";
+  document.getElementById("tPop").classList.add("open");
+  ai("For \""+term+"\" in "+curSubj+":\n1. Urdu translation 2-3 words\n2. One clear sentence\n3. Three tags\nJSON only: {\"urdu\":\"\",\"english\":\"\",\"tags\":[\"\",\"\"]}",
+  280,function(txt,err){
+    if(err||!txt){document.getElementById("pUr").textContent=term;document.getElementById("pBody").textContent=curSubj+" ka aik aham concept.";return;}
+    try{
+      var d=JSON.parse(txt.replace(/```json/g,"").replace(/```/g,"").trim());
+      document.getElementById("pUr").textContent=d.urdu||term;
+      document.getElementById("pBody").textContent=d.english||"An important concept.";
+      document.getElementById("pTags").innerHTML=(d.tags||[]).map(function(t){return "<span class='tag' style='background:var(--a4)22;color:var(--a4)'>"+t+"</span>";}).join("");
+    }catch(e){document.getElementById("pUr").textContent=term;document.getElementById("pBody").textContent=txt.substring(0,150);}
+  });
+}
+function closePop(){document.getElementById("tPop").classList.remove("open");}
+function popAct(action){
+  var res=document.getElementById("pAI"),vid=document.getElementById("pVid");
+  res.classList.add("show");vid.style.display="none";
+  res.innerHTML="<div class='ldots'><span></span><span></span><span></span></div>";
+  if(action==="video"){
+    res.classList.remove("show");vid.style.display="flex";
+    var q=encodeURIComponent(curTerm+" "+curSubj+" explained");
+    vid.innerHTML="<div style='text-align:center;padding:16px;color:var(--muted)'>Video dekhnay ke liye:<br><br><a href='https://www.youtube.com/results?search_query="+q+"' target='_blank' style='color:var(--a1);font-weight:700;font-size:1rem;text-decoration:none'>YouTube</a><br><br><a href='https://www.khanacademy.org/search?page_search_query="+encodeURIComponent(curTerm)+"' target='_blank' style='color:var(--a3);font-weight:700'>Khan Academy</a> <a href='https://en.wikipedia.org/wiki/"+encodeURIComponent(curTerm)+"' target='_blank' style='color:var(--a4);font-weight:700'>Wikipedia</a></div>";
+    return;
+  }
+  var ps={
+    deepexplain:"Explain \""+curTerm+"\" for a student studying "+curSubj+" in a warm friendly teacher tone.\nWrite in two sections:\nSection 1 English: 3-4 sentences. Use **bold** on 4-5 key terms. No bullet points.\nSection 2 Urdu: Write same in proper Urdu script (not Roman Urdu not Hindi). Use **bold** on key terms.\nDo NOT use Roman Urdu or Hindi.",
+    examples:"Give 4 real-world examples of \""+curTerm+"\" in "+curSubj+".\nSection 1 English: 4 examples. Use **bold** on concept.\nSection 2 Urdu: 2 examples in proper Urdu script. No Roman Urdu.",
+    quiz:"3 MCQ questions on \""+curTerm+"\" in "+curSubj+".\nEnglish questions.\nFormat:\nQ1. Question?\nA) B) C) D)\nAnswer: X - reason in English.\nThen same in proper Urdu script only."
+  };
+  ai(ps[action],900,function(txt,err){
+    if(err||!txt){res.innerHTML="<span style='color:var(--a1)'>"+(err||"Error")+"</span>";return;}
+    res.innerHTML="<div>"+styleText(txt)+"</div>";
+  });
+}
+
+function openTool(name){
+  document.querySelectorAll(".tcard").forEach(function(c){c.classList.remove("active");});
+  document.querySelectorAll(".tws").forEach(function(w){w.classList.remove("active");});
+  var tw=document.getElementById("tw-"+name);if(tw)tw.classList.add("active");
+  document.querySelectorAll(".tcard").forEach(function(c){if(c.getAttribute("onclick")&&c.getAttribute("onclick").indexOf("'"+name+"'")!==-1)c.classList.add("active");});
+}
+function runTool(tool){
+  var el=document.getElementById("q-"+tool);if(!el)return;
+  var q=el.value.trim();if(!q){alert("Kuch likhen pehle!");return;}
+  var res=document.getElementById("r-"+tool);
+  res.innerHTML="<div class='ldots'><span></span><span></span><span></span></div>";
+  var ps={
+    explain:"Explain \""+q+"\" in a warm human teacher tone.\nSection 1 English: 3-4 sentences. Use **bold** on 4-5 key terms. Flowing paragraphs.\nSection 2 Urdu: Same in proper Urdu script (not Roman Urdu not Hindi). Use **bold** on key Urdu terms.",
+    wordmeaning:"Word: \""+q+"\"\nDirection: "+document.getElementById("wmlang").value+"\nGive: 1 Direct meaning, 2 Context meanings 3 Example sentence 4 Related words.\nUse proper script for target language. Use **bold** on main word and translation. No Roman Urdu.",
+    wordhistory:"Tell origin and history of word \""+q+"\" as a story.\nSection 1 English: Which language, what it meant originally, how meaning changed. Use **bold** on key terms.\nSection 2 Urdu: Summary in proper Urdu script. No Roman Urdu.",
+    sciterm:"Break down \""+q+"\" root by root.\nSection 1 English: Each root, its Greek Latin origin, combined meaning, then full concept. Use **bold** on each root.\nSection 2 Urdu: Brief in proper Urdu script. No Roman Urdu.",
+    scientist:"Write about scientist \""+q+"\" as a human story.\nSection 1 English: Early life, struggles, **key discoveries** (bold names), achievements, famous quote. 5-6 sentences.\nSection 2 Urdu: 4-5 sentences in proper Urdu script. No Roman Urdu.",
+    translate:"Translate: \""+q+"\"\nDirection: "+document.getElementById("tlang").value+"\nProvide ONLY translation. Use proper script. No Roman Urdu or Roman Sindhi.",
+    summarize:"Summarize:\n"+q+"\nSection 1 English: 4-5 key points. Use **bold** on main ideas.\nSection 2 Urdu: 3 sentences in proper Urdu script. No Roman Urdu.",
+    essay:"Essay on \""+q+"\" in "+document.getElementById("elang").value+". 300-350 words. Use **bold** on key terms. Natural style. If Urdu: proper Urdu script only.",
+    formula:"Formulas for \""+q+"\". For each: **Formula Name** bold, formula, symbol meanings, Urdu name in Urdu script. Human explanations.",
+    timeline:"Timeline of \""+q+"\" with 8 events. Format: Year - **Event** - one sentence.\nSection 2 Urdu: 4 sentences in proper Urdu script.",
+    compare:"Compare \""+q+"\".\nSection 1 English: similarities differences key features. Use **bold**. Paragraphs.\nSection 2 Urdu: Summary in proper Urdu script.",
+    story:"Explain \""+q+"\" as engaging story for students.\nSection 1 English: Use **bold** on key concepts. 3 learning points.\nSection 2 Urdu: Short version in proper Urdu script."
+  };
+  var mx=(tool==="essay"||tool==="story"||tool==="scientist"||tool==="wordhistory")?1100:800;
+  ai(ps[tool],mx,function(txt,err){
+    if(err||!txt){res.innerHTML="<span style='color:var(--a1)'>"+(err||"Error. API key check karein.")+"</span>";return;}
+    res.innerHTML="<div>"+styleText(txt)+"</div>";
+  });
+}
+
+function loadSim(key){
+  var sim=SD[key];if(!sim)return;
+  document.getElementById("simTitle").textContent=sim.t;
+  document.getElementById("simDesc").textContent=sim.d;
+  curSimHTML="data:text/html;base64,"+sim.b;
+  document.getElementById("simIframe").src=curSimHTML;
+  document.getElementById("simFrame").style.display="block";
+  document.getElementById("simLoad").style.display="none";
+}
+function resetSim(){var fr=document.getElementById("simIframe");var s=fr.src;fr.src="";setTimeout(function(){fr.src=s;},80);}
+function fullSim(){var fr=document.getElementById("simIframe");if(fr.requestFullscreen)fr.requestFullscreen();else if(fr.webkitRequestFullscreen)fr.webkitRequestFullscreen();}
+function generateSim(){
+  var topic=document.getElementById("simTopic").value.trim();
+  var subj=document.getElementById("simSubj").value;
+  if(!topic){alert("Topic likhen!");return;}
+  document.getElementById("simLoad").style.display="block";
+  document.getElementById("simFrame").style.display="none";
+  var prompt="Create a complete interactive HTML5 simulation for: \""+topic+"\" in "+subj+".\nRequirements: dark background #0a0a1a, colorful visuals, Canvas 2D API or CSS animations only, interactive controls sliders buttons, mobile touch friendly, self-contained single HTML file, show relevant equations or labels, at least one interactive element.\nReturn ONLY complete HTML code. No explanation no markdown no backticks.";
+  ai(prompt,3000,function(txt,err){
+    document.getElementById("simLoad").style.display="none";
+    var html=err||!txt?"<html><body style='background:#0a0a1a;color:#ff6b6b;padding:20px;font-family:sans-serif'>"+(err||"Could not generate. Try a preset above.")+"</body></html>":txt.replace(/```html/g,"").replace(/```/g,"").trim();
+    var b64=btoa(unescape(encodeURIComponent(html)));
+    curSimHTML="data:text/html;base64,"+b64;
+    document.getElementById("simTitle").textContent=topic+" - "+subj;
+    document.getElementById("simDesc").textContent="AI-generated simulation for "+topic+" in "+subj+". Controls se interact karein!";
+    document.getElementById("simIframe").src=curSimHTML;
+    document.getElementById("simFrame").style.display="block";
+  });
+}
+
+function generateQuiz(){
+  var topic=document.getElementById("qTopic").value.trim()||document.getElementById("qSubj").value;
+  var subj=document.getElementById("qSubj").value,lang=document.getElementById("qLang").value;
+  var area=document.getElementById("qArea");
+  area.innerHTML="<div class='ldots' style='justify-content:center;padding:34px'><span></span><span></span><span></span></div>";
+  document.getElementById("qScore").style.display="none";qAns=[];
+  ai("5 MCQ questions on \""+topic+"\" for "+subj+". Language: "+lang+". If Urdu: proper Urdu script. Return ONLY JSON:\n[{\"q\":\"\",\"options\":[\"\",\"\",\"\",\"\"],\"answer\":0,\"explanation\":\"\"}]",
+  1000,function(txt,err){
+    if(err||!txt){area.innerHTML="<div style='color:var(--a1);text-align:center;padding:20px'>"+(err||"Error")+"</div>";return;}
+    try{qData=JSON.parse(txt.replace(/```json/g,"").replace(/```/g,"").trim());renderQuiz();}
+    catch(e){area.innerHTML="<div style='color:var(--a1);padding:20px'>Parse error. Try again.</div>";}
+  });
+}
+function renderQuiz(){
+  document.getElementById("qArea").innerHTML=qData.map(function(q,i){
+    return "<div class='qq' id='qq"+i+"'><h4>Q"+(i+1)+". "+q.q+"</h4><div class='qopts'>"+
+      q.options.map(function(o,j){return "<button class='qo' id='qo"+i+"_"+j+"' onclick='ansQ("+i+","+j+")'>"+String.fromCharCode(65+j)+") "+o+"</button>";}).join("")+
+      "</div><div id='qe"+i+"' style='display:none;margin-top:6px;font-size:.78rem;color:var(--muted);padding:6px;background:var(--card2);border-radius:7px'>"+(q.explanation||"")+"</div></div>";
+  }).join("");
+  qAns=new Array(qData.length).fill(-1);
+}
+function ansQ(qi,ans){
+  if(qAns[qi]!==-1)return;qAns[qi]=ans;
+  var c=qData[qi].answer;
+  for(var j=0;j<4;j++){var b=document.getElementById("qo"+qi+"_"+j);if(!b)continue;if(j===c)b.classList.add("correct");else if(j===ans&&ans!==c)b.classList.add("wrong");b.disabled=true;}
+  document.getElementById("qe"+qi).style.display="block";
+  if(qAns.every(function(a){return a!==-1;})){
+    var sc=qAns.filter(function(a,i){return a===qData[i].answer;}).length;
+    var pct=Math.round(sc/qData.length*100),em=pct>=80?"🎉":pct>=60?"👍":"💪";
+    var el=document.getElementById("qScore");el.style.display="block";
+    el.innerHTML=em+" Score: <span style='color:var(--a3)'>"+sc+"/"+qData.length+"</span> ("+pct+"%) "+em;
+  }
+}
+
+function generateFC(){
+  var topic=document.getElementById("fcTopic").value.trim();if(!topic){alert("Topic likhen!");return;}
+  var area=document.getElementById("fcArea");
+  area.innerHTML="<div class='ldots' style='justify-content:center;padding:34px'><span></span><span></span><span></span></div>";
+  ai("8 bilingual flashcards for \""+topic+"\". Return ONLY JSON:\n[{\"front\":\"English term or question\",\"back\":\"Urdu answer in Urdu script + English answer\"}]",
+  800,function(txt,err){
+    if(err||!txt){area.innerHTML="<div style='color:var(--a1);padding:20px'>"+(err||"Error")+"</div>";return;}
+    try{fcData=JSON.parse(txt.replace(/```json/g,"").replace(/```/g,"").trim());fcIdx=0;renderFC();document.getElementById("fcNav").style.display="block";}
+    catch(e){area.innerHTML="<div style='color:var(--a1);padding:20px'>Parse error.</div>";}
+  });
+}
+function renderFC(){
+  if(!fcData.length)return;
+  var c=fcData[fcIdx],col=TC[fcIdx%TC.length];
+  document.getElementById("fcArea").innerHTML="<div class='fcc'><div class='fc' onclick='this.classList.toggle(\"flipped\")'>"+
+    "<div class='fcf fcfront' style='border-color:"+col+"44'><div style='color:"+col+";font-size:.7rem;font-weight:700;margin-bottom:6px'>QUESTION</div><div class='fcw' style='color:"+col+"'>"+c.front+"</div><div class='fch'>Tap to flip</div></div>"+
+    "<div class='fcf fcback' style='border-color:"+col+"44'><div style='color:"+col+";font-size:.7rem;font-weight:700;margin-bottom:6px'>ANSWER</div><div class='fcw' style='color:#fff;font-size:1rem;line-height:1.8'>"+c.back+"</div></div></div></div>";
+  document.getElementById("fcCtr").textContent=(fcIdx+1)+"/"+fcData.length;
+}
+function nextFC(){if(fcIdx<fcData.length-1){fcIdx++;renderFC();}}
+function prevFC(){if(fcIdx>0){fcIdx--;renderFC();}}
+
+document.addEventListener("keydown",function(e){
+  if(document.getElementById("tPop").classList.contains("open")){if(e.key==="Escape")closePop();return;}
+  if(document.getElementById("panel-slides").classList.contains("active")){if(e.key==="ArrowRight")nextSlide();if(e.key==="ArrowLeft")prevSlide();}
+});
+
 (function(){
-  try{var k=localStorage.getItem('gk');if(k){GROQ_KEY=k;document.getElementById('groqKey').value=k;}}catch(e){}
-  document.getElementById('groqKey').addEventListener('input',function(){GROQ_KEY=this.value;try{localStorage.setItem('gk',this.value);}catch(e){}});
-  slides=demoSlides("Newton's Laws of Motion",6); renderSlide(); renderDots();
+  try{var k=localStorage.getItem("gk");if(k){GROQ_KEY=k;document.getElementById("groqKey").value=k;}}catch(e){}
+  document.getElementById("groqKey").addEventListener("input",function(){GROQ_KEY=this.value;try{localStorage.setItem("gk",this.value);}catch(e){}});
+  slides=demoSlides("Newton Laws of Motion",6);renderSlide();renderDots();
+  loadSim("pendulum");
 })();
 </script>
 </body>
