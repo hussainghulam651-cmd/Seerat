@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>3D Science Simulations</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#020408;--card:#080d14;--a1:#00f5ff;--a2:#ff6b35;--a3:#7fff00;--a4:#bf5fff;--a5:#ffcc00;--text:#e8f4f8;--muted:#4a7080;--bdr:#1a2535}
+body{background:var(--bg);color:var(--text);font-family:"Rajdhani",sans-serif;min-height:100vh;overflow:hidden}
+header{position:relative;z-index:10;padding:12px 16px;border-bottom:1px solid var(--bdr);background:rgba(2,4,8,0.95);backdrop-filter:blur(20px);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-family:"Orbitron",monospace;font-size:1rem;font-weight:900;background:linear-gradient(90deg,var(--a1),var(--a4),var(--a3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.logo span{display:block;font-size:.55rem;font-family:"Rajdhani",sans-serif;color:var(--muted);-webkit-text-fill-color:var(--muted);letter-spacing:3px}
+.sim-nav{display:flex;gap:5px;flex-wrap:wrap;flex:1;justify-content:flex-end}
+.snav-btn{padding:6px 11px;border-radius:6px;font-family:"Orbitron",monospace;font-size:.58rem;font-weight:700;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--muted);letter-spacing:.5px;transition:all .2s}
+.snav-btn:hover{color:var(--text);border-color:var(--a1)}
+.snav-btn.on{background:linear-gradient(135deg,#00f5ff,#0080ff);color:#000;border-color:transparent}
+.ai-btn{background:linear-gradient(135deg,#7fff00,#44aa00)!important;color:#000!important;border-color:transparent!important;animation:gp 2s ease-in-out infinite}
+@keyframes gp{0%,100%{box-shadow:0 0 8px rgba(127,255,0,.3)}50%{box-shadow:0 0 20px rgba(127,255,0,.6)}}
+main{height:calc(100vh - 58px);position:relative;overflow:hidden}
+.sp{display:none;height:100%;position:relative;overflow:hidden}
+.sp.on{display:flex;flex-direction:column}
+.cw{flex:1;position:relative;overflow:hidden}
+.cw canvas{width:100%!important;height:100%!important;display:block}
+.hud{position:absolute;top:10px;left:10px;background:rgba(2,4,8,.88);backdrop-filter:blur(12px);border:1px solid rgba(0,245,255,.2);border-radius:10px;padding:11px 13px;font-size:.7rem;min-width:150px;z-index:10}
+.ht{font-family:"Orbitron",monospace;font-size:.62rem;color:var(--a1);letter-spacing:2px;margin-bottom:7px}
+.hr{display:flex;justify-content:space-between;gap:10px;margin-bottom:3px;line-height:1.6}
+.hv{font-family:"Orbitron",monospace;font-weight:700}
+.hf{margin-top:7px;padding-top:7px;border-top:1px solid rgba(0,245,255,.15);font-family:"Orbitron",monospace;font-size:.58rem;color:var(--a1);opacity:.7}
+.ip{position:absolute;right:10px;top:10px;width:200px;background:rgba(2,4,8,.88);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;z-index:10;font-size:.74rem;color:rgba(255,255,255,.7);line-height:1.7}
+.it{font-family:"Orbitron",monospace;font-size:.64rem;color:var(--a3);letter-spacing:1px;margin-bottom:7px}
+.cb-bar{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:10;flex-wrap:wrap;justify-content:center}
+.cb{padding:7px 14px;border-radius:8px;border:1px solid rgba(0,245,255,.3);background:rgba(2,4,8,.88);color:var(--a1);font-family:"Orbitron",monospace;font-size:.58rem;cursor:pointer;transition:all .2s;letter-spacing:.5px;backdrop-filter:blur(10px)}
+.cb:hover{background:rgba(0,245,255,.1);box-shadow:0 0 14px rgba(0,245,255,.3)}
+.sw{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:8px;border:1px solid rgba(0,245,255,.15);background:rgba(2,4,8,.88);backdrop-filter:blur(10px)}
+.sw label{font-family:"Orbitron",monospace;font-size:.55rem;color:var(--muted);letter-spacing:.5px;white-space:nowrap}
+.sw input[type=range]{-webkit-appearance:none;width:75px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--a1),var(--a4));outline:none}
+.sw input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--a1);cursor:pointer}
+.sv{font-family:"Orbitron",monospace;font-size:.6rem;color:var(--a1);min-width:28px}
+.sld{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:20}
+.slr{width:52px;height:52px;border-radius:50%;border:3px solid rgba(0,245,255,.1);border-top-color:var(--a1);animation:spin 1s linear infinite;margin-bottom:14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.slt{font-family:"Orbitron",monospace;font-size:.68rem;color:var(--a1);letter-spacing:3px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+/* AI MODAL */
+#aiModal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:16px}
+#aiModal.open{display:flex}
+.aib{background:#080d14;border:1px solid rgba(127,255,0,.3);border-radius:18px;padding:26px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 0 50px rgba(127,255,0,.12)}
+.aim-t{text-align:center;margin-bottom:20px}
+.aim-t h2{font-family:"Orbitron",monospace;font-size:.9rem;color:#7fff00;letter-spacing:2px;margin-bottom:5px}
+.aim-t p{font-size:.76rem;color:var(--muted)}
+.aif{margin-bottom:14px}
+.aif label{font-family:"Orbitron",monospace;font-size:.58rem;color:var(--muted);letter-spacing:2px;display:block;margin-bottom:5px}
+.aif input,.aif select{width:100%;background:#0d1520;border:1px solid rgba(0,245,255,.2);border-radius:8px;color:#fff;padding:9px 12px;font-family:"Orbitron",monospace;font-size:.65rem;outline:none;transition:border-color .2s}
+.aif input:focus,.aif select:focus{border-color:#00f5ff}
+.aif-row{display:flex;gap:8px;flex-wrap:wrap}
+.aif-row .aif{flex:1;min-width:120px}
+.qt-grid{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.qt{padding:4px 10px;border-radius:5px;border:1px solid rgba(0,245,255,.18);background:rgba(0,245,255,.04);color:#00f5ff;font-family:"Orbitron",monospace;font-size:.52rem;cursor:pointer;transition:all .2s}
+.qt:hover{background:rgba(0,245,255,.14);box-shadow:0 0 8px rgba(0,245,255,.2)}
+.gen-btn{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,#7fff00,#44aa00);color:#000;font-family:"Orbitron",monospace;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:2px;margin-top:14px}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed}
+.ai-stat{display:none;margin-top:14px;padding:13px;background:rgba(127,255,0,.06);border:1px solid rgba(127,255,0,.2);border-radius:10px;text-align:center}
+.ai-stat .slr{width:32px;height:32px;border-width:2px;margin:0 auto 9px}
+.ai-stat p{font-family:"Orbitron",monospace;font-size:.65rem;color:#7fff00;letter-spacing:1px}
+.ai-stat small{font-size:.7rem;color:var(--muted);display:block;margin-top:3px}
+.cancel-btn{padding:10px 18px;border:1px solid #334455;border-radius:8px;background:transparent;color:var(--muted);font-family:"Orbitron",monospace;font-size:.62rem;cursor:pointer;margin-left:8px}
+
+/* TOPIC SEARCH */
+.srch-wrap{position:relative;display:flex;align-items:center;gap:0;margin-right:6px}
+.srch-inp{background:rgba(0,245,255,.07);border:1px solid rgba(0,245,255,.28);border-radius:8px 0 0 8px;color:#e8f4f8;font-family:"Rajdhani",sans-serif;font-size:.78rem;padding:6px 28px 6px 10px;width:148px;outline:none;transition:border-color .2s,width .2s}
+.srch-inp:focus{border-color:#00f5ff;width:180px}
+.srch-inp::placeholder{color:#4a7080;font-size:.72rem}
+.srch-clr{display:none;position:absolute;right:34px;top:50%;transform:translateY(-50%);background:none;border:none;color:#4a7080;font-size:.8rem;cursor:pointer;padding:0 3px;line-height:1}
+.srch-clr.vis{display:block}
+.srch-ico{background:rgba(0,245,255,.12);border:1px solid rgba(0,245,255,.28);border-left:none;border-radius:0 8px 8px 0;padding:6px 9px;color:#00f5ff;font-size:.78rem;cursor:pointer;transition:background .2s}
+.srch-ico:hover{background:rgba(0,245,255,.22)}
+.srch-dd{display:none;position:absolute;top:calc(100% + 6px);left:0;background:#080d14;border:1px solid rgba(0,245,255,.25);border-radius:10px;z-index:9999;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.8);min-width:260px;max-height:320px;overflow-y:auto}
+.srch-dd.open{display:block}
+.srch-dd-hd{font-family:"Orbitron",monospace;font-size:.5rem;color:#4a7080;letter-spacing:2px;padding:8px 12px 4px;border-bottom:1px solid #1a2535;position:sticky;top:0;background:#080d14}
+.srch-item{padding:9px 13px;cursor:pointer;display:flex;align-items:center;gap:9px;transition:background .15s;border-bottom:1px solid rgba(255,255,255,.04)}
+.srch-item:last-child{border-bottom:none}
+.srch-item:hover,.srch-item.foc{background:rgba(0,245,255,.08)}
+.srch-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.srch-lbl{font-family:"Orbitron",monospace;font-size:.6rem;color:#e8f4f8;letter-spacing:.4px;display:flex;align-items:center;gap:5px}
+.srch-ai-tag{font-size:.48rem;background:rgba(127,255,0,.15);color:#7fff00;padding:1px 5px;border-radius:3px;font-family:"Orbitron",monospace}
+.srch-sub{font-size:.6rem;color:#4a7080;margin-top:1px}
+.srch-no{padding:13px;text-align:center;font-family:"Orbitron",monospace;font-size:.58rem;color:#4a7080;letter-spacing:1px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">3D SCI-LAB<span>PROFESSIONAL SIMULATIONS</span></div>
+  <div class="srch-wrap" id="srchWrap">
+    <input type="text" class="srch-inp" id="srchInp" placeholder="Search topic..." autocomplete="off" oninput="srchUpd(this.value)" onfocus="srchOpen()" onkeydown="srchKey(event)">
+    <button class="srch-clr" id="srchClr" onclick="srchClr()" title="Clear">&#215;</button>
+    <button class="srch-ico" onclick="srchOpen()" title="Search">&#128269;</button>
+    <div class="srch-dd" id="srchDd">
+      <div class="srch-dd-hd">SIMULATIONS &amp; AI TOPICS</div>
+      <div id="srchList"></div>
+    </div>
+  </div>
+  <nav class="sim-nav">
+    <button class="snav-btn on" id="btn-atom" onclick="showSim('atom',this)">Atom</button>
+    <button class="snav-btn" id="btn-solar" onclick="showSim('solar',this)">Solar</button>
+    <button class="snav-btn" id="btn-dna" onclick="showSim('dna',this)">DNA</button>
+    <button class="snav-btn" id="btn-wave" onclick="showSim('wave',this)">Wave</button>
+    <button class="snav-btn" id="btn-pendulum" onclick="showSim('pendulum',this)">Pendulum</button>
+    <button class="snav-btn" id="btn-molecule" onclick="showSim('molecule',this)">Molecule</button>
+    <button class="snav-btn ai-btn" id="btn-ai" onclick="openAIModal()">AI Generate</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ATOM -->
+<div class="sp on" id="sp-atom">
+  <div class="cw" id="cw-atom"><div class="sld" id="sl-atom"><div class="slr"></div><div class="slt">INITIALIZING ATOM...</div></div></div>
+  <div class="hud"><div class="ht">ATOMIC MODEL</div>
+    <div class="hr"><span>Element</span><span class="hv" id="a-el" style="color:#00f5ff">Hydrogen</span></div>
+    <div class="hr"><span>Protons</span><span class="hv" id="a-p" style="color:#ff6b35">1</span></div>
+    <div class="hr"><span>Neutrons</span><span class="hv" id="a-n" style="color:#888">0</span></div>
+    <div class="hr"><span>Electrons</span><span class="hv" id="a-e" style="color:#00f5ff">1</span></div>
+    <div class="hf">E = hf = hc/lambda</div>
+  </div>
+  <div class="ip"><div class="it">ELEMENT INFO</div><div id="atom-info">Hydrogen (H) - Atomic No: 1. Most abundant element. Makes up 75% of universe.</div></div>
+  <div class="cb-bar">
+    <div class="sw"><label>ELEMENT</label><input type="range" id="elem-sl" min="1" max="18" value="1" oninput="changeElem(this.value)"><span class="sv" id="elem-v">H</span></div>
+    <button class="cb" onclick="atomPaused=!atomPaused;this.textContent=atomPaused?'PLAY':'PAUSE'">PAUSE</button>
+    <div class="sw"><label>SPEED</label><input type="range" id="atom-sp" min="1" max="10" value="5"><span class="sv">5</span></div>
+  </div>
+</div>
+
+<!-- SOLAR -->
+<div class="sp" id="sp-solar">
+  <div class="cw" id="cw-solar"><div class="sld" id="sl-solar"><div class="slr"></div><div class="slt">LOADING SOLAR SYSTEM...</div></div></div>
+  <div class="hud"><div class="ht">SOLAR SYSTEM</div>
+    <div class="hr"><span>Selected</span><span class="hv" id="s-sel" style="color:#ffcc00">None</span></div>
+    <div class="hr"><span>Distance</span><span class="hv" id="s-dist" style="color:#00f5ff">-</span></div>
+    <div class="hr"><span>Period</span><span class="hv" id="s-per" style="color:#7fff00">-</span></div>
+    <div class="hr"><span>Moons</span><span class="hv" id="s-moons" style="color:#bf5fff">-</span></div>
+    <div class="hf">T2 prop R3 (Kepler)</div>
+  </div>
+  <div class="ip"><div class="it">PLANET INFO</div><div id="solar-info">Click any planet for details.</div></div>
+  <div class="cb-bar">
+    <div class="sw"><label>SPEED</label><input type="range" id="solar-sp" min="1" max="20" value="5"><span class="sv">5</span></div>
+    <button class="cb" onclick="toggleOrbits()">ORBITS</button>
+    <button class="cb" onclick="resetCam('solar')">RESET CAM</button>
+  </div>
+</div>
+
+<!-- DNA -->
+<div class="sp" id="sp-dna">
+  <div class="cw" id="cw-dna"><div class="sld" id="sl-dna"><div class="slr"></div><div class="slt">BUILDING DNA HELIX...</div></div></div>
+  <div class="hud"><div class="ht">DNA DOUBLE HELIX</div>
+    <div class="hr"><span>Base Pair</span><span class="hv" id="d-bp" style="color:#7fff00">A-T</span></div>
+    <div class="hr"><span>Rotation</span><span class="hv" id="d-rot" style="color:#00f5ff">0 deg</span></div>
+    <div class="hf">A-T and G-C (Chargaff Rule)</div>
+  </div>
+  <div class="ip"><div class="it">DNA STRUCTURE</div>Adenine (A) pairs with Thymine (T). Guanine (G) pairs with Cytosine (C). Discovered by Watson and Crick in 1953.</div>
+  <div class="cb-bar">
+    <button class="cb" onclick="dnaPaused=!dnaPaused;this.textContent=dnaPaused?'PLAY':'PAUSE'">PAUSE</button>
+    <div class="sw"><label>ZOOM</label><input type="range" id="dna-z" min="5" max="30" value="15" oninput="cameras['dna'].position.setLength(+this.value)"><span class="sv">15</span></div>
+  </div>
+</div>
+
+<!-- WAVE -->
+<div class="sp" id="sp-wave">
+  <div class="cw" id="cw-wave"><div class="sld" id="sl-wave"><div class="slr"></div><div class="slt">GENERATING WAVES...</div></div></div>
+  <div class="hud"><div class="ht">3D WAVE INTERFERENCE</div>
+    <div class="hr"><span>Freq 1</span><span class="hv" id="w-f1" style="color:#00f5ff">2.0 Hz</span></div>
+    <div class="hr"><span>Freq 2</span><span class="hv" id="w-f2" style="color:#ff6b35">3.0 Hz</span></div>
+    <div class="hr"><span>Type</span><span class="hv" id="w-type" style="color:#bf5fff">Interference</span></div>
+    <div class="hf">v = f x lambda</div>
+  </div>
+  <div class="ip"><div class="it">WAVE PHYSICS</div>Two waves create superposition. Peaks + Peaks = Constructive (louder). Peak + Trough = Destructive (quieter). Used in noise-cancelling headphones!</div>
+  <div class="cb-bar">
+    <div class="sw"><label>FREQ 1</label><input type="range" id="wf1" min="10" max="50" value="20" oninput="waveUpd()"></div>
+    <div class="sw"><label>FREQ 2</label><input type="range" id="wf2" min="10" max="50" value="30" oninput="waveUpd()"></div>
+    <div class="sw"><label>AMP</label><input type="range" id="wamp" min="5" max="30" value="15" oninput="waveUpd()"></div>
+    <button class="cb" onclick="wavePaused=!wavePaused;this.textContent=wavePaused?'PLAY':'PAUSE'">PAUSE</button>
+  </div>
+</div>
+
+<!-- PENDULUM -->
+<div class="sp" id="sp-pendulum">
+  <div class="cw" id="cw-pendulum"><div class="sld" id="sl-pendulum"><div class="slr"></div><div class="slt">BUILDING PENDULUM...</div></div></div>
+  <div class="hud"><div class="ht">PENDULUM</div>
+    <div class="hr"><span>Period T</span><span class="hv" id="p-per" style="color:#00f5ff">2.00s</span></div>
+    <div class="hr"><span>Angle</span><span class="hv" id="p-ang" style="color:#7fff00">45 deg</span></div>
+    <div class="hr"><span>Length</span><span class="hv" id="p-len" style="color:#ffcc00">4.0</span></div>
+    <div class="hf">T = 2pi sqrt(L/g)</div>
+  </div>
+  <div class="ip"><div class="it">PENDULUM PHYSICS</div>Period depends ONLY on length and gravity. Mass does NOT affect it. Galileo discovered this in 1602 watching a chandelier swing.</div>
+  <div class="cb-bar">
+    <div class="sw"><label>LENGTH</label><input type="range" id="pl" min="2" max="6" value="4" step="0.1" oninput="pendUpd()"><span class="sv" id="plv">4</span></div>
+    <div class="sw"><label>GRAVITY</label><input type="range" id="pg" min="1" max="25" value="9" step="0.5" oninput="pendUpd()"><span class="sv" id="pgv">9</span></div>
+    <button class="cb" onclick="pendPaused=!pendPaused;this.textContent=pendPaused?'PLAY':'PAUSE'">PAUSE</button>
+  </div>
+</div>
+
+<!-- MOLECULE -->
+<div class="sp" id="sp-molecule">
+  <div class="cw" id="cw-molecule"><div class="sld" id="sl-molecule"><div class="slr"></div><div class="slt">BUILDING MOLECULE...</div></div></div>
+  <div class="hud"><div class="ht">3D MOLECULES</div>
+    <div class="hr"><span>Molecule</span><span class="hv" id="m-nm" style="color:#00f5ff">Water</span></div>
+    <div class="hr"><span>Formula</span><span class="hv" id="m-fm" style="color:#7fff00">H2O</span></div>
+    <div class="hr"><span>Shape</span><span class="hv" id="m-sh" style="color:#bf5fff">Bent</span></div>
+    <div class="hf">VSEPR Theory</div>
+  </div>
+  <div class="ip"><div class="it">MOLECULE INFO</div><div id="mol-info">Water H2O - Bent shape. Bond angle 104.5 degrees. Polar molecule - universal solvent, essential for life.</div></div>
+  <div class="cb-bar">
+    <button class="cb" onclick="showMol('water')">H2O</button>
+    <button class="cb" onclick="showMol('co2')">CO2</button>
+    <button class="cb" onclick="showMol('ch4')">CH4</button>
+    <button class="cb" onclick="showMol('nh3')">NH3</button>
+    <button class="cb" onclick="showMol('nacl')">NaCl</button>
+    <button class="cb" onclick="resetCam('molecule')">RESET</button>
+  </div>
+</div>
+
+<!-- AI SIM PANEL -->
+<div class="sp" id="sp-ai">
+  <div class="cw" id="cw-ai">
+    <iframe id="ai-iframe" style="width:100%;height:100%;border:none;background:#020408" sandbox="allow-scripts allow-same-origin"></iframe>
+  </div>
+  <div class="hud"><div class="ht">AI SIMULATION</div>
+    <div class="hr"><span>Topic</span><span class="hv" id="ai-t" style="color:#7fff00">-</span></div>
+    <div class="hr"><span>Subject</span><span class="hv" id="ai-s" style="color:#00f5ff">-</span></div>
+    <div class="hf">AI Generated</div>
+  </div>
+  <div class="ip"><div class="it">AI INFO</div><div id="ai-info">AI-generated simulation. Interact with controls inside.</div></div>
+  <div class="cb-bar">
+    <button class="cb ai-btn" style="font-size:.58rem" onclick="openAIModal()">NEW SIMULATION</button>
+    <button class="cb" onclick="reloadAI()">RELOAD</button>
+    <button class="cb" onclick="fullscreenAI()">FULLSCREEN</button>
+  </div>
+</div>
+
+</main>
+
+<!-- AI MODAL -->
+<div id="aiModal">
+  <div class="aib">
+    <div class="aim-t"><h2>AI 3D SIMULATION GENERATOR</h2><p>Koi bhi topic likhen — AI 3D interactive simulation banayega</p></div>
+    <div class="aif"><label>GROQ API KEY <a href="https://console.groq.com/keys" target="_blank" style="color:#7fff00;font-size:.55rem">(FREE)</a></label><input type="password" id="ai-key" placeholder="gsk_..."></div>
+    <div class="aif-row">
+      <div class="aif"><label>SUBJECT</label><select id="ai-subj"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Mathematics">Mathematics</option><option value="Astronomy">Astronomy</option><option value="Engineering">Engineering</option><option value="Computer Science">Computer Science</option></select></div>
+      <div class="aif" style="flex:2"><label>TOPIC</label><input type="text" id="ai-topic" placeholder="e.g. Electromagnetic Wave, Osmosis, Black Hole..."></div>
+    </div>
+    <div class="aif-row">
+      <div class="aif"><label>QUALITY</label><select id="ai-qual"><option value="standard">Standard Fast</option><option value="high" selected>High Quality</option><option value="ultra">Ultra Detail</option></select></div>
+      <div class="aif"><label>STYLE</label><select id="ai-style"><option value="3d">3D Three.js</option><option value="2d">2D Interactive</option><option value="particles">Particle System</option></select></div>
+    </div>
+    <div class="aif"><label>QUICK TOPICS</label>
+      <div class="qt-grid">
+        <button class="qt" onclick="setTpc('Electromagnetic Wave','Physics')">EM Wave</button>
+        <button class="qt" onclick="setTpc('Magnetic Field Lines','Physics')">Magnetic Field</button>
+        <button class="qt" onclick="setTpc('Spring Oscillation SHM','Physics')">Spring SHM</button>
+        <button class="qt" onclick="setTpc('Electric Field Lines','Physics')">Electric Field</button>
+        <button class="qt" onclick="setTpc('Fluid Dynamics Flow','Physics')">Fluid Flow</button>
+        <button class="qt" onclick="setTpc('Black Hole Gravity','Astronomy')">Black Hole</button>
+        <button class="qt" onclick="setTpc('Orbital Mechanics','Astronomy')">Orbital Mech</button>
+        <button class="qt" onclick="setTpc('Cell Membrane Transport','Biology')">Cell Membrane</button>
+        <button class="qt" onclick="setTpc('Photosynthesis Process','Biology')">Photosynthesis</button>
+        <button class="qt" onclick="setTpc('Crystal Lattice Structure','Chemistry')">Crystal Lattice</button>
+        <button class="qt" onclick="setTpc('Gas Particles Kinetic Theory','Chemistry')">Gas Particles</button>
+        <button class="qt" onclick="setTpc('Fourier Transform','Mathematics')">Fourier</button>
+        <button class="qt" onclick="setTpc('Projectile Motion 3D','Physics')">Projectile 3D</button>
+        <button class="qt" onclick="setTpc('Neural Network Neurons','Computer Science')">Neural Net</button>
+        <button class="qt" onclick="setTpc('Binary Tree Data Structure','Computer Science')">Binary Tree</button>
+        <button class="qt" onclick="setTpc('Tectonic Plates Movement','Geology')">Tectonic Plates</button>
+      </div>
+    </div>
+    <div style="display:flex;margin-top:4px">
+      <button class="gen-btn" id="gen-btn" onclick="generateAI()">GENERATE 3D SIMULATION</button>
+      <button class="cancel-btn" onclick="closeAIModal()">CANCEL</button>
+    </div>
+    <div class="ai-stat" id="ai-stat"><div class="slr"></div><p id="ai-stat-t">GENERATING...</p><small id="ai-stat-s">AI is building your simulation...</small></div>
+  </div>
+</div>
+
+<script>
+var scn={},ren={},cam={},aFr={};
+var GROQ_KEY='';
+try{var _k=localStorage.getItem('gk');if(_k)GROQ_KEY=_k;}catch(e){}
+
+// ===== ORBIT CONTROL =====
+function addOrbit(canvas,camera){
+  var m={down:false,x:0,y:0,th:0.5,ph:0.8,r:15};
+  function upd(){camera.position.x=m.r*Math.sin(m.ph)*Math.cos(m.th);camera.position.y=m.r*Math.cos(m.ph);camera.position.z=m.r*Math.sin(m.ph)*Math.sin(m.th);camera.lookAt(0,0,0);}
+  canvas.addEventListener('mousedown',function(e){m.down=true;m.x=e.clientX;m.y=e.clientY;});
+  canvas.addEventListener('mousemove',function(e){if(!m.down)return;var dx=(e.clientX-m.x)*0.01,dy=(e.clientY-m.y)*0.01;m.th-=dx;m.ph=Math.max(0.2,Math.min(Math.PI-0.2,m.ph+dy));m.x=e.clientX;m.y=e.clientY;upd();});
+  canvas.addEventListener('mouseup',function(){m.down=false;});
+  canvas.addEventListener('wheel',function(e){m.r=Math.max(3,Math.min(50,m.r+e.deltaY*0.01));upd();e.preventDefault();},{passive:false});
+  canvas.addEventListener('touchstart',function(e){m.down=true;m.x=e.touches[0].clientX;m.y=e.touches[0].clientY;},{passive:true});
+  canvas.addEventListener('touchmove',function(e){if(!m.down)return;var dx=(e.touches[0].clientX-m.x)*0.01,dy=(e.touches[0].clientY-m.y)*0.01;m.th-=dx;m.ph=Math.max(0.2,Math.min(Math.PI-0.2,m.ph+dy));m.x=e.touches[0].clientX;m.y=e.touches[0].clientY;upd();},{passive:true});
+  canvas.addEventListener('touchend',function(){m.down=false;});
+  camera._orb=m;camera._orbUpd=upd;upd();
+}
+
+function resetCam(id){var c=cam[id];if(c&&c._orb){c._orb.th=0.5;c._orb.ph=0.8;c._orb.r=15;c._orbUpd();}}
+
+// ===== RENDERER INIT =====
+function mkRen(id){
+  var wrap=document.getElementById('cw-'+id);
+  var r=new THREE.WebGLRenderer({antialias:true,alpha:false});
+  r.setPixelRatio(window.devicePixelRatio);
+  r.setSize(wrap.clientWidth,wrap.clientHeight);
+  r.shadowMap.enabled=true;
+  r.toneMapping=THREE.ACESFilmicToneMapping;
+  r.toneMappingExposure=1.2;
+  wrap.appendChild(r.domElement);
+  var c=new THREE.PerspectiveCamera(60,wrap.clientWidth/wrap.clientHeight,0.1,1000);
+  ren[id]=r;cam[id]=c;
+  setTimeout(function(){var sl=document.getElementById('sl-'+id);if(sl)sl.style.display='none';},900);
+  window.addEventListener('resize',function(){if(!wrap.parentElement)return;var w=wrap.clientWidth,h=wrap.clientHeight;r.setSize(w,h);c.aspect=w/h;c.updateProjectionMatrix();});
+  addOrbit(r.domElement,c);
+  return{r:r,c:c};
+}
+
+// ===== SHOW SIM =====
+function showSim(name,btn){
+  document.querySelectorAll('.sp').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.snav-btn').forEach(function(b){b.classList.remove('on');b.style.background='';b.style.color='';});
+  document.getElementById('sp-'+name).classList.add('on');
+  if(btn){btn.classList.add('on');}
+  if(!scn[name])setTimeout(function(){initSim(name);},100);
+}
+
+function initSim(n){
+  if(n==='atom')initAtom();
+  else if(n==='solar')initSolar();
+  else if(n==='dna')initDNA();
+  else if(n==='wave')initWave();
+  else if(n==='pendulum')initPend();
+  else if(n==='molecule')initMol();
+}
+
+// ===== STARS HELPER =====
+function mkStars(scene,count,spread){
+  var g=new THREE.BufferGeometry(),p=[];
+  for(var i=0;i<count;i++)p.push((Math.random()-0.5)*spread,(Math.random()-0.5)*spread,(Math.random()-0.5)*spread);
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.18,transparent:true,opacity:0.65})));
+}
+
+// =========================================
+// ATOM 3D
+// =========================================
+var atomD=[
+  {s:'H',n:'Hydrogen',p:1,nt:0,e:1,m:1.008,t:'Nonmetal',d:'Most abundant element. Makes up 75% of universe. Essential for water H2O.'},
+  {s:'He',n:'Helium',p:2,nt:2,e:2,m:4.003,t:'Noble Gas',d:'Noble gas. Used in balloons and MRI. Completely inert.'},
+  {s:'Li',n:'Lithium',p:3,nt:4,e:3,m:6.941,t:'Alkali Metal',d:'Used in batteries for phones and electric cars.'},
+  {s:'Be',n:'Beryllium',p:4,nt:5,e:4,m:9.012,t:'Alkaline Earth',d:'Lightweight rigid metal. Used in aerospace.'},
+  {s:'B',n:'Boron',p:5,nt:6,e:5,m:10.811,t:'Metalloid',d:'Used in glass, ceramics and semiconductors.'},
+  {s:'C',n:'Carbon',p:6,nt:6,e:6,m:12.011,t:'Nonmetal',d:'Basis of all life. Forms 10 million+ compounds.'},
+  {s:'N',n:'Nitrogen',p:7,nt:7,e:7,m:14.007,t:'Nonmetal',d:'78% of atmosphere. Essential for proteins and DNA.'},
+  {s:'O',n:'Oxygen',p:8,nt:8,e:8,m:15.999,t:'Nonmetal',d:'Essential for respiration. 21% of atmosphere.'},
+  {s:'F',n:'Fluorine',p:9,nt:10,e:9,m:18.998,t:'Halogen',d:'Most reactive element. Used in toothpaste.'},
+  {s:'Ne',n:'Neon',p:10,nt:10,e:10,m:20.18,t:'Noble Gas',d:'Used in neon signs. Glows orange-red in discharge.'},
+  {s:'Na',n:'Sodium',p:11,nt:12,e:11,m:22.99,t:'Alkali Metal',d:'In table salt. Essential for nerve signals.'},
+  {s:'Mg',n:'Magnesium',p:12,nt:12,e:12,m:24.305,t:'Alkaline Earth',d:'Central atom in chlorophyll for photosynthesis.'},
+  {s:'Al',n:'Aluminium',p:13,nt:14,e:13,m:26.982,t:'Post-Trans Metal',d:'Most abundant metal in crust. Used in aircraft.'},
+  {s:'Si',n:'Silicon',p:14,nt:14,e:14,m:28.086,t:'Metalloid',d:'Basis of all computer chips. Silicon Valley!'},
+  {s:'P',n:'Phosphorus',p:15,nt:16,e:15,m:30.974,t:'Nonmetal',d:'In DNA RNA and ATP energy molecules.'},
+  {s:'S',n:'Sulphur',p:16,nt:16,e:16,m:32.065,t:'Nonmetal',d:'Yellow solid. In proteins and vitamins.'},
+  {s:'Cl',n:'Chlorine',p:17,nt:18,e:17,m:35.453,t:'Halogen',d:'Disinfects water. In stomach acid HCl.'},
+  {s:'Ar',n:'Argon',p:18,nt:22,e:18,m:39.948,t:'Noble Gas',d:'Used in welding and light bulbs.'}
+];
+var atomEl=[],atomNuc,atomAng=0,atomPaused=false;
+
+function initAtom(){
+  var rc=mkRen('atom');
+  var s=new THREE.Scene();scn['atom']=s;
+  cam['atom'].position.set(0,5,15);cam['atom'].lookAt(0,0,0);
+  s.add(new THREE.AmbientLight(0x111133,0.8));
+  var dl=new THREE.DirectionalLight(0x4488ff,1.5);dl.position.set(5,10,5);s.add(dl);
+  s.add(new THREE.PointLight(0x00f5ff,2,20));
+  mkStars(s,2000,200);
+  buildAtom(0);
+  animAtom();
+}
+
+function buildAtom(idx){
+  var s=scn['atom'];if(!s)return;
+  var el=atomD[idx];
+  while(s.children.length>5)s.remove(s.children[s.children.length-1]);
+  atomEl=[];
+  var nr=el.p*0.08+0.7;
+  var ng=new THREE.SphereGeometry(nr,32,32);
+  var nm=new THREE.MeshPhongMaterial({color:0xff4422,emissive:0x661100,shininess:120,specular:0xff8866});
+  atomNuc=new THREE.Mesh(ng,nm);s.add(atomNuc);
+  var gg=new THREE.SphereGeometry(nr+0.4,16,16);
+  var gm=new THREE.MeshBasicMaterial({color:0xff4422,transparent:true,opacity:0.12,side:THREE.BackSide});
+  s.add(new THREE.Mesh(gg,gm));
+  var shells,radii;
+  if(el.e<=2){shells=[el.e];radii=[3];}
+  else if(el.e<=10){shells=[2,el.e-2];radii=[3,5.5];}
+  else{shells=[2,8,el.e-10];radii=[3,5.5,8];}
+  shells.forEach(function(cnt,si){
+    var rad=radii[si];
+    var rg=new THREE.TorusGeometry(rad,0.04,8,80);
+    rg.rotateX(Math.PI/2+si*0.4);rg.rotateY(si*0.8);
+    s.add(new THREE.Mesh(rg,new THREE.MeshBasicMaterial({color:0x00f5ff,transparent:true,opacity:0.25})));
+    for(var ei=0;ei<cnt;ei++){
+      var eg=new THREE.SphereGeometry(0.22,16,16);
+      var em=new THREE.MeshPhongMaterial({color:0x00ddff,emissive:0x004466,shininess:200,specular:0x88ffff});
+      var mesh=new THREE.Mesh(eg,em);
+      var egl=new THREE.Mesh(new THREE.SphereGeometry(0.35,8,8),new THREE.MeshBasicMaterial({color:0x00f5ff,transparent:true,opacity:0.3}));
+      mesh.add(egl);s.add(mesh);
+      atomEl.push({mesh:mesh,r:rad,sh:si,ph:(ei/cnt)*Math.PI*2,ax:si*0.4,ay:si*0.8,sp:0.8/(si+1)});
+    }
+  });
+  document.getElementById('a-el').textContent=el.n;
+  document.getElementById('a-p').textContent=el.p;
+  document.getElementById('a-n').textContent=el.nt;
+  document.getElementById('a-e').textContent=el.e;
+  document.getElementById('elem-v').textContent=el.s;
+  document.getElementById('atom-info').textContent=el.n+' ('+el.s+') - Atomic No: '+el.p+' | Mass: '+el.m+' | '+el.t+'. '+el.d;
+}
+
+function changeElem(v){buildAtom(parseInt(v)-1);}
+
+function animAtom(){
+  aFr['atom']=requestAnimationFrame(animAtom);
+  if(!atomPaused){
+    var sp=(+document.getElementById('atom-sp').value)*0.006;
+    atomAng+=sp;
+    if(atomNuc){atomNuc.rotation.x+=0.005;atomNuc.rotation.y+=0.008;}
+    atomEl.forEach(function(e){
+      var ang=atomAng*e.sp+e.ph;
+      var cx=Math.cos(e.ax),sx=Math.sin(e.ax);
+      var cy2=Math.cos(e.ay),sy=Math.sin(e.ay);
+      var x=e.r*Math.cos(ang),z=e.r*Math.sin(ang);
+      e.mesh.position.x=x*cy2-z*sx*sy;
+      e.mesh.position.y=z*cx;
+      e.mesh.position.z=x*sy+z*sx*cy2;
+    });
+  }
+  ren['atom'].render(scn['atom'],cam['atom']);
+}
+
+// =========================================
+// SOLAR SYSTEM 3D
+// =========================================
+var solarPl=[],solarOrbs=true;
+var pData=[
+  {n:'Mercury',r:0.4,orb:5,sp:4.1,col:0xb5b5b5,col2:0x888888,dist:'57.9M km',per:'88 days',moons:0,desc:'Smallest planet. No atmosphere. Extreme temp -180 to 430C.'},
+  {n:'Venus',r:0.9,orb:7.5,sp:1.6,col:0xffa040,col2:0xcc6600,dist:'108M km',per:'225 days',moons:0,desc:'Hottest planet 462C. Thick CO2 atmosphere. Rotates backwards.'},
+  {n:'Earth',r:1.0,orb:10,sp:1.0,col:0x4488ff,col2:0x2255cc,dist:'149M km',per:'365 days',moons:1,desc:'Our home. Only known planet with life. 71% water surface.'},
+  {n:'Mars',r:0.6,orb:13,sp:0.53,col:0xff5533,col2:0xaa2200,dist:'228M km',per:'687 days',moons:2,desc:'Red Planet. Olympus Mons - largest volcano in solar system.'},
+  {n:'Jupiter',r:2.5,orb:18,sp:0.084,col:0xc88040,col2:0xaa6030,dist:'778M km',per:'12 yrs',moons:95,desc:'Largest planet. Great Red Spot storm. 95 moons!'},
+  {n:'Saturn',r:2.0,orb:24,sp:0.034,col:0xe8c070,col2:0xc0a050,dist:'1.43B km',per:'29 yrs',moons:83,rings:true,desc:'Famous ring system. Less dense than water. 83 moons.'},
+  {n:'Uranus',r:1.5,orb:29,sp:0.012,col:0x80d4e8,col2:0x50b0c0,dist:'2.87B km',per:'84 yrs',moons:27,desc:'Ice giant. Rotates on its side 98 degree tilt.'},
+  {n:'Neptune',r:1.3,orb:33,sp:0.006,col:0x3050ff,col2:0x2030cc,dist:'4.5B km',per:'165 yrs',moons:16,desc:'Strongest winds 2100 km/h. Triton orbits backwards.'}
+];
+
+function initSolar(){
+  var rc=mkRen('solar');
+  var s=new THREE.Scene();scn['solar']=s;
+  cam['solar'].position.set(0,20,40);cam['solar'].lookAt(0,0,0);
+  mkStars(s,3000,600);
+  s.add(new THREE.AmbientLight(0x111122,0.3));
+  s.add(new THREE.PointLight(0xffffff,2.5,200));
+  var sunG=new THREE.SphereGeometry(2.5,32,32);
+  var sunM=new THREE.MeshBasicMaterial({color:0xffdd44});
+  s.add(new THREE.Mesh(sunG,sunM));
+  [3.5,4.5,6].forEach(function(sz,i){
+    s.add(new THREE.Mesh(new THREE.SphereGeometry(sz,16,16),new THREE.MeshBasicMaterial({color:0xffaa00,transparent:true,opacity:0.07-i*0.02,side:THREE.BackSide})));
+  });
+  solarPl=[];
+  pData.forEach(function(pd){
+    var og=new THREE.TorusGeometry(pd.orb,0.04,8,120);og.rotateX(Math.PI/2);
+    var om=new THREE.Mesh(og,new THREE.MeshBasicMaterial({color:0x334455,transparent:true,opacity:0.35}));s.add(om);
+    var pg=new THREE.SphereGeometry(pd.r,32,32);
+    var pm=new THREE.MeshPhongMaterial({color:pd.col,emissive:pd.col2,shininess:80,specular:0x444444});
+    var pMesh=new THREE.Mesh(pg,pm);s.add(pMesh);
+    if(pd.rings){
+      var rg=new THREE.TorusGeometry(pd.r+1.2,0.5,4,64);
+      var rm=new THREE.MeshBasicMaterial({color:0xe8c070,transparent:true,opacity:0.6,side:THREE.DoubleSide});
+      var rMesh=new THREE.Mesh(rg,rm);rMesh.rotation.x=Math.PI/2.5;pMesh.add(rMesh);
+    }
+    if(pd.n==='Earth'){
+      var mg=new THREE.SphereGeometry(0.27,16,16);
+      var mm=new THREE.MeshPhongMaterial({color:0xaaaaaa});
+      pMesh.userData.moon=new THREE.Mesh(mg,mm);pMesh.add(pMesh.userData.moon);
+    }
+    solarPl.push({mesh:pMesh,orb:om,d:pd,ang:Math.random()*Math.PI*2});
+  });
+  var ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+  ren['solar'].domElement.addEventListener('click',function(e){
+    var rc2=ren['solar'].domElement.getBoundingClientRect();
+    mv.x=((e.clientX-rc2.left)/rc2.width)*2-1;mv.y=-((e.clientY-rc2.top)/rc2.height)*2+1;
+    ray.setFromCamera(mv,cam['solar']);
+    var hit=ray.intersectObjects(solarPl.map(function(p){return p.mesh;}),true);
+    if(hit.length>0){
+      var found=solarPl.find(function(p){return p.mesh===hit[0].object||p.mesh===hit[0].object.parent;});
+      if(found){var d=found.d;document.getElementById('s-sel').textContent=d.n;document.getElementById('s-dist').textContent=d.dist;document.getElementById('s-per').textContent=d.per;document.getElementById('s-moons').textContent=d.moons;document.getElementById('solar-info').innerHTML='<b style="color:#ffcc00">'+d.n+'</b><br>'+d.desc+'<br>Distance: '+d.dist+' | Period: '+d.per+' | Moons: '+d.moons;}
+    }
+  });
+  animSolar();
+}
+
+function toggleOrbits(){solarOrbs=!solarOrbs;solarPl.forEach(function(p){p.orb.visible=solarOrbs;});}
+
+function animSolar(){
+  aFr['solar']=requestAnimationFrame(animSolar);
+  var sp=(+document.getElementById('solar-sp').value)*0.002;
+  solarPl.forEach(function(p){
+    p.ang+=p.d.sp*sp;
+    p.mesh.position.x=Math.cos(p.ang)*p.d.orb;
+    p.mesh.position.z=Math.sin(p.ang)*p.d.orb;
+    p.mesh.rotation.y+=0.01;
+    if(p.mesh.userData.moon){p.mesh.userData.moon.position.x=Math.cos(p.ang*13)*1.5;p.mesh.userData.moon.position.z=Math.sin(p.ang*13)*1.5;}
+  });
+  ren['solar'].render(scn['solar'],cam['solar']);
+}
+
+// =========================================
+// DNA 3D
+// =========================================
+var dnaGrp,dnaPaused=false,dnaAng=0;
+
+function initDNA(){
+  var rc=mkRen('dna');
+  var s=new THREE.Scene();scn['dna']=s;
+  cam['dna'].position.set(0,0,18);cam['dna'].lookAt(0,0,0);
+  s.add(new THREE.AmbientLight(0x112233,1.0));
+  var dl=new THREE.DirectionalLight(0x4488ff,1.5);dl.position.set(5,10,5);s.add(dl);
+  s.add(new THREE.DirectionalLight(0x44ff88,1.0)).position.set(-5,-5,5);
+  mkStars(s,1000,200);
+  dnaGrp=new THREE.Group();s.add(dnaGrp);
+  var bC={A:0xff5533,T:0x3399ff,G:0x44cc44,C:0xffcc00};
+  var bP=[['A','T'],['G','C'],['T','A'],['C','G'],['A','T'],['G','C'],['T','A'],['C','G'],['A','T'],['G','C'],['T','A'],['C','G'],['A','T'],['G','C'],['T','A'],['C','G']];
+  var nb=bP.length,ht=16,rad=2.5;
+  for(var st=0;st<2;st++){
+    var ph=st*Math.PI,pts=[];
+    for(var i=0;i<=80;i++){var tt=i/80,ag=tt*Math.PI*4+ph;pts.push(new THREE.Vector3(rad*Math.cos(ag),tt*ht-ht/2,rad*Math.sin(ag)));}
+    var curve=new THREE.CatmullRomCurve3(pts);
+    var tg=new THREE.TubeGeometry(curve,80,0.12,8,false);
+    var tm=new THREE.MeshPhongMaterial({color:st===0?0x2244aa:0x22aa44,emissive:st===0?0x001133:0x001100,shininess:120,specular:0x8888ff});
+    dnaGrp.add(new THREE.Mesh(tg,tm));
+  }
+  bP.forEach(function(pair,i){
+    var tt=i/(nb-1),ag=tt*Math.PI*4,y=tt*ht-ht/2;
+    var x1=rad*Math.cos(ag),z1=rad*Math.sin(ag),x2=rad*Math.cos(ag+Math.PI),z2=rad*Math.sin(ag+Math.PI);
+    var mid=[new THREE.Vector3(x1,y,z1),new THREE.Vector3(0,y,0),new THREE.Vector3(x2,y,z2)];
+    var rg=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(mid),8,0.06,6,false);
+    dnaGrp.add(new THREE.Mesh(rg,new THREE.MeshBasicMaterial({color:0x334455,transparent:true,opacity:0.5})));
+    [[x1,z1,pair[0]],[x2,z2,pair[1]]].forEach(function(info){
+      var sg=new THREE.SphereGeometry(0.32,16,16);
+      var sm=new THREE.MeshPhongMaterial({color:bC[info[2]],emissive:bC[info[2]]>>1&0x7f7f7f,shininess:150,specular:0xffffff});
+      var mesh=new THREE.Mesh(sg,sm);mesh.position.set(info[0],y,info[1]);dnaGrp.add(mesh);
+    });
+  });
+  animDNA();
+}
+
+function animDNA(){
+  aFr['dna']=requestAnimationFrame(animDNA);
+  if(!dnaPaused){dnaAng+=0.008;if(dnaGrp)dnaGrp.rotation.y=dnaAng;document.getElementById('d-rot').textContent=Math.round(dnaAng*180/Math.PI%360)+' deg';var bps=['A-T','G-C','T-A','C-G'];document.getElementById('d-bp').textContent=bps[Math.floor(dnaAng*2)%4];}
+  ren['dna'].render(scn['dna'],cam['dna']);
+}
+
+// =========================================
+// WAVE 3D
+// =========================================
+var wavePlane,wavePaused=false,waveT=0,wavePos;
+var WW=60,WH=60;
+
+function initWave(){
+  var rc=mkRen('wave');
+  var s=new THREE.Scene();scn['wave']=s;
+  cam['wave'].position.set(0,25,30);cam['wave'].lookAt(0,0,0);
+  s.add(new THREE.AmbientLight(0x112233,0.8));
+  var dl=new THREE.DirectionalLight(0x4488ff,2);dl.position.set(10,20,10);s.add(dl);
+  s.add(new THREE.DirectionalLight(0x44ff88,1.5)).position.set(-10,10,-10);
+  var geo=new THREE.PlaneGeometry(30,30,WW-1,WH-1);geo.rotateX(-Math.PI/2);
+  wavePos=geo.attributes.position;
+  var cols=new Float32Array(wavePos.count*3);
+  geo.setAttribute('color',new THREE.BufferAttribute(cols,3));
+  var mat=new THREE.MeshPhongMaterial({shininess:200,specular:0x4488ff,side:THREE.DoubleSide,vertexColors:true});
+  wavePlane=new THREE.Mesh(geo,mat);s.add(wavePlane);
+  s.add(new THREE.GridHelper(30,30,0x002244,0x001133));
+  animWave();
+}
+
+function waveUpd(){
+  var f1=+document.getElementById('wf1').value/100,f2=+document.getElementById('wf2').value/100;
+  document.getElementById('w-f1').textContent=(f1*10).toFixed(1)+' Hz';
+  document.getElementById('w-f2').textContent=(f2*10).toFixed(1)+' Hz';
+  document.getElementById('w-type').textContent=Math.abs(f1-f2)<0.05?'Standing Wave':'Interference';
+}
+
+function animWave(){
+  aFr['wave']=requestAnimationFrame(animWave);
+  if(!wavePaused){
+    waveT+=0.04;
+    if(wavePlane){
+      var f1=+document.getElementById('wf1').value/100,f2=+document.getElementById('wf2').value/100,amp=+document.getElementById('wamp').value/15;
+      var p=wavePos,c=wavePlane.geometry.attributes.color;
+      for(var i=0;i<p.count;i++){
+        var x=p.getX(i),z=p.getZ(i);
+        var d1=Math.sqrt(x*x+z*z),d2=Math.sqrt((x-5)*(x-5)+z*z);
+        var y=amp*(Math.sin(d1*f1*3-waveT)+Math.sin(d2*f2*3-waveT));
+        p.setY(i,y);var t2=(y/(amp*2)+0.5);c.setXYZ(i,t2*0.1,t2*0.5,1-t2*0.3);
+      }
+      p.needsUpdate=true;c.needsUpdate=true;wavePlane.geometry.computeVertexNormals();
+    }
+  }
+  ren['wave'].render(scn['wave'],cam['wave']);
+}
+
+// =========================================
+// PENDULUM 3D
+// =========================================
+var pendBob,pendRod,pendAng=Math.PI/4,pendV=0,pendPaused=false,pendTrail=[],pendTrPos;
+
+function initPend(){
+  var rc=mkRen('pendulum');
+  var s=new THREE.Scene();scn['pendulum']=s;
+  cam['pendulum'].position.set(0,3,18);cam['pendulum'].lookAt(0,-3,0);
+  s.add(new THREE.AmbientLight(0x112233,0.8));
+  var dl=new THREE.DirectionalLight(0x6688ff,2);dl.position.set(5,10,5);s.add(dl);
+  s.add(new THREE.DirectionalLight(0xffaa44,1)).position.set(-5,0,-5);
+  var mg=new THREE.BoxGeometry(3,0.3,1);
+  s.add(new THREE.Mesh(mg,new THREE.MeshPhongMaterial({color:0x334455,shininess:60}))).position.set(0,5,0);
+  s.add(new THREE.GridHelper(20,20,0x112233,0x0a1a2a)).position.y=-8;
+  var rg=new THREE.CylinderGeometry(0.06,0.06,1,12);
+  pendRod=new THREE.Mesh(rg,new THREE.MeshPhongMaterial({color:0x8899aa,shininess:100,specular:0x4488aa}));s.add(pendRod);
+  var bg=new THREE.SphereGeometry(0.7,32,32);
+  var bm=new THREE.MeshPhongMaterial({color:0x00ccff,emissive:0x003344,shininess:200,specular:0x88ffff});
+  pendBob=new THREE.Mesh(bg,bm);
+  pendBob.add(new THREE.Mesh(new THREE.SphereGeometry(1.0,16,16),new THREE.MeshBasicMaterial({color:0x00f5ff,transparent:true,opacity:0.15,side:THREE.BackSide})));
+  s.add(pendBob);
+  s.add(new THREE.Mesh(new THREE.SphereGeometry(0.2,16,16),new THREE.MeshPhongMaterial({color:0x888888}))).position.set(0,5,0);
+  var tg=new THREE.BufferGeometry();
+  var tp=new Float32Array(150*3);tg.setAttribute('position',new THREE.BufferAttribute(tp,3));
+  pendTrPos=tg.attributes.position;
+  s.add(new THREE.Line(tg,new THREE.LineBasicMaterial({color:0x00f5ff,transparent:true,opacity:0.5})));
+  animPend();
+}
+
+function pendUpd(){document.getElementById('plv').textContent=document.getElementById('pl').value;document.getElementById('pgv').textContent=document.getElementById('pg').value;}
+
+function animPend(){
+  aFr['pendulum']=requestAnimationFrame(animPend);
+  if(!pendPaused){
+    var L=+document.getElementById('pl').value,g=+document.getElementById('pg').value;
+    var acc=-g/10*Math.sin(pendAng);pendV+=acc*0.05;pendV*=0.9992;pendAng+=pendV;
+    var bx=Math.sin(pendAng)*L*1.5,by=5-Math.cos(pendAng)*L*1.5;
+    pendBob.position.set(bx,by,0);
+    pendRod.position.set(bx/2,(5+by)/2,0);
+    pendRod.scale.y=Math.sqrt(bx*bx+(by-5)*(by-5));
+    pendRod.rotation.z=-pendAng;
+    pendTrail.push(new THREE.Vector3(bx,by,0));
+    if(pendTrail.length>50)pendTrail.shift();
+    for(var i=0;i<50;i++){var pt=pendTrail[i]||new THREE.Vector3(0,0,0);pendTrPos.setXYZ(i,pt.x,pt.y,pt.z);}
+    pendTrPos.needsUpdate=true;
+    var T=2*Math.PI*Math.sqrt(L*1.5/g);
+    document.getElementById('p-per').textContent=T.toFixed(2)+'s';
+    document.getElementById('p-ang').textContent=(pendAng*180/Math.PI).toFixed(1)+' deg';
+    document.getElementById('p-len').textContent=(L*1.5).toFixed(1);
+  }
+  ren['pendulum'].render(scn['pendulum'],cam['pendulum']);
+}
+
+// =========================================
+// MOLECULE 3D
+// =========================================
+var molGrp;
+var molData={
+  water:{n:'Water',f:'H2O',sh:'Bent 104.5 deg',b:2,info:'Bent shape due to 2 lone pairs. Polar molecule - universal solvent. Essential for all life.',atoms:[{c:0xff3333,r:0.6,p:[0,0,0]},{c:0xffffff,r:0.35,p:[-1.2,0.8,0]},{c:0xffffff,r:0.35,p:[1.2,0.8,0]}],bonds:[[0,1],[0,2]]},
+  co2:{n:'Carbon Dioxide',f:'CO2',sh:'Linear 180 deg',b:4,info:'Linear molecule. Two double bonds. Greenhouse gas. Used in photosynthesis.',atoms:[{c:0x444444,r:0.55,p:[0,0,0]},{c:0xff3333,r:0.55,p:[-1.8,0,0]},{c:0xff3333,r:0.55,p:[1.8,0,0]}],bonds:[[0,1],[0,2]]},
+  ch4:{n:'Methane',f:'CH4',sh:'Tetrahedral 109.5 deg',b:4,info:'Tetrahedral shape. Natural gas fuel. Produced by bacteria. Used as cooking gas.',atoms:[{c:0x444444,r:0.55,p:[0,0,0]},{c:0xffffff,r:0.32,p:[1.2,1.2,0]},{c:0xffffff,r:0.32,p:[-1.2,1.2,0]},{c:0xffffff,r:0.32,p:[0,-1.2,1.2]},{c:0xffffff,r:0.32,p:[0,-1.2,-1.2]}],bonds:[[0,1],[0,2],[0,3],[0,4]]},
+  nh3:{n:'Ammonia',f:'NH3',sh:'Trigonal Pyramidal 107 deg',b:3,info:'Pyramidal shape. Used in fertilizers and cleaning. Pungent smell. Important in agriculture.',atoms:[{c:0x4466ff,r:0.55,p:[0,0,0]},{c:0xffffff,r:0.32,p:[1.1,-0.7,0]},{c:0xffffff,r:0.32,p:[-1.1,-0.7,0]},{c:0xffffff,r:0.32,p:[0,-0.7,1.1]}],bonds:[[0,1],[0,2],[0,3]]},
+  nacl:{n:'Sodium Chloride Salt',f:'NaCl',sh:'Ionic Bond',b:1,info:'Ionic compound. Na+ loses electron to Cl-. Forms cubic crystal. Essential for human body.',atoms:[{c:0xffaa22,r:0.7,p:[-1.2,0,0]},{c:0x44ff44,r:0.85,p:[1.2,0,0]}],bonds:[[0,1]]}
+};
+
+function initMol(){
+  var rc=mkRen('molecule');
+  var s=new THREE.Scene();scn['molecule']=s;
+  cam['molecule'].position.set(0,3,12);cam['molecule'].lookAt(0,0,0);
+  s.add(new THREE.AmbientLight(0x223344,1.2));
+  var dl=new THREE.DirectionalLight(0x88aaff,2);dl.position.set(5,10,5);s.add(dl);
+  s.add(new THREE.DirectionalLight(0xff8844,1.2)).position.set(-5,-5,5);
+  s.add(new THREE.DirectionalLight(0x44ff88,0.8)).position.set(0,-10,0);
+  mkStars(s,1000,200);
+  molGrp=new THREE.Group();s.add(molGrp);
+  showMol('water');
+  animMol();
+}
+
+function showMol(name){
+  if(!molGrp)return;
+  while(molGrp.children.length)molGrp.remove(molGrp.children[0]);
+  var mol=molData[name];if(!mol)return;
+  mol.atoms.forEach(function(a){
+    var g=new THREE.SphereGeometry(a.r,32,32);
+    var m=new THREE.MeshPhongMaterial({color:a.c,emissive:new THREE.Color(a.c).multiplyScalar(0.18),shininess:200,specular:0xffffff});
+    var mesh=new THREE.Mesh(g,m);
+    mesh.position.set(a.p[0],a.p[1],a.p[2]);
+    mesh.add(new THREE.Mesh(new THREE.SphereGeometry(a.r*1.4,8,8),new THREE.MeshBasicMaterial({color:a.c,transparent:true,opacity:0.1,side:THREE.BackSide})));
+    molGrp.add(mesh);
+  });
+  mol.bonds.forEach(function(b){
+    var a1=mol.atoms[b[0]],a2=mol.atoms[b[1]];
+    var p1=new THREE.Vector3(a1.p[0],a1.p[1],a1.p[2]),p2=new THREE.Vector3(a2.p[0],a2.p[1],a2.p[2]);
+    var dir=new THREE.Vector3().subVectors(p2,p1),len=dir.length();
+    var cg=new THREE.CylinderGeometry(0.1,0.1,len,12);
+    var cm=new THREE.MeshPhongMaterial({color:0xaabbcc,shininess:80,transparent:true,opacity:0.85});
+    var cmesh=new THREE.Mesh(cg,cm);
+    cmesh.position.copy(p1).lerp(p2,0.5);
+    cmesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());
+    molGrp.add(cmesh);
+  });
+  document.getElementById('m-nm').textContent=mol.n;
+  document.getElementById('m-fm').textContent=mol.f;
+  document.getElementById('m-sh').textContent=mol.sh;
+  document.getElementById('mol-info').textContent=mol.n+' ('+mol.f+') - '+mol.info;
+}
+
+function animMol(){
+  aFr['molecule']=requestAnimationFrame(animMol);
+  if(molGrp){molGrp.rotation.y+=0.008;molGrp.rotation.x+=0.002;}
+  ren['molecule'].render(scn['molecule'],cam['molecule']);
+}
+
+// =========================================
+// AI GENERATOR
+// =========================================
+var curAIHtml='';
+
+function openAIModal(){
+  document.getElementById('aiModal').classList.add('open');
+  try{var k=localStorage.getItem('gk');if(k&&!document.getElementById('ai-key').value)document.getElementById('ai-key').value=k;}catch(e){}
+}
+function closeAIModal(){
+  document.getElementById('aiModal').classList.remove('open');
+  document.getElementById('ai-stat').style.display='none';
+  document.getElementById('gen-btn').disabled=false;
+  document.getElementById('gen-btn').textContent='GENERATE 3D SIMULATION';
+}
+function setTpc(t,s){document.getElementById('ai-topic').value=t;var sel=document.getElementById('ai-subj');for(var i=0;i<sel.options.length;i++)if(sel.options[i].value===s){sel.selectedIndex=i;break;}}
+
+document.getElementById('aiModal').addEventListener('click',function(e){if(e.target===this)closeAIModal();});
+document.getElementById('ai-topic').addEventListener('keydown',function(e){if(e.key==='Enter')generateAI();});
+document.getElementById('ai-key').addEventListener('input',function(){try{localStorage.setItem('gk',this.value);}catch(e){}});
+
+function generateAI(){
+  var key=document.getElementById('ai-key').value.trim();
+  var topic=document.getElementById('ai-topic').value.trim();
+  var subj=document.getElementById('ai-subj').value;
+  var qual=document.getElementById('ai-qual').value;
+  var style=document.getElementById('ai-style').value;
+  if(!key||key.length<10){alert('Please enter Groq API key!');return;}
+  if(!topic){alert('Please enter a topic!');return;}
+  GROQ_KEY=key;try{localStorage.setItem('gk',key);}catch(e){}
+  document.getElementById('ai-stat').style.display='block';
+  document.getElementById('gen-btn').disabled=true;
+  document.getElementById('gen-btn').textContent='GENERATING...';
+  document.getElementById('ai-stat-t').textContent='AI IS BUILDING...';
+  document.getElementById('ai-stat-s').textContent='Creating 3D simulation for: '+topic;
+
+  var qInstr=qual==='ultra'?
+    'Create an extremely detailed professional simulation with: multiple interactive controls, real-time physics calculations, color-coded visualization, particle effects, animated labels, gradient backgrounds, glow effects, HUD with live data, smooth animations. Make it look like a NASA/CERN visualization tool.':
+    qual==='high'?
+    'Create a high-quality simulation with smooth animations, interactive sliders, color gradients, physics labels, good lighting and visual effects. Professional scientific look.':
+    'Create a clear interactive simulation with good controls and visualization.';
+
+  var sInstr=style==='3d'?
+    'Use Three.js r128 from: https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js. Create full 3D scene with lighting, shadows, PerspectiveCamera, drag-to-orbit (mousedown/mousemove), pinch-to-zoom, realistic MeshPhongMaterial objects.':
+    style==='particles'?
+    'Use HTML5 Canvas 2D with 200+ animated particles. Mouse hover disturbs particles. Show the concept through particle behavior.':
+    'Use HTML5 Canvas 2D API. High quality 2D visualization with smooth 60fps animation.';
+
+  var prompt='Create a COMPLETE PROFESSIONAL self-contained HTML simulation for: "'+topic+'" subject: '+subj+'. '+sInstr+' '+qInstr+' REQUIREMENTS: Dark background #020408. Neon colors cyan #00f5ff green #7fff00 purple #bf5fff orange #ff6b35. Mobile touch support. At least 3 interactive controls. Real equations/formulas shown. Smooth 60fps animation. English labels. Single self-contained HTML file. Return ONLY complete HTML. No explanation. No markdown. Start with <!DOCTYPE html>';
+
+  fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+    body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:4000,messages:[{role:'user',content:prompt}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(d.error){alert('Error: '+d.error.message);document.getElementById('ai-stat').style.display='none';document.getElementById('gen-btn').disabled=false;document.getElementById('gen-btn').textContent='GENERATE 3D SIMULATION';return;}
+    var html=d.choices[0].message.content;
+    html=html.split('\x60\x60\x60html').join('').split('\x60\x60\x60').join('').trim();
+    if(!html.includes('<!DOCTYPE')&&!html.includes('<html')){alert('AI returned invalid HTML. Try again.');document.getElementById('ai-stat').style.display='none';document.getElementById('gen-btn').disabled=false;document.getElementById('gen-btn').textContent='GENERATE 3D SIMULATION';return;}
+    curAIHtml=html;
+    var blob=new Blob([html],{type:'text/html'});
+    document.getElementById('ai-iframe').src=URL.createObjectURL(blob);
+    document.getElementById('ai-t').textContent=topic.substring(0,16);
+    document.getElementById('ai-s').textContent=subj;
+    document.getElementById('ai-info').textContent='AI simulation: '+topic+' ('+subj+'). Interact with controls inside!';
+    closeAIModal();
+    document.querySelectorAll('.sp').forEach(function(p){p.classList.remove('on');});
+    document.getElementById('sp-ai').classList.add('on');
+    document.querySelectorAll('.snav-btn').forEach(function(b){b.classList.remove('on');b.style.background='';b.style.color='';});
+  })
+  .catch(function(e){alert('Network error: '+e.message);document.getElementById('ai-stat').style.display='none';document.getElementById('gen-btn').disabled=false;document.getElementById('gen-btn').textContent='GENERATE 3D SIMULATION';});
+}
+
+function reloadAI(){if(curAIHtml){var b=new Blob([curAIHtml],{type:'text/html'});document.getElementById('ai-iframe').src=URL.createObjectURL(b);}}
+function fullscreenAI(){var f=document.getElementById('ai-iframe');if(f.requestFullscreen)f.requestFullscreen();else if(f.webkitRequestFullscreen)f.webkitRequestFullscreen();}
+
+// =========================================
+// TOPIC SEARCH
+// =========================================
+var ST=[
+  {id:'atom',lb:'Atom Model',sb:'Electrons, Protons, Orbitals',cl:'#00f5ff',tp:'sim'},
+  {id:'solar',lb:'Solar System',sb:'Planets, Orbits, Kepler',cl:'#ffcc00',tp:'sim'},
+  {id:'dna',lb:'DNA Double Helix',sb:'A-T, G-C Base Pairs',cl:'#7fff00',tp:'sim'},
+  {id:'wave',lb:'Wave Interference',sb:'Frequency, Amplitude',cl:'#bf5fff',tp:'sim'},
+  {id:'pendulum',lb:'Pendulum',sb:'Period, Gravity, SHM',cl:'#ff6b35',tp:'sim'},
+  {id:'molecule',lb:'3D Molecules',sb:'H2O, CO2, CH4, NH3, NaCl',cl:'#00f5ff',tp:'sim'},
+  {id:'a1',lb:'Electromagnetic Wave',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Electromagnetic Wave',sj:'Physics'},
+  {id:'a2',lb:'Magnetic Field Lines',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Magnetic Field Lines',sj:'Physics'},
+  {id:'a3',lb:'Spring Oscillation SHM',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Spring Oscillation SHM',sj:'Physics'},
+  {id:'a4',lb:'Electric Field Lines',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Electric Field Lines',sj:'Physics'},
+  {id:'a5',lb:'Black Hole Gravity',sb:'AI - Astronomy',cl:'#7fff00',tp:'ai',tc:'Black Hole Gravity',sj:'Astronomy'},
+  {id:'a6',lb:'Orbital Mechanics',sb:'AI - Astronomy',cl:'#7fff00',tp:'ai',tc:'Orbital Mechanics',sj:'Astronomy'},
+  {id:'a7',lb:'Cell Membrane Transport',sb:'AI - Biology',cl:'#7fff00',tp:'ai',tc:'Cell Membrane Transport',sj:'Biology'},
+  {id:'a8',lb:'Photosynthesis Process',sb:'AI - Biology',cl:'#7fff00',tp:'ai',tc:'Photosynthesis Process',sj:'Biology'},
+  {id:'a9',lb:'Crystal Lattice Structure',sb:'AI - Chemistry',cl:'#7fff00',tp:'ai',tc:'Crystal Lattice Structure',sj:'Chemistry'},
+  {id:'a10',lb:'Gas Particles Kinetic Theory',sb:'AI - Chemistry',cl:'#7fff00',tp:'ai',tc:'Gas Particles Kinetic Theory',sj:'Chemistry'},
+  {id:'a11',lb:'Projectile Motion 3D',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Projectile Motion 3D',sj:'Physics'},
+  {id:'a12',lb:'Neural Network Neurons',sb:'AI - Computer Science',cl:'#7fff00',tp:'ai',tc:'Neural Network Neurons',sj:'Computer Science'},
+  {id:'a13',lb:'Binary Tree Data Structure',sb:'AI - Computer Science',cl:'#7fff00',tp:'ai',tc:'Binary Tree Data Structure',sj:'Computer Science'},
+  {id:'a14',lb:'Tectonic Plates Movement',sb:'AI - Geology',cl:'#7fff00',tp:'ai',tc:'Tectonic Plates Movement',sj:'Geology'},
+  {id:'a15',lb:'Fluid Dynamics Flow',sb:'AI - Physics',cl:'#7fff00',tp:'ai',tc:'Fluid Dynamics Flow',sj:'Physics'},
+  {id:'a16',lb:'Fourier Transform',sb:'AI - Mathematics',cl:'#7fff00',tp:'ai',tc:'Fourier Transform',sj:'Mathematics'}
+];
+var srchFI=-1;
+
+function srchUpd(v){
+  var c=document.getElementById('srchClr');
+  if(v&&v.trim()){c.classList.add('vis');}else{c.classList.remove('vis');}
+  renderSL(v?v.trim():'');
+  document.getElementById('srchDd').classList.add('open');
+}
+
+function renderSL(q){
+  var list=document.getElementById('srchList');
+  var f=q?ST.filter(function(t){return (t.lb+' '+t.sb).toLowerCase().indexOf(q.toLowerCase())>-1;}):ST.slice(0,9);
+  srchFI=-1;
+  if(!f.length){list.innerHTML='<div class="srch-no">No results for: '+q+'</div>';return;}
+  var h='';
+  for(var i=0;i<f.length;i++){
+    var ai=f[i].tp==='ai'?'<span class="srch-ai-tag">AI</span>':'';
+    h+='<div class="srch-item" data-i="'+i+'" onclick="srchSel('+i+','+JSON.stringify(f).replace(/</g,'\u003c').replace(/>/g,'\u003e')+')">';
+    h+='<div class="srch-dot" style="background:'+f[i].cl+'"></div>';
+    h+='<div><div class="srch-lbl">'+f[i].lb+ai+'</div>';
+    h+='<div class="srch-sub">'+f[i].sb+'</div></div></div>';
+  }
+  list.innerHTML=h;
+  list._data=f;
+}
+
+function srchSel(i,f){
+  var t=f[i];
+  document.getElementById('srchInp').value=t.lb;
+  document.getElementById('srchClr').classList.add('vis');
+  srchClose();
+  if(t.tp==='sim'){
+    var btn=document.getElementById('btn-'+t.id);
+    showSim(t.id,btn);
+  }else{
+    setTpc(t.tc,t.sj);
+    openAIModal();
+  }
+}
+
+function srchOpen(){
+  var v=document.getElementById('srchInp').value.trim();
+  renderSL(v);
+  document.getElementById('srchDd').classList.add('open');
+}
+
+function srchClose(){
+  document.getElementById('srchDd').classList.remove('open');
+  srchFI=-1;
+}
+
+function srchClr(){
+  document.getElementById('srchInp').value='';
+  document.getElementById('srchClr').classList.remove('vis');
+  document.getElementById('srchInp').focus();
+  renderSL('');
+  document.getElementById('srchDd').classList.add('open');
+}
+
+function srchKey(e){
+  var dd=document.getElementById('srchDd');
+  var items=dd.querySelectorAll('.srch-item');
+  if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();srchFI=Math.min(srchFI+1,items.length-1);srchHL(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();srchFI=Math.max(srchFI-1,0);srchHL(items);}
+  else if(e.key==='Enter'&&srchFI>=0){items[srchFI].click();}
+  else if(e.key==='Escape'){srchClose();}
+}
+
+function srchHL(items){
+  for(var i=0;i<items.length;i++)items[i].classList.toggle('foc',i===srchFI);
+  if(srchFI>=0)items[srchFI].scrollIntoView({block:'nearest'});
+}
+
+document.addEventListener('click',function(e){
+  var w=document.getElementById('srchWrap');
+  if(w&&!w.contains(e.target))srchClose();
+});
+
+// ===== INIT =====
+window.addEventListener('load',function(){
+  initAtom();
+  document.getElementById('btn-atom').classList.add('on');
+});
+</script>
+</body>
+</html>
