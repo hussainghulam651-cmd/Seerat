@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Reyan Hussain Confectionary</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #E8B84B;
+  --dark-gold: #C49A2A;
+  --brown: #3B1F0A;
+  --cream: #FFF8EC;
+  --red: #D63031;
+  --green: #00B894;
+  --blue: #0984E3;
+  --shadow: 0 4px 20px rgba(59,31,10,0.15);
+  --card: rgba(255,255,255,0.95);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #3B1F0A 0%, #6B3A1F 50%, #3B1F0A 100%);
+  min-height: 100vh;
+  color: #222;
+}
+.header {
+  background: linear-gradient(90deg, #3B1F0A, #6B3A1F, #3B1F0A);
+  padding: 16px;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+  position: sticky; top: 0; z-index: 100;
+}
+.header h1 {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  color: var(--gold);
+  font-size: 20px;
+  line-height: 1.4;
+}
+.header p { color: #ccc; font-size: 11px; margin-top: 2px; }
+
+.tabs {
+  display: flex;
+  background: #2a1505;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--gold);
+}
+.tab-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 10px 6px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 10px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.tab-btn.active { color: var(--gold); border-bottom: 3px solid var(--gold); background: rgba(232,184,75,0.1); }
+.tab-btn span { display: block; font-size: 18px; }
+
+.page { display: none; padding: 14px; }
+.page.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #f0e0c8;
+  padding-bottom: 8px;
+}
+.urdu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 14px; direction: rtl; }
+.bilingual { display: flex; justify-content: space-between; align-items: center; }
+.bilingual small { font-size: 10px; color: #888; }
+
+/* Inputs */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e0d0b8;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+  background: #fffdf8;
+  outline: none;
+  margin-bottom: 8px;
+  transition: border 0.2s;
+  direction: ltr;
+}
+input:focus, select:focus { border-color: var(--gold); }
+.input-label {
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 3px;
+  display: block;
+}
+.input-label .u { font-family: 'Noto Nastaliq Urdu', serif; font-size: 12px; color: var(--brown); }
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-gold { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: #3B1F0A; box-shadow: 0 3px 12px rgba(232,184,75,0.4); }
+.btn-red { background: var(--red); color: white; }
+.btn-green { background: var(--green); color: white; }
+.btn-blue { background: var(--blue); color: white; }
+.btn-sm { padding: 6px 12px; width: auto; font-size: 11px; border-radius: 7px; }
+
+/* Stats Grid */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat-card {
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  color: white;
+}
+.stat-card.green { background: linear-gradient(135deg, #00b894, #00cec9); }
+.stat-card.red { background: linear-gradient(135deg, #d63031, #e17055); }
+.stat-card.gold { background: linear-gradient(135deg, #E8B84B, #c49a2a); color: #3B1F0A; }
+.stat-card.blue { background: linear-gradient(135deg, #0984e3, #6c5ce7); }
+.stat-card .stat-val { font-size: 20px; font-weight: 700; }
+.stat-card .stat-lbl { font-size: 10px; opacity: 0.85; margin-top: 2px; }
+.stat-card .stat-urdu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 13px; display: block; }
+
+/* List items */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0e0c8;
+}
+.list-item:last-child { border-bottom: none; }
+.item-name { font-size: 13px; font-weight: 600; color: var(--brown); }
+.item-sub { font-size: 10px; color: #888; margin-top: 2px; }
+.item-actions { display: flex; gap: 6px; }
+
+/* Badges */
+.badge {
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-green { background: #d4fff5; color: #00b894; }
+.badge-red { background: #ffe0e0; color: var(--red); }
+.badge-gold { background: #fff3cd; color: var(--dark-gold); }
+.badge-blue { background: #e0f0ff; color: var(--blue); }
+
+/* Order status */
+.status-pending { color: #e17055; font-size: 11px; }
+.status-done { color: var(--green); font-size: 11px; }
+
+/* Summary */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px dashed #e0d0b8;
+  font-size: 12px;
+}
+.summary-row:last-child { border-bottom: none; font-weight: 700; font-size: 14px; color: var(--brown); }
+
+/* Alert */
+.alert {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  display: none;
+}
+.alert.show { display: block; }
+.alert-success { background: #d4fff5; color: #00b894; border: 1px solid #b2f0e8; }
+.alert-error { background: #ffe0e0; color: var(--red); border: 1px solid #ffb3b3; }
+
+/* Empty state */
+.empty { text-align: center; padding: 30px 10px; color: #aaa; }
+.empty span { font-size: 40px; display: block; margin-bottom: 8px; }
+.empty p { font-size: 12px; }
+.empty .eu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 14px; display: block; margin-top: 4px; }
+
+/* Date filter */
+.filter-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.filter-row input, .filter-row select { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ریان حسین کنفیکشنری</h1>
+  <p>Reyan Hussain Confectionary — Tando Jam</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('dashboard')"><span>📊</span>Dashboard</button>
+  <button class="tab-btn" onclick="showTab('products')"><span>🍬</span>Items</button>
+  <button class="tab-btn" onclick="showTab('orders')"><span>🛒</span>Orders</button>
+  <button class="tab-btn" onclick="showTab('sales')"><span>💰</span>Sales</button>
+  <button class="tab-btn" onclick="showTab('report')"><span>📈</span>Report</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="tab-dashboard" class="page active">
+  <div class="stats-grid">
+    <div class="stat-card gold">
+      <div class="stat-val" id="d-sales">0</div>
+      <div class="stat-lbl">Today Sales / آج کی فروخت</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-val" id="d-profit">0</div>
+      <div class="stat-lbl">Today Profit / آج کا منافع</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-val" id="d-orders">0</div>
+      <div class="stat-lbl">Pending Orders / زیر التواء آرڈر</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-val" id="d-items">0</div>
+      <div class="stat-lbl">Total Items / کل اشیاء</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ Quick Sale <span class="urdu" style="margin-right:auto">فوری فروخت</span></div>
+    <label class="input-label"><span class="u">آئٹم</span> / Item</label>
+    <select id="qs-item" onchange="qsFill()">
+      <option value="">-- Select Item --</option>
+    </select>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <label class="input-label">Qty / مقدار</label>
+        <input type="number" id="qs-qty" value="1" min="1">
+      </div>
+      <div>
+        <label class="input-label">Price (Rs) / قیمت</label>
+        <input type="number" id="qs-price" placeholder="0">
+      </div>
+    </div>
+    <label class="input-label">Customer / گاہک</label>
+    <input type="text" id="qs-customer" placeholder="Customer name (optional)">
+    <div id="qs-alert" class="alert"></div>
+    <button class="btn btn-gold" onclick="quickSale()">💳 Record Sale / فروخت ریکارڈ کریں</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🕐 Recent Sales <span class="urdu" style="margin-right:auto">حالیہ فروخت</span></div>
+    <div id="recent-sales-list"><div class="empty"><span>📭</span><p>No sales yet<br><span class="eu">ابھی کوئی فروخت نہیں</span></p></div></div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div id="tab-products" class="page">
+  <div class="card">
+    <div class="card-title">➕ Add Item <span class="urdu" style="margin-right:auto">نیا آئٹم</span></div>
+    <label class="input-label"><span class="u">آئٹم کا نام</span> / Item Name</label>
+    <input type="text" id="p-name" placeholder="e.g. Gulab Jamun">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <label class="input-label">Cost / لاگت (Rs)</label>
+        <input type="number" id="p-cost" placeholder="0" min="0">
+      </div>
+      <div>
+        <label class="input-label">Sell Price / فروخت قیمت (Rs)</label>
+        <input type="number" id="p-price" placeholder="0" min="0">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <label class="input-label">Stock / اسٹاک</label>
+        <input type="number" id="p-stock" placeholder="0" min="0">
+      </div>
+      <div>
+        <label class="input-label">Unit / یونٹ</label>
+        <select id="p-unit">
+          <option>piece</option>
+          <option>kg</option>
+          <option>gram</option>
+          <option>dozen</option>
+          <option>box</option>
+          <option>packet</option>
+        </select>
+      </div>
+    </div>
+    <label class="input-label">Category / قسم</label>
+    <select id="p-cat">
+      <option>Mithai</option>
+      <option>Bakery</option>
+      <option>Drinks</option>
+      <option>Snacks</option>
+      <option>Ice Cream</option>
+      <option>Other</option>
+    </select>
+    <div id="p-alert" class="alert"></div>
+    <button class="btn btn-gold" onclick="saveProduct()">💾 Save Item / آئٹم محفوظ کریں</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📦 My Items <span class="urdu" style="margin-right:auto">میرے آئٹمز</span></div>
+    <input type="text" id="p-search" placeholder="🔍 Search item..." oninput="renderProducts()" style="margin-bottom:10px">
+    <div id="product-list"><div class="empty"><span>🍬</span><p>No items added yet<br><span class="eu">ابھی کوئی آئٹم نہیں</span></p></div></div>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div id="tab-orders" class="page">
+  <div class="card">
+    <div class="card-title">📋 New Order <span class="urdu" style="margin-right:auto">نیا آرڈر</span></div>
+    <label class="input-label"><span class="u">گاہک کا نام</span> / Customer Name</label>
+    <input type="text" id="o-customer" placeholder="Customer name">
+    <label class="input-label"><span class="u">فون نمبر</span> / Phone</label>
+    <input type="tel" id="o-phone" placeholder="03xx-xxxxxxx">
+    <label class="input-label"><span class="u">ڈیلیوری تاریخ</span> / Delivery Date</label>
+    <input type="date" id="o-date">
+    <hr style="margin:8px 0;border-color:#f0e0c8">
+    <div id="order-items-form">
+      <div class="order-item-row" style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px">
+        <select class="o-item-sel"><option value="">-- Item --</option></select>
+        <input type="number" class="o-item-qty" placeholder="Qty" min="1" value="1">
+      </div>
+    </div>
+    <button class="btn btn-blue btn-sm" style="margin-bottom:8px" onclick="addOrderRow()">➕ Add Item / مزید آئٹم</button>
+    <label class="input-label"><span class="u">نوٹ</span> / Note</label>
+    <textarea id="o-note" placeholder="Special instructions..." rows="2" style="resize:none"></textarea>
+    <label class="input-label"><span class="u">پیشگی رقم</span> / Advance (Rs)</label>
+    <input type="number" id="o-advance" placeholder="0">
+    <div id="o-alert" class="alert"></div>
+    <button class="btn btn-gold" onclick="saveOrder()">📋 Place Order / آرڈر دیں</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📬 All Orders <span class="urdu" style="margin-right:auto">تمام آرڈر</span></div>
+    <select id="o-filter" onchange="renderOrders()" style="margin-bottom:10px">
+      <option value="all">All / سب</option>
+      <option value="pending">Pending / زیر التواء</option>
+      <option value="done">Completed / مکمل</option>
+      <option value="cancelled">Cancelled / منسوخ</option>
+    </select>
+    <div id="order-list"><div class="empty"><span>🛒</span><p>No orders yet<br><span class="eu">ابھی کوئی آرڈر نہیں</span></p></div></div>
+  </div>
+</div>
+
+<!-- SALES HISTORY -->
+<div id="tab-sales" class="page">
+  <div class="card">
+    <div class="card-title">📅 Filter <span class="urdu" style="margin-right:auto">فلٹر</span></div>
+    <div class="filter-row">
+      <input type="date" id="s-from" oninput="renderSales()">
+      <input type="date" id="s-to" oninput="renderSales()">
+    </div>
+    <button class="btn btn-sm btn-gold" onclick="clearSalesFilter()">Show All / سب دکھائیں</button>
+  </div>
+  <div class="card">
+    <div class="card-title">💰 Sales History <span class="urdu" style="margin-right:auto">فروخت کی تاریخ</span></div>
+    <div id="sales-list"></div>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div id="tab-report" class="page">
+  <div class="card">
+    <div class="card-title">📅 Report Period <span class="urdu" style="margin-right:auto">رپورٹ مدت</span></div>
+    <div class="filter-row">
+      <input type="date" id="r-from">
+      <input type="date" id="r-to">
+    </div>
+    <button class="btn btn-gold" onclick="generateReport()">📊 Generate / رپورٹ بنائیں</button>
+  </div>
+
+  <div id="report-output" style="display:none">
+    <div class="stats-grid">
+      <div class="stat-card gold"><div class="stat-val" id="r-total">0</div><div class="stat-lbl">Total Sales / کل فروخت</div></div>
+      <div class="stat-card green"><div class="stat-val" id="r-profit">0</div><div class="stat-lbl">Total Profit / کل منافع</div></div>
+      <div class="stat-card red"><div class="stat-val" id="r-cost">0</div><div class="stat-lbl">Total Cost / کل لاگت</div></div>
+      <div class="stat-card blue"><div class="stat-val" id="r-txns">0</div><div class="stat-lbl">Transactions / لین دین</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📦 Best Selling Items <span class="urdu" style="margin-right:auto">سب سے زیادہ بکنے والے</span></div>
+      <div id="r-top-items"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📉 Profit/Loss Summary <span class="urdu" style="margin-right:auto">منافع/نقصان خلاصہ</span></div>
+      <div id="r-summary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT EDIT MODAL -->
+<div id="edit-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999;padding:20px;overflow-y:auto">
+  <div class="card" style="margin-top:30px">
+    <div class="card-title">✏️ Edit Item <span class="urdu" style="margin-right:auto">آئٹم ترمیم</span></div>
+    <input type="hidden" id="edit-id">
+    <label class="input-label">Name / نام</label>
+    <input type="text" id="edit-name">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label class="input-label">Cost / لاگت</label><input type="number" id="edit-cost"></div>
+      <div><label class="input-label">Price / قیمت</label><input type="number" id="edit-price"></div>
+    </div>
+    <label class="input-label">Stock / اسٹاک</label>
+    <input type="number" id="edit-stock">
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-gold" onclick="updateProduct()">💾 Update</button>
+      <button class="btn btn-red" onclick="closeEdit()">✖ Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var DATA = {
+  products: [],
+  sales: [],
+  orders: []
+};
+
+function load() {
+  try {
+    var d = localStorage.getItem('reyan_conf');
+    if (d) DATA = JSON.parse(d);
+    if (!DATA.products) DATA.products = [];
+    if (!DATA.sales) DATA.sales = [];
+    if (!DATA.orders) DATA.orders = [];
+  } catch(e) {}
+}
+
+function save() {
+  try { localStorage.setItem('reyan_conf', JSON.stringify(DATA)); } catch(e) {}
+}
+
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function fmt(n) { return 'Rs ' + (n || 0).toLocaleString(); }
+
+function showAlert(id, msg, type) {
+  var el = document.getElementById(id);
+  el.className = 'alert show alert-' + type;
+  el.textContent = msg;
+  setTimeout(function() { el.className = 'alert'; }, 3000);
+}
+
+function showTab(name) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'dashboard') { refreshDashboard(); renderRecentSales(); }
+  if (name === 'products') renderProducts();
+  if (name === 'orders') { fillOrderSelects(); renderOrders(); }
+  if (name === 'sales') renderSales();
+  if (name === 'report') { setDefaultReportDates(); }
+}
+
+// ===================== PRODUCTS =====================
+function saveProduct() {
+  var name = document.getElementById('p-name').value.trim();
+  var cost = parseFloat(document.getElementById('p-cost').value) || 0;
+  var price = parseFloat(document.getElementById('p-price').value) || 0;
+  var stock = parseInt(document.getElementById('p-stock').value) || 0;
+  var unit = document.getElementById('p-unit').value;
+  var cat = document.getElementById('p-cat').value;
+  if (!name) { showAlert('p-alert', 'Item name required! / نام ضروری ہے', 'error'); return; }
+  if (price <= 0) { showAlert('p-alert', 'Price required! / قیمت ضروری ہے', 'error'); return; }
+  DATA.products.push({ id: Date.now(), name: name, cost: cost, price: price, stock: stock, unit: unit, cat: cat });
+  save();
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-cost').value = '';
+  document.getElementById('p-price').value = '';
+  document.getElementById('p-stock').value = '';
+  showAlert('p-alert', 'Item saved! / آئٹم محفوظ ہو گیا ✅', 'success');
+  renderProducts();
+  fillOrderSelects();
+  refreshDashboard();
+}
+
+function renderProducts() {
+  var q = (document.getElementById('p-search').value || '').toLowerCase();
+  var list = document.getElementById('product-list');
+  var filtered = DATA.products.filter(function(p) { return p.name.toLowerCase().includes(q); });
+  if (!filtered.length) { list.innerHTML = '<div class="empty"><span>🍬</span><p>No items<br><span class="eu">کوئی آئٹم نہیں</span></p></div>'; return; }
+  list.innerHTML = filtered.map(function(p) {
+    var margin = p.cost > 0 ? ((p.price - p.cost) / p.cost * 100).toFixed(0) + '%' : 'N/A';
+    var stockBadge = p.stock <= 0 ? '<span class="badge badge-red">Out of Stock</span>' : (p.stock < 5 ? '<span class="badge badge-gold">Low: ' + p.stock + '</span>' : '<span class="badge badge-green">Stock: ' + p.stock + '</span>');
+    return '<div class="list-item"><div><div class="item-name">' + p.name + '</div><div class="item-sub">' + p.cat + ' | Cost: Rs' + p.cost + ' | Sell: Rs' + p.price + ' | Margin: ' + margin + '</div><div style="margin-top:4px">' + stockBadge + '</div></div><div class="item-actions"><button class="btn btn-sm btn-blue" onclick="openEdit(' + p.id + ')">✏️</button><button class="btn btn-sm btn-red" onclick="delProduct(' + p.id + ')">🗑️</button></div></div>';
+  }).join('');
+}
+
+function delProduct(id) {
+  if (!confirm('Delete item? / آئٹم حذف کریں؟')) return;
+  DATA.products = DATA.products.filter(function(p) { return p.id !== id; });
+  save(); renderProducts(); refreshDashboard();
+}
+
+function openEdit(id) {
+  var p = DATA.products.find(function(x) { return x.id === id; });
+  if (!p) return;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-name').value = p.name;
+  document.getElementById('edit-cost').value = p.cost;
+  document.getElementById('edit-price').value = p.price;
+  document.getElementById('edit-stock').value = p.stock;
+  document.getElementById('edit-modal').style.display = 'block';
+}
+
+function closeEdit() { document.getElementById('edit-modal').style.display = 'none'; }
+
+function updateProduct() {
+  var id = parseInt(document.getElementById('edit-id').value);
+  var p = DATA.products.find(function(x) { return x.id === id; });
+  if (!p) return;
+  p.name = document.getElementById('edit-name').value.trim();
+  p.cost = parseFloat(document.getElementById('edit-cost').value) || 0;
+  p.price = parseFloat(document.getElementById('edit-price').value) || 0;
+  p.stock = parseInt(document.getElementById('edit-stock').value) || 0;
+  save(); closeEdit(); renderProducts();
+}
+
+// ===================== QUICK SALE =====================
+function fillQSItems() {
+  var sel = document.getElementById('qs-item');
+  sel.innerHTML = '<option value="">-- Select Item --</option>' + DATA.products.map(function(p) {
+    return '<option value="' + p.id + '">' + p.name + ' (Rs' + p.price + ')</option>';
+  }).join('');
+}
+
+function qsFill() {
+  var id = parseInt(document.getElementById('qs-item').value);
+  var p = DATA.products.find(function(x) { return x.id === id; });
+  if (p) document.getElementById('qs-price').value = p.price;
+}
+
+function quickSale() {
+  var id = parseInt(document.getElementById('qs-item').value);
+  var qty = parseInt(document.getElementById('qs-qty').value) || 1;
+  var price = parseFloat(document.getElementById('qs-price').value) || 0;
+  var customer = document.getElementById('qs-customer').value.trim() || 'Walk-in';
+  if (!id) { showAlert('qs-alert', 'Select an item! / آئٹم منتخب کریں', 'error'); return; }
+  if (price <= 0) { showAlert('qs-alert', 'Price required! / قیمت درج کریں', 'error'); return; }
+  var p = DATA.products.find(function(x) { return x.id === id; });
+  var cost = p ? p.cost : 0;
+  var total = price * qty;
+  var profit = (price - cost) * qty;
+  DATA.sales.push({
+    id: Date.now(), date: today(), time: new Date().toLocaleTimeString('en-PK', {hour:'2-digit',minute:'2-digit'}),
+    itemId: id, itemName: p ? p.name : 'Item', qty: qty, price: price, total: total,
+    cost: cost * qty, profit: profit, customer: customer
+  });
+  if (p && p.stock > 0) p.stock -= qty;
+  save();
+  document.getElementById('qs-qty').value = 1;
+  document.getElementById('qs-customer').value = '';
+  showAlert('qs-alert', 'Sale recorded! Rs' + total + ' / فروخت ریکارڈ ہوئی ✅', 'success');
+  refreshDashboard(); renderRecentSales(); fillQSItems();
+}
+
+// ===================== DASHBOARD =====================
+function refreshDashboard() {
+  var t = today();
+  var todaySales = DATA.sales.filter(function(s) { return s.date === t; });
+  var totalSales = todaySales.reduce(function(a, s) { return a + s.total; }, 0);
+  var totalProfit = todaySales.reduce(function(a, s) { return a + s.profit; }, 0);
+  var pendingOrders = DATA.orders.filter(function(o) { return o.status === 'pending'; }).length;
+  document.getElementById('d-sales').textContent = fmt(totalSales);
+  document.getElementById('d-profit').textContent = fmt(totalProfit);
+  document.getElementById('d-orders').textContent = pendingOrders;
+  document.getElementById('d-items').textContent = DATA.products.length;
+  fillQSItems();
+}
+
+function renderRecentSales() {
+  var el = document.getElementById('recent-sales-list');
+  var recent = DATA.sales.slice(-5).reverse();
+  if (!recent.length) { el.innerHTML = '<div class="empty"><span>📭</span><p>No sales yet<br><span class="eu">ابھی کوئی فروخت نہیں</span></p></div>'; return; }
+  el.innerHTML = recent.map(function(s) {
+    var pClass = s.profit >= 0 ? 'badge-green' : 'badge-red';
+    return '<div class="list-item"><div><div class="item-name">' + s.itemName + ' x' + s.qty + '</div><div class="item-sub">' + s.customer + ' | ' + s.time + ' ' + s.date + '</div></div><div style="text-align:right"><div style="font-weight:700;color:var(--brown)">Rs' + s.total + '</div><span class="badge ' + pClass + '">' + (s.profit >= 0 ? '+' : '') + 'Rs' + s.profit + '</span></div></div>';
+  }).join('');
+}
+
+// ===================== ORDERS =====================
+function fillOrderSelects() {
+  document.querySelectorAll('.o-item-sel').forEach(function(sel) {
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">-- Item --</option>' + DATA.products.map(function(p) {
+      return '<option value="' + p.id + '"' + (cur == p.id ? ' selected' : '') + '>' + p.name + ' (Rs' + p.price + ')</option>';
+    }).join('');
+  });
+}
+
+function addOrderRow() {
+  var div = document.createElement('div');
+  div.className = 'order-item-row';
+  div.style.cssText = 'display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px';
+  div.innerHTML = '<select class="o-item-sel"><option value="">-- Item --</option>' + DATA.products.map(function(p) { return '<option value="' + p.id + '">' + p.name + ' (Rs' + p.price + ')</option>'; }).join('') + '</select><input type="number" class="o-item-qty" placeholder="Qty" min="1" value="1">';
+  document.getElementById('order-items-form').appendChild(div);
+}
+
+function saveOrder() {
+  var customer = document.getElementById('o-customer').value.trim();
+  var phone = document.getElementById('o-phone').value.trim();
+  var date = document.getElementById('o-date').value;
+  var note = document.getElementById('o-note').value.trim();
+  var advance = parseFloat(document.getElementById('o-advance').value) || 0;
+  if (!customer) { showAlert('o-alert', 'Customer name required! / نام ضروری ہے', 'error'); return; }
+  var rows = document.querySelectorAll('.order-item-row');
+  var items = [];
+  var total = 0;
+  rows.forEach(function(row) {
+    var id = parseInt(row.querySelector('.o-item-sel').value);
+    var qty = parseInt(row.querySelector('.o-item-qty').value) || 1;
+    if (id) {
+      var p = DATA.products.find(function(x) { return x.id === id; });
+      if (p) { items.push({ id: id, name: p.name, qty: qty, price: p.price, subtotal: p.price * qty }); total += p.price * qty; }
+    }
+  });
+  if (!items.length) { showAlert('o-alert', 'Add at least one item! / ایک آئٹم ضروری ہے', 'error'); return; }
+  DATA.orders.push({ id: Date.now(), customer: customer, phone: phone, date: date || today(), note: note, advance: advance, items: items, total: total, status: 'pending', createdAt: today() });
+  save();
+  document.getElementById('o-customer').value = '';
+  document.getElementById('o-phone').value = '';
+  document.getElementById('o-note').value = '';
+  document.getElementById('o-advance').value = '';
+  document.getElementById('order-items-form').innerHTML = '<div class="order-item-row" style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:8px"><select class="o-item-sel"><option value="">-- Item --</option>' + DATA.products.map(function(p) { return '<option value="' + p.id + '">' + p.name + ' (Rs' + p.price + ')</option>'; }).join('') + '</select><input type="number" class="o-item-qty" placeholder="Qty" min="1" value="1"></div>';
+  showAlert('o-alert', 'Order placed! / آرڈر ہو گیا ✅', 'success');
+  renderOrders(); refreshDashboard();
+}
+
+function renderOrders() {
+  var filter = document.getElementById('o-filter').value;
+  var list = document.getElementById('order-list');
+  var filtered = DATA.orders.filter(function(o) { return filter === 'all' || o.status === filter; }).reverse();
+  if (!filtered.length) { list.innerHTML = '<div class="empty"><span>🛒</span><p>No orders<br><span class="eu">کوئی آرڈر نہیں</span></p></div>'; return; }
+  list.innerHTML = filtered.map(function(o) {
+    var statusLabel = o.status === 'pending' ? '<span class="badge badge-gold">Pending</span>' : (o.status === 'done' ? '<span class="badge badge-green">Done ✅</span>' : '<span class="badge badge-red">Cancelled</span>');
+    var remaining = o.total - o.advance;
+    var itemsList = o.items.map(function(i) { return i.name + ' x' + i.qty; }).join(', ');
+    var btns = o.status === 'pending' ? '<button class="btn btn-sm btn-green" onclick="changeOrderStatus(' + o.id + ',\'done\')">✅ Done</button> <button class="btn btn-sm btn-red" onclick="changeOrderStatus(' + o.id + ',\'cancelled\')">✖</button>' : '';
+    return '<div class="list-item" style="flex-direction:column;align-items:flex-start"><div style="width:100%;display:flex;justify-content:space-between;align-items:center"><div><div class="item-name">' + o.customer + (o.phone ? ' | ' + o.phone : '') + '</div><div class="item-sub">' + itemsList + '</div></div>' + statusLabel + '</div><div style="width:100%;margin-top:6px;display:flex;justify-content:space-between;align-items:center"><div class="item-sub">Delivery: ' + o.date + ' | Total: <b>Rs' + o.total + '</b> | Due: <b style="color:var(--red)">Rs' + remaining + '</b></div><div style="display:flex;gap:4px">' + btns + '</div></div></div>';
+  }).join('');
+}
+
+function changeOrderStatus(id, status) {
+  var o = DATA.orders.find(function(x) { return x.id === id; });
+  if (!o) return;
+  o.status = status;
+  if (status === 'done') {
+    o.items.forEach(function(item) {
+      var p = DATA.products.find(function(x) { return x.id === item.id; });
+      DATA.sales.push({ id: Date.now() + Math.random(), date: today(), time: new Date().toLocaleTimeString('en-PK', {hour:'2-digit',minute:'2-digit'}), itemId: item.id, itemName: item.name, qty: item.qty, price: item.price, total: item.subtotal, cost: (p ? p.cost : 0) * item.qty, profit: (item.price - (p ? p.cost : 0)) * item.qty, customer: o.customer });
+      if (p && p.stock > 0) p.stock -= item.qty;
+    });
+  }
+  save(); renderOrders(); refreshDashboard();
+}
+
+// ===================== SALES =====================
+function renderSales() {
+  var from = document.getElementById('s-from').value;
+  var to = document.getElementById('s-to').value;
+  var filtered = DATA.sales.filter(function(s) {
+    if (from && s.date < from) return false;
+    if (to && s.date > to) return false;
+    return true;
+  }).reverse();
+  var list = document.getElementById('sales-list');
+  if (!filtered.length) { list.innerHTML = '<div class="empty"><span>💰</span><p>No sales found<br><span class="eu">کوئی فروخت نہیں</span></p></div>'; return; }
+  var total = filtered.reduce(function(a, s) { return a + s.total; }, 0);
+  var profit = filtered.reduce(function(a, s) { return a + s.profit; }, 0);
+  list.innerHTML = '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:2px solid var(--gold);margin-bottom:8px"><span style="font-weight:700">Total: ' + fmt(total) + '</span><span style="color:var(--green);font-weight:700">Profit: ' + fmt(profit) + '</span></div>' + filtered.map(function(s) {
+    var pClass = s.profit >= 0 ? 'badge-green' : 'badge-red';
+    return '<div class="list-item"><div><div class="item-name">' + s.itemName + ' x' + s.qty + '</div><div class="item-sub">' + s.customer + ' | ' + s.date + ' ' + s.time + '</div></div><div style="text-align:right"><div style="font-weight:700">Rs' + s.total + '</div><span class="badge ' + pClass + '">' + (s.profit >= 0 ? '+' : '') + 'Rs' + s.profit + '</span></div></div>';
+  }).join('');
+}
+
+function clearSalesFilter() {
+  document.getElementById('s-from').value = '';
+  document.getElementById('s-to').value = '';
+  renderSales();
+}
+
+// ===================== REPORT =====================
+function setDefaultReportDates() {
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = String(now.getMonth() + 1).padStart(2, '0');
+  document.getElementById('r-from').value = y + '-' + m + '-01';
+  document.getElementById('r-to').value = today();
+}
+
+function generateReport() {
+  var from = document.getElementById('r-from').value;
+  var to = document.getElementById('r-to').value;
+  var filtered = DATA.sales.filter(function(s) {
+    if (from && s.date < from) return false;
+    if (to && s.date > to) return false;
+    return true;
+  });
+  var totalSales = filtered.reduce(function(a, s) { return a + s.total; }, 0);
+  var totalProfit = filtered.reduce(function(a, s) { return a + s.profit; }, 0);
+  var totalCost = filtered.reduce(function(a, s) { return a + s.cost; }, 0);
+  document.getElementById('r-total').textContent = fmt(totalSales);
+  document.getElementById('r-profit').textContent = fmt(totalProfit);
+  document.getElementById('r-cost').textContent = fmt(totalCost);
+  document.getElementById('r-txns').textContent = filtered.length;
+
+  // Top items
+  var itemMap = {};
+  filtered.forEach(function(s) {
+    if (!itemMap[s.itemName]) itemMap[s.itemName] = { qty: 0, total: 0, profit: 0 };
+    itemMap[s.itemName].qty += s.qty;
+    itemMap[s.itemName].total += s.total;
+    itemMap[s.itemName].profit += s.profit;
+  });
+  var topItems = Object.keys(itemMap).sort(function(a, b) { return itemMap[b].total - itemMap[a].total; }).slice(0, 5);
+  document.getElementById('r-top-items').innerHTML = topItems.length ? topItems.map(function(name, i) {
+    return '<div class="list-item"><div><div class="item-name">' + (i + 1) + '. ' + name + '</div><div class="item-sub">Sold: ' + itemMap[name].qty + ' units</div></div><div style="text-align:right"><div style="font-weight:700">Rs' + itemMap[name].total + '</div><span class="badge badge-green">+Rs' + itemMap[name].profit + '</span></div></div>';
+  }).join('') : '<div class="empty"><span>📦</span><p>No data / کوئی ڈیٹا نہیں</p></div>';
+
+  // Summary
+  var margin = totalSales > 0 ? ((totalProfit / totalSales) * 100).toFixed(1) : 0;
+  var plClass = totalProfit >= 0 ? 'badge-green' : 'badge-red';
+  document.getElementById('r-summary').innerHTML = '<div class="summary-row"><span>Total Revenue / کل آمدن</span><span>' + fmt(totalSales) + '</span></div><div class="summary-row"><span>Total Cost / کل لاگت</span><span style="color:var(--red)">' + fmt(totalCost) + '</span></div><div class="summary-row"><span>Gross Profit / کل منافع</span><span style="color:var(--green)">' + fmt(totalProfit) + '</span></div><div class="summary-row"><span>Profit Margin</span><span><span class="badge ' + plClass + '">' + margin + '%</span></span></div><div class="summary-row"><span>' + (totalProfit >= 0 ? '✅ NET PROFIT / منافع' : '❌ NET LOSS / نقصان') + '</span><span style="color:' + (totalProfit >= 0 ? 'var(--green)' : 'var(--red)') + '">' + fmt(Math.abs(totalProfit)) + '</span></div>';
+
+  document.getElementById('report-output').style.display = 'block';
+}
+
+// Init
+load();
+refreshDashboard();
+renderRecentSales();
+setDefaultReportDates();
+</script>
+</body>
+</html>
