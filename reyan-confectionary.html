@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reyan Hussain Confectionary</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Noto+Nastaliq+Urdu&display=swap');
+
+  :root {
+    --bg: #fdf6ec;
+    --card: #ffffff;
+    --primary: #c8410a;
+    --primary2: #e85d1a;
+    --accent: #f7c948;
+    --accent2: #fff3c4;
+    --text: #2d1a0e;
+    --muted: #9e7a5a;
+    --border: #f0ddc0;
+    --success: #2a8c4a;
+    --danger: #c0392b;
+    --radius: 14px;
+    --shadow: 0 4px 24px rgba(200,65,10,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Baloo 2', cursive;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 60%, var(--accent) 100%);
+    padding: 18px 16px 14px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 18px rgba(200,65,10,0.28);
+  }
+  .app-header h1 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .app-header p { font-size: 0.78rem; color: #ffe9c8; margin-top: 2px; }
+
+  /* NAV */
+  .nav-bar {
+    display: flex;
+    background: var(--card);
+    border-bottom: 2px solid var(--border);
+    overflow-x: auto;
+    position: sticky;
+    top: 72px;
+    z-index: 90;
+    scrollbar-width: none;
+  }
+  .nav-bar::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex: 1;
+    min-width: 64px;
+    padding: 10px 6px 7px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: color 0.2s, border-bottom 0.2s;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-btn span.icon { font-size: 1.3rem; }
+  .nav-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+
+  /* TABS */
+  .tab { display: none; padding: 14px 12px 80px; }
+  .tab.active { display: block; }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1.5px solid var(--border);
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 3px 10px rgba(200,65,10,0.25); }
+  .btn-accent { background: var(--accent); color: var(--text); }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-ghost { background: var(--border); color: var(--text); }
+  .btn-sm { padding: 5px 10px; font-size: 0.75rem; border-radius: 7px; }
+  .btn-full { width: 100%; justify-content: center; margin-top: 8px; }
+  .btn-wa { background: #25D366; color: #fff; }
+  .btn-sms { background: #3b82f6; color: #fff; }
+
+  /* INPUTS */
+  .inp {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 8px;
+  }
+  .inp:focus { border-color: var(--primary); }
+  label { font-size: 0.78rem; font-weight: 700; color: var(--muted); display: block; margin-bottom: 3px; }
+  select.inp { appearance: none; }
+
+  /* ITEM CARD */
+  .item-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 12px;
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(200,65,10,0.07);
+  }
+  .item-card .item-info { flex: 1; }
+  .item-card .item-name { font-weight: 700; font-size: 0.92rem; }
+  .item-card .item-meta { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+  .item-card .item-price { text-align: right; }
+  .item-card .item-price .sell { font-weight: 800; color: var(--primary); font-size: 0.95rem; }
+  .item-card .item-price .cost { font-size: 0.72rem; color: var(--muted); }
+  .item-check { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--accent2);
+    color: var(--primary);
+    margin-left: 5px;
+  }
+
+  /* PROFIT STATS */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .stat-box {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 10px;
+    text-align: center;
+  }
+  .stat-box .val { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+  .stat-box .lbl { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .stat-big { grid-column: span 2; background: linear-gradient(120deg, var(--primary), var(--primary2)); }
+  .stat-big .val, .stat-big .lbl { color: #fff; }
+
+  /* UDHAR */
+  .udhar-card {
+    background: var(--card);
+    border: 1.5px solid #f8c5c5;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 9px;
+  }
+  .udhar-name { font-weight: 800; font-size: 0.95rem; }
+  .udhar-amount { font-size: 1.1rem; font-weight: 800; color: var(--danger); float: right; }
+  .udhar-meta { font-size: 0.74rem; color: var(--muted); margin-top: 3px; }
+
+  /* CONTACT */
+  .contact-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .contact-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: #fff; font-weight: 800; flex-shrink: 0;
+  }
+  .contact-info { flex: 1; }
+  .contact-name { font-weight: 700; font-size: 0.92rem; }
+  .contact-phone { font-size: 0.78rem; color: var(--muted); }
+
+  /* CALCULATOR */
+  .calc-display {
+    background: var(--text);
+    border-radius: 12px;
+    padding: 18px 16px 10px;
+    text-align: right;
+    margin-bottom: 10px;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .calc-display .expr { color: var(--muted); font-size: 0.85rem; min-height: 20px; }
+  .calc-display .result { color: #fff; font-size: 2.2rem; font-weight: 800; word-break: break-all; }
+  .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .calc-key {
+    padding: 16px 6px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    transition: transform 0.1s;
+  }
+  .calc-key:active { transform: scale(0.92); }
+  .calc-key.op { background: var(--accent2); color: var(--primary); }
+  .calc-key.eq { background: var(--primary); color: #fff; }
+  .calc-key.ac { background: #fde8e8; color: var(--danger); }
+  .calc-key.zero { grid-column: span 2; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(45,26,14,0.55);
+    z-index: 999;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px 32px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.28s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-close {
+    background: none; border: none; font-size: 1.3rem;
+    cursor: pointer; color: var(--muted); line-height: 1;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-state .icon { font-size: 3rem; margin-bottom: 8px; }
+  .empty-state p { font-size: 0.85rem; }
+
+  /* ORDER TABS */
+  .order-type-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .otype-btn {
+    flex: 1; padding: 9px; border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--card); color: var(--muted);
+    font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; text-align: center;
+  }
+  .otype-btn.active { border-color: var(--primary); color: var(--primary); background: #fff5ef; }
+
+  /* BILL PREVIEW */
+  .bill-preview {
+    background: var(--bg);
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    min-height: 60px;
+    font-size: 0.82rem;
+  }
+  .bill-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .bill-row.total { font-weight: 800; border-top: 1.5px solid var(--border); margin-top: 6px; padding-top: 6px; color: var(--primary); font-size: 0.92rem; }
+
+  /* PROFIT CALC */
+  .profit-calc {
+    background: var(--accent2);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 16px;
+  }
+  .profit-calc h4 { font-size: 0.88rem; margin-bottom: 10px; }
+  .profit-result {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    margin-top: 8px;
+    font-weight: 800;
+    color: var(--success);
+    font-size: 1.05rem;
+  }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .filter-chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .filter-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  /* QTY CONTROL */
+  .qty-ctrl { display: flex; align-items: center; gap: 6px; }
+  .qty-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%; border: 2px solid var(--primary);
+    background: none; color: var(--primary);
+    font-size: 1rem; font-weight: 800; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .qty-val { font-weight: 700; min-width: 24px; text-align: center; font-size: 0.9rem; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary2));
+    color: #fff;
+    font-size: 1.6rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(200,65,10,0.4);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 80;
+    transition: transform 0.18s;
+  }
+  .fab:active { transform: scale(0.92); }
+
+  .low-stock { border-left: 4px solid #e67e22; }
+  .out-stock { border-left: 4px solid var(--danger); opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>🍬 Reyan Hussain Confectionary</h1>
+  <p>Professional Business Manager</p>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showTab('items')"><span class="icon">🏪</span>Items</button>
+  <button class="nav-btn" onclick="showTab('order')"><span class="icon">🛒</span>Order</button>
+  <button class="nav-btn" onclick="showTab('profit')"><span class="icon">📊</span>Profit</button>
+  <button class="nav-btn" onclick="showTab('udhar')"><span class="icon">💸</span>Udhar</button>
+  <button class="nav-btn" onclick="showTab('contacts')"><span class="icon">📞</span>Contacts</button>
+  <button class="nav-btn" onclick="showTab('calc')"><span class="icon">🧮</span>Calc</button>
+</div>
+
+<!-- ===== ITEMS TAB ===== -->
+<div id="tab-items" class="tab active">
+  <div class="sec-title">🏪 Items Store <span id="item-count-badge" class="badge">0</span></div>
+  <div class="filter-bar" id="cat-filters">
+    <button class="filter-chip active" onclick="filterCat('All', this)">All</button>
+    <button class="filter-chip" onclick="filterCat('Mithai', this)">🍮 Mithai</button>
+    <button class="filter-chip" onclick="filterCat('Biscuit', this)">🍪 Biscuit</button>
+    <button class="filter-chip" onclick="filterCat('Chocolate', this)">🍫 Chocolate</button>
+    <button class="filter-chip" onclick="filterCat('Drink', this)">🥤 Drink</button>
+    <button class="filter-chip" onclick="filterCat('Snack', this)">🥨 Snack</button>
+    <button class="filter-chip" onclick="filterCat('Bakery', this)">🥐 Bakery</button>
+    <button class="filter-chip" onclick="filterCat('Other', this)">📦 Other</button>
+  </div>
+  <div id="items-list"></div>
+</div>
+
+<!-- ===== ORDER TAB ===== -->
+<div id="tab-order" class="tab">
+  <div class="sec-title">🛒 Customer Order</div>
+  <div class="order-type-tabs">
+    <button class="otype-btn active" id="otype-customer" onclick="setOrderType('customer')">🛒 Customer Order<br><small>Sell Price</small></button>
+    <button class="otype-btn" id="otype-seller" onclick="setOrderType('seller')">🏭 Seller Order<br><small>Cost Price</small></button>
+  </div>
+  <div class="card">
+    <label>Customer Name</label>
+    <input class="inp" id="ord-name" placeholder="e.g. Ahmed Bhai">
+    <label>Customer Phone</label>
+    <input class="inp" id="ord-phone" type="tel" placeholder="03XX-XXXXXXX">
+    <label>Date</label>
+    <input class="inp" id="ord-date" type="date">
+    <label>Note</label>
+    <input class="inp" id="ord-note" placeholder="Optional note...">
+  </div>
+  <div class="sec-title" style="font-size:0.9rem;">📋 Order Preview</div>
+  <div class="bill-preview" id="bill-preview-area">
+    <div style="color:var(--muted);font-size:0.82rem;">Items tab mein tick karen phir yahan order banao</div>
+  </div>
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div style="font-size:0.78rem;color:var(--muted);">Total</div>
+      <div id="ord-total" style="font-size:1.4rem;font-weight:800;color:var(--primary);">Rs. 0</div>
+    </div>
+    <div>
+      <div style="font-size:0.78rem;color:var(--muted);">Total Profit</div>
+      <div id="ord-profit" style="font-size:1.1rem;font-weight:700;color:var(--success);">Rs. 0</div>
+    </div>
+  </div>
+  <button class="btn btn-wa btn-full" onclick="sendWhatsApp()">📱 WhatsApp Send</button>
+  <button class="btn btn-sms btn-full" onclick="sendSMS()">💬 SMS Send</button>
+  <button class="btn btn-ghost btn-full" onclick="sendBillWA()">📄 Bill (WhatsApp)</button>
+</div>
+
+<!-- ===== PROFIT TAB ===== -->
+<div id="tab-profit" class="tab">
+  <div class="sec-title">📊 Profit Report</div>
+
+  <!-- PROFIT MODE TABS -->
+  <div class="order-type-tabs" style="margin-bottom:14px;">
+    <button class="otype-btn active" id="pmode-stock" onclick="setProfitMode('stock')">📦 Stock Profit</button>
+    <button class="otype-btn" id="pmode-order" onclick="setProfitMode('order')">🛒 Order Profit</button>
+    <button class="otype-btn" id="pmode-manual" onclick="setProfitMode('manual')">✏️ Manual Calc</button>
+  </div>
+
+  <!-- ===== STOCK PROFIT ===== -->
+  <div id="pmode-stock-view">
+    <div class="stat-grid">
+      <div class="stat-box stat-big">
+        <div class="val" id="total-profit-big">Rs. 0</div>
+        <div class="lbl">Stock ke mutabiq total faida</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="total-cost">0</div>
+        <div class="lbl">Total Cost</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="total-sell">0</div>
+        <div class="lbl">Total Sell Value</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="total-items-count">0</div>
+        <div class="lbl">Items</div>
+      </div>
+      <div class="stat-box">
+        <div class="val" id="avg-margin">0%</div>
+        <div class="lbl">Avg Margin</div>
+      </div>
+    </div>
+    <div class="sec-title" style="font-size:0.88rem;margin-bottom:8px;">Per Item Profit</div>
+    <div id="item-profit-list"></div>
+    <button class="btn btn-danger btn-sm" onclick="clearAllData()" style="margin-top:10px;">🗑 Clear All Data</button>
+  </div>
+
+  <!-- ===== ORDER PROFIT ===== -->
+  <div id="pmode-order-view" style="display:none;">
+    <div id="order-profit-empty" class="empty-state" style="display:none;">
+      <div class="icon">🛒</div>
+      <p>Pehle Order tab mein items tick karen<br>phir yahan profit dekhein</p>
+      <button class="btn btn-primary" style="margin-top:10px;" onclick="showTab('order')">Order Tab Kholo</button>
+    </div>
+    <div id="order-profit-content">
+      <div class="stat-grid">
+        <div class="stat-box stat-big" style="background:linear-gradient(120deg,var(--success),#38a169);">
+          <div class="val" id="op-profit">Rs. 0</div>
+          <div class="lbl">Is Order ka Total Faida</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="op-cost">Rs. 0</div>
+          <div class="lbl">Total Cost</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="op-sell">Rs. 0</div>
+          <div class="lbl">Total Sell</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="op-margin">0%</div>
+          <div class="lbl">Profit Margin</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="op-items">0</div>
+          <div class="lbl">Items in Order</div>
+        </div>
+      </div>
+      <div class="sec-title" style="font-size:0.88rem;margin-bottom:8px;">Order Items Breakdown</div>
+      <div id="op-breakdown"></div>
+    </div>
+  </div>
+
+  <!-- ===== MANUAL CALC ===== -->
+  <div id="pmode-manual-view" style="display:none;">
+    <div class="card" style="margin-bottom:12px;">
+      <div class="sec-title" style="font-size:0.92rem;margin-bottom:10px;">➕ Item Add Karo</div>
+      <label>Item Name</label>
+      <input class="inp" id="mc-name" placeholder="e.g. Kaju Barfi">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div>
+          <label>Cost Price (Rs.)</label>
+          <input class="inp" id="mc-cost" type="number" placeholder="0">
+        </div>
+        <div>
+          <label>Sell Price (Rs.)</label>
+          <input class="inp" id="mc-sell" type="number" placeholder="0">
+        </div>
+      </div>
+      <label>Quantity</label>
+      <input class="inp" id="mc-qty" type="number" placeholder="1" value="1">
+      <button class="btn btn-primary btn-full" onclick="addManualItem()">➕ Add Item</button>
+    </div>
+
+    <div id="mc-list-wrap" style="display:none;">
+      <div class="stat-grid" style="margin-bottom:12px;">
+        <div class="stat-box stat-big" style="background:linear-gradient(120deg,#7b2ff7,#b040fb);">
+          <div class="val" id="mc-total-profit">Rs. 0</div>
+          <div class="lbl">Total Faida</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="mc-total-cost">Rs. 0</div>
+          <div class="lbl">Total Cost</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="mc-total-sell">Rs. 0</div>
+          <div class="lbl">Total Sell</div>
+        </div>
+        <div class="stat-box">
+          <div class="val" id="mc-margin">0%</div>
+          <div class="lbl">Avg Margin</div>
+        </div>
+      </div>
+      <div class="sec-title" style="font-size:0.88rem;margin-bottom:8px;">📋 Items List</div>
+      <div id="mc-items-list"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="clearManualItems()">🗑 Clear All</button>
+        <button class="btn btn-wa btn-sm" onclick="shareManualReport()">📱 WhatsApp Share</button>
+      </div>
+    </div>
+
+    <div class="profit-calc" style="margin-top:16px;">
+      <h4>💹 Quick Profit Calculator</h4>
+      <label>Cost Price (Rs.)</label>
+      <input class="inp" id="pc-cost" type="number" placeholder="0" oninput="calcProfit()">
+      <label>Sell Price (Rs.)</label>
+      <input class="inp" id="pc-sell" type="number" placeholder="0" oninput="calcProfit()">
+      <div class="profit-result" id="pc-result">Faida: Rs. 0 (0%)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== UDHAR TAB ===== -->
+<div id="tab-udhar" class="tab">
+  <div class="sec-title">💸 Udhar Khata</div>
+  <div id="udhar-list"></div>
+</div>
+
+<!-- ===== CONTACTS TAB ===== -->
+<div id="tab-contacts" class="tab">
+  <div class="sec-title">📞 Contacts</div>
+  <div id="contacts-list"></div>
+</div>
+
+<!-- ===== CALCULATOR TAB ===== -->
+<div id="tab-calc" class="tab">
+  <div class="sec-title">🧮 Calculator</div>
+  <div class="calc-display">
+    <div class="expr" id="calc-expr"></div>
+    <div class="result" id="calc-result">0</div>
+  </div>
+  <div class="calc-grid">
+    <button class="calc-key ac" onclick="calcAC()">AC</button>
+    <button class="calc-key op" onclick="calcPlusMinus()">+/-</button>
+    <button class="calc-key op" onclick="calcPercent()">%</button>
+    <button class="calc-key op" onclick="calcOp('/')">÷</button>
+    <button class="calc-key" onclick="calcNum('7')">7</button>
+    <button class="calc-key" onclick="calcNum('8')">8</button>
+    <button class="calc-key" onclick="calcNum('9')">9</button>
+    <button class="calc-key op" onclick="calcOp('*')">×</button>
+    <button class="calc-key" onclick="calcNum('4')">4</button>
+    <button class="calc-key" onclick="calcNum('5')">5</button>
+    <button class="calc-key" onclick="calcNum('6')">6</button>
+    <button class="calc-key op" onclick="calcOp('-')">−</button>
+    <button class="calc-key" onclick="calcNum('1')">1</button>
+    <button class="calc-key" onclick="calcNum('2')">2</button>
+    <button class="calc-key" onclick="calcNum('3')">3</button>
+    <button class="calc-key op" onclick="calcOp('+')">+</button>
+    <button class="calc-key zero" onclick="calcNum('0')">0</button>
+    <button class="calc-key" onclick="calcDot()">.</button>
+    <button class="calc-key eq" onclick="calcEquals()">=</button>
+  </div>
+
+  <div class="profit-calc" style="margin-top:20px;">
+    <h4>💹 Profit Calculator</h4>
+    <label>Cost Price (Rs.)</label>
+    <input class="inp" id="c2-cost" type="number" placeholder="0" oninput="calcProfit2()">
+    <label>Sell Price (Rs.)</label>
+    <input class="inp" id="c2-sell" type="number" placeholder="0" oninput="calcProfit2()">
+    <div class="profit-result" id="c2-result">Faida: Rs. 0 (0%)</div>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fab-btn" onclick="openFab()">+</button>
+
+<!-- ===== MODAL: ADD ITEM ===== -->
+<div class="modal-overlay" id="modal-item">
+  <div class="modal">
+    <div class="modal-title">
+      <span>➕ Naya Item</span>
+      <button class="modal-close" onclick="closeModal('modal-item')">✕</button>
+    </div>
+    <label>Item Name *</label>
+    <input class="inp" id="m-name" placeholder="e.g. Kaju Barfi">
+    <label>Category</label>
+    <select class="inp" id="m-cat">
+      <option>Mithai</option><option>Biscuit</option><option>Chocolate</option>
+      <option>Drink</option><option>Snack</option><option>Bakery</option><option>Other</option>
+    </select>
+    <label>Unit</label>
+    <select class="inp" id="m-unit">
+      <option>piece</option><option>kg</option><option>gram</option>
+      <option>packet</option><option>box</option><option>dozen</option><option>litre</option>
+    </select>
+    <label>Cost Price (Rs.) *</label>
+    <input class="inp" id="m-cost" type="number" placeholder="0">
+    <label>Sell Price (Rs.) *</label>
+    <input class="inp" id="m-sell" type="number" placeholder="0">
+    <label>Stock Qty</label>
+    <input class="inp" id="m-stock" type="number" placeholder="0">
+    <label>Min Stock Alert</label>
+    <input class="inp" id="m-minstock" type="number" placeholder="5">
+    <button class="btn btn-primary btn-full" onclick="saveItem()">💾 Save Item</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: ADD UDHAR ===== -->
+<div class="modal-overlay" id="modal-udhar">
+  <div class="modal">
+    <div class="modal-title">
+      <span>💸 Udhar Add Karen</span>
+      <button class="modal-close" onclick="closeModal('modal-udhar')">✕</button>
+    </div>
+    <label>Customer Name *</label>
+    <input class="inp" id="u-name" placeholder="Customer ka naam">
+    <label>Phone *</label>
+    <input class="inp" id="u-phone" type="tel" placeholder="03XX-XXXXXXX">
+    <label>Amount (Rs.) *</label>
+    <input class="inp" id="u-amount" type="number" placeholder="0">
+    <label>Date</label>
+    <input class="inp" id="u-date" type="date">
+    <label>Due Date</label>
+    <input class="inp" id="u-due" type="date">
+    <label>Items / Note</label>
+    <input class="inp" id="u-note" placeholder="Kya kharida / note">
+    <button class="btn btn-primary btn-full" onclick="saveUdhar()">💾 Save Udhar</button>
+  </div>
+</div>
+
+<!-- ===== MODAL: ADD CONTACT ===== -->
+<div class="modal-overlay" id="modal-contact">
+  <div class="modal">
+    <div class="modal-title">
+      <span>📞 Contact Add Karen</span>
+      <button class="modal-close" onclick="closeModal('modal-contact')">✕</button>
+    </div>
+    <label>Name *</label>
+    <input class="inp" id="co-name" placeholder="Naam">
+    <label>Phone *</label>
+    <input class="inp" id="co-phone" type="tel" placeholder="03XX-XXXXXXX">
+    <label>Type</label>
+    <select class="inp" id="co-type">
+      <option value="Seller">Seller (Supplier)</option>
+      <option value="Buyer">Buyer</option>
+      <option value="Customer">Customer</option>
+    </select>
+    <label>Note (Optional)</label>
+    <input class="inp" id="co-note" placeholder="Note">
+    <button class="btn btn-primary btn-full" onclick="saveContact()">💾 Save</button>
+  </div>
+</div>
+
+<script>
+var DB = {
+  items: [], udhar: [], contacts: [], orders: []
+};
+var currentTab = 'items';
+var orderType = 'customer';
+var selectedItems = {};
+var editItemId = null;
+var calcDisplay = '0';
+var calcExpr = '';
+var calcOper = '';
+var calcPrev = '';
+var calcNewNum = true;
+
+function load() {
+  try {
+    var s = localStorage.getItem('reyan_db');
+    if (s) DB = JSON.parse(s);
+    if (!DB.items) DB.items = [];
+    if (!DB.udhar) DB.udhar = [];
+    if (!DB.contacts) DB.contacts = [];
+    if (!DB.orders) DB.orders = [];
+  } catch(e) {}
+  var d = new Date();
+  var dd = d.toISOString().split('T')[0];
+  document.getElementById('ord-date').value = dd;
+  document.getElementById('u-date').value = dd;
+  renderAll();
+}
+
+function save() {
+  localStorage.setItem('reyan_db', JSON.stringify(DB));
+}
+
+function renderAll() {
+  renderItems();
+  renderOrder();
+  renderProfit();
+  renderUdhar();
+  renderContacts();
+}
+
+/* ===== ITEMS ===== */
+var currentCat = 'All';
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.filter-chip').forEach(function(b) { b.classList.remove('active'); });
+  el.classList.add('active');
+  renderItems();
+}
+
+function renderItems() {
+  var list = document.getElementById('items-list');
+  var items = DB.items.filter(function(it) { return currentCat === 'All' || it.cat === currentCat; });
+  document.getElementById('item-count-badge').textContent = DB.items.length;
+  if (!items.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>Koi item nahi. "+" press karain item add karne ke liye.</p></div>';
+    return;
+  }
+  var html = '';
+  items.forEach(function(it) {
+    var checked = selectedItems[it.id] ? 'checked' : '';
+    var stockClass = it.stock <= 0 ? 'out-stock' : (it.minstock && it.stock <= it.minstock ? 'low-stock' : '');
+    var stockTxt = it.stock !== undefined ? ('Stock: ' + it.stock + ' ' + it.unit) : '';
+    var qty = selectedItems[it.id] ? selectedItems[it.id].qty : 1;
+    html += '<div class="item-card ' + stockClass + '">' +
+      '<input type="checkbox" class="item-check" ' + checked + ' onchange="toggleItem(' + it.id + ', this.checked)">' +
+      '<div class="item-info">' +
+        '<div class="item-name">' + esc(it.name) + ' <span class="badge">' + it.cat + '</span></div>' +
+        '<div class="item-meta">' + it.unit + ' &bull; ' + stockTxt + '</div>' +
+        (checked ? '<div class="qty-ctrl" style="margin-top:6px;">' +
+          '<button class="qty-btn" onclick="changeQty(' + it.id + ',-1)">−</button>' +
+          '<span class="qty-val" id="qty-' + it.id + '">' + qty + '</span>' +
+          '<button class="qty-btn" onclick="changeQty(' + it.id + ',1)">+</button>' +
+        '</div>' : '') +
+      '</div>' +
+      '<div class="item-price">' +
+        '<div class="sell">Rs.' + it.sell + '</div>' +
+        '<div class="cost">Cost: Rs.' + it.cost + '</div>' +
+        '<div style="margin-top:6px;display:flex;gap:4px;">' +
+          '<button class="btn btn-ghost btn-sm" onclick="editItem(' + it.id + ')">✏️</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteItem(' + it.id + ')">🗑</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function toggleItem(id, checked) {
+  if (checked) {
+    var it = DB.items.find(function(x) { return x.id === id; });
+    selectedItems[id] = { qty: 1, item: it };
+  } else {
+    delete selectedItems[id];
+  }
+  renderItems();
+  renderOrder();
+}
+
+function changeQty(id, delta) {
+  if (!selectedItems[id]) return;
+  selectedItems[id].qty = Math.max(1, (selectedItems[id].qty || 1) + delta);
+  renderItems();
+  renderOrder();
+}
+
+function saveItem() {
+  var name = document.getElementById('m-name').value.trim();
+  var cat = document.getElementById('m-cat').value;
+  var unit = document.getElementById('m-unit').value;
+  var cost = parseFloat(document.getElementById('m-cost').value) || 0;
+  var sell = parseFloat(document.getElementById('m-sell').value) || 0;
+  var stock = parseFloat(document.getElementById('m-stock').value) || 0;
+  var minstock = parseFloat(document.getElementById('m-minstock').value) || 5;
+  if (!name) { alert('Item ka naam dalen!'); return; }
+  if (editItemId !== null) {
+    var idx = DB.items.findIndex(function(x) { return x.id === editItemId; });
+    if (idx > -1) { DB.items[idx] = { id: editItemId, name: name, cat: cat, unit: unit, cost: cost, sell: sell, stock: stock, minstock: minstock }; }
+    editItemId = null;
+  } else {
+    var newId = Date.now();
+    DB.items.push({ id: newId, name: name, cat: cat, unit: unit, cost: cost, sell: sell, stock: stock, minstock: minstock });
+  }
+  save(); closeModal('modal-item'); clearItemForm(); renderAll();
+}
+
+function editItem(id) {
+  var it = DB.items.find(function(x) { return x.id === id; });
+  if (!it) return;
+  editItemId = id;
+  document.getElementById('m-name').value = it.name;
+  document.getElementById('m-cat').value = it.cat;
+  document.getElementById('m-unit').value = it.unit;
+  document.getElementById('m-cost').value = it.cost;
+  document.getElementById('m-sell').value = it.sell;
+  document.getElementById('m-stock').value = it.stock;
+  document.getElementById('m-minstock').value = it.minstock || 5;
+  openModal('modal-item');
+}
+
+function deleteItem(id) {
+  if (!confirm('Is item ko delete karen?')) return;
+  DB.items = DB.items.filter(function(x) { return x.id !== id; });
+  delete selectedItems[id];
+  save(); renderAll();
+}
+
+function clearItemForm() {
+  ['m-name','m-cost','m-sell','m-stock','m-minstock'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('m-cat').value = 'Mithai';
+  document.getElementById('m-unit').value = 'piece';
+}
+
+/* ===== ORDER ===== */
+function setOrderType(type) {
+  orderType = type;
+  document.getElementById('otype-customer').classList.toggle('active', type === 'customer');
+  document.getElementById('otype-seller').classList.toggle('active', type === 'seller');
+  renderOrder();
+}
+
+function renderOrder() {
+  var keys = Object.keys(selectedItems);
+  var previewEl = document.getElementById('bill-preview-area');
+  var totalEl = document.getElementById('ord-total');
+  var profitEl = document.getElementById('ord-profit');
+  if (!keys.length) {
+    previewEl.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;">Items tab mein tick karen phir yahan order banao</div>';
+    totalEl.textContent = 'Rs. 0';
+    profitEl.textContent = 'Rs. 0';
+    return;
+  }
+  var html = '';
+  var total = 0, totalCost = 0;
+  keys.forEach(function(id) {
+    var sel = selectedItems[id];
+    var it = sel.item;
+    var price = orderType === 'customer' ? it.sell : it.cost;
+    var lineTotal = price * sel.qty;
+    total += lineTotal;
+    totalCost += it.cost * sel.qty;
+    html += '<div class="bill-row"><span>' + esc(it.name) + ' x' + sel.qty + '</span><span>Rs.' + lineTotal + '</span></div>';
+  });
+  html += '<div class="bill-row total"><span>Total</span><span>Rs.' + total + '</span></div>';
+  previewEl.innerHTML = html;
+  totalEl.textContent = 'Rs. ' + total;
+  var profit = total - totalCost;
+  profitEl.textContent = 'Rs. ' + profit;
+  profitEl.style.color = profit >= 0 ? 'var(--success)' : 'var(--danger)';
+  if (profitMode === 'order') renderOrderProfit();
+}
+
+function getBillText() {
+  var name = document.getElementById('ord-name').value.trim() || 'Customer';
+  var phone = document.getElementById('ord-phone').value.trim();
+  var date = document.getElementById('ord-date').value;
+  var note = document.getElementById('ord-note').value.trim();
+  var keys = Object.keys(selectedItems);
+  var lines = [];
+  lines.push('🍬 *Reyan Hussain Confectionary*');
+  lines.push('Customer: ' + name);
+  if (phone) lines.push('Phone: ' + phone);
+  lines.push('Date: ' + date);
+  lines.push('---');
+  var total = 0;
+  keys.forEach(function(id) {
+    var sel = selectedItems[id];
+    var it = sel.item;
+    var price = orderType === 'customer' ? it.sell : it.cost;
+    var lineTotal = price * sel.qty;
+    total += lineTotal;
+    lines.push(it.name + ' x' + sel.qty + ' = Rs.' + lineTotal);
+  });
+  lines.push('---');
+  lines.push('*Total: Rs.' + total + '*');
+  if (note) lines.push('Note: ' + note);
+  lines.push('');
+  lines.push('Shukriya! 🙏');
+  return lines.join('\n');
+}
+
+function sendWhatsApp() {
+  var phone = document.getElementById('ord-phone').value.trim().replace(/\D/g, '');
+  if (!phone) { alert('Phone number dalen!'); return; }
+  if (phone.startsWith('0')) phone = '92' + phone.substring(1);
+  var msg = getBillText();
+  window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg));
+}
+
+function sendBillWA() {
+  var msg = getBillText();
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg));
+}
+
+function sendSMS() {
+  var phone = document.getElementById('ord-phone').value.trim();
+  var msg = getBillText();
+  window.open('sms:' + phone + '?body=' + encodeURIComponent(msg));
+}
+
+/* ===== PROFIT MODE ===== */
+var profitMode = 'stock';
+var manualItems = [];
+
+function setProfitMode(mode) {
+  profitMode = mode;
+  document.getElementById('pmode-stock').classList.toggle('active', mode === 'stock');
+  document.getElementById('pmode-order').classList.toggle('active', mode === 'order');
+  document.getElementById('pmode-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('pmode-stock-view').style.display = mode === 'stock' ? 'block' : 'none';
+  document.getElementById('pmode-order-view').style.display = mode === 'order' ? 'block' : 'none';
+  document.getElementById('pmode-manual-view').style.display = mode === 'manual' ? 'block' : 'none';
+  if (mode === 'order') renderOrderProfit();
+  if (mode === 'manual') renderManualItems();
+}
+
+/* ===== STOCK PROFIT ===== */
+function renderProfit() {
+  var totalCost = 0, totalSell = 0, count = 0;
+  DB.items.forEach(function(it) {
+    totalCost += it.cost * (it.stock || 0);
+    totalSell += it.sell * (it.stock || 0);
+    count++;
+  });
+  var profit = totalSell - totalCost;
+  var margin = totalSell ? Math.round((profit / totalSell) * 100) : 0;
+  document.getElementById('total-profit-big').textContent = 'Rs. ' + profit;
+  document.getElementById('total-cost').textContent = 'Rs. ' + totalCost;
+  document.getElementById('total-sell').textContent = 'Rs. ' + totalSell;
+  document.getElementById('total-items-count').textContent = count;
+  document.getElementById('avg-margin').textContent = margin + '%';
+
+  var html = '';
+  DB.items.forEach(function(it) {
+    var p = (it.sell - it.cost);
+    var pct = it.sell ? Math.round((p / it.sell) * 100) : 0;
+    var stockVal = (it.stock || 0);
+    html += '<div class="item-card">' +
+      '<div class="item-info"><div class="item-name">' + esc(it.name) + '</div>' +
+      '<div class="item-meta">' + it.cat + ' &bull; Stock: ' + stockVal + ' ' + it.unit + '</div></div>' +
+      '<div class="item-price">' +
+      '<div class="sell">+Rs.' + p + '/unit</div>' +
+      '<div class="cost">' + pct + '% margin</div>' +
+      '<div class="cost">Stock faida: Rs.' + (p * stockVal) + '</div>' +
+      '</div></div>';
+  });
+  document.getElementById('item-profit-list').innerHTML = html || '<div class="empty-state"><div class="icon">📊</div><p>Koi item nahi</p></div>';
+
+  if (profitMode === 'order') renderOrderProfit();
+}
+
+/* ===== ORDER PROFIT ===== */
+function renderOrderProfit() {
+  var keys = Object.keys(selectedItems);
+  var emptyEl = document.getElementById('order-profit-empty');
+  var contentEl = document.getElementById('order-profit-content');
+  if (!keys.length) {
+    emptyEl.style.display = 'block';
+    contentEl.style.display = 'none';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  contentEl.style.display = 'block';
+
+  var totalSell = 0, totalCost = 0, itemCount = 0;
+  var html = '';
+  keys.forEach(function(id) {
+    var sel = selectedItems[id];
+    var it = sel.item;
+    var qty = sel.qty;
+    var price = orderType === 'customer' ? it.sell : it.cost;
+    var lineSell = price * qty;
+    var lineCost = it.cost * qty;
+    var lineProfit = lineSell - lineCost;
+    var linePct = lineSell ? Math.round((lineProfit / lineSell) * 100) : 0;
+    totalSell += lineSell;
+    totalCost += lineCost;
+    itemCount += qty;
+
+    var profitColor = lineProfit >= 0 ? 'var(--success)' : 'var(--danger)';
+    html += '<div class="item-card">' +
+      '<div class="item-info">' +
+        '<div class="item-name">' + esc(it.name) + '</div>' +
+        '<div class="item-meta">Qty: ' + qty + ' &bull; Sell: Rs.' + price + '/unit</div>' +
+        '<div class="item-meta">Cost: Rs.' + it.cost + '/unit &bull; Line Total: Rs.' + lineSell + '</div>' +
+      '</div>' +
+      '<div class="item-price">' +
+        '<div class="sell" style="color:' + profitColor + ';">+Rs.' + lineProfit + '</div>' +
+        '<div class="cost">' + linePct + '% margin</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  var totalProfit = totalSell - totalCost;
+  var totalMargin = totalSell ? Math.round((totalProfit / totalSell) * 100) : 0;
+
+  document.getElementById('op-profit').textContent = 'Rs. ' + totalProfit;
+  document.getElementById('op-cost').textContent = 'Rs. ' + totalCost;
+  document.getElementById('op-sell').textContent = 'Rs. ' + totalSell;
+  document.getElementById('op-margin').textContent = totalMargin + '%';
+  document.getElementById('op-items').textContent = itemCount;
+  document.getElementById('op-breakdown').innerHTML = html;
+}
+
+/* ===== MANUAL PROFIT ===== */
+function addManualItem() {
+  var name = document.getElementById('mc-name').value.trim() || 'Item';
+  var cost = parseFloat(document.getElementById('mc-cost').value) || 0;
+  var sell = parseFloat(document.getElementById('mc-sell').value) || 0;
+  var qty = parseFloat(document.getElementById('mc-qty').value) || 1;
+  if (!cost && !sell) { alert('Cost ya Sell price dalen!'); return; }
+  manualItems.push({ id: Date.now(), name: name, cost: cost, sell: sell, qty: qty });
+  document.getElementById('mc-name').value = '';
+  document.getElementById('mc-cost').value = '';
+  document.getElementById('mc-sell').value = '';
+  document.getElementById('mc-qty').value = '1';
+  renderManualItems();
+}
+
+function removeManualItem(id) {
+  manualItems = manualItems.filter(function(x) { return x.id !== id; });
+  renderManualItems();
+}
+
+function clearManualItems() {
+  if (!confirm('Saari manual items clear karen?')) return;
+  manualItems = [];
+  renderManualItems();
+}
+
+function renderManualItems() {
+  var wrapEl = document.getElementById('mc-list-wrap');
+  var listEl = document.getElementById('mc-items-list');
+  if (!manualItems.length) {
+    wrapEl.style.display = 'none';
+    return;
+  }
+  wrapEl.style.display = 'block';
+
+  var totalCost = 0, totalSell = 0;
+  var html = '';
+  manualItems.forEach(function(it) {
+    var lineCost = it.cost * it.qty;
+    var lineSell = it.sell * it.qty;
+    var lineProfit = lineSell - lineCost;
+    var pct = lineSell ? Math.round((lineProfit / lineSell) * 100) : 0;
+    totalCost += lineCost;
+    totalSell += lineSell;
+    var profitColor = lineProfit >= 0 ? 'var(--success)' : 'var(--danger)';
+    html += '<div class="item-card">' +
+      '<div class="item-info">' +
+        '<div class="item-name">' + esc(it.name) + '</div>' +
+        '<div class="item-meta">Qty: ' + it.qty + ' &bull; Cost: Rs.' + it.cost + ' &bull; Sell: Rs.' + it.sell + '</div>' +
+        '<div class="item-meta">Line: Cost Rs.' + lineCost + ' | Sell Rs.' + lineSell + '</div>' +
+      '</div>' +
+      '<div class="item-price">' +
+        '<div class="sell" style="color:' + profitColor + ';">+Rs.' + lineProfit + '</div>' +
+        '<div class="cost">' + pct + '% margin</div>' +
+        '<button class="btn btn-danger btn-sm" style="margin-top:5px;" onclick="removeManualItem(' + it.id + ')">🗑</button>' +
+      '</div>' +
+    '</div>';
+  });
+
+  var totalProfit = totalSell - totalCost;
+  var totalMargin = totalSell ? Math.round((totalProfit / totalSell) * 100) : 0;
+  document.getElementById('mc-total-profit').textContent = 'Rs. ' + totalProfit;
+  document.getElementById('mc-total-cost').textContent = 'Rs. ' + totalCost;
+  document.getElementById('mc-total-sell').textContent = 'Rs. ' + totalSell;
+  document.getElementById('mc-margin').textContent = totalMargin + '%';
+  listEl.innerHTML = html;
+}
+
+function shareManualReport() {
+  if (!manualItems.length) return;
+  var lines = ['🍬 *Reyan Hussain Confectionary*', '*Profit Report*', '---'];
+  var totalCost = 0, totalSell = 0;
+  manualItems.forEach(function(it) {
+    var lc = it.cost * it.qty;
+    var ls = it.sell * it.qty;
+    totalCost += lc; totalSell += ls;
+    lines.push(it.name + ' x' + it.qty + ' | Cost: Rs.' + lc + ' | Sell: Rs.' + ls + ' | Faida: Rs.' + (ls-lc));
+  });
+  lines.push('---');
+  lines.push('*Total Cost: Rs.' + totalCost + '*');
+  lines.push('*Total Sell: Rs.' + totalSell + '*');
+  lines.push('*Total Faida: Rs.' + (totalSell - totalCost) + '*');
+  window.open('https://wa.me/?text=' + encodeURIComponent(lines.join('\n')));
+}
+
+function calcProfit() {
+  var cost = parseFloat(document.getElementById('pc-cost').value) || 0;
+  var sell = parseFloat(document.getElementById('pc-sell').value) || 0;
+  var p = sell - cost;
+  var pct = sell ? Math.round((p / sell) * 100) : 0;
+  var el = document.getElementById('pc-result');
+  el.textContent = 'Faida: Rs. ' + p + ' (' + pct + '%)';
+  el.style.color = p >= 0 ? 'var(--success)' : 'var(--danger)';
+}
+
+function calcProfit2() {
+  var cost = parseFloat(document.getElementById('c2-cost').value) || 0;
+  var sell = parseFloat(document.getElementById('c2-sell').value) || 0;
+  var p = sell - cost;
+  var pct = sell ? Math.round((p / sell) * 100) : 0;
+  var el = document.getElementById('c2-result');
+  el.textContent = 'Faida: Rs. ' + p + ' (' + pct + '%)';
+  el.style.color = p >= 0 ? 'var(--success)' : 'var(--danger)';
+}
+
+function clearAllData() {
+  if (!confirm('Saara data delete hoga. Pakka?')) return;
+  DB = { items: [], udhar: [], contacts: [], orders: [] };
+  selectedItems = {};
+  save(); renderAll();
+}
+
+/* ===== UDHAR ===== */
+function renderUdhar() {
+  var el = document.getElementById('udhar-list');
+  if (!DB.udhar.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">💸</div><p>Koi udhar nahi</p></div>' +
+      '<button class="btn btn-primary btn-full" onclick="openModal(\'modal-udhar\')">+ Udhar Add Karen</button>';
+    return;
+  }
+  var total = DB.udhar.reduce(function(s, u) { return s + u.amount; }, 0);
+  var html = '<div class="card" style="background:linear-gradient(120deg,#c0392b,#e74c3c);color:#fff;margin-bottom:12px;">' +
+    '<div style="font-size:0.78rem;opacity:0.85;">Total Udhar</div>' +
+    '<div style="font-size:1.6rem;font-weight:800;">Rs. ' + total + '</div>' +
+    '</div>';
+  DB.udhar.forEach(function(u) {
+    html += '<div class="udhar-card">' +
+      '<div><span class="udhar-name">👤 ' + esc(u.name) + '</span><span class="udhar-amount">Rs.' + u.amount + '</span></div>' +
+      '<div class="udhar-meta">📞 ' + esc(u.phone) + ' &bull; ' + u.date + (u.due ? ' | Due: ' + u.due : '') + '</div>' +
+      (u.note ? '<div class="udhar-meta" style="margin-top:3px;">📝 ' + esc(u.note) + '</div>' : '') +
+      '<div style="margin-top:8px;display:flex;gap:6px;">' +
+        '<button class="btn btn-wa btn-sm" onclick="waUdhar(\'' + u.phone + '\',\'' + esc(u.name) + '\',' + u.amount + ')">📱 WhatsApp</button>' +
+        '<button class="btn btn-success btn-sm" onclick="markPaid(' + u.id + ')">✅ Paid</button>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteUdhar(' + u.id + ')">🗑</button>' +
+      '</div>' +
+    '</div>';
+  });
+  html += '<button class="btn btn-primary btn-full" onclick="openModal(\'modal-udhar\')">+ Udhar Add Karen</button>';
+  el.innerHTML = html;
+}
+
+function saveUdhar() {
+  var name = document.getElementById('u-name').value.trim();
+  var phone = document.getElementById('u-phone').value.trim();
+  var amount = parseFloat(document.getElementById('u-amount').value) || 0;
+  var date = document.getElementById('u-date').value;
+  var due = document.getElementById('u-due').value;
+  var note = document.getElementById('u-note').value.trim();
+  if (!name || !phone || !amount) { alert('Naam, phone aur amount zaroori hai!'); return; }
+  DB.udhar.push({ id: Date.now(), name: name, phone: phone, amount: amount, date: date, due: due, note: note });
+  save(); closeModal('modal-udhar');
+  ['u-name','u-phone','u-amount','u-due','u-note'].forEach(function(id) { document.getElementById(id).value = ''; });
+  renderUdhar();
+}
+
+function markPaid(id) {
+  if (!confirm('Udhar paid mark karen? Record se remove hoga.')) return;
+  DB.udhar = DB.udhar.filter(function(x) { return x.id !== id; });
+  save(); renderUdhar();
+}
+
+function deleteUdhar(id) {
+  if (!confirm('Delete karen?')) return;
+  DB.udhar = DB.udhar.filter(function(x) { return x.id !== id; });
+  save(); renderUdhar();
+}
+
+function waUdhar(phone, name, amount) {
+  var p = phone.replace(/\D/g, '');
+  if (p.startsWith('0')) p = '92' + p.substring(1);
+  var msg = 'Assalam o Alaikum ' + name + ' Bhai,\n\nAap ka Rs.' + amount + ' ka udhar baqi hai.\nMeherbani karke jald ada karen.\n\n- Reyan Hussain Confectionary 🍬';
+  window.open('https://wa.me/' + p + '?text=' + encodeURIComponent(msg));
+}
+
+/* ===== CONTACTS ===== */
+function renderContacts() {
+  var el = document.getElementById('contacts-list');
+  if (!DB.contacts.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📞</div><p>Koi contact nahi</p></div>' +
+      '<button class="btn btn-primary btn-full" onclick="openModal(\'modal-contact\')">+ Contact Add Karen</button>';
+    return;
+  }
+  var html = '';
+  DB.contacts.forEach(function(c) {
+    var initials = c.name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().substring(0,2);
+    var typeIcons = { Seller: '🏭', Buyer: '🛍️', Customer: '👤' };
+    html += '<div class="contact-card">' +
+      '<div class="contact-avatar">' + initials + '</div>' +
+      '<div class="contact-info">' +
+        '<div class="contact-name">' + (typeIcons[c.type] || '👤') + ' ' + esc(c.name) + ' <span class="badge">' + c.type + '</span></div>' +
+        '<div class="contact-phone">📞 ' + esc(c.phone) + '</div>' +
+        (c.note ? '<div class="contact-phone">📝 ' + esc(c.note) + '</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:5px;">' +
+        '<a href="tel:' + c.phone + '" class="btn btn-primary btn-sm">📞</a>' +
+        '<button class="btn btn-wa btn-sm" onclick="waContact(\'' + c.phone + '\')">💬</button>' +
+        '<button class="btn btn-danger btn-sm" onclick="deleteContact(' + c.id + ')">🗑</button>' +
+      '</div>' +
+    '</div>';
+  });
+  html += '<button class="btn btn-primary btn-full" onclick="openModal(\'modal-contact\')">+ Contact Add Karen</button>';
+  el.innerHTML = html;
+}
+
+function saveContact() {
+  var name = document.getElementById('co-name').value.trim();
+  var phone = document.getElementById('co-phone').value.trim();
+  var type = document.getElementById('co-type').value;
+  var note = document.getElementById('co-note').value.trim();
+  if (!name || !phone) { alert('Naam aur phone zaroori hai!'); return; }
+  DB.contacts.push({ id: Date.now(), name: name, phone: phone, type: type, note: note });
+  save(); closeModal('modal-contact');
+  ['co-name','co-phone','co-note'].forEach(function(id) { document.getElementById(id).value = ''; });
+  renderContacts();
+}
+
+function deleteContact(id) {
+  if (!confirm('Delete karen?')) return;
+  DB.contacts = DB.contacts.filter(function(x) { return x.id !== id; });
+  save(); renderContacts();
+}
+
+function waContact(phone) {
+  var p = phone.replace(/\D/g, '');
+  if (p.startsWith('0')) p = '92' + p.substring(1);
+  window.open('https://wa.me/' + p);
+}
+
+/* ===== CALCULATOR ===== */
+function updateCalcDisplay() {
+  document.getElementById('calc-result').textContent = calcDisplay;
+  document.getElementById('calc-expr').textContent = calcExpr;
+}
+
+function calcNum(n) {
+  if (calcNewNum) { calcDisplay = n === '.' ? '0.' : n; calcNewNum = false; }
+  else {
+    if (n === '.' && calcDisplay.indexOf('.') > -1) return;
+    calcDisplay = calcDisplay === '0' ? n : calcDisplay + n;
+  }
+  updateCalcDisplay();
+}
+
+function calcDot() { calcNum('.'); }
+
+function calcOp(op) {
+  calcPrev = calcDisplay;
+  calcOper = op;
+  calcExpr = calcDisplay + ' ' + op;
+  calcNewNum = true;
+  updateCalcDisplay();
+}
+
+function calcEquals() {
+  if (!calcOper || !calcPrev) return;
+  var a = parseFloat(calcPrev), b = parseFloat(calcDisplay);
+  var res;
+  if (calcOper === '+') res = a + b;
+  else if (calcOper === '-') res = a - b;
+  else if (calcOper === '*') res = a * b;
+  else if (calcOper === '/') res = b !== 0 ? a / b : 'Error';
+  calcExpr = calcPrev + ' ' + calcOper + ' ' + calcDisplay + ' =';
+  calcDisplay = res === 'Error' ? 'Error' : String(Math.round(res * 1e10) / 1e10);
+  calcOper = ''; calcPrev = ''; calcNewNum = true;
+  updateCalcDisplay();
+}
+
+function calcAC() { calcDisplay = '0'; calcExpr = ''; calcOper = ''; calcPrev = ''; calcNewNum = true; updateCalcDisplay(); }
+function calcPlusMinus() { calcDisplay = String(-parseFloat(calcDisplay)); updateCalcDisplay(); }
+function calcPercent() { calcDisplay = String(parseFloat(calcDisplay) / 100); updateCalcDisplay(); }
+
+/* ===== MODAL ===== */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); editItemId = null; }
+
+document.querySelectorAll('.modal-overlay').forEach(function(el) {
+  el.addEventListener('click', function(e) { if (e.target === el) el.classList.remove('open'); });
+});
+
+/* ===== FAB ===== */
+function openFab() {
+  if (currentTab === 'items') openModal('modal-item');
+  else if (currentTab === 'udhar') openModal('modal-udhar');
+  else if (currentTab === 'contacts') openModal('modal-contact');
+  else if (currentTab === 'order') showTab('items');
+}
+
+/* ===== TAB ===== */
+function showTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  var btns = document.querySelectorAll('.nav-btn');
+  var tabOrder = ['items','order','profit','udhar','contacts','calc'];
+  var idx = tabOrder.indexOf(tab);
+  if (btns[idx]) btns[idx].classList.add('active');
+
+  var fabVisible = ['items','udhar','contacts'].indexOf(tab) > -1;
+  document.getElementById('fab-btn').style.display = fabVisible ? 'flex' : 'none';
+}
+
+/* ===== UTILS ===== */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+load();
+</script>
+</body>
+</html>
