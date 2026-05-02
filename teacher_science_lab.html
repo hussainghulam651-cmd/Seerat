@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Teacher's Science Lab - Al-Fareed</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --orange: #f0883e;
+  --red: #f85149;
+  --purple: #bc8cff;
+  --yellow: #e3b341;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --hand: 'Caveat', cursive;
+  --body: 'Nunito', sans-serif;
+  --code: 'JetBrains Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); min-height:100vh; overflow-x:hidden; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 50%, #0d1117 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  position: sticky; top:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon { width:36px; height:36px; background: linear-gradient(135deg,#58a6ff,#bc8cff); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+.logo-text { font-family:var(--hand); font-size:22px; font-weight:700; background: linear-gradient(90deg,#58a6ff,#bc8cff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.api-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer; font-family:var(--body); transition:all .2s; }
+.api-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+/* NAV TABS */
+.nav-tabs {
+  display:flex; gap:4px; padding:12px 16px; overflow-x:auto;
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+.tab-btn {
+  flex-shrink:0; padding:8px 14px; border-radius:8px; border:1px solid transparent;
+  background:transparent; color:var(--text2); font-family:var(--body); font-size:13px;
+  cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px;
+  font-weight:600;
+}
+.tab-btn.active { background:var(--bg3); border-color:var(--border); color:var(--text); }
+.tab-btn:hover:not(.active) { color:var(--text); }
+
+/* MAIN */
+.main { padding:16px; max-width:900px; margin:0 auto; }
+.section { display:none; }
+.section.active { display:block; }
+
+/* CARDS */
+.card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:12px;
+  padding:16px; margin-bottom:16px;
+}
+.card-title {
+  font-family:var(--hand); font-size:20px; font-weight:700; color:var(--accent);
+  margin-bottom:12px; display:flex; align-items:center; gap:8px;
+}
+
+/* INPUTS */
+.inp {
+  width:100%; background:var(--bg3); border:1px solid var(--border); color:var(--text);
+  padding:10px 14px; border-radius:8px; font-family:var(--body); font-size:14px;
+  margin-bottom:10px; resize:vertical; outline:none; transition:border .2s;
+}
+.inp:focus { border-color:var(--accent); }
+.inp-row { display:flex; gap:8px; flex-wrap:wrap; }
+.inp-row .inp { margin-bottom:0; }
+select.inp { cursor:pointer; }
+
+/* BUTTONS */
+.btn {
+  padding:10px 18px; border-radius:8px; border:none; cursor:pointer;
+  font-family:var(--body); font-size:14px; font-weight:700; transition:all .2s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.btn-primary { background: linear-gradient(135deg,#1f6feb,#388bfd); color:#fff; }
+.btn-primary:hover { transform:translateY(-1px); box-shadow:0 4px 16px #1f6feb55; }
+.btn-green { background: linear-gradient(135deg,#1a7f37,#3fb950); color:#fff; }
+.btn-green:hover { transform:translateY(-1px); box-shadow:0 4px 16px #3fb95055; }
+.btn-orange { background: linear-gradient(135deg,#9e4f10,#f0883e); color:#fff; }
+.btn-purple { background: linear-gradient(135deg,#6e40c9,#bc8cff); color:#fff; }
+.btn-red { background: linear-gradient(135deg,#b91c1c,#f85149); color:#fff; }
+.btn-sm { padding:6px 12px; font-size:12px; }
+.btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.btn:disabled { opacity:.5; cursor:not-allowed; transform:none !important; }
+
+/* OUTPUT AREA */
+.output-area {
+  background:var(--bg); border:1px solid var(--border); border-radius:10px;
+  padding:16px; margin-top:12px; min-height:80px; line-height:1.7; font-size:14px;
+  white-space:pre-wrap; display:none;
+}
+.output-area.show { display:block; }
+
+/* HANDWRITING OUTPUT */
+.handwriting-output {
+  background: #fef9e7;
+  border:2px solid #e8c84a;
+  border-radius:10px;
+  padding:20px;
+  margin-top:12px;
+  display:none;
+  position:relative;
+  background-image: repeating-linear-gradient(transparent, transparent 27px, #c5d6e8 27px, #c5d6e8 28px);
+}
+.handwriting-output.show { display:block; }
+.handwriting-output::before {
+  content:''; position:absolute; left:48px; top:0; bottom:0;
+  width:2px; background:#f4a0a0; border-radius:0;
+}
+.handwriting-output * { font-family:var(--hand) !important; color:#1a1a3e !important; font-size:18px !important; line-height:28px !important; }
+.handwriting-output h1 { font-size:24px !important; color:#8b0000 !important; margin-bottom:8px; }
+.handwriting-output h2 { font-size:21px !important; color:#8b0000 !important; }
+.handwriting-output h3 { font-size:19px !important; color:#8b4000 !important; }
+.handwriting-output strong { color:#8b0000 !important; font-weight:700; }
+.handwriting-output .formula { font-size:20px !important; color:#0a0a8a !important; background:#deeeff; padding:2px 8px; border-radius:4px; display:inline-block; margin:4px 0; border-bottom:2px solid #0a0a8a; }
+.handwriting-output .math-step { display:block; padding-left:20px; border-left:3px solid #e8c84a; margin:8px 0; }
+
+/* PPT SLIDES */
+.slide-container { display:none; }
+.slide-container.show { display:block; }
+.slide {
+  background: linear-gradient(135deg, #1e3a5f 0%, #0d1b2e 100%);
+  border:2px solid #2d5a8e; border-radius:14px; padding:30px;
+  margin-bottom:16px; position:relative; overflow:hidden;
+  min-height:260px; display:flex; flex-direction:column; justify-content:center;
+}
+.slide::before {
+  content:''; position:absolute; top:-40px; right:-40px;
+  width:160px; height:160px; background:radial-gradient(circle,#58a6ff15,transparent);
+  border-radius:50%;
+}
+.slide-num {
+  position:absolute; top:12px; right:16px;
+  font-size:11px; color:#58a6ff88; font-family:var(--code);
+}
+.slide-title { font-family:var(--hand); font-size:26px; font-weight:700; color:#58a6ff; margin-bottom:16px; }
+.slide-content { font-size:14px; color:#c9d1d9; line-height:1.8; }
+.slide-content ul { padding-left:20px; }
+.slide-content li { margin-bottom:6px; }
+.slide-formula {
+  background:#0d1b2e; border:1px solid #58a6ff55; border-radius:8px;
+  padding:10px 16px; margin:10px 0; font-family:var(--hand); font-size:20px;
+  color:#e3b341; text-align:center;
+}
+.slide-nav { display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+
+/* SIMULATION */
+.sim-container {
+  background:var(--bg); border:2px solid var(--border); border-radius:12px;
+  margin-top:12px; overflow:hidden; display:none;
+}
+.sim-container.show { display:block; }
+.sim-canvas {
+  width:100%; min-height:320px; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+canvas { display:block; max-width:100%; }
+
+/* IMAGE UPLOAD */
+.upload-area {
+  border:2px dashed var(--border); border-radius:10px; padding:30px;
+  text-align:center; cursor:pointer; transition:all .2s; margin-bottom:12px;
+}
+.upload-area:hover, .upload-area.drag { border-color:var(--accent); background:#58a6ff0a; }
+.upload-preview { max-width:100%; border-radius:8px; margin-top:10px; max-height:280px; display:none; }
+.upload-preview.show { display:block; }
+
+/* FORMULA BANK */
+.formula-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+.formula-card {
+  background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+  padding:12px; cursor:pointer; transition:all .2s;
+}
+.formula-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+.formula-card .f-name { font-size:11px; color:var(--text2); margin-bottom:4px; }
+.formula-card .f-eq { font-family:var(--hand); font-size:18px; color:var(--yellow); }
+
+/* LOADING */
+.loading { display:none; align-items:center; gap:10px; padding:12px; color:var(--text2); font-size:13px; }
+.loading.show { display:flex; }
+.spinner { width:18px; height:18px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* QUIZ */
+.quiz-q { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:12px; }
+.quiz-q .q-text { font-weight:700; margin-bottom:10px; font-size:15px; }
+.quiz-opt { display:block; padding:8px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; margin-bottom:6px; cursor:pointer; transition:all .15s; font-size:13px; }
+.quiz-opt:hover { border-color:var(--accent); background:var(--bg3); }
+.quiz-opt.correct { border-color:var(--green); background:#1a7f3720; color:var(--green); }
+.quiz-opt.wrong { border-color:var(--red); background:#b91c1c20; color:var(--red); }
+
+/* API MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; background:#000a; z-index:200; align-items:center; justify-content:center; padding:16px; }
+.modal-overlay.show { display:flex; }
+.modal { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:24px; width:100%; max-width:400px; }
+.modal h3 { font-family:var(--hand); font-size:22px; color:var(--accent); margin-bottom:16px; }
+.modal-close { float:right; background:none; border:none; color:var(--text2); font-size:22px; cursor:pointer; margin-top:-4px; }
+
+/* BADGE */
+.badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:700; }
+.badge-blue { background:#1f6feb22; color:var(--accent); border:1px solid #1f6feb44; }
+.badge-green { background:#1a7f3722; color:var(--green); border:1px solid #1a7f3744; }
+.badge-orange { background:#9e4f1022; color:var(--orange); border:1px solid #9e4f1044; }
+
+/* WHITEBOARD */
+#whiteboardCanvas { border-radius:8px; cursor:crosshair; touch-action:none; }
+.wb-tools { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; align-items:center; }
+.wb-color { width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer; transition:.15s; }
+.wb-color.active { border-color:#fff; transform:scale(1.2); }
+.color-picker-wrap { position:relative; }
+.wb-size { width:60px; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:4px; font-size:12px; }
+
+/* RESPONSIVE */
+@media(max-width:600px) {
+  .formula-grid { grid-template-columns:1fr 1fr; }
+  .slide { padding:20px; min-height:200px; }
+  .slide-title { font-size:20px; }
+}
+
+/* PRINT */
+@media print {
+  .header,.nav-tabs,.btn-row,.btn-sm,.api-btn { display:none !important; }
+  .handwriting-output { background:#fff !important; -webkit-print-color-adjust:exact; }
+  .slide { break-inside:avoid; }
+}
+
+.divider { height:1px; background:var(--border); margin:12px 0; }
+.label { font-size:12px; color:var(--text2); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🧪</div>
+    <div class="logo-text">Science Lab Pro</div>
+  </div>
+  <button class="api-btn" onclick="openApiModal()">⚙️ API Key</button>
+</div>
+
+<!-- TABS -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('simulate','this')" data-tab="simulate">🔬 Simulation</button>
+  <button class="tab-btn" onclick="switchTab('lecture','this')" data-tab="lecture">📖 Lecture</button>
+  <button class="tab-btn" onclick="switchTab('ppt','this')" data-tab="ppt">📊 PPT Slides</button>
+  <button class="tab-btn" onclick="switchTab('math','this')" data-tab="math">✏️ Math Solver</button>
+  <button class="tab-btn" onclick="switchTab('image','this')" data-tab="image">📷 Image AI</button>
+  <button class="tab-btn" onclick="switchTab('formulas','this')" data-tab="formulas">📐 Formulas</button>
+  <button class="tab-btn" onclick="switchTab('quiz','this')" data-tab="quiz">🎯 Quiz</button>
+  <button class="tab-btn" onclick="switchTab('whiteboard','this')" data-tab="whiteboard">🖊️ Whiteboard</button>
+</div>
+
+<div class="main">
+
+<!-- ===== SIMULATION ===== -->
+<div class="section active" id="sec-simulate">
+  <div class="card">
+    <div class="card-title">🔬 Topic Simulation Generator</div>
+    <div class="label">Subject</div>
+    <select class="inp" id="simSubject">
+      <option>Biology</option>
+      <option>Chemistry</option>
+      <option>Physics</option>
+    </select>
+    <div class="label">Topic / Term</div>
+    <textarea class="inp" id="simTopic" rows="2" placeholder="e.g. Photosynthesis, Osmosis, Newton's Laws, Acid-Base Reaction..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateSimulation()">⚡ Generate Simulation</button>
+      <button class="btn btn-green btn-sm" onclick="generateSimulation('visual')">🎨 Visual Only</button>
+    </div>
+    <div class="loading" id="simLoading"><div class="spinner"></div>Generating simulation...</div>
+    <div class="sim-container" id="simContainer">
+      <div id="simExplanation" class="output-area show" style="background:var(--bg2);border:none;padding:16px;"></div>
+      <div id="simCanvasWrap" class="sim-canvas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LECTURE ===== -->
+<div class="section" id="sec-lecture">
+  <div class="card">
+    <div class="card-title">📖 Complete Lecture Generator</div>
+    <div class="inp-row" style="margin-bottom:10px;">
+      <select class="inp" id="lectSubject" style="flex:1">
+        <option>Biology</option><option>Chemistry</option><option>Physics</option>
+        <option>Science (General)</option>
+      </select>
+      <select class="inp" id="lectClass" style="flex:1">
+        <option>Class 6</option><option>Class 7</option><option>Class 8</option>
+        <option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option>
+      </select>
+    </div>
+    <div class="label">Topic</div>
+    <textarea class="inp" id="lectTopic" rows="2" placeholder="e.g. Cell Division, Chemical Bonding, Waves and Sound..."></textarea>
+    <div class="label">Language</div>
+    <select class="inp" id="lectLang">
+      <option value="English">English</option>
+      <option value="Urdu">اردو (Urdu)</option>
+      <option value="Bilingual Urdu-English">Bilingual (Urdu + English)</option>
+    </select>
+    <div class="label">Output Style</div>
+    <select class="inp" id="lectStyle">
+      <option value="handwriting">✏️ Handwriting Style (Notebook)</option>
+      <option value="typed">🖨️ Typed Professional</option>
+    </select>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateLecture()">📝 Generate Lecture</button>
+      <button class="btn btn-green btn-sm" onclick="printOutput('lectureOut')">🖨️ Print</button>
+    </div>
+    <div class="loading" id="lectLoading"><div class="spinner"></div>Writing lecture...</div>
+    <div id="lectureOut" class="output-area"></div>
+    <div id="lectureHandOut" class="handwriting-output"></div>
+  </div>
+</div>
+
+<!-- ===== PPT ===== -->
+<div class="section" id="sec-ppt">
+  <div class="card">
+    <div class="card-title">📊 PPT Slide Maker</div>
+    <div class="inp-row" style="margin-bottom:10px;">
+      <select class="inp" id="pptSubject" style="flex:1">
+        <option>Biology</option><option>Chemistry</option><option>Physics</option><option>Science</option>
+      </select>
+      <select class="inp" id="pptSlides" style="flex:1">
+        <option value="5">5 Slides</option><option value="8">8 Slides</option>
+        <option value="10">10 Slides</option><option value="12">12 Slides</option>
+      </select>
+    </div>
+    <div class="label">Topic</div>
+    <textarea class="inp" id="pptTopic" rows="2" placeholder="e.g. DNA Structure, Periodic Table, Electromagnetic Waves..."></textarea>
+    <div class="label">Style</div>
+    <select class="inp" id="pptStyle">
+      <option value="dark-pro">🌑 Dark Professional</option>
+      <option value="handwriting">✏️ Handwriting Chalk Style</option>
+      <option value="minimal">⬜ Clean Minimal</option>
+    </select>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generatePPT()">🎬 Generate Slides</button>
+      <button class="btn btn-green btn-sm" onclick="printOutput('pptOut')">🖨️ Print Slides</button>
+    </div>
+    <div class="loading" id="pptLoading"><div class="spinner"></div>Creating slides...</div>
+    <div id="pptOut" class="slide-container"></div>
+  </div>
+</div>
+
+<!-- ===== MATH ===== -->
+<div class="section" id="sec-math">
+  <div class="card">
+    <div class="card-title">✏️ Math Solver — Handwriting Style</div>
+    <div class="label">Subject / Type</div>
+    <select class="inp" id="mathType">
+      <option>Algebra</option><option>Physics Numericals</option><option>Chemistry Equations</option>
+      <option>Biology Calculations</option><option>Trigonometry</option><option>Calculus</option>
+      <option>Statistics</option>
+    </select>
+    <div class="label">Problem (Type or describe)</div>
+    <textarea class="inp" id="mathProblem" rows="3" placeholder="e.g. Solve: 2x² + 5x - 3 = 0&#10;Or: A ball falls from 20m height, find time to reach ground&#10;Or: Balance: Fe + O2 → Fe2O3"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="solveMath()">🔢 Solve Step-by-Step</button>
+      <button class="btn btn-orange btn-sm" onclick="solveMath('quick')">⚡ Quick Answer</button>
+      <button class="btn btn-green btn-sm" onclick="printOutput('mathHandOut')">🖨️ Print</button>
+    </div>
+    <div class="loading" id="mathLoading"><div class="spinner"></div>Solving...</div>
+    <div id="mathOut" class="output-area"></div>
+    <div id="mathHandOut" class="handwriting-output"></div>
+  </div>
+</div>
+
+<!-- ===== IMAGE AI ===== -->
+<div class="section" id="sec-image">
+  <div class="card">
+    <div class="card-title">📷 Image → AI Analysis</div>
+    <div class="label">Upload Method</div>
+    <div class="btn-row" style="margin-bottom:12px;">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('galleryInp').click()">🖼️ Gallery</button>
+      <button class="btn btn-orange btn-sm" onclick="document.getElementById('cameraInp').click()">📸 Camera</button>
+      <button class="btn btn-purple btn-sm" onclick="document.getElementById('fileInp').click()">📁 File</button>
+    </div>
+    <input type="file" id="galleryInp" accept="image/*" style="display:none" onchange="loadImage(this)">
+    <input type="file" id="cameraInp" accept="image/*" capture="environment" style="display:none" onchange="loadImage(this)">
+    <input type="file" id="fileInp" accept="image/*" style="display:none" onchange="loadImage(this)">
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('galleryInp').click()">
+      <div style="font-size:40px;margin-bottom:8px;">📸</div>
+      <div style="font-size:14px;color:var(--text2);">Tap to upload image<br><span style="font-size:12px;">Diagram, Question, or Lab Photo</span></div>
+    </div>
+    <img id="uploadPreview" class="upload-preview" src="" alt="Preview">
+    <div class="label">What to Analyze</div>
+    <select class="inp" id="imgAnalyzeType">
+      <option value="explain">📖 Explain this diagram/image</option>
+      <option value="topic">🔍 Identify topic & generate lecture</option>
+      <option value="solve">✏️ Solve this question/problem</option>
+      <option value="label">🏷️ Label all parts</option>
+      <option value="quiz">🎯 Generate quiz from this</option>
+    </select>
+    <div class="label">Additional Instructions (optional)</div>
+    <textarea class="inp" id="imgExtra" rows="2" placeholder="e.g. Explain in Urdu, for Class 9 students..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="analyzeImage()" id="imgAnalyzeBtn" disabled>🤖 Analyze with AI</button>
+      <button class="btn btn-green btn-sm" onclick="printOutput('imgOut')">🖨️ Print</button>
+    </div>
+    <div class="loading" id="imgLoading"><div class="spinner"></div>Analyzing image...</div>
+    <div id="imgOut" class="handwriting-output"></div>
+  </div>
+</div>
+
+<!-- ===== FORMULAS ===== -->
+<div class="section" id="sec-formulas">
+  <div class="card">
+    <div class="card-title">📐 Formula Bank</div>
+    <div class="inp-row" style="margin-bottom:12px;">
+      <select class="inp" id="formulaSubject" style="flex:1" onchange="showFormulas()">
+        <option value="physics">⚡ Physics</option>
+        <option value="chemistry">🧪 Chemistry</option>
+        <option value="biology">🌿 Biology</option>
+        <option value="math">📏 Mathematics</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="generateMoreFormulas()">+ More</button>
+    </div>
+    <div id="formulaGrid" class="formula-grid"></div>
+    <div class="divider"></div>
+    <div class="card-title" style="font-size:16px;">🤖 Ask Formula AI</div>
+    <textarea class="inp" id="formulaQ" rows="2" placeholder="e.g. What is the formula for kinetic energy? Explain with example..."></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="askFormulaAI()">🔍 Ask AI</button>
+    </div>
+    <div class="loading" id="formulaLoading"><div class="spinner"></div></div>
+    <div id="formulaAiOut" class="handwriting-output"></div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="sec-quiz">
+  <div class="card">
+    <div class="card-title">🎯 Smart Quiz Generator</div>
+    <div class="inp-row" style="margin-bottom:10px;">
+      <select class="inp" id="quizSubject" style="flex:1">
+        <option>Biology</option><option>Chemistry</option><option>Physics</option>
+      </select>
+      <select class="inp" id="quizClass" style="flex:1">
+        <option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option>
+        <option>Class 6</option><option>Class 7</option><option>Class 8</option>
+      </select>
+    </div>
+    <textarea class="inp" id="quizTopic" rows="2" placeholder="e.g. Photosynthesis, Acids and Bases, Motion..."></textarea>
+    <div class="inp-row" style="margin-bottom:10px;">
+      <select class="inp" id="quizCount" style="flex:1">
+        <option value="5">5 Questions</option><option value="10">10 Questions</option>
+        <option value="15">15 Questions</option><option value="20">20 Questions</option>
+      </select>
+      <select class="inp" id="quizType" style="flex:1">
+        <option value="mcq">MCQ</option>
+        <option value="truefalse">True/False</option>
+        <option value="mixed">Mixed</option>
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generateQuiz()">🎲 Generate Quiz</button>
+    </div>
+    <div class="loading" id="quizLoading"><div class="spinner"></div>Generating quiz...</div>
+    <div id="quizOut"></div>
+    <div id="quizScore" style="display:none;padding:16px;background:var(--bg3);border-radius:10px;margin-top:12px;text-align:center;">
+      <div style="font-family:var(--hand);font-size:28px;color:var(--yellow);">Score: <span id="scoreVal">0</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHITEBOARD ===== -->
+<div class="section" id="sec-whiteboard">
+  <div class="card">
+    <div class="card-title">🖊️ Digital Whiteboard</div>
+    <div class="wb-tools">
+      <div class="wb-color active" style="background:#fff" data-color="#ffffff" onclick="setWbColor(this)"></div>
+      <div class="wb-color" style="background:#f85149" data-color="#f85149" onclick="setWbColor(this)"></div>
+      <div class="wb-color" style="background:#3fb950" data-color="#3fb950" onclick="setWbColor(this)"></div>
+      <div class="wb-color" style="background:#58a6ff" data-color="#58a6ff" onclick="setWbColor(this)"></div>
+      <div class="wb-color" style="background:#e3b341" data-color="#e3b341" onclick="setWbColor(this)"></div>
+      <div class="wb-color" style="background:#bc8cff" data-color="#bc8cff" onclick="setWbColor(this)"></div>
+      <input type="range" id="brushSize" min="1" max="30" value="4" class="wb-size" title="Brush size">
+      <button class="btn btn-sm" style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);" onclick="setWbEraser()">⬜ Eraser</button>
+      <button class="btn btn-red btn-sm" onclick="clearWb()">🗑️ Clear</button>
+      <button class="btn btn-green btn-sm" onclick="saveWb()">💾 Save</button>
+      <button class="btn btn-primary btn-sm" onclick="analyzeWhiteboard()">🤖 AI Explain</button>
+    </div>
+    <canvas id="whiteboardCanvas" width="860" height="400" style="background:#1a1a2e;width:100%;border-radius:8px;"></canvas>
+    <div class="loading" id="wbLoading" style="margin-top:8px;"><div class="spinner"></div>Analyzing...</div>
+    <div id="wbAiOut" class="handwriting-output"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- API MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <h3>⚙️ API Settings <button class="modal-close" onclick="closeApiModal()">✕</button></h3>
+    <div class="label">Groq API Key</div>
+    <input type="password" class="inp" id="apiKeyInp" placeholder="gsk_...">
+    <div class="label" style="margin-top:8px;">Groq Model</div>
+    <select class="inp" id="modelInp">
+      <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Best)</option>
+      <option value="llama3-8b-8192">llama3-8b-8192 (Fast)</option>
+      <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+    </select>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveApiKey()">💾 Save</button>
+      <button class="btn btn-sm" style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);" onclick="closeApiModal()">Cancel</button>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:10px;">Get free API key: <a href="https://console.groq.com" target="_blank" style="color:var(--accent);">console.groq.com</a></div>
+  </div>
+</div>
+
+<script>
+var API_KEY = localStorage.getItem('scilab_api') || '';
+var MODEL = localStorage.getItem('scilab_model') || 'llama-3.3-70b-versatile';
+var currentImage = null;
+var quizAnswers = [];
+var userAnswers = [];
+
+// TAB SWITCH
+function switchTab(id, btn) {
+  var sections = document.querySelectorAll('.section');
+  var tabs = document.querySelectorAll('.tab-btn');
+  for(var i=0;i<sections.length;i++) sections[i].classList.remove('active');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('active');
+  document.getElementById('sec-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(id==='formulas') showFormulas();
+  if(id==='whiteboard') initWhiteboard();
+}
+
+// API MODAL
+function openApiModal() {
+  document.getElementById('apiKeyInp').value = API_KEY;
+  document.getElementById('modelInp').value = MODEL;
+  document.getElementById('apiModal').classList.add('show');
+}
+function closeApiModal() { document.getElementById('apiModal').classList.remove('show'); }
+function saveApiKey() {
+  API_KEY = document.getElementById('apiKeyInp').value.trim();
+  MODEL = document.getElementById('modelInp').value;
+  localStorage.setItem('scilab_api', API_KEY);
+  localStorage.setItem('scilab_model', MODEL);
+  closeApiModal();
+  alert('API Key saved!');
+}
+
+// GROQ API CALL
+async function callGroq(prompt, systemMsg) {
+  if(!API_KEY) { openApiModal(); throw new Error('No API key'); }
+  var sys = systemMsg || 'You are a science teacher AI assistant. Provide accurate, educational content.';
+  var resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+    body: JSON.stringify({
+      model: MODEL,
+      messages:[{role:'system',content:sys},{role:'user',content:prompt}],
+      max_tokens:2000, temperature:0.7
+    })
+  });
+  var data = await resp.json();
+  if(data.error) throw new Error(data.error.message);
+  return data.choices[0].message.content;
+}
+
+// GROQ VISION (for image analysis)
+async function callGroqVision(base64, mimeType, prompt) {
+  if(!API_KEY) { openApiModal(); throw new Error('No API key'); }
+  var resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},
+    body: JSON.stringify({
+      model:'meta-llama/llama-4-scout-17b-16e-instruct',
+      messages:[{role:'user',content:[
+        {type:'image_url',image_url:{url:'data:'+mimeType+';base64,'+base64}},
+        {type:'text',text:prompt}
+      ]}],
+      max_tokens:1500
+    })
+  });
+  var data = await resp.json();
+  if(data.error) throw new Error(data.error.message);
+  return data.choices[0].message.content;
+}
+
+// FORMAT TO HANDWRITING HTML
+function toHandHTML(text) {
+  var html = text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^# (.*)/gm,'<h1>$1</h1>')
+    .replace(/^## (.*)/gm,'<h2>$1</h2>')
+    .replace(/^### (.*)/gm,'<h3>$1</h3>')
+    .replace(/`([^`]+)`/g,'<span class="formula">$1</span>')
+    .replace(/\$\$(.*?)\$\$/g,'<span class="formula">$1</span>')
+    .replace(/\$(.*?)\$/g,'<span class="formula">$1</span>')
+    .replace(/Step (\d+):(.*)/g,'<span class="math-step"><strong>Step $1:</strong>$2</span>')
+    .replace(/(\d+\. .*)/g,'<div>$1</div>')
+    .replace(/\n/g,'<br>');
+  return html;
+}
+
+// PRINT
+function printOutput(id) {
+  var el = document.getElementById(id);
+  if(!el) return;
+  var w = window.open('','_blank');
+  w.document.write('<html><head><title>Science Lab</title>');
+  w.document.write('<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">');
+  w.document.write('<style>body{font-family:Caveat,cursive;font-size:18px;line-height:28px;padding:30px;color:#1a1a3e;}');
+  w.document.write('h1{color:#8b0000;font-size:28px;}h2{color:#8b0000;font-size:24px;}');
+  w.document.write('.formula{color:#0a0a8a;background:#deeeff;padding:2px 8px;border-radius:4px;}');
+  w.document.write('.math-step{padding-left:20px;border-left:3px solid #e8c84a;margin:8px 0;}');
+  w.document.write('</style></head><body>');
+  w.document.write(el.innerHTML);
+  w.document.write('</body></html>');
+  w.print();
+}
+
+// ===== SIMULATION =====
+async function generateSimulation(mode) {
+  var topic = document.getElementById('simTopic').value.trim();
+  var subject = document.getElementById('simSubject').value;
+  if(!topic) { alert('Please enter a topic!'); return; }
+  
+  document.getElementById('simLoading').classList.add('show');
+  document.getElementById('simContainer').classList.remove('show');
+  
+  try {
+    var prompt = 'Create a detailed scientific simulation/explanation for: ' + subject + ' - ' + topic + '\n\nInclude:\n1. Brief overview (2-3 sentences)\n2. Key process steps (numbered)\n3. Important formulas (use $ $ for inline, $$ $$ for display)\n4. Real-world example\n5. Key terms with definitions\n\nAlso provide an ASCII/text visualization or diagram of the process.';
+    
+    var result = await callGroq(prompt, 'You are an expert science teacher. Provide clear, accurate simulations with visual ASCII diagrams when possible.');
+    
+    document.getElementById('simExplanation').innerHTML = toHandHTML(result);
+    document.getElementById('simContainer').classList.add('show');
+    
+    // Draw canvas animation for common topics
+    drawSimulationCanvas(topic, subject);
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+  document.getElementById('simLoading').classList.remove('show');
+}
+
+function drawSimulationCanvas(topic, subject) {
+  var wrap = document.getElementById('simCanvasWrap');
+  wrap.innerHTML = '';
+  var t = topic.toLowerCase();
+  
+  if(t.indexOf('photosynth') >= 0) drawPhotosynthesis(wrap);
+  else if(t.indexOf('cell') >= 0 || t.indexOf('mitosis') >= 0) drawCell(wrap);
+  else if(t.indexOf('wave') >= 0) drawWave(wrap);
+  else if(t.indexOf('atom') >= 0 || t.indexOf('orbit') >= 0) drawAtom(wrap);
+  else if(t.indexOf('pendulum') >= 0) drawPendulum(wrap);
+  else if(t.indexOf('dna') >= 0) drawDNA(wrap);
+  else drawGenericSim(wrap, topic);
+}
+
+function drawPhotosynthesis(wrap) {
+  var c = document.createElement('canvas');
+  c.width=700; c.height=260; c.style.width='100%';
+  wrap.appendChild(c);
+  var ctx = c.getContext('2d');
+  // Sky
+  var sky = ctx.createLinearGradient(0,0,0,260);
+  sky.addColorStop(0,'#87CEEB'); sky.addColorStop(1,'#98FB98');
+  ctx.fillStyle=sky; ctx.fillRect(0,0,700,260);
+  // Sun
+  ctx.beginPath(); ctx.arc(80,60,35,0,Math.PI*2);
+  ctx.fillStyle='#FFD700'; ctx.fill();
+  ctx.strokeStyle='#FFA500'; ctx.lineWidth=3; ctx.stroke();
+  // Sun rays
+  for(var i=0;i<8;i++) {
+    var a=i*Math.PI/4;
+    ctx.beginPath(); ctx.moveTo(80+45*Math.cos(a),60+45*Math.sin(a));
+    ctx.lineTo(80+65*Math.cos(a),60+65*Math.sin(a));
+    ctx.strokeStyle='#FFD700'; ctx.lineWidth=3; ctx.stroke();
+  }
+  // Leaf
+  ctx.beginPath(); ctx.ellipse(350,130,120,70,0,0,Math.PI*2);
+  ctx.fillStyle='#228B22'; ctx.fill();
+  // Leaf vein
+  ctx.beginPath(); ctx.moveTo(230,130); ctx.lineTo(470,130);
+  ctx.strokeStyle='#90EE90'; ctx.lineWidth=2; ctx.stroke();
+  // Arrows: Light in
+  ctx.fillStyle='#FFD700'; ctx.font='bold 13px Arial';
+  ctx.fillText('Light \u2192',130,100);
+  // CO2 in
+  ctx.fillStyle='#555'; ctx.fillText('CO\u2082 \u2192',490,160);
+  // O2 out
+  ctx.fillStyle='#00BFFF'; ctx.fillText('\u2190 O\u2082',490,100);
+  // Water in
+  ctx.fillStyle='#1E90FF'; ctx.fillText('H\u2082O \u2191',320,220);
+  // Glucose
+  ctx.fillStyle='#FF6347'; ctx.font='bold 12px Arial';
+  ctx.fillText('Glucose produced',270,135);
+  // Formula
+  ctx.fillStyle='#1a3a1a'; ctx.font='bold 11px Arial';
+  ctx.fillText('6CO\u2082 + 6H\u2082O + Light \u2192 C\u2086H\u2081\u2082O\u2086 + 6O\u2082',200,200);
+  animateLeaf(ctx, c);
+}
+
+function animateLeaf(ctx, c) {
+  var t=0;
+  function frame() {
+    // Pulse effect on canvas opacity - simple bubble animation
+    ctx.clearRect(0,0,30,30);
+    ctx.fillStyle='rgba(0,191,255,'+(0.3+0.3*Math.sin(t))+')';
+    ctx.beginPath(); ctx.arc(15+10*Math.sin(t),15,8,0,Math.PI*2); ctx.fill();
+    t+=0.07;
+    requestAnimationFrame(frame);
+  }
+  // Not running heavy animation to save performance
+}
+
+function drawAtom(wrap) {
+  var c = document.createElement('canvas');
+  c.width=700; c.height=260; c.style.width='100%';
+  wrap.appendChild(c);
+  var ctx = c.getContext('2d');
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,260);
+  var cx=350, cy=130;
+  // Nucleus
+  ctx.beginPath(); ctx.arc(cx,cy,22,0,Math.PI*2);
+  var g=ctx.createRadialGradient(cx,cy,2,cx,cy,22);
+  g.addColorStop(0,'#f85149'); g.addColorStop(1,'#9e0000');
+  ctx.fillStyle=g; ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='bold 11px Arial'; ctx.textAlign='center';
+  ctx.fillText('Nucleus',cx,cy+4);
+  // Orbits
+  var orbits=[{a:90,b:40,ang:0},{a:70,b:50,ang:60},{a:110,b:30,ang:120}];
+  orbits.forEach(function(o) {
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(o.ang*Math.PI/180);
+    ctx.beginPath(); ctx.ellipse(0,0,o.a,o.b,0,0,Math.PI*2);
+    ctx.strokeStyle='#58a6ff44'; ctx.lineWidth=1; ctx.stroke();
+    // Electron
+    ctx.beginPath(); ctx.arc(o.a,0,5,0,Math.PI*2);
+    ctx.fillStyle='#58a6ff'; ctx.fill();
+    ctx.restore();
+  });
+  ctx.fillStyle='#8b949e'; ctx.font='14px Arial'; ctx.textAlign='left';
+  ctx.fillText('Electron orbiting nucleus', 20,30);
+  ctx.fillText('Electrostatic attraction', 20,50);
+}
+
+function drawWave(wrap) {
+  var c = document.createElement('canvas');
+  c.width=700; c.height=200; c.style.width='100%';
+  wrap.appendChild(c); var ctx=c.getContext('2d');
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,200);
+  var offset=0;
+  function drawW() {
+    ctx.clearRect(0,0,700,200);
+    ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,200);
+    // Transverse wave
+    ctx.beginPath(); ctx.moveTo(0,100);
+    for(var x=0;x<700;x++) {
+      ctx.lineTo(x, 100+50*Math.sin((x+offset)*0.04));
+    }
+    ctx.strokeStyle='#58a6ff'; ctx.lineWidth=3; ctx.stroke();
+    // Labels
+    ctx.fillStyle='#e3b341'; ctx.font='13px Arial';
+    ctx.fillText('Amplitude',20,55); ctx.fillText('Wavelength \u03bb',300,170);
+    ctx.fillStyle='#3fb950'; ctx.font='12px Arial';
+    ctx.fillText('\u2190 Direction of wave propagation \u2192',220,30);
+    offset+=2;
+    requestAnimationFrame(drawW);
+  }
+  drawW();
+}
+
+function drawCell(wrap) {
+  var c=document.createElement('canvas');
+  c.width=700;c.height=260;c.style.width='100%';
+  wrap.appendChild(c); var ctx=c.getContext('2d');
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,260);
+  // Cell membrane
+  ctx.beginPath(); ctx.ellipse(350,130,200,100,0,0,Math.PI*2);
+  ctx.strokeStyle='#3fb950'; ctx.lineWidth=3; ctx.stroke();
+  ctx.fillStyle='#0a2a0a'; ctx.fill();
+  // Nucleus
+  ctx.beginPath(); ctx.ellipse(350,130,55,45,0,0,Math.PI*2);
+  ctx.fillStyle='#1a1a6e'; ctx.fill();
+  ctx.strokeStyle='#bc8cff'; ctx.lineWidth=2; ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 12px Arial'; ctx.textAlign='center';
+  ctx.fillText('Nucleus',350,134);
+  // Mitochondria
+  ctx.beginPath(); ctx.ellipse(250,160,30,15,0.3,0,Math.PI*2);
+  ctx.fillStyle='#cc4400'; ctx.fill(); ctx.strokeStyle='#f0883e'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='#f0883e'; ctx.font='10px Arial'; ctx.fillText('Mito.',250,185);
+  // Vacuole
+  ctx.beginPath(); ctx.arc(430,110,25,0,Math.PI*2);
+  ctx.fillStyle='#00416a'; ctx.fill(); ctx.strokeStyle='#58a6ff'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='#58a6ff'; ctx.font='10px Arial'; ctx.fillText('Vacuole',425,138);
+  // Labels
+  ctx.fillStyle='#8b949e'; ctx.font='12px Arial'; ctx.textAlign='left';
+  ctx.fillText('Cell Membrane',530,80);
+  ctx.fillText('Cytoplasm',530,100);
+}
+
+function drawDNA(wrap) {
+  var c=document.createElement('canvas');
+  c.width=700;c.height=260;c.style.width='100%';
+  wrap.appendChild(c); var ctx=c.getContext('2d');
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,260);
+  var offset=0;
+  function drawD() {
+    ctx.clearRect(0,0,700,260);
+    ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,260);
+    for(var x=50;x<650;x+=2) {
+      var y1=130+70*Math.sin((x+offset)*0.04);
+      var y2=130+70*Math.sin((x+offset)*0.04+Math.PI);
+      ctx.fillStyle='#58a6ff'; ctx.fillRect(x,y1,3,3);
+      ctx.fillStyle='#f85149'; ctx.fillRect(x,y2,3,3);
+      if(x%30===0) {
+        ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y2);
+        ctx.strokeStyle='#3fb95066'; ctx.lineWidth=1; ctx.stroke();
+      }
+    }
+    ctx.fillStyle='#58a6ff'; ctx.font='bold 13px Arial'; ctx.textAlign='left';
+    ctx.fillText('DNA Double Helix Structure',20,25);
+    ctx.fillStyle='#f85149'; ctx.fillText('\u25CF Strand 1  ',20,45);
+    ctx.fillStyle='#58a6ff'; ctx.fillText('\u25CF Strand 2',120,45);
+    offset+=1;
+    requestAnimationFrame(drawD);
+  }
+  drawD();
+}
+
+function drawPendulum(wrap) {
+  var c=document.createElement('canvas');
+  c.width=700;c.height=260;c.style.width='100%';
+  wrap.appendChild(c); var ctx=c.getContext('2d');
+  var angle=Math.PI/4, velocity=0, g=9.8, L=150, dt=0.03;
+  function drawP() {
+    ctx.clearRect(0,0,700,260);
+    ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,260);
+    velocity += -(g/L)*Math.sin(angle)*dt;
+    angle += velocity*dt;
+    var px=350+L*Math.sin(angle), py=40+L*Math.cos(angle);
+    ctx.beginPath(); ctx.moveTo(350,40); ctx.lineTo(px,py);
+    ctx.strokeStyle='#8b949e'; ctx.lineWidth=2; ctx.stroke();
+    ctx.beginPath(); ctx.arc(px,py,18,0,Math.PI*2);
+    var g2=ctx.createRadialGradient(px,py,2,px,py,18);
+    g2.addColorStop(0,'#58a6ff'); g2.addColorStop(1,'#1f6feb');
+    ctx.fillStyle=g2; ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 11px Arial'; ctx.textAlign='center';
+    ctx.fillText('m',px,py+4);
+    // Pivot
+    ctx.beginPath(); ctx.arc(350,40,8,0,Math.PI*2);
+    ctx.fillStyle='#f0883e'; ctx.fill();
+    // Floor line
+    ctx.beginPath(); ctx.moveTo(100,240); ctx.lineTo(600,240);
+    ctx.strokeStyle='#30363d'; ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle='#8b949e'; ctx.font='12px Arial'; ctx.textAlign='left';
+    ctx.fillText('T = 2\u03C0\u221A(L/g)',20,230);
+    ctx.fillText('\u03B8 = '+Math.round(angle*180/Math.PI)+'\u00B0',20,30);
+    requestAnimationFrame(drawP);
+  }
+  drawP();
+}
+
+function drawGenericSim(wrap, topic) {
+  var c=document.createElement('canvas');
+  c.width=700;c.height=180;c.style.width='100%';
+  wrap.appendChild(c); var ctx=c.getContext('2d');
+  ctx.fillStyle='#0d1117'; ctx.fillRect(0,0,700,180);
+  ctx.fillStyle='#58a6ff'; ctx.font='bold 18px Caveat,cursive'; ctx.textAlign='center';
+  ctx.fillText(topic,350,70);
+  ctx.fillStyle='#3fb950'; ctx.font='14px Arial';
+  ctx.fillText('Interactive simulation not available for this topic',350,110);
+  ctx.fillText('See explanation above',350,135);
+}
+
+// ===== LECTURE =====
+async function generateLecture() {
+  var topic = document.getElementById('lectTopic').value.trim();
+  var subject = document.getElementById('lectSubject').value;
+  var cls = document.getElementById('lectClass').value;
+  var lang = document.getElementById('lectLang').value;
+  var style = document.getElementById('lectStyle').value;
+  if(!topic) { alert('Please enter a topic!'); return; }
+  
+  document.getElementById('lectLoading').classList.add('show');
+  document.getElementById('lectureOut').classList.remove('show');
+  document.getElementById('lectureHandOut').classList.remove('show');
+  
+  try {
+    var prompt = 'Write a complete, detailed lecture for ' + cls + ' students on: ' + subject + ' - ' + topic;
+    prompt += '\nLanguage: ' + lang;
+    prompt += '\n\nInclude:\n1. Learning Objectives\n2. Introduction\n3. Main Content (with subheadings)\n4. Key Formulas (use $ $ notation)\n5. Diagrams description (ASCII art)\n6. Worked Examples\n7. Summary\n8. Practice Questions\n\nMake it engaging, educational, and appropriate for Pakistan Sindh Board students.';
+    
+    var result = await callGroq(prompt, 'You are an expert science teacher in Pakistan teaching ' + cls + ' students. Write in clear, educational language.');
+    
+    if(style === 'handwriting') {
+      document.getElementById('lectureHandOut').innerHTML = toHandHTML(result);
+      document.getElementById('lectureHandOut').classList.add('show');
+    } else {
+      document.getElementById('lectureOut').textContent = result;
+      document.getElementById('lectureOut').classList.add('show');
+    }
+  } catch(e) { alert('Error: ' + e.message); }
+  document.getElementById('lectLoading').classList.remove('show');
+}
+
+// ===== PPT =====
+async function generatePPT() {
+  var topic = document.getElementById('pptTopic').value.trim();
+  var subject = document.getElementById('pptSubject').value;
+  var slides = document.getElementById('pptSlides').value;
+  var pstyle = document.getElementById('pptStyle').value;
+  if(!topic) { alert('Please enter a topic!'); return; }
+  
+  document.getElementById('pptLoading').classList.add('show');
+  document.getElementById('pptOut').classList.remove('show');
+  document.getElementById('pptOut').innerHTML = '';
+  
+  try {
+    var prompt = 'Create exactly ' + slides + ' presentation slides for: ' + subject + ' - ' + topic;
+    prompt += '\n\nFor EACH slide provide in this EXACT format:\n';
+    prompt += 'SLIDE_TITLE: [title here]\n';
+    prompt += 'SLIDE_CONTENT: [bullet points, each on new line starting with -]\n';
+    prompt += 'SLIDE_FORMULA: [main formula if applicable, or NONE]\n';
+    prompt += '---\n';
+    prompt += '\nMake slides educational, engaging, with clear progression. Include diagrams as text art where possible.';
+    
+    var result = await callGroq(prompt, 'You are creating educational presentation slides for Pakistan science students. Be concise and educational.');
+    
+    var slideBlocks = result.split('---');
+    var html = '';
+    slideBlocks.forEach(function(block, idx) {
+      if(!block.trim()) return;
+      var titleMatch = block.match(/SLIDE_TITLE:\s*(.+)/i);
+      var contentMatch = block.match(/SLIDE_CONTENT:\s*([\s\S]*?)(?=SLIDE_FORMULA|$)/i);
+      var formulaMatch = block.match(/SLIDE_FORMULA:\s*(.+)/i);
+      
+      var title = titleMatch ? titleMatch[1].trim() : 'Slide '+(idx+1);
+      var content = contentMatch ? contentMatch[1].trim() : '';
+      var formula = formulaMatch ? formulaMatch[1].trim() : '';
+      
+      var slideStyle = pstyle==='minimal'?'background:linear-gradient(135deg,#f0f4f8,#e8ecef);' :
+                       pstyle==='handwriting'?'background:linear-gradient(135deg,#1a2a00,#0d1a00);' : '';
+      var titleColor = pstyle==='minimal'?'color:#1a1a3e;':'';
+      var contentColor = pstyle==='minimal'?'color:#333;':'';
+      
+      var bullets = content.split('\n').filter(function(l){return l.trim().startsWith('-');})
+        .map(function(l){return '<li>'+l.replace(/^-\s*/,'')+'</li>';}).join('');
+      
+      html += '<div class="slide" style="'+slideStyle+'">';
+      html += '<div class="slide-num">'+String(idx+1).padStart(2,'0')+' / '+slides+'</div>';
+      html += '<div class="slide-title" style="'+titleColor+'">'+(pstyle==='handwriting'?'&#9998; ':'')+title+'</div>';
+      if(bullets) html += '<div class="slide-content" style="'+contentColor+'"><ul>'+bullets+'</ul></div>';
+      if(formula && formula!=='NONE' && formula!=='None') {
+        html += '<div class="slide-formula">'+formula+'</div>';
+      }
+      html += '</div>';
+    });
+    
+    document.getElementById('pptOut').innerHTML = html;
+    document.getElementById('pptOut').classList.add('show');
+  } catch(e) { alert('Error: ' + e.message); }
+  document.getElementById('pptLoading').classList.remove('show');
+}
+
+// ===== MATH SOLVER =====
+async function solveMath(mode) {
+  var problem = document.getElementById('mathProblem').value.trim();
+  var mtype = document.getElementById('mathType').value;
+  if(!problem) { alert('Please enter a problem!'); return; }
+  
+  document.getElementById('mathLoading').classList.add('show');
+  document.getElementById('mathOut').classList.remove('show');
+  document.getElementById('mathHandOut').classList.remove('show');
+  
+  try {
+    var prompt;
+    if(mode==='quick') {
+      prompt = 'Solve this quickly with just the answer and formula: ' + mtype + '\n' + problem;
+    } else {
+      prompt = 'Solve this ' + mtype + ' problem step-by-step as a teacher would on a blackboard:\n\n' + problem;
+      prompt += '\n\nFormat as:\nGiven:\nFind:\nSolution:\nStep 1: [explanation]\n= [calculation]\nStep 2: ...\n...\nAnswer: [final answer with units]';
+      prompt += '\n\nUse clear mathematical notation. Show all working. Use $ for inline formulas.';
+    }
+    
+    var result = await callGroq(prompt, 'You are a math/science teacher. Solve problems clearly with step-by-step working, like writing on a blackboard. Use proper mathematical notation.');
+    
+    if(mode==='quick') {
+      document.getElementById('mathOut').textContent = result;
+      document.getElementById('mathOut').classList.add('show');
+    } else {
+      document.getElementById('mathHandOut').innerHTML = toHandHTML(result);
+      document.getElementById('mathHandOut').classList.add('show');
+    }
+  } catch(e) { alert('Error: ' + e.message); }
+  document.getElementById('mathLoading').classList.remove('show');
+}
+
+// ===== IMAGE UPLOAD =====
+function loadImage(input) {
+  var file = input.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var preview = document.getElementById('uploadPreview');
+    preview.src = e.target.result;
+    preview.classList.add('show');
+    document.getElementById('uploadArea').style.display = 'none';
+    currentImage = {data: e.target.result.split(',')[1], type: file.type};
+    document.getElementById('imgAnalyzeBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzeImage() {
+  if(!currentImage) { alert('Please upload an image first!'); return; }
+  var analyzeType = document.getElementById('imgAnalyzeType').value;
+  var extra = document.getElementById('imgExtra').value.trim();
+  
+  document.getElementById('imgLoading').classList.add('show');
+  document.getElementById('imgOut').classList.remove('show');
+  
+  try {
+    var prompts = {
+      'explain':'Explain this science diagram/image in detail. Identify all parts, describe the process shown, and provide educational content suitable for students.',
+      'topic':'Identify the main scientific topic in this image. Then provide: 1) Topic name, 2) Key concepts, 3) A brief lecture, 4) Important formulas if applicable.',
+      'solve':'Solve the problem/question shown in this image. Show all working step by step.',
+      'label':'Identify and label all parts visible in this scientific diagram. Explain what each part does.',
+      'quiz':'Create 5 multiple-choice questions based on the content of this image.'
+    };
+    
+    // Extract prompt key from option value
+    var pKey = analyzeType.split(' ')[0].toLowerCase().replace(/[^a-z]/g,'');
+    // Match one of our keys
+    var matchedKey = 'explain';
+    if(analyzeType.indexOf('topic')>=0) matchedKey='topic';
+    else if(analyzeType.indexOf('solve')>=0) matchedKey='solve';
+    else if(analyzeType.indexOf('label')>=0) matchedKey='label';
+    else if(analyzeType.indexOf('quiz')>=0) matchedKey='quiz';
+    
+    var prompt = prompts[matchedKey] + (extra ? '\n\nAdditional: ' + extra : '');
+    
+    var result = await callGroqVision(currentImage.data, currentImage.type, prompt);
+    document.getElementById('imgOut').innerHTML = toHandHTML(result);
+    document.getElementById('imgOut').classList.add('show');
+  } catch(e) {
+    // Fallback to text analysis
+    try {
+      var prompt2 = 'Based on the context that a science teacher uploaded an image for ' + analyzeType + ', provide a helpful educational response about this topic.';
+      if(extra) prompt2 += ' Additional context: ' + extra;
+      var result2 = await callGroq(prompt2);
+      document.getElementById('imgOut').innerHTML = toHandHTML(result2);
+      document.getElementById('imgOut').classList.add('show');
+    } catch(e2) { alert('Error: ' + e2.message); }
+  }
+  document.getElementById('imgLoading').classList.remove('show');
+}
+
+// ===== FORMULA BANK =====
+var formulaData = {
+  physics: [
+    {name:'Newton\'s 2nd Law',eq:'F = ma'},
+    {name:'Kinetic Energy',eq:'KE = \u00BDmv\u00B2'},
+    {name:'Potential Energy',eq:'PE = mgh'},
+    {name:'Velocity',eq:'v = u + at'},
+    {name:'Displacement',eq:'s = ut + \u00BDat\u00B2'},
+    {name:'Work Done',eq:'W = Fs\u00B7cos\u03B8'},
+    {name:'Power',eq:'P = W/t'},
+    {name:'Ohm\'s Law',eq:'V = IR'},
+    {name:'Wave Speed',eq:'v = f\u03BB'},
+    {name:'Pressure',eq:'P = F/A'},
+    {name:'Density',eq:'\u03C1 = m/V'},
+    {name:'Snell\'s Law',eq:'n\u2081sin\u03B8\u2081 = n\u2082sin\u03B8\u2082'},
+  ],
+  chemistry: [
+    {name:'Ideal Gas',eq:'PV = nRT'},
+    {name:'Mole Formula',eq:'n = m/M'},
+    {name:'pH Formula',eq:'pH = -log[H\u207A]'},
+    {name:'Molarity',eq:'M = n/V'},
+    {name:'Avogadro\'s No.',eq:'N\u2090 = 6.022\u00D710\u00B2\u00B3'},
+    {name:'Boyle\'s Law',eq:'P\u2081V\u2081 = P\u2082V\u2082'},
+    {name:'Charles\'s Law',eq:'V\u2081/T\u2081 = V\u2082/T\u2082'},
+    {name:'Rate of Reaction',eq:'r = \u0394[A]/\u0394t'},
+    {name:'Faraday\'s Law',eq:'m = ZIt'},
+    {name:'Heat Equation',eq:'Q = mc\u0394T'},
+  ],
+  biology: [
+    {name:'Photosynthesis',eq:'6CO\u2082+6H\u2082O\u2192C\u2086H\u2081\u2082O\u2086+6O\u2082'},
+    {name:'Respiration',eq:'C\u2086H\u2081\u2082O\u2086+6O\u2082\u21926CO\u2082+6H\u2082O'},
+    {name:'BMI',eq:'BMI = kg/m\u00B2'},
+    {name:'Hardy-Weinberg',eq:'p\u00B2+2pq+q\u00B2 = 1'},
+    {name:'Growth Rate',eq:'r = (N\u2082-N\u2081)/N\u2081\u00D7t'},
+    {name:'Cardiac Output',eq:'CO = HR \u00D7 SV'},
+  ],
+  math: [
+    {name:'Quadratic',eq:'x = (-b\u00B1\u221A(b\u00B2-4ac))/2a'},
+    {name:'Pythagoras',eq:'a\u00B2 + b\u00B2 = c\u00B2'},
+    {name:'Area Circle',eq:'A = \u03C0r\u00B2'},
+    {name:'Slope',eq:'m = (y\u2082-y\u2081)/(x\u2082-x\u2081)'},
+    {name:'Binomial Theorem',eq:'(a+b)\u207F = \u03A3\u2099C\u1D63a\u207F\u207B\u1D63b\u1D63'},
+    {name:'Sin Rule',eq:'a/sinA = b/sinB = c/sinC'},
+    {name:'Cos Rule',eq:'a\u00B2 = b\u00B2+c\u00B2-2bc\u00B7cosA'},
+    {name:'Integration',eq:'\u222Bx\u207F dx = x\u207F\u207A\u00B9/(n+1)+C'},
+  ]
+};
+
+function showFormulas() {
+  var sub = document.getElementById('formulaSubject').value;
+  var fms = formulaData[sub] || [];
+  var html = '';
+  fms.forEach(function(f) {
+    html += '<div class="formula-card" onclick="copyFormula(\''+f.eq+'\')">';
+    html += '<div class="f-name">'+f.name+'</div>';
+    html += '<div class="f-eq">'+f.eq+'</div>';
+    html += '</div>';
+  });
+  document.getElementById('formulaGrid').innerHTML = html;
+}
+
+function copyFormula(eq) {
+  navigator.clipboard && navigator.clipboard.writeText(eq).then(function(){alert('Copied: '+eq);});
+}
+
+async function generateMoreFormulas() {
+  var sub = document.getElementById('formulaSubject').value;
+  document.getElementById('formulaLoading').classList.add('show');
+  try {
+    var result = await callGroq('List 10 more important formulas for '+sub+' with their names. Format: NAME | FORMULA (one per line)');
+    var lines = result.split('\n').filter(function(l){return l.includes('|');});
+    lines.forEach(function(l) {
+      var parts = l.split('|');
+      if(parts.length>=2) formulaData[sub].push({name:parts[0].trim(), eq:parts[1].trim()});
+    });
+    showFormulas();
+  } catch(e) { alert('Error: '+e.message); }
+  document.getElementById('formulaLoading').classList.remove('show');
+}
+
+async function askFormulaAI() {
+  var q = document.getElementById('formulaQ').value.trim();
+  if(!q) return;
+  document.getElementById('formulaLoading').classList.add('show');
+  document.getElementById('formulaAiOut').classList.remove('show');
+  try {
+    var result = await callGroq(q, 'You are an expert science teacher. Explain formulas clearly with derivation, meaning of variables, units, and worked examples.');
+    document.getElementById('formulaAiOut').innerHTML = toHandHTML(result);
+    document.getElementById('formulaAiOut').classList.add('show');
+  } catch(e) { alert('Error: '+e.message); }
+  document.getElementById('formulaLoading').classList.remove('show');
+}
+
+// ===== QUIZ =====
+async function generateQuiz() {
+  var topic = document.getElementById('quizTopic').value.trim();
+  var subject = document.getElementById('quizSubject').value;
+  var cls = document.getElementById('quizClass').value;
+  var count = document.getElementById('quizCount').value;
+  var qtype = document.getElementById('quizType').value;
+  if(!topic) { alert('Please enter a topic!'); return; }
+  
+  document.getElementById('quizLoading').classList.add('show');
+  document.getElementById('quizOut').innerHTML = '';
+  document.getElementById('quizScore').style.display = 'none';
+  quizAnswers = []; userAnswers = [];
+  
+  try {
+    var prompt = 'Generate ' + count + ' ' + qtype + ' questions for ' + cls + ' ' + subject + ' on topic: ' + topic;
+    prompt += '\n\nFormat EACH question EXACTLY like this:\nQ: [question]\nA: [option A]\nB: [option B]\nC: [option C]\nD: [option D]\nANS: [correct letter]\n---\n';
+    if(qtype==='truefalse') {
+      prompt = 'Generate ' + count + ' True/False questions for ' + cls + ' ' + subject + ' on: ' + topic;
+      prompt += '\n\nFormat:\nQ: [question]\nA: True\nB: False\nANS: [A or B]\n---\n';
+    }
+    
+    var result = await callGroq(prompt);
+    var blocks = result.split('---');
+    var html = '';
+    
+    blocks.forEach(function(block, idx) {
+      if(!block.trim()) return;
+      var qMatch = block.match(/Q:\s*(.+)/);
+      var aMatch = block.match(/A:\s*(.+)/);
+      var bMatch = block.match(/B:\s*(.+)/);
+      var cMatch = block.match(/C:\s*(.+)/);
+      var dMatch = block.match(/D:\s*(.+)/);
+      var ansMatch = block.match(/ANS:\s*([ABCD])/i);
+      
+      if(!qMatch || !ansMatch) return;
+      
+      var ans = ansMatch[1].toUpperCase();
+      quizAnswers.push(ans);
+      userAnswers.push('');
+      
+      html += '<div class="quiz-q" id="quizQ_'+idx+'">';
+      html += '<div class="q-text">Q'+(idx+1)+'. '+qMatch[1].trim()+'</div>';
+      var opts = [{l:'A',t:aMatch},{l:'B',t:bMatch},{l:'C',t:cMatch},{l:'D',t:dMatch}];
+      opts.forEach(function(o) {
+        if(!o.t) return;
+        html += '<div class="quiz-opt" id="opt_'+idx+'_'+o.l+'" onclick="selectOpt('+idx+',\''+o.l+'\',\''+ans+'\')">';
+        html += '<strong>'+o.l+'.</strong> '+o.t[1].trim()+'</div>';
+      });
+      html += '</div>';
+    });
+    
+    document.getElementById('quizOut').innerHTML = html;
+    if(html) {
+      var btn = document.createElement('button');
+      btn.className='btn btn-green'; btn.innerHTML='📊 Show Score';
+      btn.onclick=showScore;
+      document.getElementById('quizOut').appendChild(btn);
+    }
+  } catch(e) { alert('Error: '+e.message); }
+  document.getElementById('quizLoading').classList.remove('show');
+}
+
+function selectOpt(qIdx, letter, ans) {
+  userAnswers[qIdx] = letter;
+  var opts = document.querySelectorAll('[id^="opt_'+qIdx+'_"]');
+  opts.forEach(function(o) {
+    o.classList.remove('correct','wrong');
+    var l = o.id.split('_').pop();
+    if(l===letter) {
+      o.classList.add(letter===ans?'correct':'wrong');
+    }
+    if(l===ans && letter!==ans) o.classList.add('correct');
+  });
+}
+
+function showScore() {
+  var score = 0;
+  for(var i=0;i<quizAnswers.length;i++) {
+    if(userAnswers[i]===quizAnswers[i]) score++;
+  }
+  document.getElementById('scoreVal').textContent = score + ' / ' + quizAnswers.length;
+  document.getElementById('quizScore').style.display='block';
+}
+
+// ===== WHITEBOARD =====
+var wbCtx, wbDrawing=false, wbColor='#ffffff', wbSize=4, wbErasing=false;
+
+function initWhiteboard() {
+  var c = document.getElementById('whiteboardCanvas');
+  if(!c) return;
+  wbCtx = c.getContext('2d');
+  c.addEventListener('mousedown', wbStart);
+  c.addEventListener('mousemove', wbDraw);
+  c.addEventListener('mouseup', wbStop);
+  c.addEventListener('mouseleave', wbStop);
+  c.addEventListener('touchstart', wbTouchStart, {passive:false});
+  c.addEventListener('touchmove', wbTouchMove, {passive:false});
+  c.addEventListener('touchend', wbStop);
+}
+
+function getPos(c, e) {
+  var r = c.getBoundingClientRect();
+  var scaleX = c.width/r.width, scaleY = c.height/r.height;
+  return {x:(e.clientX-r.left)*scaleX, y:(e.clientY-r.top)*scaleY};
+}
+function wbStart(e) { wbDrawing=true; var p=getPos(this,e); wbCtx.beginPath(); wbCtx.moveTo(p.x,p.y); }
+function wbDraw(e) {
+  if(!wbDrawing) return;
+  var p=getPos(this,e);
+  wbCtx.lineWidth=wbErasing?20:wbSize;
+  wbCtx.strokeStyle=wbErasing?'#1a1a2e':wbColor;
+  wbCtx.lineCap='round'; wbCtx.lineJoin='round';
+  wbCtx.lineTo(p.x,p.y); wbCtx.stroke();
+  wbCtx.beginPath(); wbCtx.moveTo(p.x,p.y);
+}
+function wbStop() { wbDrawing=false; }
+function wbTouchStart(e) { e.preventDefault(); var t=e.touches[0]; wbDrawing=true; var p=getPos(e.target,t); wbCtx.beginPath(); wbCtx.moveTo(p.x,p.y); }
+function wbTouchMove(e) { e.preventDefault(); if(!wbDrawing) return; var t=e.touches[0]; wbCtx.lineWidth=wbErasing?20:wbSize; wbCtx.strokeStyle=wbErasing?'#1a1a2e':wbColor; wbCtx.lineCap='round'; wbCtx.lineJoin='round'; var p=getPos(e.target,t); wbCtx.lineTo(p.x,p.y); wbCtx.stroke(); wbCtx.beginPath(); wbCtx.moveTo(p.x,p.y); }
+
+function setWbColor(el) {
+  wbErasing=false;
+  wbColor=el.dataset.color;
+  document.querySelectorAll('.wb-color').forEach(function(c){c.classList.remove('active');});
+  el.classList.add('active');
+  var bs=document.getElementById('brushSize');
+  if(bs) wbSize=parseInt(bs.value)||4;
+}
+function setWbEraser() { wbErasing=true; document.querySelectorAll('.wb-color').forEach(function(c){c.classList.remove('active');}); }
+function clearWb() { var c=document.getElementById('whiteboardCanvas'); wbCtx.clearRect(0,0,c.width,c.height); wbCtx.fillStyle='#1a1a2e'; wbCtx.fillRect(0,0,c.width,c.height); }
+function saveWb() {
+  var c=document.getElementById('whiteboardCanvas');
+  var a=document.createElement('a'); a.href=c.toDataURL('image/png');
+  a.download='whiteboard.png'; a.click();
+}
+
+async function analyzeWhiteboard() {
+  var c=document.getElementById('whiteboardCanvas');
+  var base64=c.toDataURL('image/png').split(',')[1];
+  document.getElementById('wbLoading').classList.add('show');
+  document.getElementById('wbAiOut').classList.remove('show');
+  try {
+    var result = await callGroqVision(base64,'image/png','Analyze this whiteboard/drawing. Identify what is drawn, explain the science concept if any, solve any math problems shown, and provide educational explanation.');
+    document.getElementById('wbAiOut').innerHTML=toHandHTML(result);
+    document.getElementById('wbAiOut').classList.add('show');
+  } catch(e) {
+    try {
+      var result2=await callGroq('A teacher drew something on a whiteboard. Provide a general educational response about drawing/teaching science visually.');
+      document.getElementById('wbAiOut').innerHTML=toHandHTML(result2);
+      document.getElementById('wbAiOut').classList.add('show');
+    } catch(e2){alert('Error: '+e2.message);}
+  }
+  document.getElementById('wbLoading').classList.remove('show');
+}
+
+// BRUSH SIZE
+document.addEventListener('DOMContentLoaded', function() {
+  var bs=document.getElementById('brushSize');
+  if(bs) bs.addEventListener('input',function(){wbSize=parseInt(this.value);});
+  if(API_KEY) {
+    console.log('API key loaded');
+  }
+  showFormulas();
+});
+</script>
+</body>
+</html>
