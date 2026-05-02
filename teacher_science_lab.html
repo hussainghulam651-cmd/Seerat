@@ -109,27 +109,49 @@ select.inp { cursor:pointer; }
 
 /* HANDWRITING OUTPUT */
 .handwriting-output {
-  background: #fef9e7;
-  border:2px solid #e8c84a;
+  background: #ffffff;
+  border:2px solid #f0c040;
   border-radius:10px;
-  padding:20px;
+  padding:24px 24px 24px 60px;
   margin-top:12px;
   display:none;
   position:relative;
-  background-image: repeating-linear-gradient(transparent, transparent 27px, #c5d6e8 27px, #c5d6e8 28px);
+  background-image: repeating-linear-gradient(transparent, transparent 31px, #b8d4f0 31px, #b8d4f0 32px);
 }
 .handwriting-output.show { display:block; }
 .handwriting-output::before {
-  content:''; position:absolute; left:48px; top:0; bottom:0;
-  width:2px; background:#f4a0a0; border-radius:0;
+  content:''; position:absolute; left:50px; top:0; bottom:0;
+  width:2px; background:#f4a0a0;
 }
-.handwriting-output * { font-family:var(--hand) !important; color:#1a1a3e !important; font-size:18px !important; line-height:28px !important; }
-.handwriting-output h1 { font-size:24px !important; color:#8b0000 !important; margin-bottom:8px; }
-.handwriting-output h2 { font-size:21px !important; color:#8b0000 !important; }
-.handwriting-output h3 { font-size:19px !important; color:#8b4000 !important; }
-.handwriting-output strong { color:#8b0000 !important; font-weight:700; }
-.handwriting-output .formula { font-size:20px !important; color:#0a0a8a !important; background:#deeeff; padding:2px 8px; border-radius:4px; display:inline-block; margin:4px 0; border-bottom:2px solid #0a0a8a; }
-.handwriting-output .math-step { display:block; padding-left:20px; border-left:3px solid #e8c84a; margin:8px 0; }
+/* Base text - dark navy, clearly visible */
+.handwriting-output { color:#1a1a3e; font-family:'Caveat',cursive; font-size:19px; line-height:32px; }
+.handwriting-output * { font-family:'Caveat',cursive !important; font-size:19px !important; line-height:32px !important; }
+/* Headings - deep red, bold */
+.handwriting-output h1 { font-size:26px !important; color:#c0000a !important; font-weight:700 !important; margin-bottom:6px !important; }
+.handwriting-output h2 { font-size:23px !important; color:#b5000a !important; font-weight:700 !important; }
+.handwriting-output h3 { font-size:21px !important; color:#8b4000 !important; font-weight:700 !important; }
+/* Bold text - purple/violet */
+.handwriting-output strong { color:#6a00cc !important; font-weight:700 !important; }
+/* Normal paragraphs - dark blue-black */
+.handwriting-output br, .handwriting-output p, .handwriting-output div { color:#1a1a3e !important; }
+/* Formulas - bright blue box */
+.handwriting-output .formula {
+  font-size:20px !important; color:#0044cc !important;
+  background:#e8f0ff; padding:3px 10px; border-radius:5px;
+  display:inline-block; margin:4px 2px;
+  border-bottom:2.5px solid #0044cc;
+  border-left:3px solid #0044cc;
+}
+/* Math steps - green left border */
+.handwriting-output .math-step {
+  display:block; padding-left:18px;
+  border-left:4px solid #2a9a2a;
+  margin:8px 0; color:#1a4a1a !important;
+}
+/* List items - teal/dark green */
+.handwriting-output li { color:#004a4a !important; margin-bottom:4px !important; }
+/* Links */
+.handwriting-output a { color:#0055cc !important; }
 
 /* PPT SLIDES */
 .slide-container { display:none; }
