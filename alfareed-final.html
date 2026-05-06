@@ -178,6 +178,19 @@ textarea{min-height:68px;resize:vertical;}
 <!-- ══════════════════════════════
      LOGIN SCREENS
 ══════════════════════════════ -->
+<!-- ══ APP ACCESS GATE ══ -->
+<div id="accessGate" style="min-height:100vh;background:linear-gradient(135deg,#0d5c3a,#0a4f2e);display:flex;align-items:center;justify-content:center;padding:20px;">
+<div style="background:#fff;border-radius:18px;padding:28px 22px;width:100%;max-width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3)">
+  <div style="font-size:40px;margin-bottom:10px">🔒</div>
+  <div style="font-family:Playfair Display,serif;font-size:16px;font-weight:900;color:#0d5c3a;margin-bottom:4px">AL-FAREED PUBLIC SCHOOL</div>
+  <div style="font-size:11px;color:#888;margin-bottom:18px">Yeh app sirf authorized users ke liye hai<br>Admin se access code hasil karein</div>
+  <input type="password" id="gateCode" style="width:100%;padding:11px 13px;border:1.5px solid #ddd;border-radius:9px;font-size:15px;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px;font-family:Inter,sans-serif" placeholder="Access Code..." onkeydown="if(event.keyCode==13)checkGate()">
+  <button onclick="checkGate()" style="width:100%;padding:13px;background:linear-gradient(135deg,#0d5c3a,#1a7a4f);color:#c9a84c;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif">🔓 Enter App</button>
+  <div id="gateErr" style="display:none;color:#c0392b;font-size:11px;margin-top:8px;font-weight:700">❌ Galat code! Admin se rabta karein.</div>
+  <div style="margin-top:12px;font-size:10px;color:#aaa">Default access code: <b>AF2024</b></div>
+</div>
+</div>
+
 <div id="loginWrap" class="login-wrap">
 <div class="login-box">
   <div class="login-logo" id="ll-logo" onclick="document.getElementById('ll-lf').click()">
@@ -188,9 +201,10 @@ textarea{min-height:68px;resize:vertical;}
   <div class="login-school">AL-FAREED <span style="color:var(--g)">PUBLIC SCHOOL</span></div>
   <div class="login-urdu">الفرید پبلک اسکول ، ٹنڈو جام</div>
   <div class="login-sub">Tando Jam, Sindh &bull; Principal: Sir Ghulam Hussain</div>
-  <div class="login-tabs">
+  <div class="login-tabs" style="flex-wrap:wrap">
     <div class="login-tab on" id="lt-admin" onclick="switchLoginTab('admin')">👑 Admin</div>
     <div class="login-tab" id="lt-teacher" onclick="switchLoginTab('teacher')">👩‍🏫 Teacher</div>
+    <div class="login-tab" id="lt-parent" onclick="switchLoginTab('parent')">👨‍👩‍👧 Parent</div>
   </div>
 
   <!-- Admin Login -->
@@ -209,6 +223,17 @@ textarea{min-height:68px;resize:vertical;}
     <div id="teacherPendingMsg" style="display:none;background:#fff3e0;border-radius:8px;padding:9px;font-size:11px;color:#e65100;margin-bottom:9px;text-align:center">⏳ Admin se permission pending hai. Admin se rabta karen.</div>
     <button class="login-btn" onclick="doLogin('teacher')">👩‍🏫 Teacher Login</button>
     <div class="login-hint">Admin se permission milne ke baad login hoga</div>
+  </div>
+
+  <!-- Parent Login -->
+  <div id="parentLoginForm" style="display:none">
+    <div style="background:#e8f4fd;border-radius:9px;padding:11px;margin-bottom:10px;font-size:11px;color:#1565c0;text-align:center;font-weight:700">
+      👨‍👩‍👧 Parent — Sirf Homework & Attendance dekhein<br>
+      <span style="font-weight:400;color:#888">Admin se access code hasil karein</span>
+    </div>
+    <input type="password" id="parentPass" class="login-inp" placeholder="Parent Access Code..." onkeydown="if(event.keyCode==13)doLogin('parent')">
+    <button class="login-btn" style="background:linear-gradient(135deg,#1565c0,#0d47a1)" onclick="doLogin('parent')">👨‍👩‍👧 Parent Login</button>
+    <div class="login-hint">Admin se code hasil karein</div>
   </div>
 
   <div class="login-err" id="loginErr">❌ Galat password ya permission nahi!</div>
@@ -385,12 +410,11 @@ textarea{min-height:68px;resize:vertical;}
   <div style="overflow-x:auto">
     <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr style="background:var(--g);color:#fff">
-        <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:65px">Class</th>
-        <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:72px">Subject</th>
+        <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:90px">Subject</th>
         <th style="padding:9px 7px;border:2px solid #000;text-align:left">Home Work</th>
-        <th style="padding:9px 4px;border:2px solid #000;width:24px"></th>
+        <th style="padding:9px 4px;border:2px solid #000;width:26px"></th>
       </tr></thead>
-      <tbody id="hwTbody"><tr><td colspan="4" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr></tbody>
+      <tbody id="hwTbody"><tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr></tbody>
     </table>
   </div>
 </div>
@@ -556,6 +580,32 @@ textarea{min-height:68px;resize:vertical;}
 <div class="card">
   <div class="card-title">👨‍🎓 Student Classes Overview</div>
   <div id="studClassList" style="font-size:12px;color:#888;padding:10px;text-align:center">Attendance tab mein students add karo</div>
+</div>
+
+<!-- APP ACCESS CODE -->
+<div class="card" style="border:2px solid #e65100">
+  <div class="card-title" style="color:#e65100">🔒 App Access Code (Gate)</div>
+  <div style="font-size:11px;color:#888;margin-bottom:9px">Yeh code enter karna hoga app open karne se pehle</div>
+  <div class="r2">
+    <div><label>New Access Code</label><input type="password" id="newGateCode" placeholder="Naya code..."></div>
+    <div><label>Confirm Code</label><input type="password" id="confGateCode" placeholder="Confirm..."></div>
+  </div>
+  <button class="btn-g" onclick="changeGateCode()">🔒 Update App Gate Code</button>
+</div>
+
+<!-- PARENT ACCESS -->
+<div class="card" style="border:2px solid var(--blue)">
+  <div class="card-title" style="color:var(--blue)">👨‍👩‍👧 Parent Access Management</div>
+  <div style="font-size:11px;color:#888;margin-bottom:9px">Parents sirf Homework aur Attendance dekh sakte hain</div>
+  <div class="r2">
+    <div><label>Parent Access Code</label><input type="password" id="parentCodeInp" placeholder="Parent ka code..."></div>
+    <div><label>Confirm</label><input type="password" id="parentCodeConf" placeholder="Confirm..."></div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn-g" onclick="setParentCode()" style="flex:1">✅ Set Parent Code</button>
+    <button class="btn-sm bsr" onclick="revokeParent()" style="padding:11px 14px">🚫 Revoke Parent Access</button>
+  </div>
+  <div id="parentCodeStatus" style="font-size:11px;margin-top:8px;color:#888"></div>
 </div>
 </div>
 
@@ -1071,6 +1121,8 @@ textarea{min-height:68px;resize:vertical;}
 // ═══════════════════════════════════════════
 var SK={
   ADMIN_P:'af_admin_p',
+  GATE_CODE:'af_gate_code',
+  PARENT_CODE:'af_parent_code',
   TEACHERS:'af_teachers',
   STUDENTS:'af_students',
   HW:'af_hw',
@@ -1098,7 +1150,7 @@ function ls_set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 // ═══════════════════════════════════════════
 var gL=ls_get(SK.GLOGO)||'';
 var imgs={pM:'',pS:'',epLM:'',epRM:'',etM:'',etS:'',cM:'',cS:'',schM:'',schS:'',midM:'',midS:'',annM:'',annS:'',ttExM:'',ttExS:''};
-var currentRole=''; // 'admin' or 'teacher'
+var currentRole=''; // 'admin','teacher','parent'
 var currentTeacher=null;
 var hwEntries=[], hwActiveSub='';
 var dwN=0, etRowN=0;
@@ -1106,9 +1158,39 @@ var curPub='', curCert='', cLang='en';
 var teacherAttData={}, studentAttData={};
 
 // ═══════════════════════════════════════════
+//  APP GATE
+// ═══════════════════════════════════════════
+function getGateCode(){return ls_get(SK.GATE_CODE)||'AF2024';}
+function checkGate(){
+  var v=document.getElementById('gateCode').value;
+  if(v===getGateCode()){
+    document.getElementById('accessGate').style.display='none';
+    document.getElementById('loginWrap').style.display='flex';
+    document.getElementById('gateCode').value='';
+  }else{
+    document.getElementById('gateErr').style.display='block';
+    document.getElementById('gateCode').value='';
+    setTimeout(function(){document.getElementById('gateErr').style.display='none';},2500);
+  }
+}
+function changeGateCode(){
+  var np=document.getElementById('newGateCode').value;
+  var cp=document.getElementById('confGateCode').value;
+  if(!np||np.length<4){toast('Min 4 characters!');return;}
+  if(np!==cp){toast('Codes match nahi!');return;}
+  ls_set(SK.GATE_CODE,np);
+  document.getElementById('newGateCode').value='';
+  document.getElementById('confGateCode').value='';
+  toast('App gate code updated! ✅');
+}
+
+// ═══════════════════════════════════════════
 //  INITIAL SETUP
 // ═══════════════════════════════════════════
 window.onload=function(){
+  // Show gate first, hide login
+  document.getElementById('accessGate').style.display='flex';
+  document.getElementById('loginWrap').style.display='none';
   // Set today's date on inputs
   var td=today();
   ['hwDate','attSDate','attTDate','dwDate','epDate','cDate'].forEach(function(id){
@@ -1131,15 +1213,19 @@ window.onload=function(){
 //  LOGIN
 // ═══════════════════════════════════════════
 function switchLoginTab(t){
-  document.getElementById('lt-admin').classList.toggle('on',t==='admin');
-  document.getElementById('lt-teacher').classList.toggle('on',t==='teacher');
-  document.getElementById('adminLoginForm').style.display=t==='admin'?'block':'none';
-  document.getElementById('teacherLoginForm').style.display=t==='teacher'?'block':'none';
+  ['admin','teacher','parent'].forEach(function(r){
+    var btn=document.getElementById('lt-'+r);
+    var form=document.getElementById(r+'LoginForm');
+    if(btn)btn.classList.toggle('on',r===t);
+    if(form)form.style.display=r===t?'block':'none';
+  });
   document.getElementById('loginErr').style.display='none';
-  document.getElementById('teacherPendingMsg').style.display='none';
+  var pm=document.getElementById('teacherPendingMsg');
+  if(pm)pm.style.display='none';
 }
 
 function getAdminPass(){return ls_get(SK.ADMIN_P)||'1234';}
+function getParentCode(){return ls_get(SK.PARENT_CODE)||'';}
 
 function doLogin(role){
   document.getElementById('loginErr').style.display='none';
@@ -1150,29 +1236,28 @@ function doLogin(role){
       document.getElementById('loginWrap').style.display='none';
       document.getElementById('mainApp').style.display='block';
       document.getElementById('roleTag').textContent='👑 Admin ▾';
-      // Show all nav items
       document.getElementById('navAdmin').style.display='block';
+      // Show all nav buttons for admin
+      document.querySelectorAll('.nav-btn').forEach(function(b){b.style.display='';});
       setupDashboard();
       toast('Admin login! ✅');
     }else{
       document.getElementById('loginErr').style.display='block';
     }
     document.getElementById('adminPass').value='';
-  }else{
+
+  }else if(role==='teacher'){
     var sel=document.getElementById('teacherSel').value;
     var tp=document.getElementById('teacherPass').value;
     if(!sel){toast('Apna naam select karo!');return;}
     var teachers=ls_get(SK.TEACHERS)||[];
     var found=null;
-    for(var i=0;i<teachers.length;i++){
-      if(teachers[i].id===sel){found=teachers[i];break;}
-    }
+    for(var i=0;i<teachers.length;i++){if(teachers[i].id===sel){found=teachers[i];break;}}
     if(!found){document.getElementById('loginErr').style.display='block';document.getElementById('teacherPass').value='';return;}
     if(found.status==='pending'||found.status==='revoked'){
       document.getElementById('teacherPendingMsg').style.display='block';
-      document.getElementById('teacherPendingMsg').textContent=found.status==='revoked'?'🚫 Aap ka access revoke ho gaya hai. Admin se rabta karen.':'⏳ Admin se permission pending hai.';
-      document.getElementById('teacherPass').value='';
-      return;
+      document.getElementById('teacherPendingMsg').textContent=found.status==='revoked'?'🚫 Access revoke ho gaya. Admin se rabta karen.':'⏳ Admin se permission pending hai.';
+      document.getElementById('teacherPass').value='';return;
     }
     if(tp===found.password){
       currentRole='teacher';
@@ -1180,9 +1265,10 @@ function doLogin(role){
       document.getElementById('loginWrap').style.display='none';
       document.getElementById('mainApp').style.display='block';
       document.getElementById('roleTag').textContent='👩‍🏫 '+found.name+' ▾';
-      // Hide admin nav for teacher
+      // Teacher: hide admin panel
       document.getElementById('navAdmin').style.display='none';
-      // Pre-fill teacher name in forms
+      document.querySelectorAll('.nav-btn').forEach(function(b){b.style.display='';});
+      document.getElementById('navAdmin').style.display='none';
       if(document.getElementById('dwTch'))document.getElementById('dwTch').value=found.name;
       setupDashboard();
       toast('Welcome, '+found.name+'! ✅');
@@ -1190,6 +1276,29 @@ function doLogin(role){
       document.getElementById('loginErr').style.display='block';
     }
     document.getElementById('teacherPass').value='';
+
+  }else if(role==='parent'){
+    var pp=document.getElementById('parentPass').value;
+    var pc=getParentCode();
+    if(!pc){toast('Admin ne parent access set nahi kiya!');document.getElementById('parentPass').value='';return;}
+    if(pp===pc){
+      currentRole='parent';
+      currentTeacher=null;
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('mainApp').style.display='block';
+      document.getElementById('roleTag').textContent='👨‍👩‍👧 Parent ▾';
+      // Parent: show only Dashboard and (read-only view)
+      document.querySelectorAll('.nav-btn').forEach(function(b){b.style.display='none';});
+      var nb=document.querySelectorAll('.nav-btn');
+      if(nb[0])nb[0].style.display=''; // Dashboard only
+      document.getElementById('navAdmin').style.display='none';
+      setupDashboard();
+      sTab(0);
+      toast('Parent login! Homework & Attendance dekhein ✅');
+    }else{
+      document.getElementById('loginErr').style.display='block';
+    }
+    document.getElementById('parentPass').value='';
   }
 }
 
@@ -1201,9 +1310,28 @@ function doLogout(){
   document.getElementById('adminPass').value='';
   document.getElementById('teacherPass').value='';
   document.getElementById('navAdmin').style.display='block';
-  // Reset to tab 0
   sTab(0);
   toast('Logged out 🔒');
+}
+
+// Parent access management
+function setParentCode(){
+  var np=document.getElementById('parentCodeInp').value;
+  var cp=document.getElementById('parentCodeConf').value;
+  if(!np||np.length<4){toast('Min 4 characters!');return;}
+  if(np!==cp){toast('Codes match nahi!');return;}
+  ls_set(SK.PARENT_CODE,np);
+  document.getElementById('parentCodeInp').value='';
+  document.getElementById('parentCodeConf').value='';
+  document.getElementById('parentCodeStatus').textContent='✅ Parent code set ho gaya!';
+  document.getElementById('parentCodeStatus').style.color='#2e7d32';
+  toast('Parent access code set! ✅');
+}
+function revokeParent(){
+  ls_set(SK.PARENT_CODE,'');
+  document.getElementById('parentCodeStatus').textContent='🚫 Parent access revoke ho gaya!';
+  document.getElementById('parentCodeStatus').style.color='#c0392b';
+  toast('Parent access revoked!');
 }
 
 function loadTeacherDropdown(){
@@ -1737,18 +1865,48 @@ function updateDashboard(){
 function renderDashHW(){
   var hw=ls_get(SK.HW)||[];
   var el=document.getElementById('dashHWList');
-  if(!hw.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi homework nahi</div>';return;}
-  // Show last 10
-  var recent=hw.slice(-10).reverse();
+  if(!hw.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Aaj ka koi homework nahi</div>';return;}
+  // Sort: most recent first
+  var sorted=hw.slice().reverse();
   var h='';
-  recent.forEach(function(e){
-    h+='<div class="hw-item">'+
+  sorted.forEach(function(e,i){
+    var realIdx=hw.length-1-i;
+    h+='<div class="hw-item" style="position:relative">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+      '<div>'+
       '<div class="hw-sub">'+e.subject+'</div>'+
+      '<div style="font-size:10px;font-weight:700;color:var(--blue);margin-top:1px">'+e.cls+'</div>'+
+      '</div>'+
+      (currentRole==='admin'?
+        '<div style="display:flex;gap:5px">'+
+        '<button onclick="hwEditSaved('+realIdx+')" style="padding:3px 8px;background:var(--blue);color:#fff;border:none;border-radius:5px;font-size:10px;cursor:pointer">✏️</button>'+
+        '<button onclick="hwDelSaved('+realIdx+')" style="padding:3px 8px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:10px;cursor:pointer">🗑️</button>'+
+        '</div>':'')+
+      '</div>'+
       '<div class="hw-txt">'+e.hw+'</div>'+
-      '<div class="hw-meta">Class: '+e.cls+' &nbsp;|&nbsp; '+fmtDate(e.date)+' &nbsp;|&nbsp; By: '+e.by+'</div>'+
+      '<div class="hw-meta">'+fmtDate(e.date)+' &nbsp;|&nbsp; By: '+e.by+'</div>'+
       '</div>';
   });
   el.innerHTML=h;
+}
+function hwDelSaved(idx){
+  if(currentRole!=='admin'){toast('Sirf Admin delete kar sakta hai!');return;}
+  if(!confirm('Yeh homework delete karen?'))return;
+  var hw=ls_get(SK.HW)||[];
+  hw.splice(idx,1);ls_set(SK.HW,hw);
+  renderDashHW();
+  var td=ls_get(SK.HW)||[];
+  document.getElementById('dsTodayHW').textContent=td.filter(function(h){return h.date===today();}).length;
+  toast('Homework deleted!');
+}
+function hwEditSaved(idx){
+  if(currentRole!=='admin'){toast('Sirf Admin edit kar sakta hai!');return;}
+  var hw=ls_get(SK.HW)||[];
+  var e=hw[idx];if(!e)return;
+  var newHw=prompt('Homework edit karo:',e.hw);
+  if(newHw===null)return;
+  hw[idx].hw=newHw.trim()||e.hw;
+  ls_set(SK.HW,hw);renderDashHW();toast('Homework updated! ✅');
 }
 
 function renderDashAtt(){
@@ -1833,18 +1991,17 @@ function hwAddEntry(){
   if(!hwActiveSub){toast('Subject select karen!');return;}
   var txt=document.getElementById('hwInp').value.trim();
   if(!txt){toast('Homework likhein!');return;}
-  var cls=document.getElementById('hwCls').value;
-  hwEntries.push({cls:cls,sub:hwActiveSub,hw:txt});
+  hwEntries.push({sub:hwActiveSub,hw:txt});
   document.getElementById('hwInp').value='';
   hwRender();toast(hwActiveSub+' add! ✅');
 }
 function hwRender(){
   var tb=document.getElementById('hwTbody');
-  if(!hwEntries.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr>';return;}
+  if(!tb)return;
+  if(!hwEntries.length){tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr>';return;}
   var h='';
   hwEntries.forEach(function(e,i){
     h+='<tr style="background:'+(i%2?'#f5f5f5':'#fff')+'">'+
-      '<td style="padding:8px 7px;border:2px solid #000;font-weight:700;vertical-align:top">'+e.cls+'</td>'+
       '<td style="padding:8px 7px;border:2px solid #000;font-weight:700;vertical-align:top;white-space:nowrap">'+e.sub+'</td>'+
       '<td style="padding:8px 7px;border:2px solid #000;vertical-align:top">'+e.hw+'</td>'+
       '<td style="padding:5px 3px;border:2px solid #000;text-align:center;vertical-align:middle">'+
@@ -1866,7 +2023,7 @@ function genHW(){
   var savedHW=ls_get(SK.HW)||[];
   var by=currentTeacher?currentTeacher.name:'Admin';
   hwEntries.forEach(function(e){
-    savedHW.push({date:dt,cls:e.cls,subject:e.sub,hw:e.hw,by:by});
+    savedHW.push({date:dt,cls:cls,subject:e.sub,hw:e.hw,by:by});
   });
   ls_set(SK.HW,savedHW);
   var li=document.getElementById('hwLLi'),ri=document.getElementById('hwLRi');
@@ -1875,8 +2032,8 @@ function genHW(){
   var rows=hwEntries.slice();while(rows.length<9)rows.push(null);
   var trs='';
   rows.forEach(function(e){
-    trs+='<tr style="height:46px"><td style="border:2px solid #000;padding:5px 8px;font-weight:700;font-size:13px;vertical-align:middle;min-width:68px">'+(e?e.cls:'')+'</td>'+
-      '<td style="border:2px solid #000;padding:5px 8px;font-weight:700;font-size:13px;vertical-align:middle;min-width:80px">'+(e?e.sub:'')+'</td>'+
+    trs+='<tr style="height:46px">'+
+      '<td style="border:2px solid #000;padding:5px 8px;font-weight:700;font-size:13px;vertical-align:middle;min-width:90px">'+(e?e.sub:'')+'</td>'+
       '<td style="border:2px solid #000;padding:5px 8px;font-size:13px;vertical-align:middle">'+(e?e.hw:'')+'</td></tr>';
   });
   var html=
@@ -1889,7 +2046,7 @@ function genHW(){
     '<div style="background:#ffff00;color:#000;font-size:24px;font-weight:900;padding:7px 22px;border-radius:9px;font-family:Arial Black,sans-serif">Diary</div>'+
     '<div style="background:#fff;border-radius:6px;padding:8px 12px;font-size:13px"><span style="color:#888">Class: </span><strong>'+cls+'</strong></div></div>'+
     '<div style="background:#fff"><table style="width:100%;border-collapse:collapse">'+
-    '<thead><tr style="background:#0d5c3a"><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:left">Class</th><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:left">Subject</th><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:left">Home Work</th></tr></thead>'+
+    '<thead><tr style="background:#0d5c3a"><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:left;min-width:90px">Subject</th><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:14px;font-weight:700;letter-spacing:1px;text-align:left">Home Work</th></tr></thead>'+
     '<tbody>'+trs+'</tbody></table></div>'+
     '<div style="padding:12px 14px;background:#0d5c3a;border-top:4px solid #c9a84c;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px">'+
     '<div><div style="color:#fff;font-size:13px;font-weight:900;margin-bottom:5px">PHONE / Whatsaap</div>'+
