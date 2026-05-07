@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Al-Fareed Public School</title>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -601,6 +604,31 @@ textarea{min-height:68px;resize:vertical;}
 
 <!-- Admin Password Change -->
 <div class="card">
+<!-- FIREBASE SYNC SETUP -->
+<div class="card" style="border:2px solid #ff6f00;background:#fff8e1">
+  <div class="card-title" style="color:#ff6f00">🔥 Firebase Sync Setup
+    <span id="fbStatus" style="margin-left:auto;font-size:10px;padding:3px 8px;border-radius:10px;background:#ffebee;color:#c62828">Not Connected</span>
+  </div>
+  <div style="font-size:11px;color:#666;margin-bottom:9px;line-height:1.6">
+    Sab devices pe data sync karne ke liye Firebase connect karo (bilkul free):<br>
+    1. <a href="https://console.firebase.google.com" target="_blank" style="color:#ff6f00;font-weight:700">firebase.google.com</a> → New Project → Realtime Database → Start<br>
+    2. Rules mein <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">read/write: true</code> set karo<br>
+    3. Project Settings → Your apps → Web app → Config copy karo<br>
+    4. Neeche paste karo
+  </div>
+  <label>Firebase API Key</label>
+  <input type="text" id="fbApiKey" placeholder="AIzaSy...">
+  <label>Auth Domain</label>
+  <input type="text" id="fbAuthDomain" placeholder="yourproject.firebaseapp.com">
+  <label>Database URL</label>
+  <input type="text" id="fbDbUrl" placeholder="https://yourproject-default-rtdb.firebaseio.com">
+  <label>Project ID</label>
+  <input type="text" id="fbProjectId" placeholder="your-project-id">
+  <button class="btn-g btn-full" onclick="connectFirebase()">🔥 Connect Firebase</button>
+  <button class="btn-sm bsr btn-full" style="margin-top:6px" onclick="disconnectFirebase()">Disconnect</button>
+  <div id="fbMsg" style="font-size:11px;margin-top:7px;text-align:center"></div>
+</div>
+
 <!-- SCHOOL OFFICIAL SETTINGS -->
 <div class="card" style="border:2px solid var(--g);background:var(--lg)">
   <div class="card-title" style="color:var(--g)">🏫 School Official Settings</div>
@@ -1276,7 +1304,55 @@ function todayFmt(){var d=new Date();return d.getDate()+' '+MON[d.getMonth()]+' 
 function fmtTime(v){if(!v)return '';var p=v.split(':'),h=parseInt(p[0]),m=p[1],ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+m+' '+ap;}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
 function ls_get(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
-function ls_set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function ls_set(k,v){
+  try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}
+  // Also sync to Firebase for shared keys
+  var sharedKeys=['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students'];
+  if(sharedKeys.indexOf(k)>=0 && window.afDB){
+    try{
+      window.afDB.ref('school/'+k).set(v);
+    }catch(e){console.log('Firebase write error:',e);}
+  }
+}
+
+// ─── Firebase Config ───
+// IMPORTANT: Apna Firebase config yahan paste karo
+// firebase.google.com → Create project → Realtime Database → Rules: public read/write
+var FB_CONFIG = ls_get('af_fb_config') || null;
+
+function initFirebase(cfg){
+  try{
+    if(firebase.apps.length===0){
+      firebase.initializeApp(cfg);
+    }
+    window.afDB = firebase.database();
+    toast('🔥 Firebase connected! Data sync on ✅');
+    // Subscribe to shared data changes
+    subscribeFirebase();
+    return true;
+  }catch(e){
+    console.log('Firebase init error:',e);
+    return false;
+  }
+}
+
+function subscribeFirebase(){
+  if(!window.afDB)return;
+  var sharedKeys=['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students'];
+  sharedKeys.forEach(function(k){
+    window.afDB.ref('school/'+k).on('value',function(snap){
+      var val=snap.val();
+      if(val!==null){
+        try{localStorage.setItem(k,JSON.stringify(val));}catch(e){}
+        // Refresh UI if relevant
+        if(k==='af_hw'){try{renderDashHW();updateDashboard();}catch(e){}}
+        if(k==='af_teachers'){try{renderTeacherList();loadTeacherDropdown();renderTeachAttGrid();}catch(e){}}
+        if(k==='af_students'){try{loadStudentList();updateStudentStats();}catch(e){}}
+        if(k==='af_stud_att'||k==='af_teach_att'){try{renderDashAtt();}catch(e){}}
+      }
+    });
+  });
+}
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -1347,6 +1423,11 @@ window.onload=function(){
   if(savedST){var stEl=document.getElementById('schoolStart');if(stEl)stEl.value=savedST;}
   // Auto-set hwDay from today
   hwAutoDay();
+  // Auto-connect Firebase if config saved
+  var savedFbCfg=ls_get('af_fb_config');
+  if(savedFbCfg&&savedFbCfg.apiKey&&savedFbCfg.databaseURL){
+    initFirebase(savedFbCfg);
+  }
   // Load global logo
   if(gL){
     document.getElementById('glogoi').src=gL;
@@ -1507,7 +1588,7 @@ function sTab(n){
   if(secs[n])secs[n].classList.add('on');
   if(btns[n])btns[n].classList.add('on');
   if(n===0)updateDashboard();
-  if(n===3&&currentRole==='admin'){renderTeacherList();loadSchSettingsUI();}
+  if(n===3&&currentRole==='admin'){renderTeacherList();loadSchSettingsUI();loadFbConfigUI();}
   if(n===7)etInit();
   if(n===8)sylInitRows();
 }
@@ -3244,6 +3325,72 @@ function minsStr(m){
   var abs=Math.abs(m);
   var h=Math.floor(abs/60),min=abs%60;
   return (h>0?h+'h ':'')+min+'m';
+}
+
+// ═══════════════════════════════════════════
+//  FIREBASE CONNECT / DISCONNECT
+// ═══════════════════════════════════════════
+function connectFirebase(){
+  var apiKey=document.getElementById('fbApiKey').value.trim();
+  var authDomain=document.getElementById('fbAuthDomain').value.trim();
+  var dbUrl=document.getElementById('fbDbUrl').value.trim();
+  var projectId=document.getElementById('fbProjectId').value.trim();
+  if(!apiKey||!dbUrl){toast('API Key aur Database URL required hain!');return;}
+  var cfg={
+    apiKey:apiKey,
+    authDomain:authDomain,
+    databaseURL:dbUrl,
+    projectId:projectId
+  };
+  var ok=initFirebase(cfg);
+  if(ok){
+    ls_set('af_fb_config',cfg);
+    document.getElementById('fbStatus').textContent='Connected ✅';
+    document.getElementById('fbStatus').style.background='#e8f5e9';
+    document.getElementById('fbStatus').style.color='#2e7d32';
+    document.getElementById('fbMsg').textContent='✅ Firebase connected! Data ab sab devices pe sync hoga.';
+    document.getElementById('fbMsg').style.color='#2e7d32';
+    // Push all existing local data to Firebase
+    pushAllToFirebase();
+  }else{
+    document.getElementById('fbMsg').textContent='❌ Connection failed. Config check karo.';
+    document.getElementById('fbMsg').style.color='#c62828';
+  }
+}
+
+function pushAllToFirebase(){
+  if(!window.afDB)return;
+  var keys=['af_hw','af_dw','af_stud_att','af_teach_att','af_teachers','af_students','af_arrival'];
+  keys.forEach(function(k){
+    var data=ls_get(k);
+    if(data){
+      window.afDB.ref('school/'+k).set(data);
+    }
+  });
+  toast('Local data Firebase pe upload ho gaya! ✅');
+}
+
+function disconnectFirebase(){
+  if(window.afDB){
+    try{window.afDB.goOffline();}catch(e){}
+    window.afDB=null;
+  }
+  ls_set('af_fb_config',null);
+  var st=document.getElementById('fbStatus');
+  if(st){st.textContent='Not Connected';st.style.background='#ffebee';st.style.color='#c62828';}
+  toast('Firebase disconnected');
+}
+
+function loadFbConfigUI(){
+  var cfg=ls_get('af_fb_config');
+  if(!cfg)return;
+  var el;
+  if((el=document.getElementById('fbApiKey'))&&cfg.apiKey)el.value=cfg.apiKey;
+  if((el=document.getElementById('fbAuthDomain'))&&cfg.authDomain)el.value=cfg.authDomain;
+  if((el=document.getElementById('fbDbUrl'))&&cfg.databaseURL)el.value=cfg.databaseURL;
+  if((el=document.getElementById('fbProjectId'))&&cfg.projectId)el.value=cfg.projectId;
+  var st=document.getElementById('fbStatus');
+  if(st){st.textContent='Saved (reconnect)';st.style.background='#fff9c4';st.style.color='#f57f17';}
 }
 
 </script>
