@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Al-Fareed Public School</title>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -260,7 +258,10 @@ textarea{min-height:68px;resize:vertical;}
     <div class="app-urdu">الفرید پبلک اسکول ، ٹنڈو جام</div>
     <div class="app-sub">Tando Jam, Sindh &bull; Sir Ghulam Hussain</div>
   </div>
-  <div class="app-role" id="roleTag" onclick="doLogout()">👑 Admin ▾</div>
+  <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+    <span id="syncBadge" onclick="if(JB_KEY&&JB_BIN)jbPull()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);cursor:pointer;white-space:nowrap">Offline</span>
+    <div class="app-role" id="roleTag" onclick="doLogout()">👑 Admin ▾</div>
+  </div>
 </div>
 
 <!-- Navigation -->
@@ -604,29 +605,31 @@ textarea{min-height:68px;resize:vertical;}
 
 <!-- Admin Password Change -->
 <div class="card">
-<!-- FIREBASE SYNC SETUP -->
-<div class="card" style="border:2px solid #ff6f00;background:#fff8e1">
-  <div class="card-title" style="color:#ff6f00">🔥 Firebase Sync Setup
-    <span id="fbStatus" style="margin-left:auto;font-size:10px;padding:3px 8px;border-radius:10px;background:#ffebee;color:#c62828">Not Connected</span>
+<!-- JSONBIN SYNC SETUP -->
+<div class="card" style="border:2px solid #1565c0;background:#e3f2fd">
+  <div class="card-title" style="color:#1565c0">☁️ Data Sync Setup (JSONBin.io)
+    <span id="syncBadge" style="margin-left:auto;font-size:10px;padding:3px 9px;border-radius:10px;background:#ffebee;color:#c62828;white-space:nowrap">Not Connected</span>
   </div>
-  <div style="font-size:11px;color:#666;margin-bottom:9px;line-height:1.6">
-    Sab devices pe data sync karne ke liye Firebase connect karo (bilkul free):<br>
-    1. <a href="https://console.firebase.google.com" target="_blank" style="color:#ff6f00;font-weight:700">firebase.google.com</a> → New Project → Realtime Database → Start<br>
-    2. Rules mein <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">read/write: true</code> set karo<br>
-    3. Project Settings → Your apps → Web app → Config copy karo<br>
-    4. Neeche paste karo
+  <div style="font-size:11px;color:#555;margin-bottom:11px;line-height:1.7;background:#fff;border-radius:8px;padding:10px">
+    <strong>Sab devices pe data share karne ka tarika (FREE):</strong><br>
+    1️⃣ <a href="https://jsonbin.io" target="_blank" style="color:#1565c0;font-weight:700">jsonbin.io</a> par jaao → Sign Up (free)<br>
+    2️⃣ Login karo → <strong>API Keys</strong> → <strong>Master Key</strong> copy karo<br>
+    3️⃣ Neeche paste karo → <strong>Connect & Create</strong> dabao<br>
+    4️⃣ <strong>Bin ID save</strong> ho jayega — phir sab devices pe yahi ID use karo
   </div>
-  <label>Firebase API Key</label>
-  <input type="text" id="fbApiKey" placeholder="AIzaSy...">
-  <label>Auth Domain</label>
-  <input type="text" id="fbAuthDomain" placeholder="yourproject.firebaseapp.com">
-  <label>Database URL</label>
-  <input type="text" id="fbDbUrl" placeholder="https://yourproject-default-rtdb.firebaseio.com">
-  <label>Project ID</label>
-  <input type="text" id="fbProjectId" placeholder="your-project-id">
-  <button class="btn-g btn-full" onclick="connectFirebase()">🔥 Connect Firebase</button>
-  <button class="btn-sm bsr btn-full" style="margin-top:6px" onclick="disconnectFirebase()">Disconnect</button>
-  <div id="fbMsg" style="font-size:11px;margin-top:7px;text-align:center"></div>
+
+  <label>Master Key (jsonbin.io se)</label>
+  <input type="password" id="jbMasterKey" placeholder="$2a$10$..." style="font-family:monospace">
+
+  <label>Bin ID (pehli baar blank chhodo — auto create hoga)</label>
+  <input type="text" id="jbBinId" placeholder="64abc123... (auto-fill hoga)" style="font-family:monospace">
+
+  <div style="display:flex;gap:8px;margin-bottom:9px">
+    <button class="btn-g" onclick="jbConnect()" style="flex:1">☁️ Connect & Sync</button>
+    <button class="btn-sm" style="background:#ff6f00;color:#fff;padding:11px 13px" onclick="jbPull()">🔄 Pull Latest</button>
+  </div>
+  <button class="btn-sm bsr btn-full" style="margin-bottom:0" onclick="jbDisconnect()">🔌 Disconnect</button>
+  <div id="jbMsg" style="font-size:11px;margin-top:8px;text-align:center;color:#555"></div>
 </div>
 
 <!-- SCHOOL OFFICIAL SETTINGS -->
@@ -1303,56 +1306,132 @@ function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1<10?
 function todayFmt(){var d=new Date();return d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();}
 function fmtTime(v){if(!v)return '';var p=v.split(':'),h=parseInt(p[0]),m=p[1],ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+m+' '+ap;}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
-function ls_get(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+// ═══════════════════════════════════════════
+//  STORAGE — JSONBin.io SYNC
+//  Sab devices pe data share hoga
+// ═══════════════════════════════════════════
+var JB_KEY = ''; // JSONBin Master Key (Admin Panel se set hota hai)
+var JB_BIN = ''; // JSONBin Bin ID
+var JB_BASE = 'https://api.jsonbin.io/v3/b';
+var JB_SYNCING = false;
+var JB_QUEUE = {}; // pending writes
+var SHARED_KEYS = ['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students'];
+
+function ls_get(k){
+  try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}
+}
 function ls_set(k,v){
   try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}
-  // Also sync to Firebase for shared keys
-  var sharedKeys=['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students'];
-  if(sharedKeys.indexOf(k)>=0 && window.afDB){
-    try{
-      window.afDB.ref('school/'+k).set(v);
-    }catch(e){console.log('Firebase write error:',e);}
+  if(SHARED_KEYS.indexOf(k)>=0 && JB_KEY && JB_BIN){
+    JB_QUEUE[k]=v;
+    jbPushDebounced();
   }
 }
 
-// ─── Firebase Config ───
-// IMPORTANT: Apna Firebase config yahan paste karo
-// firebase.google.com → Create project → Realtime Database → Rules: public read/write
-var FB_CONFIG = ls_get('af_fb_config') || null;
-
-function initFirebase(cfg){
-  try{
-    if(firebase.apps.length===0){
-      firebase.initializeApp(cfg);
-    }
-    window.afDB = firebase.database();
-    toast('🔥 Firebase connected! Data sync on ✅');
-    // Subscribe to shared data changes
-    subscribeFirebase();
-    return true;
-  }catch(e){
-    console.log('Firebase init error:',e);
-    return false;
-  }
+// ─── Debounce writes (500ms) ───
+var jbTimer=null;
+function jbPushDebounced(){
+  if(jbTimer)clearTimeout(jbTimer);
+  jbTimer=setTimeout(jbPushAll,500);
 }
 
-function subscribeFirebase(){
-  if(!window.afDB)return;
-  var sharedKeys=['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students'];
-  sharedKeys.forEach(function(k){
-    window.afDB.ref('school/'+k).on('value',function(snap){
-      var val=snap.val();
-      if(val!==null){
-        try{localStorage.setItem(k,JSON.stringify(val));}catch(e){}
-        // Refresh UI if relevant
-        if(k==='af_hw'){try{renderDashHW();updateDashboard();}catch(e){}}
-        if(k==='af_teachers'){try{renderTeacherList();loadTeacherDropdown();renderTeachAttGrid();}catch(e){}}
-        if(k==='af_students'){try{loadStudentList();updateStudentStats();}catch(e){}}
-        if(k==='af_stud_att'||k==='af_teach_att'){try{renderDashAtt();}catch(e){}}
-      }
+function jbPushAll(){
+  if(!JB_KEY||!JB_BIN||JB_SYNCING)return;
+  var keys=Object.keys(JB_QUEUE);
+  if(!keys.length)return;
+  JB_SYNCING=true;
+  // Read current bin, merge, write back
+  jbRead(function(current){
+    var merged=current||{};
+    keys.forEach(function(k){merged[k]=JB_QUEUE[k];});
+    JB_QUEUE={};
+    jbWrite(merged,function(ok){
+      JB_SYNCING=false;
+      if(ok) jbUpdateSyncBadge(true);
     });
   });
 }
+
+function jbRead(cb){
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',JB_BASE+'/'+JB_BIN+'/latest',true);
+  xhr.setRequestHeader('X-Master-Key',JB_KEY);
+  xhr.setRequestHeader('X-Bin-Meta','false');
+  xhr.onload=function(){
+    try{
+      var d=JSON.parse(xhr.responseText);
+      cb(d);
+    }catch(e){cb({});}
+  };
+  xhr.onerror=function(){cb({});};
+  xhr.send();
+}
+
+function jbWrite(data,cb){
+  var xhr=new XMLHttpRequest();
+  xhr.open('PUT',JB_BASE+'/'+JB_BIN,true);
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-Master-Key',JB_KEY);
+  xhr.onload=function(){cb(xhr.status===200);};
+  xhr.onerror=function(){cb(false);};
+  xhr.send(JSON.stringify(data));
+}
+
+// ─── Pull latest data from JSONBin ───
+function jbPull(){
+  if(!JB_KEY||!JB_BIN)return;
+  jbUpdateSyncBadge(null); // loading
+  jbRead(function(data){
+    if(!data){jbUpdateSyncBadge(false);return;}
+    SHARED_KEYS.forEach(function(k){
+      if(data[k]!==undefined){
+        try{localStorage.setItem(k,JSON.stringify(data[k]));}catch(e){}
+      }
+    });
+    jbUpdateSyncBadge(true);
+    // Refresh UI
+    try{updateDashboard();}catch(e){}
+    try{renderTeacherList();loadTeacherDropdown();}catch(e){}
+    try{loadStudentList();}catch(e){}
+    toast('Data sync ho gaya! ✅');
+  });
+}
+
+// ─── Create new bin ───
+function jbCreateBin(cb){
+  var xhr=new XMLHttpRequest();
+  xhr.open('POST',JB_BASE,true);
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-Master-Key',JB_KEY);
+  xhr.setRequestHeader('X-Bin-Name','AlFareedSchool');
+  xhr.setRequestHeader('X-Bin-Private','false');
+  xhr.onload=function(){
+    try{
+      var d=JSON.parse(xhr.responseText);
+      cb(d.metadata&&d.metadata.id?d.metadata.id:null);
+    }catch(e){cb(null);}
+  };
+  xhr.onerror=function(){cb(null);};
+  var initData={};
+  SHARED_KEYS.forEach(function(k){
+    var v=ls_get(k);
+    if(v)initData[k]=v;
+  });
+  xhr.send(JSON.stringify(initData));
+}
+
+function jbUpdateSyncBadge(ok){
+  var b=document.getElementById('syncBadge');
+  if(!b)return;
+  if(ok===null){b.textContent='⏳ Syncing...';b.style.background='#fff9c4';b.style.color='#f57f17';}
+  else if(ok){b.textContent='✅ Synced';b.style.background='#e8f5e9';b.style.color='#2e7d32';}
+  else{b.textContent='❌ Sync Error';b.style.background='#ffebee';b.style.color='#c62828';}
+}
+
+// ─── Auto-pull every 30 sec if connected ───
+setInterval(function(){
+  if(JB_KEY&&JB_BIN)jbPull();
+},30000);
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -1423,10 +1502,13 @@ window.onload=function(){
   if(savedST){var stEl=document.getElementById('schoolStart');if(stEl)stEl.value=savedST;}
   // Auto-set hwDay from today
   hwAutoDay();
-  // Auto-connect Firebase if config saved
-  var savedFbCfg=ls_get('af_fb_config');
-  if(savedFbCfg&&savedFbCfg.apiKey&&savedFbCfg.databaseURL){
-    initFirebase(savedFbCfg);
+  // Auto-connect JSONBin if config saved
+  var savedKey=ls_get('af_jb_key');
+  var savedBin=ls_get('af_jb_bin');
+  if(savedKey&&savedBin){
+    JB_KEY=savedKey;JB_BIN=savedBin;
+    // Pull latest data on load
+    jbPull();
   }
   // Load global logo
   if(gL){
@@ -3328,69 +3410,71 @@ function minsStr(m){
 }
 
 // ═══════════════════════════════════════════
-//  FIREBASE CONNECT / DISCONNECT
+//  JSONBIN CONNECT / DISCONNECT
 // ═══════════════════════════════════════════
-function connectFirebase(){
-  var apiKey=document.getElementById('fbApiKey').value.trim();
-  var authDomain=document.getElementById('fbAuthDomain').value.trim();
-  var dbUrl=document.getElementById('fbDbUrl').value.trim();
-  var projectId=document.getElementById('fbProjectId').value.trim();
-  if(!apiKey||!dbUrl){toast('API Key aur Database URL required hain!');return;}
-  var cfg={
-    apiKey:apiKey,
-    authDomain:authDomain,
-    databaseURL:dbUrl,
-    projectId:projectId
-  };
-  var ok=initFirebase(cfg);
-  if(ok){
-    ls_set('af_fb_config',cfg);
-    document.getElementById('fbStatus').textContent='Connected ✅';
-    document.getElementById('fbStatus').style.background='#e8f5e9';
-    document.getElementById('fbStatus').style.color='#2e7d32';
-    document.getElementById('fbMsg').textContent='✅ Firebase connected! Data ab sab devices pe sync hoga.';
-    document.getElementById('fbMsg').style.color='#2e7d32';
-    // Push all existing local data to Firebase
-    pushAllToFirebase();
+function jbConnect(){
+  var key=document.getElementById('jbMasterKey').value.trim();
+  var binId=document.getElementById('jbBinId').value.trim();
+  if(!key){toast('Master Key daalen!');return;}
+  JB_KEY=key;
+  var msg=document.getElementById('jbMsg');
+  if(!binId){
+    // Create new bin
+    msg.textContent='Creating bin...';msg.style.color='#888';
+    jbCreateBin(function(newId){
+      if(!newId){
+        msg.textContent='❌ Bin create nahi hua. Key check karo.';
+        msg.style.color='#c62828';
+        JB_KEY='';return;
+      }
+      JB_BIN=newId;
+      document.getElementById('jbBinId').value=newId;
+      ls_set('af_jb_key',key);
+      ls_set('af_jb_bin',newId);
+      jbUpdateSyncBadge(true);
+      msg.textContent='✅ Connected! Bin ID: '+newId+' — Doosre devices pe yahi ID use karo';
+      msg.style.color='#2e7d32';
+      toast('JSONBin connected! ✅');
+    });
   }else{
-    document.getElementById('fbMsg').textContent='❌ Connection failed. Config check karo.';
-    document.getElementById('fbMsg').style.color='#c62828';
+    JB_BIN=binId;
+    ls_set('af_jb_key',key);
+    ls_set('af_jb_bin',binId);
+    // Pull data immediately
+    jbPull();
+    msg.textContent='✅ Connected — Data pull ho raha hai...';
+    msg.style.color='#2e7d32';
   }
 }
 
-function pushAllToFirebase(){
-  if(!window.afDB)return;
-  var keys=['af_hw','af_dw','af_stud_att','af_teach_att','af_teachers','af_students','af_arrival'];
-  keys.forEach(function(k){
-    var data=ls_get(k);
-    if(data){
-      window.afDB.ref('school/'+k).set(data);
-    }
-  });
-  toast('Local data Firebase pe upload ho gaya! ✅');
-}
-
-function disconnectFirebase(){
-  if(window.afDB){
-    try{window.afDB.goOffline();}catch(e){}
-    window.afDB=null;
-  }
-  ls_set('af_fb_config',null);
-  var st=document.getElementById('fbStatus');
-  if(st){st.textContent='Not Connected';st.style.background='#ffebee';st.style.color='#c62828';}
-  toast('Firebase disconnected');
+function jbDisconnect(){
+  JB_KEY='';JB_BIN='';
+  ls_set('af_jb_key','');ls_set('af_jb_bin','');
+  jbUpdateSyncBadge(false);
+  var msg=document.getElementById('jbMsg');
+  if(msg){msg.textContent='Disconnected';msg.style.color='#888';}
+  toast('Sync disconnected');
 }
 
 function loadFbConfigUI(){
-  var cfg=ls_get('af_fb_config');
-  if(!cfg)return;
-  var el;
-  if((el=document.getElementById('fbApiKey'))&&cfg.apiKey)el.value=cfg.apiKey;
-  if((el=document.getElementById('fbAuthDomain'))&&cfg.authDomain)el.value=cfg.authDomain;
-  if((el=document.getElementById('fbDbUrl'))&&cfg.databaseURL)el.value=cfg.databaseURL;
-  if((el=document.getElementById('fbProjectId'))&&cfg.projectId)el.value=cfg.projectId;
-  var st=document.getElementById('fbStatus');
-  if(st){st.textContent='Saved (reconnect)';st.style.background='#fff9c4';st.style.color='#f57f17';}
+  // Load saved JSONBin config
+  var k=ls_get('af_jb_key');
+  var b=ls_get('af_jb_bin');
+  if(k){
+    JB_KEY=k;
+    var el=document.getElementById('jbMasterKey');
+    if(el)el.value=k;
+  }
+  if(b){
+    JB_BIN=b;
+    var el2=document.getElementById('jbBinId');
+    if(el2)el2.value=b;
+  }
+  if(k&&b){
+    jbUpdateSyncBadge(true);
+    var msg=document.getElementById('jbMsg');
+    if(msg){msg.textContent='Auto-connected ✅ — Pull karo latest data ke liye';msg.style.color='#2e7d32';}
+  }
 }
 
 </script>
