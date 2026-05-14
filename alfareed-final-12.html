@@ -1395,10 +1395,12 @@ function jbPull(){
       }
     });
     jbUpdateSyncBadge(true);
-    // Refresh UI
+    // Refresh UI after pull
     try{updateDashboard();}catch(e){}
-    try{renderTeacherList();loadTeacherDropdown();}catch(e){}
+    try{renderTeacherList();}catch(e){}
+    try{loadTeacherDropdown();}catch(e){}
     try{loadStudentList();}catch(e){}
+    try{updateStudentStats();}catch(e){}
     toast('Data sync ho gaya! ✅');
   });
 }
@@ -1434,10 +1436,10 @@ function jbUpdateSyncBadge(ok){
   else{b.textContent='❌ Sync Error';b.style.background='#ffebee';b.style.color='#c62828';}
 }
 
-// ─── Auto-pull every 30 sec if connected ───
+// ─── Auto-pull every 10 sec if connected ───
 setInterval(function(){
   if(JB_KEY&&JB_BIN)jbPull();
-},30000);
+},10000);
 
 // ═══════════════════════════════════════════
 //  STATE
@@ -1513,8 +1515,22 @@ window.onload=function(){
   var savedBin=ls_get('af_jb_bin');
   if(savedKey&&savedBin){
     JB_KEY=savedKey;JB_BIN=savedBin;
-    // Pull latest data on load
-    jbPull();
+    // Pull latest data on load - then rebuild dropdown
+    jbRead(function(d){
+      if(d){
+        SHARED_KEYS.forEach(function(k){
+          if(d[k]!==undefined){try{localStorage.setItem(k,JSON.stringify(d[k]));}catch(e){}}
+        });
+        jbUpdateSyncBadge(true);
+        try{updateDashboard();}catch(e){}
+        toast('Data sync ho gaya! ✅');
+      }
+      // Always rebuild dropdown after pull attempt
+      loadTeacherDropdown();
+    });
+  } else {
+    // No sync - just load local dropdown
+    loadTeacherDropdown();
   }
   // Load global logo
   if(gL){
@@ -1523,8 +1539,6 @@ window.onload=function(){
     document.getElementById('ll-li').src=gL;
     document.getElementById('ll-li').style.display='block';
   }
-  // Populate teacher login dropdown
-  loadTeacherDropdown();
   // Set admin tab active
   switchLoginTab('admin');
 };
