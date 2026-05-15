@@ -7,441 +7,324 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Rajdhani:wght@600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Kalam:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Rajdhani:wght@600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
 
 :root{
-  --bg:#060d1a;
-  --panel:#0e1829;
-  --card:#162032;
-  --border:#1e3050;
-  --accent:#60a5fa;
-  --gold:#fbbf24;
-  --red:#f87171;
-  --green:#34d399;
-  --purple:#a78bfa;
-  --pink:#f472b6;
-  --teal:#22d3ee;
-  --text:#f1f5f9;
-  --sub:#94a3b8;
-  --white:#ffffff;
+  --bg:#050d1a;--panel:#0a1628;--card:#0f1f38;--border:#1a3050;
+  --accent:#60a5fa;--gold:#fbbf24;--red:#f87171;--green:#34d399;
+  --purple:#a78bfa;--pink:#f472b6;--teal:#22d3ee;
+  --text:#f0f6ff;--sub:#7090b0;--white:#ffffff;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;font-size:14px;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;}
 
-/* ===== HEADER ===== */
-.hdr{
-  background:linear-gradient(135deg,#0a1628,#0f2444,#0a1628);
-  border-bottom:2.5px solid var(--gold);
-  padding:11px 16px;
-  position:sticky;top:0;z-index:100;
-  box-shadow:0 4px 24px rgba(251,191,36,.2);
-}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#060e20,#0d2248,#060e20);border-bottom:2.5px solid var(--gold);padding:11px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(251,191,36,.2);}
 .hdr-inner{display:flex;align-items:center;gap:10px;}
-.hdr-logo{
-  width:44px;height:44px;
-  background:linear-gradient(135deg,var(--gold),#f59e0b);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
-  box-shadow:0 0 14px rgba(251,191,36,.4);
-}
-.hdr-txt h1{font-size:15px;font-weight:700;color:var(--gold);letter-spacing:.3px;}
+.hdr-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.hdr-txt h1{font-size:14px;font-weight:700;color:var(--gold);}
 .hdr-txt p{font-size:10px;color:var(--teal);letter-spacing:1.5px;font-weight:600;}
 
-/* ===== BOTTOM NAV ===== */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#080f1e;
-  border-top:1.5px solid var(--border);
-  display:flex;z-index:100;
-  padding:4px 0 10px;
-}
-.bnav-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:7px 4px;cursor:pointer;border:none;background:none;
-  color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;
-}
-.bnav-btn.on{color:var(--accent);}
-.bnav-btn.on .ni{filter:drop-shadow(0 0 6px rgba(96,165,250,.6));}
-.bnav-btn .ni{font-size:22px;}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#04090f;border-top:1.5px solid var(--border);display:flex;z-index:100;padding:5px 0 10px;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;border:none;background:none;color:var(--sub);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;}
+.nb.on{color:var(--accent);}
+.nb .ni{font-size:22px;}
 
-/* ===== PAGES ===== */
-.pg{display:none;padding:14px;padding-bottom:88px;}
+/* PAGES */
+.pg{display:none;padding:14px;padding-bottom:90px;}
 .pg.on{display:block;}
 
-/* ===== LABELS & INPUTS ===== */
-.fl{
-  font-size:11px;color:var(--teal);font-weight:700;
-  letter-spacing:1.2px;margin-bottom:6px;display:block;
-  text-transform:uppercase;
-}
-.fi{
-  width:100%;background:var(--card);
-  border:1.5px solid var(--border);
-  border-radius:10px;color:var(--white);
-  padding:11px 13px;font-family:'Rajdhani',sans-serif;
-  font-size:13px;font-weight:600;outline:none;
-  transition:border .2s;
-}
+/* FORM */
+.fl{font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1px;margin-bottom:6px;display:block;text-transform:uppercase;}
+.fi{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:10px;color:var(--white);padding:11px 13px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;outline:none;}
 .fi:focus{border-color:var(--accent);}
-select.fi option{background:var(--card);color:var(--white);}
-.fg{margin-bottom:13px;}
+select.fi option{background:var(--card);}
+.fg{margin-bottom:12px;}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 
-/* ===== SUBJECT CHIPS ===== */
-.subj-bar{display:flex;gap:7px;overflow-x:auto;padding:3px 0 10px;scrollbar-width:none;}
-.subj-bar::-webkit-scrollbar{display:none;}
-.schip{
-  padding:7px 14px;border-radius:22px;
-  border:1.5px solid var(--border);
-  background:var(--card);color:var(--sub);
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;
-  cursor:pointer;white-space:nowrap;flex-shrink:0;
-  transition:all .2s;
-}
-.schip.on{border-color:var(--gold);color:var(--gold);background:rgba(251,191,36,.12);}
+/* SUBJECT CHIPS */
+.sbar{display:flex;gap:7px;overflow-x:auto;padding:3px 0 10px;scrollbar-width:none;}
+.sbar::-webkit-scrollbar{display:none;}
+.schip{padding:7px 14px;border-radius:22px;border:1.5px solid var(--border);background:var(--card);color:var(--sub);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;}
+.schip.on{border-color:var(--gold);color:var(--gold);background:rgba(251,191,36,.1);}
 
-/* ===== INPUT TYPE BAR ===== */
-.ibar{display:flex;gap:7px;margin-bottom:13px;}
-.itype{
-  flex:1;padding:12px 4px;border-radius:12px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:var(--sub);font-family:'Rajdhani',sans-serif;
-  font-weight:700;font-size:11px;cursor:pointer;text-align:center;
-  transition:all .2s;
-}
+/* INPUT TYPE */
+.ibar{display:flex;gap:7px;margin-bottom:12px;}
+.itype{flex:1;padding:11px 4px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--sub);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;cursor:pointer;text-align:center;transition:all .2s;}
 .itype .ic{font-size:24px;display:block;margin-bottom:3px;}
-.itype.on{border-color:var(--accent);color:var(--accent);background:rgba(96,165,250,.12);}
+.itype.on{border-color:var(--accent);color:var(--accent);background:rgba(96,165,250,.1);}
 
-/* ===== UPLOAD ZONE ===== */
-.upzone{
-  border:2px dashed var(--border);border-radius:16px;
-  background:var(--card);padding:30px 16px;
-  text-align:center;cursor:pointer;margin-bottom:13px;
-  transition:border .2s;
-}
+/* UPLOAD ZONE */
+.upzone{border:2px dashed var(--border);border-radius:16px;background:var(--card);padding:30px 16px;text-align:center;cursor:pointer;margin-bottom:12px;transition:all .2s;}
 .upzone:active{border-color:var(--accent);}
 .upzone .ui{font-size:50px;margin-bottom:10px;}
 .upzone .ut{font-size:14px;font-weight:700;color:var(--white);}
 .upzone .us{font-size:11px;color:var(--sub);margin-top:4px;}
 
-/* ===== IMAGE PREVIEW ===== */
-.img-prev-wrap{border-radius:14px;overflow:hidden;border:2px solid var(--accent);margin-bottom:8px;position:relative;}
-.img-prev-wrap img{width:100%;max-height:280px;object-fit:contain;display:block;background:#000;}
-.img-clear{position:absolute;top:8px;right:8px;background:rgba(248,113,113,.95);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.img-acts{display:flex;gap:8px;margin-bottom:13px;}
-.ia-btn{flex:1;padding:10px;border-radius:10px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
+/* IMAGE PREVIEW */
+.iprev{border-radius:14px;overflow:hidden;border:2px solid var(--accent);margin-bottom:8px;position:relative;}
+.iprev img{width:100%;max-height:280px;object-fit:contain;display:block;background:#000;}
+.iclr{position:absolute;top:8px;right:8px;background:rgba(248,113,113,.95);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.iacts{display:flex;gap:8px;margin-bottom:12px;}
+.ia{flex:1;padding:10px;border-radius:10px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
 .ia-crop{background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff;}
 .ia-rot{background:var(--card);border:1.5px solid var(--border);color:var(--white);}
 
-/* ===== TEXT AREA ===== */
-.txtarea{
-  width:100%;background:var(--card);
-  border:1.5px solid var(--border);border-radius:12px;
-  color:var(--white);padding:13px;
-  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;
-  outline:none;min-height:160px;resize:vertical;line-height:1.7;
-  margin-bottom:13px;
-}
+/* TEXT AREA */
+.txtarea{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:var(--white);padding:13px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;outline:none;min-height:160px;resize:vertical;line-height:1.7;margin-bottom:12px;}
 .txtarea:focus{border-color:var(--accent);}
-.txtarea.urdu-mode{
-  font-family:'Noto Nastaliq Urdu',serif;
-  font-size:18px;direction:rtl;text-align:right;
-  line-height:2.4;
-}
+.txtarea.urdu-inp{font-family:'Noto Nastaliq Urdu',serif;font-size:18px;direction:rtl;text-align:right;line-height:2.5;}
 
-/* ===== LANGUAGE TOGGLE ===== */
-.lang-row{display:flex;gap:8px;margin-bottom:13px;}
-.lang-btn{
-  flex:1;padding:11px;border-radius:10px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:var(--sub);font-family:'Rajdhani',sans-serif;
-  font-weight:700;font-size:13px;cursor:pointer;
-  text-align:center;transition:all .2s;
-}
-.lang-btn.on{border-color:var(--teal);color:var(--teal);background:rgba(34,211,238,.12);}
+/* LANGUAGE */
+.lang-row{display:flex;gap:8px;margin-bottom:12px;}
+.lbtn{flex:1;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--sub);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-align:center;transition:all .2s;}
+.lbtn.on{border-color:var(--teal);color:var(--teal);background:rgba(34,211,238,.1);}
 
-/* ===== STYLE OPTIONS ===== */
-.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
-.sopt{
-  padding:12px;border-radius:12px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:var(--sub);font-family:'Rajdhani',sans-serif;
-  font-weight:700;font-size:12px;cursor:pointer;text-align:center;
-  transition:all .2s;
-}
+/* STYLE */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.sopt{padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:var(--sub);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-align:center;transition:all .2s;}
 .sopt .si{font-size:22px;display:block;margin-bottom:3px;}
-.sopt.on{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.12);}
+.sopt.on{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.1);}
 
-/* ===== SOLVE BUTTON ===== */
-.solve-btn{
-  width:100%;padding:17px;
-  background:linear-gradient(135deg,#7c3aed,#db2777);
-  border:none;color:#fff;border-radius:16px;
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;
-  cursor:pointer;letter-spacing:1.5px;
-  box-shadow:0 8px 28px rgba(139,92,246,.5);
-  margin-bottom:16px;transition:all .2s;
-}
+/* SOLVE BUTTON */
+.solve-btn{width:100%;padding:17px;background:linear-gradient(135deg,#7c3aed,#db2777);border:none;color:#fff;border-radius:16px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;cursor:pointer;letter-spacing:1.5px;box-shadow:0 8px 28px rgba(139,92,246,.5);margin-bottom:16px;transition:all .2s;}
 .solve-btn:disabled{opacity:.6;}
 
-/* ===== API CARD ===== */
-.api-card{
-  background:var(--card);border:2px solid var(--gold);
-  border-radius:14px;padding:16px;margin-bottom:16px;
-}
+/* API CARD */
+.api-card{background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:16px;}
 .api-card h3{font-size:14px;color:var(--gold);margin-bottom:6px;font-weight:700;}
 .api-card p{font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.5;}
 .api-row{display:flex;gap:7px;}
-.api-inp{
-  flex:1;background:var(--panel);border:1.5px solid var(--border);
-  border-radius:9px;color:var(--white);padding:10px;
-  font-family:monospace;font-size:11px;outline:none;
-}
-.api-sbtn{
-  padding:10px 16px;background:var(--gold);border:none;
-  color:#000;border-radius:9px;font-family:'Rajdhani',sans-serif;
-  font-weight:700;cursor:pointer;font-size:13px;
-}
+.api-inp{flex:1;background:var(--panel);border:1.5px solid var(--border);border-radius:9px;color:var(--white);padding:10px;font-family:monospace;font-size:11px;outline:none;}
+.api-sbtn{padding:10px 16px;background:var(--gold);border:none;color:#000;border-radius:9px;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;font-size:13px;}
 
-/* ===== RESULT TOOLBAR ===== */
-.result-bar{
-  background:var(--panel);border:1.5px solid var(--border);
-  border-radius:14px;padding:12px;margin-bottom:12px;
-  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
-}
-.tb{
-  padding:8px 12px;border-radius:9px;border:none;
-  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;
-  cursor:pointer;display:flex;align-items:center;gap:5px;
-}
-.tb-save{background:var(--green);color:#000;}
-.tb-pdf{background:#ef4444;color:#fff;}
-.tb-print{background:#2563eb;color:#fff;}
-.tb-copy{background:var(--card);border:1.5px solid var(--border);color:var(--white);}
-.tb-new{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
-.zoom-row{display:flex;align-items:center;gap:6px;margin-left:auto;}
-.z-btn{
-  width:30px;height:30px;border-radius:7px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:var(--white);font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-weight:700;
-}
-.z-lbl{font-size:12px;font-weight:700;color:var(--white);min-width:36px;text-align:center;}
+/* RESULT TOOLBAR */
+.rbar{background:var(--panel);border:1.5px solid var(--border);border-radius:14px;padding:12px;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+.tb{padding:9px 13px;border-radius:9px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.tb-s{background:var(--green);color:#000;}
+.tb-p{background:#ef4444;color:#fff;}
+.tb-pr{background:#2563eb;color:#fff;}
+.tb-c{background:var(--card);border:1.5px solid var(--border);color:var(--white);}
+.tb-n{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;}
+.zrow{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.zbtn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.zlbl{font-size:13px;font-weight:700;color:var(--white);min-width:38px;text-align:center;}
 
-/* ============================================================
-   NOTEBOOK PAGE — EXACT SAME AS IMAGE
-   ============================================================ */
+/* ================================================================
+   NOTEBOOK PAGE — EXACT HANDWRITTEN BLUE INK STYLE
+   ================================================================ */
 .nb-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .nb-wrap{display:inline-block;}
 
 .nb-page{
-  width:720px;min-height:960px;
-  background:#fffef5;
+  width:720px;
+  min-height:980px;
+  background:#fffef4;
   position:relative;
-  box-shadow:5px 6px 22px rgba(0,0,0,.45);
+  box-shadow:5px 6px 24px rgba(0,0,0,.5);
   border:1px solid #b8b8a0;
-  font-family:'Caveat','Kalam',cursive;
   overflow:hidden;
 }
 
-/* Spiral rings */
+/* Left spiral */
 .nb-spiral{
   position:absolute;left:0;top:0;bottom:0;width:32px;
-  background:linear-gradient(90deg,#c8c8b8,#e0e0d0);
-  display:flex;flex-direction:column;
-  justify-content:space-evenly;align-items:center;
-  padding:16px 0;
-  border-right:1px solid #aaa;
+  background:linear-gradient(90deg,#c8c8b5,#deded0);
+  display:flex;flex-direction:column;justify-content:space-evenly;
+  align-items:center;padding:16px 0;border-right:1px solid #aaa;
 }
-.nb-ring{
-  width:18px;height:18px;border-radius:50%;
-  border:3px solid #666;background:#e0e0c8;
-  position:relative;
-}
+.nb-ring{width:18px;height:18px;border-radius:50%;border:3px solid #666;background:#d8d8c0;}
 
-/* Body — blue lines + red margin */
+/* Notebook body — blue lines + red margin */
 .nb-body{
   margin-left:32px;
-  padding:14px 20px 24px 18px;
-  min-height:960px;position:relative;
+  padding:12px 18px 24px 18px;
+  min-height:980px;
+  position:relative;
   background-image:
-    repeating-linear-gradient(transparent,transparent 32px,#b8d0e8 32px,#b8d0e8 33.5px),
-    linear-gradient(90deg,transparent 0,#ee8888 0,#ee8888 3px,transparent 3px);
+    repeating-linear-gradient(transparent,transparent 32px,#b0cce8 32px,#b0cce8 33.5px),
+    linear-gradient(90deg,transparent 0,#e88 0,#e88 3px,transparent 3px);
 }
 
-/* Page number — top right */
+/* Page number */
 .nb-pgnum{
-  position:absolute;top:12px;right:16px;
+  position:absolute;top:12px;right:14px;
   font-family:'Caveat',cursive;font-size:15px;font-weight:700;
   color:#1a3570;border:2.5px solid #1a3570;
-  padding:2px 12px;border-radius:4px;
-  background:#fffef5;letter-spacing:.5px;
+  padding:2px 12px;border-radius:4px;background:#fffef4;
 }
 
-/* School title — bordered box centered */
-.nb-school-box{
-  text-align:center;padding:8px 32px 4px;
-}
-.nb-school-title{
+/* SCHOOL TITLE — bordered box, dark blue, Caveat font */
+.nb-school-wrap{text-align:center;padding:10px 32px 3px;}
+.nb-school{
   font-family:'Caveat',cursive;
-  font-size:26px;font-weight:700;color:#1a3570;
-  border:3px solid #1a3570;
-  padding:5px 20px;border-radius:5px;
+  font-size:28px;font-weight:700;
+  color:#1a2e6e;
+  border:3px solid #1a2e6e;
+  padding:5px 22px;border-radius:5px;
   display:inline-block;
 }
-.nb-school-title.urdu-nb{
-  font-family:'Noto Nastaliq Urdu',serif;
-  font-size:22px;
-}
 
-/* Class line */
+/* Class line — normal black Caveat */
 .nb-classline{
   font-family:'Caveat',cursive;
-  font-size:16px;font-weight:600;color:#111;
+  font-size:17px;font-weight:600;color:#1a1a1a;
   text-align:center;display:block;margin:3px 0;
 }
 
-/* Chapter — red underline */
+/* Chapter — RED, underlined, Caveat */
 .nb-chapter{
   font-family:'Caveat',cursive;
-  font-size:17px;font-weight:700;color:#c0392b;
-  text-decoration:underline;text-align:center;
-  display:block;margin:3px 0;
+  font-size:18px;font-weight:700;color:#cc2200;
+  text-decoration:underline;
+  text-align:center;display:block;margin:3px 0;
 }
-.nb-chapter.urdu-nb{font-family:'Noto Nastaliq Urdu',serif;font-size:15px;}
-
-/* Horizontal dividers */
-.nb-hdiv{border:none;border-top:2.5px solid #222;margin:7px 0;}
 
 /* Question heading */
 .nb-qhead{
   font-family:'Caveat',cursive;
-  font-size:14px;font-weight:700;color:#111;
-  display:block;margin:8px 0 3px;
+  font-size:15px;font-weight:700;color:#111;
+  display:block;margin:9px 0 3px;
 }
-.nb-qhead.urdu-nb{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;}
 
-/* ---- TWO COLUMN LAYOUT (exact image style) ---- */
-.nb-twocol{
+/* Divider */
+.nb-div{border:none;border-top:2.5px solid #1a1a1a;margin:7px 0;}
+
+/* ---- TWO COLUMN — exact image style ---- */
+.nb-2col{
   display:grid;grid-template-columns:1fr 1fr;
-  border-top:2.5px solid #222;border-bottom:2.5px solid #222;
+  border-top:2.5px solid #111;
+  border-bottom:2.5px solid #111;
   margin:5px 0;
 }
-.nb-col{padding:6px 10px 6px 6px;}
+.nb-col{padding:6px 10px 8px 6px;}
 .nb-col:first-child{border-right:2px solid #777;padding-right:14px;}
 
-/* Part label — red italic */
+/* Part label — RED italic bold */
 .nb-part{
   font-family:'Caveat',cursive;
-  font-size:14px;font-weight:700;color:#c0392b;
-  font-style:italic;display:inline;
+  font-size:15px;font-weight:700;
+  color:#cc2200;font-style:italic;
 }
-.nb-part.urdu-nb{font-family:'Noto Nastaliq Urdu',serif;font-style:normal;}
 
-/* Sol: */
+/* Sol: — blue underlined */
 .nb-sol{
   font-family:'Caveat',cursive;
-  font-size:13px;font-weight:700;color:#1a3570;
-  text-decoration:underline;display:inline-block;
-  margin:4px 0 2px;
+  font-size:13px;font-weight:700;
+  color:#1a2e6e;text-decoration:underline;
+  display:inline-block;margin:3px 0 2px;
 }
 
-/* Step description */
-.nb-desc{
-  font-family:'Caveat',cursive;
-  font-size:12.5px;color:#111;
-  font-style:italic;display:block;margin:2px 0;
+/* Step description — BLUE INK, Caveat/Kalam */
+.nb-step{
+  font-family:'Kalam','Caveat',cursive;
+  font-size:13px;
+  color:#1a2e8e;  /* BLUE INK */
+  font-style:italic;
+  display:block;margin:2px 0;
 }
-.nb-desc.urdu-nb{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;text-align:right;font-style:normal;font-size:13px;line-height:2.2;}
 
-/* Equation */
+/* Equation lines — BLUE INK, slightly larger */
 .nb-eq{
-  font-family:'Caveat',cursive;
-  font-size:13px;color:#111;
-  font-style:italic;display:block;margin:1px 0;
+  font-family:'Kalam','Caveat',cursive;
+  font-size:14px;
+  color:#1a2e8e;  /* BLUE INK */
+  font-style:italic;
+  display:block;margin:1px 0;
   padding-left:10px;
 }
 
-/* Equals-chain (= ... indented) */
+/* Equals-chain indented — BLUE INK */
 .nb-chain{
-  font-family:'Caveat',cursive;
-  font-size:12px;color:#111;
-  font-style:italic;display:block;margin:0;
-  padding-left:24px;
+  font-family:'Kalam','Caveat',cursive;
+  font-size:13px;
+  color:#1a2e8e;  /* BLUE INK */
+  font-style:italic;
+  display:block;margin:0;
+  padding-left:26px;
 }
 
-/* BOXED ANSWER */
+/* BOXED ANSWER — dark blue border, blue ink text */
 .nb-ansbox{
-  font-family:'Caveat',cursive;
-  font-size:15px;font-weight:700;color:#111;
-  border:3px solid #1a3570;
-  padding:5px 16px;display:inline-block;
+  font-family:'Kalam','Caveat',cursive;
+  font-size:15px;font-weight:700;
+  color:#0d1f5c;
+  border:3px solid #1a2e6e;
+  padding:5px 18px;display:inline-block;
   border-radius:4px;margin:6px 0;
-  background:#dce8fc;
+  background:#ddeaff;
 }
-.nb-ansbox.urdu-nb{font-family:'Noto Nastaliq Urdu',serif;direction:rtl;}
+
+/* For Urdu notes */
+.nb-urdu{
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:15px;color:#1a2e8e;
+  direction:rtl;text-align:right;
+  display:block;margin:2px 0;line-height:2.3;
+}
+.nb-urdu-head{
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:16px;font-weight:700;color:#cc2200;
+  direction:rtl;text-align:right;
+  display:block;margin:4px 0;line-height:2.3;
+  text-decoration:underline;
+}
 
 /* Footer */
 .nb-footer{
-  text-align:center;font-size:12px;color:#666;
+  text-align:center;font-size:11px;color:#666;
   font-family:'Caveat',cursive;
-  border-top:1.5px solid #ccc;
-  padding:6px 8px;margin-top:14px;
+  border-top:1.5px solid #ccc;padding:6px;margin-top:12px;
 }
 
-/* ===== CROP MODAL ===== */
+/* CROP MODAL */
 .crop-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:200;flex-direction:column;}
 .crop-ov.open{display:flex;}
-.crop-top{background:#0e1829;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.crop-top{background:#080f1e;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
 .crop-top h3{font-size:14px;color:var(--gold);font-weight:700;}
-.crop-cancel{padding:8px 14px;background:var(--red);border:none;border-radius:8px;color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;}
+.crop-can{padding:8px 14px;background:var(--red);border:none;border-radius:8px;color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;}
 .crop-area{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden;}
-.crop-cwrap{position:relative;display:inline-block;}
+.cwrap{position:relative;display:inline-block;}
 #cropCanvas{display:block;max-width:100%;max-height:58vh;cursor:crosshair;}
-.crop-sel{position:absolute;border:2.5px solid #00ff88;background:rgba(0,255,136,.07);pointer-events:none;}
-.crop-hint{text-align:center;padding:6px 14px;font-size:12px;color:var(--sub);}
-.crop-btns{padding:12px 14px;background:#0e1829;border-top:1px solid var(--border);display:flex;gap:10px;}
-.crop-cb{flex:1;padding:13px;border-radius:12px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+.csel{position:absolute;border:2.5px solid #00ff88;background:rgba(0,255,136,.07);pointer-events:none;}
+.crop-hint{text-align:center;padding:6px;font-size:12px;color:var(--sub);}
+.crop-btns{padding:12px 16px;background:#080f1e;border-top:1px solid var(--border);display:flex;gap:10px;}
+.cb{flex:1;padding:13px;border-radius:12px;border:none;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
 
-/* ===== NOTES GRID ===== */
+/* NOTES GRID */
 .ngrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .ncard{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;position:relative;transition:all .2s;}
 .ncard:hover{border-color:var(--accent);}
-.ncard-thumb{height:100px;background:#fffef5;overflow:hidden;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;}
-.ncard-thumb-txt{font-family:'Caveat',cursive;font-size:10px;color:#1a3570;padding:6px;line-height:1.5;text-align:center;width:100%;max-height:100px;overflow:hidden;}
+.ncard-thumb{height:100px;background:#fffef4;overflow:hidden;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;}
+.ncard-txt{font-family:'Kalam',cursive;font-size:10px;color:#1a2e8e;padding:6px;line-height:1.5;text-align:left;width:100%;max-height:100px;overflow:hidden;}
 .ncard-info{padding:8px 10px;}
 .ncard-title{font-size:12px;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ncard-meta{font-size:10px;color:var(--sub);margin-top:2px;}
-.ncard-del{position:absolute;top:6px;right:6px;background:rgba(248,113,113,.9);border:none;color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;cursor:pointer;opacity:0;transition:.2s;display:flex;align-items:center;justify-content:center;}
-.ncard:hover .ncard-del{opacity:1;}
+.ndel{position:absolute;top:6px;right:6px;background:rgba(248,113,113,.9);border:none;color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;cursor:pointer;opacity:0;transition:.2s;display:flex;align-items:center;justify-content:center;}
+.ncard:hover .ndel{opacity:1;}
 .empty-st{text-align:center;padding:70px 20px;color:var(--sub);}
-.empty-st .ei{font-size:52px;margin-bottom:12px;}
 
-/* ===== SETTINGS ===== */
+/* SETTINGS */
 .s-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
 .s-card h3{font-size:14px;color:var(--gold);margin-bottom:10px;font-weight:700;}
 .s-row{display:flex;gap:7px;margin-bottom:9px;}
-.si{flex:1;background:var(--panel);border:1.5px solid var(--border);border-radius:9px;color:var(--white);padding:10px;font-family:monospace;font-size:11px;outline:none;}
-.s-btn{padding:10px 16px;border:none;border-radius:9px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
+.si{flex:1;background:var(--panel);border:1.5px solid var(--border);border-radius:9px;color:var(--white);padding:10px;font-family:'Rajdhani',sans-serif;font-size:12px;outline:none;}
+.s-btn{padding:11px 16px;border:none;border-radius:9px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
 
-/* ===== VIEW NOTE HEADER ===== */
+/* VIEW NOTE */
 .vnh{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 .btn-back{background:var(--card);border:1.5px solid var(--border);color:var(--white);width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
-/* ===== LOADING ===== */
+/* LOADING */
 .ldots{display:inline-flex;gap:5px;}
 .ldots span{width:7px;height:7px;border-radius:50%;background:#fff;animation:ld 1.2s infinite;}
 .ldots span:nth-child(2){animation-delay:.2s;}
 .ldots span:nth-child(3){animation-delay:.4s;}
 @keyframes ld{0%,80%,100%{transform:scale(.5);opacity:.3}40%{transform:scale(1);opacity:1}}
 
-/* ===== TOAST ===== */
-.toast{
-  position:fixed;bottom:82px;left:50%;transform:translateX(-50%);
-  background:var(--green);color:#000;padding:11px 22px;
-  border-radius:22px;font-size:13px;font-weight:700;
-  opacity:0;pointer-events:none;transition:opacity .3s;z-index:300;white-space:nowrap;
-}
+/* TOAST */
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--green);color:#000;padding:11px 22px;border-radius:22px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s;z-index:300;white-space:nowrap;}
 .toast.show{opacity:1;}
 .toast.err{background:var(--red);color:#fff;}
 
@@ -455,7 +338,6 @@ select.fi option{background:var(--card);color:var(--white);}
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <div class="hdr">
   <div class="hdr-inner">
     <div class="hdr-logo">📚</div>
@@ -469,19 +351,17 @@ select.fi option{background:var(--card);color:var(--white);}
 <!-- ===== SOLVE PAGE ===== -->
 <div class="pg on" id="pgSolve">
 
-  <!-- API KEY -->
   <div class="api-card" id="apiCard" style="display:none;">
     <h3>🔑 Groq API Key Daalen</h3>
-    <p>Free milti hai: <b>console.groq.com</b> — Sign up karein, API key copy karein</p>
+    <p>Free milti hai: <b>console.groq.com</b></p>
     <div class="api-row">
-      <input class="api-inp" type="password" id="apiInp" placeholder="gsk_xxxxxxxxxxxxxxxx">
+      <input class="api-inp" type="password" id="apiInp" placeholder="gsk_...">
       <button class="api-sbtn" onclick="saveKey()">✓ Save</button>
     </div>
   </div>
 
-  <!-- SUBJECT -->
   <label class="fl">📚 Subject</label>
-  <div class="subj-bar">
+  <div class="sbar">
     <button class="schip on" onclick="setSub(this,'Mathematics')">📐 Mathematics</button>
     <button class="schip" onclick="setSub(this,'Chemistry')">⚗️ Chemistry</button>
     <button class="schip" onclick="setSub(this,'Biology')">🧬 Biology</button>
@@ -492,10 +372,10 @@ select.fi option{background:var(--card);color:var(--white);}
     <button class="schip" onclick="setSub(this,'Islamiyat')">☪️ Islamiyat</button>
     <button class="schip" onclick="setSub(this,'Computer')">💻 Computer</button>
     <button class="schip" onclick="setSub(this,'Economics')">📊 Economics</button>
+    <button class="schip" onclick="setSub(this,'Sindhi')">🌸 Sindhi</button>
     <button class="schip" onclick="setSub(this,'General')">📚 General</button>
   </div>
 
-  <!-- CLASS & CHAPTER -->
   <div class="r2">
     <div class="fg">
       <label class="fl">🎓 Class</label>
@@ -525,15 +405,15 @@ select.fi option{background:var(--card);color:var(--white);}
     </div>
   </div>
 
-  <!-- LANGUAGE -->
+  <!-- LANGUAGE: only English or Urdu -->
   <label class="fl">🌐 Solution Language</label>
   <div class="lang-row">
-    <button class="lang-btn on" id="langEn" onclick="setLang('en')">🇬🇧 English</button>
-    <button class="lang-btn" id="langUr" onclick="setLang('ur')">🇵🇰 اردو</button>
+    <button class="lbtn on" id="lEn" onclick="setLang('en')">🇬🇧 English</button>
+    <button class="lbtn" id="lUr" onclick="setLang('ur')">🇵🇰 اردو (Urdu)</button>
   </div>
 
   <!-- INPUT TYPE -->
-  <label class="fl">📥 Material / Question</label>
+  <label class="fl">📥 Material Input</label>
   <div class="ibar">
     <button class="itype on" id="itG" onclick="setIT('G')"><span class="ic">🖼️</span>Gallery</button>
     <button class="itype" id="itC" onclick="setIT('C')"><span class="ic">📷</span>Camera</button>
@@ -552,80 +432,74 @@ select.fi option{background:var(--card);color:var(--white);}
   <div id="aC" style="display:none;">
     <input type="file" id="fC" accept="image/*" capture="environment" style="display:none;" onchange="loadImg(event)">
     <div class="upzone" onclick="document.getElementById('fC').click()">
-      <div class="ui">📷</div>
-      <div class="ut">Camera se photo lo</div>
+      <div class="ui">📷</div><div class="ut">Camera se photo lo</div>
       <div class="us">Notebook, board ya textbook ki photo</div>
     </div>
   </div>
   <div id="aT" style="display:none;">
-    <textarea class="txtarea" id="txtInp" placeholder="Question ya topic yahan likhein...&#10;&#10;Example:&#10;Solve: 2z + (3+i)w = 9-i&#10;       -iz - iw = -1+i&#10;&#10;Ya phir koi bhi subject ka sawal likhein..."></textarea>
+    <textarea class="txtarea" id="txtInp" placeholder="Question ya topic yahan likhein..."></textarea>
   </div>
   <div id="aF" style="display:none;">
     <input type="file" id="fF" accept="image/*" style="display:none;" onchange="loadImg(event)">
     <div class="upzone" onclick="document.getElementById('fF').click()">
-      <div class="ui">📁</div>
-      <div class="ut">File choose karein</div>
-      <div class="us">Image file upload karein</div>
+      <div class="ui">📁</div><div class="ut">File choose karein</div><div class="us">Image file</div>
     </div>
   </div>
 
   <!-- IMAGE PREVIEW + CROP + ROTATE -->
   <div id="imgBox" style="display:none;">
-    <div class="img-prev-wrap">
+    <div class="iprev">
       <img id="prevImg" src="" alt="">
-      <button class="img-clear" onclick="clearImg()">✕</button>
+      <button class="iclr" onclick="clearImg()">✕</button>
     </div>
-    <div class="img-acts">
-      <button class="ia-btn ia-crop" onclick="openCrop()">✂️ Crop Karein</button>
-      <button class="ia-btn ia-rot" onclick="rotateImg()">↻ Rotate</button>
+    <div class="iacts">
+      <button class="ia ia-crop" onclick="openCrop()">✂️ Crop Karein</button>
+      <button class="ia ia-rot" onclick="rotImg()">↻ Rotate</button>
     </div>
   </div>
 
   <!-- STYLE -->
   <label class="fl">✍️ Solution Style</label>
-  <div class="style-grid">
+  <div class="sgrid">
     <button class="sopt on" id="ss1" onclick="setSS('step')"><span class="si">📐</span>Step by Step</button>
     <button class="sopt" id="ss2" onclick="setSS('twocol')"><span class="si">⊞</span>Two Column</button>
-    <button class="sopt" id="ss3" onclick="setSS('concept')"><span class="si">💡</span>Concept+Solve</button>
+    <button class="sopt" id="ss3" onclick="setSS('concept')"><span class="si">💡</span>Theory+Solve</button>
     <button class="sopt" id="ss4" onclick="setSS('quick')"><span class="si">⚡</span>Quick Answer</button>
   </div>
 
-  <!-- SOLVE BUTTON -->
   <button class="solve-btn" id="solveBtn" onclick="doSolve()">⚡ SOLVE KARO</button>
 
   <!-- RESULT -->
   <div id="resDiv" style="display:none;">
-    <div class="result-bar">
-      <button class="tb tb-save" onclick="saveNote()">💾 Save</button>
-      <button class="tb tb-pdf" onclick="makePDF('nbPage')">📄 PDF</button>
-      <button class="tb tb-print" onclick="doPrint('nbPage')">🖨️ Print</button>
-      <button class="tb tb-copy" onclick="doCopy()">📋 Copy</button>
-      <button class="tb tb-new" onclick="resetAll()">↺ New</button>
-      <div class="zoom-row">
-        <button class="z-btn" onclick="doZoom(-10,'nbWrap','nbPage','zL1')">−</button>
-        <span class="z-lbl" id="zL1">70%</span>
-        <button class="z-btn" onclick="doZoom(10,'nbWrap','nbPage','zL1')">+</button>
+    <div class="rbar">
+      <button class="tb tb-s" onclick="saveNote()">💾 Save</button>
+      <button class="tb tb-p" onclick="makePDF('nbPage')">📄 PDF</button>
+      <button class="tb tb-pr" onclick="doPrint('nbPage')">🖨️ Print</button>
+      <button class="tb tb-c" onclick="doCopy()">📋 Copy</button>
+      <button class="tb tb-n" onclick="resetAll()">↺ New</button>
+      <div class="zrow">
+        <button class="zbtn" onclick="doZ(-10,'nWrap','nbPage','zL1')">−</button>
+        <span class="zlbl" id="zL1">70%</span>
+        <button class="zbtn" onclick="doZ(10,'nWrap','nbPage','zL1')">+</button>
       </div>
     </div>
-    <div class="nb-scroll">
-      <div id="nbWrap">
-        <div class="nb-page" id="nbPage">
-          <div class="nb-spiral" id="nbSpiral"></div>
-          <div class="nb-body" id="nbBody"></div>
-        </div>
+    <div class="nb-scroll"><div id="nWrap">
+      <div class="nb-page" id="nbPage">
+        <div class="nb-spiral" id="sp1"></div>
+        <div class="nb-body" id="nbBody"></div>
       </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
 <!-- ===== NOTES PAGE ===== -->
 <div class="pg" id="pgNotes">
   <div style="margin-bottom:12px;">
-    <input class="fi" id="srchInp" placeholder="🔍 Notes search karein..." oninput="renderNotes()" style="width:100%;">
+    <input class="fi" id="srch" placeholder="🔍 Notes search karein..." oninput="renderNotes()" style="width:100%;">
   </div>
-  <div class="ngrid" id="notesGrid"></div>
-  <div class="empty-st" id="emptyNotes" style="display:none;">
-    <div class="ei">📓</div>
+  <div class="ngrid" id="ngrid"></div>
+  <div class="empty-st" id="emptyN" style="display:none;">
+    <div style="font-size:52px;margin-bottom:12px;">📓</div>
     <p style="font-size:14px;font-weight:600;">Koi notes nahi hain.<br>Solve karke Save karein!</p>
   </div>
 </div>
@@ -634,24 +508,22 @@ select.fi option{background:var(--card);color:var(--white);}
 <div class="pg" id="pgView">
   <div class="vnh">
     <button class="btn-back" onclick="goNotes()">←</button>
-    <span style="flex:1;font-size:14px;font-weight:700;color:var(--gold);" id="vnTitle">Note</span>
-    <button class="tb tb-pdf" onclick="makePDF('savedPage')" style="padding:8px 11px;font-size:11px;">📄 PDF</button>
-    <button class="tb tb-print" onclick="doPrint('savedPage')" style="padding:8px 11px;font-size:11px;">🖨️</button>
+    <span style="flex:1;font-size:14px;font-weight:700;color:var(--gold);" id="vnT">Note</span>
+    <button class="tb tb-p" onclick="makePDF('savedPg')" style="padding:8px 11px;font-size:11px;">📄 PDF</button>
+    <button class="tb tb-pr" onclick="doPrint('savedPg')" style="padding:8px 11px;font-size:11px;">🖨️</button>
   </div>
   <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px;">
     <span style="font-size:11px;font-weight:700;color:var(--sub);">ZOOM:</span>
-    <button class="z-btn" onclick="doZoom(-10,'savedWrap','savedPage','zL2')">−</button>
-    <span class="z-lbl" id="zL2">70%</span>
-    <button class="z-btn" onclick="doZoom(10,'savedWrap','savedPage','zL2')">+</button>
+    <button class="zbtn" onclick="doZ(-10,'sWrap','savedPg','zL2')">−</button>
+    <span class="zlbl" id="zL2">70%</span>
+    <button class="zbtn" onclick="doZ(10,'sWrap','savedPg','zL2')">+</button>
   </div>
-  <div class="nb-scroll">
-    <div id="savedWrap">
-      <div class="nb-page" id="savedPage">
-        <div class="nb-spiral" id="savedSpiral"></div>
-        <div class="nb-body" id="savedBody"></div>
-      </div>
+  <div class="nb-scroll"><div id="sWrap">
+    <div class="nb-page" id="savedPg">
+      <div class="nb-spiral" id="sp2"></div>
+      <div class="nb-body" id="savedBody"></div>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <!-- ===== SETTINGS ===== -->
@@ -659,11 +531,11 @@ select.fi option{background:var(--card);color:var(--white);}
   <div class="s-card">
     <h3>🔑 Groq API Key</h3>
     <div class="s-row">
-      <input class="si" type="password" id="sApiInp" placeholder="gsk_...">
+      <input class="si" type="password" id="sApiI" placeholder="gsk_...">
       <button class="s-btn" style="background:var(--gold);color:#000;" onclick="saveSettKey()">✓ Save</button>
     </div>
     <p id="apiSt" style="font-size:12px;color:var(--green);margin-top:4px;font-weight:600;"></p>
-    <p style="font-size:11px;color:var(--sub);margin-top:4px;">Free API: <b style="color:var(--teal);">console.groq.com</b></p>
+    <p style="font-size:11px;color:var(--sub);margin-top:4px;">Free: <b style="color:var(--teal);">console.groq.com</b></p>
   </div>
   <div class="s-card">
     <h3>🏫 School Info</h3>
@@ -675,47 +547,39 @@ select.fi option{background:var(--card);color:var(--white);}
       <label class="fl">Teacher Name</label>
       <input class="fi" id="sTeacher" style="width:100%;" value="Sir Ghulam Hussain">
     </div>
-    <button class="s-btn" style="background:var(--green);color:#000;width:100%;padding:12px;" onclick="saveSchool()">💾 Save Info</button>
+    <button class="s-btn" style="background:var(--green);color:#000;width:100%;padding:13px;" onclick="saveSchool()">💾 Save Info</button>
   </div>
   <div class="s-card">
     <h3>🗑️ Clear All Notes</h3>
-    <button class="s-btn" style="background:var(--red);color:#fff;width:100%;padding:12px;" onclick="clearAll()">🗑️ Sab Notes Delete Karein</button>
+    <button class="s-btn" style="background:var(--red);color:#fff;width:100%;padding:13px;" onclick="clearAll()">🗑️ Sab Notes Delete Karein</button>
   </div>
   <div style="text-align:center;padding:16px;color:var(--sub);font-size:12px;">
-    Sir Ghulam Hussain Notes Maker v3.0<br>Al-Fareed Public School, Tando Jam
+    Sir Ghulam Hussain Notes Maker v4.0<br>Al-Fareed Public School, Tando Jam
   </div>
 </div>
 
-<!-- ===== CROP MODAL ===== -->
+<!-- CROP MODAL -->
 <div class="crop-ov" id="cropMod">
   <div class="crop-top">
     <h3>✂️ Image Crop Karein</h3>
-    <button class="crop-cancel" onclick="closeCrop()">✕ Cancel</button>
+    <button class="crop-can" onclick="closeCrop()">✕ Cancel</button>
   </div>
-  <div class="crop-area" id="cropArea">
-    <div class="crop-cwrap" id="cropWrap">
-      <canvas id="cropCanvas"></canvas>
-      <div class="crop-sel" id="cropSel" style="display:none;"></div>
-    </div>
-  </div>
+  <div class="crop-area"><div class="cwrap" id="cWrap">
+    <canvas id="cropCanvas"></canvas>
+    <div class="csel" id="cSel" style="display:none;"></div>
+  </div></div>
   <div class="crop-hint">👆 Image par drag karein — crop area select karein</div>
   <div class="crop-btns">
-    <button class="crop-cb" style="background:var(--card);border:1.5px solid var(--border);color:var(--white);" onclick="resetCrop()">↺ Reset</button>
-    <button class="crop-cb" style="background:linear-gradient(135deg,var(--green),#059669);color:#000;" onclick="applyCrop()">✅ Apply Crop</button>
+    <button class="cb" style="background:var(--card);border:1.5px solid var(--border);color:var(--white);" onclick="resetCrop()">↺ Reset</button>
+    <button class="cb" style="background:linear-gradient(135deg,var(--green),#059669);color:#000;" onclick="applyCrop()">✅ Apply Crop</button>
   </div>
 </div>
 
 <!-- BOTTOM NAV -->
 <div class="bnav">
-  <button class="bnav-btn on" id="bn0" onclick="showPg('pgSolve',0)">
-    <span class="ni">⚡</span><span>Solve</span>
-  </button>
-  <button class="bnav-btn" id="bn1" onclick="showPg('pgNotes',1)">
-    <span class="ni">📓</span><span>Notes</span>
-  </button>
-  <button class="bnav-btn" id="bn2" onclick="showPg('pgSettings',2)">
-    <span class="ni">⚙️</span><span>Settings</span>
-  </button>
+  <button class="nb on" id="bn0" onclick="showPg('pgSolve',0)"><span class="ni">⚡</span><span>Solve</span></button>
+  <button class="nb" id="bn1" onclick="showPg('pgNotes',1)"><span class="ni">📓</span><span>Notes</span></button>
+  <button class="nb" id="bn2" onclick="showPg('pgSettings',2)"><span class="ni">⚙️</span><span>Settings</span></button>
 </div>
 
 <div id="pzone" style="display:none;"></div>
@@ -723,54 +587,54 @@ select.fi option{background:var(--card);color:var(--white);}
 
 <script>
 var apiKey=localStorage.getItem('ghKey')||'';
-var subject='Mathematics',solStyle='step',inputType='G',lang='en';
-var uploadedImg=null,origImg=null,rotAngle=0;
-var notes=JSON.parse(localStorage.getItem('ghNotes7')||'[]');
+var subject='Mathematics',solStyle='step',IT='G',lang='en';
+var uploadedImg=null,rotAngle=0;
+var notes=JSON.parse(localStorage.getItem('ghNotes8')||'[]');
 var schoolName=localStorage.getItem('ghSchool')||'Al-Fareed Public School, Tando Jam';
 var teacherName=localStorage.getItem('ghTeacher')||'Sir Ghulam Hussain';
 var currentSol='',currentNote=null;
-var zoomLevels={nbWrap:70,savedWrap:70};
-var cropImgEl=null,cropStartX=0,cropStartY=0,cropEndX=0,cropEndY=0,isCropping=false;
+var ZL={nWrap:70,sWrap:70};
+var cropImg=null,cX1=0,cY1=0,cX2=0,cY2=0,cropping=false;
 
 window.onload=function(){
-  if(apiKey){document.getElementById('apiCard').style.display='none';document.getElementById('apiSt').textContent='✅ API key save hai';document.getElementById('sApiInp').value=apiKey;}
+  if(apiKey){document.getElementById('apiCard').style.display='none';document.getElementById('apiSt').textContent='✅ API key save hai';document.getElementById('sApiI').value=apiKey;}
   else document.getElementById('apiCard').style.display='block';
   document.getElementById('sSchool').value=schoolName;
   document.getElementById('sTeacher').value=teacherName;
-  applyZoom('nbWrap','nbPage','zL1');
-  applyZoom('savedWrap','savedPage','zL2');
+  applyZ('nWrap','nbPage','zL1');
+  applyZ('sWrap','savedPg','zL2');
   renderNotes();
 };
 
 function showPg(id,n){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   document.getElementById('bn'+n).classList.add('on');
   if(id==='pgNotes')renderNotes();
 }
 function goNotes(){showPg('pgNotes',1);}
 
-function saveKey(){var k=document.getElementById('apiInp').value.trim();if(k){apiKey=k;localStorage.setItem('ghKey',k);document.getElementById('apiCard').style.display='none';toast('API key save ho gayi! ✅');}}
-function saveSettKey(){var k=document.getElementById('sApiInp').value.trim();if(k){apiKey=k;localStorage.setItem('ghKey',k);document.getElementById('apiSt').textContent='✅ Saved!';toast('Saved! ✅');}}
-function saveSchool(){schoolName=document.getElementById('sSchool').value;teacherName=document.getElementById('sTeacher').value;localStorage.setItem('ghSchool',schoolName);localStorage.setItem('ghTeacher',teacherName);toast('School info save ho gayi! ✅');}
-function clearAll(){if(confirm('Sab notes delete ho jayenge?')){notes=[];localStorage.removeItem('ghNotes7');renderNotes();toast('Sab notes delete ho gaye');}}
+function saveKey(){var k=document.getElementById('apiInp').value.trim();if(k){apiKey=k;localStorage.setItem('ghKey',k);document.getElementById('apiCard').style.display='none';toast('API key saved! ✅');}}
+function saveSettKey(){var k=document.getElementById('sApiI').value.trim();if(k){apiKey=k;localStorage.setItem('ghKey',k);document.getElementById('apiSt').textContent='✅ Saved!';toast('Saved! ✅');}}
+function saveSchool(){schoolName=document.getElementById('sSchool').value;teacherName=document.getElementById('sTeacher').value;localStorage.setItem('ghSchool',schoolName);localStorage.setItem('ghTeacher',teacherName);toast('Info saved! ✅');}
+function clearAll(){if(confirm('Sab notes delete ho jayenge?')){notes=[];localStorage.removeItem('ghNotes8');renderNotes();toast('Deleted');}}
 
 function setSub(btn,s){subject=s;document.querySelectorAll('.schip').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
 
 function setLang(l){
   lang=l;
-  document.getElementById('langEn').classList.toggle('on',l==='en');
-  document.getElementById('langUr').classList.toggle('on',l==='ur');
+  document.getElementById('lEn').classList.toggle('on',l==='en');
+  document.getElementById('lUr').classList.toggle('on',l==='ur');
   var ta=document.getElementById('txtInp');
-  if(l==='ur'){ta.classList.add('urdu-mode');ta.dir='rtl';ta.placeholder='یہاں سوال یا موضوع لکھیں...';}
-  else{ta.classList.remove('urdu-mode');ta.dir='ltr';ta.placeholder='Question ya topic yahan likhein...';}
+  if(l==='ur'){ta.classList.add('urdu-inp');ta.dir='rtl';ta.placeholder='یہاں سوال لکھیں...';}
+  else{ta.classList.remove('urdu-inp');ta.dir='ltr';ta.placeholder='Question ya topic yahan likhein...';}
 }
 
 function setSS(s){solStyle=s;['ss1','ss2','ss3','ss4'].forEach(b=>document.getElementById(b).classList.remove('on'));var m={step:'ss1',twocol:'ss2',concept:'ss3',quick:'ss4'};document.getElementById(m[s]).classList.add('on');}
 
 function setIT(t){
-  inputType=t;
+  IT=t;
   ['G','C','T','F'].forEach(x=>{document.getElementById('a'+x).style.display=x===t?'block':'none';document.getElementById('it'+x).classList.toggle('on',x===t);});
   if(t!=='G'&&t!=='C'&&t!=='F')clearImg();
 }
@@ -778,12 +642,12 @@ function setIT(t){
 function loadImg(ev){
   var f=ev.target.files[0];if(!f)return;
   var r=new FileReader();
-  r.onload=function(e){uploadedImg=e.target.result;origImg=e.target.result;rotAngle=0;document.getElementById('prevImg').src=uploadedImg;document.getElementById('imgBox').style.display='block';};
+  r.onload=function(e){uploadedImg=e.target.result;rotAngle=0;document.getElementById('prevImg').src=uploadedImg;document.getElementById('imgBox').style.display='block';};
   r.readAsDataURL(f);ev.target.value='';
 }
-function clearImg(){uploadedImg=null;origImg=null;document.getElementById('imgBox').style.display='none';document.getElementById('prevImg').src='';}
+function clearImg(){uploadedImg=null;document.getElementById('imgBox').style.display='none';document.getElementById('prevImg').src='';}
 
-function rotateImg(){
+function rotImg(){
   if(!uploadedImg)return;
   rotAngle=(rotAngle+90)%360;
   var img=new Image();
@@ -803,41 +667,40 @@ function openCrop(){
   var canvas=document.getElementById('cropCanvas');var ctx=canvas.getContext('2d');
   var img=new Image();
   img.onload=function(){
-    var maxW=window.innerWidth-24,maxH=window.innerHeight*0.55;
-    var r=img.width/img.height,w=maxW,h=w/r;
-    if(h>maxH){h=maxH;w=h*r;}
+    var mW=window.innerWidth-24,mH=window.innerHeight*0.55;
+    var r=img.width/img.height,w=mW,h=w/r;
+    if(h>mH){h=mH;w=h*r;}
     canvas.width=Math.round(w);canvas.height=Math.round(h);
     ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    cropImgEl=img;initCropEvents(canvas);
+    cropImg=img;
+    var sel=document.getElementById('cSel');sel.style.display='none';
+    cX1=cY1=cX2=cY2=0;
+    function gp(e){var rc=canvas.getBoundingClientRect();var x=(e.touches?e.touches[0].clientX:e.clientX)-rc.left;var y=(e.touches?e.touches[0].clientY:e.clientY)-rc.top;return{x:Math.max(0,Math.min(x,canvas.width)),y:Math.max(0,Math.min(y,canvas.height))};}
+    function start(e){e.preventDefault();var p=gp(e);cX1=p.x;cY1=p.y;cropping=true;sel.style.display='block';}
+    function move(e){if(!cropping)return;e.preventDefault();var p=gp(e);cX2=p.x;cY2=p.y;var l=Math.min(cX1,cX2),t=Math.min(cY1,cY2),w=Math.abs(cX2-cX1),h=Math.abs(cY2-cY1);sel.style.left=l+'px';sel.style.top=t+'px';sel.style.width=w+'px';sel.style.height=h+'px';}
+    function end(){cropping=false;}
+    canvas.onmousedown=start;canvas.onmousemove=move;canvas.onmouseup=end;
+    canvas.ontouchstart=start;canvas.ontouchmove=move;canvas.ontouchend=end;
   };img.src=uploadedImg;
 }
-function initCropEvents(canvas){
-  var sel=document.getElementById('cropSel');
-  function pos(e){var r=canvas.getBoundingClientRect();var x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;var y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;return{x:Math.max(0,Math.min(x,canvas.width)),y:Math.max(0,Math.min(y,canvas.height))};}
-  function start(e){e.preventDefault();var p=pos(e);cropStartX=p.x;cropStartY=p.y;isCropping=true;sel.style.display='block';}
-  function move(e){if(!isCropping)return;e.preventDefault();var p=pos(e);cropEndX=p.x;cropEndY=p.y;var l=Math.min(cropStartX,cropEndX),t=Math.min(cropStartY,cropEndY),w=Math.abs(cropEndX-cropStartX),h=Math.abs(cropEndY-cropStartY);sel.style.left=l+'px';sel.style.top=t+'px';sel.style.width=w+'px';sel.style.height=h+'px';}
-  function end(){isCropping=false;}
-  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);canvas.addEventListener('mouseup',end);
-  canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',end);
-}
-function resetCrop(){document.getElementById('cropSel').style.display='none';cropStartX=cropStartY=cropEndX=cropEndY=0;}
+function resetCrop(){document.getElementById('cSel').style.display='none';cX1=cY1=cX2=cY2=0;}
 function applyCrop(){
-  if(!cropImgEl||cropEndX===cropStartX){toast('Crop area select karein!',1);return;}
+  if(!cropImg||cX2===cX1){toast('Crop area select karein!',1);return;}
   var canvas=document.getElementById('cropCanvas');
-  var sx=cropImgEl.naturalWidth/canvas.width,sy=cropImgEl.naturalHeight/canvas.height;
-  var x=Math.min(cropStartX,cropEndX)*sx,y=Math.min(cropStartY,cropEndY)*sy;
-  var w=Math.abs(cropEndX-cropStartX)*sx,h=Math.abs(cropEndY-cropStartY)*sy;
+  var sx=cropImg.naturalWidth/canvas.width,sy=cropImg.naturalHeight/canvas.height;
+  var x=Math.min(cX1,cX2)*sx,y=Math.min(cY1,cY2)*sy;
+  var w=Math.abs(cX2-cX1)*sx,h=Math.abs(cY2-cY1)*sy;
   var out=document.createElement('canvas');out.width=Math.round(w);out.height=Math.round(h);
-  out.getContext('2d').drawImage(cropImgEl,x,y,w,h,0,0,w,h);
+  out.getContext('2d').drawImage(cropImg,x,y,w,h,0,0,w,h);
   uploadedImg=out.toDataURL('image/jpeg',0.95);document.getElementById('prevImg').src=uploadedImg;
-  closeCrop();toast('Crop apply ho gaya! ✅');
+  closeCrop();toast('Crop ho gaya! ✅');
 }
 function closeCrop(){document.getElementById('cropMod').classList.remove('open');}
 
 // ZOOM
-function doZoom(d,wId,pId,lId){zoomLevels[wId]=Math.min(150,Math.max(30,(zoomLevels[wId]||70)+d));applyZoom(wId,pId,lId);}
-function applyZoom(wId,pId,lId){
-  var z=zoomLevels[wId]||70;
+function doZ(d,wId,pId,lId){ZL[wId]=Math.min(150,Math.max(30,(ZL[wId]||70)+d));applyZ(wId,pId,lId);}
+function applyZ(wId,pId,lId){
+  var z=ZL[wId]||70;
   var w=document.getElementById(wId),p=document.getElementById(pId),l=document.getElementById(lId);
   if(!w||!p)return;
   p.style.transform='scale('+z/100+')';p.style.transformOrigin='top left';
@@ -846,148 +709,219 @@ function applyZoom(wId,pId,lId){
   if(l)l.textContent=z+'%';
 }
 
-// MAIN SOLVE
+// ===== MAIN SOLVE =====
 async function doSolve(){
   if(!apiKey){toast('Settings mein API key daalen!',1);document.getElementById('apiCard').style.display='block';return;}
   var txt=document.getElementById('txtInp').value||'';
-  if(!uploadedImg&&!txt.trim()){toast('Image ya text input dein!',1);return;}
+  if(!uploadedImg&&!txt.trim()){toast('Image ya text dein!',1);return;}
   var btn=document.getElementById('solveBtn');
-  btn.innerHTML='<span class="ldots"><span></span><span></span><span></span></span> AI Solve kar raha hai...';
+  btn.innerHTML='<span class="ldots"><span></span><span></span><span></span></span> Solving...';
   btn.disabled=true;document.getElementById('resDiv').style.display='none';
 
-  var langInstr={
-    en:'Write the complete solution in English only. Clear professional English. No Urdu or Roman Urdu.',
-    ur:'پوری solution صرف اردو میں لکھیں۔ واضح اردو زبان استعمال کریں۔ Equations English میں رہیں۔ کوئی Roman Urdu نہ لکھیں۔'
-  };
-  var styleInstr={
-    step:'Solve step by step. Number each step clearly (Step 1, Step 2...). Show all working. Write final answer as "ANSWER: [value]"',
-    twocol:'If there are two parts, solve both. Label each part clearly. Final answers boxed.',
-    concept:'First explain the concept/theory briefly. Then show the method. Then solve step by step.',
-    quick:'Shortest direct method. Minimum steps. Clear final answer.'
+  // CRITICAL: NO Roman Urdu, NO explanations — only pure math/subject notation
+  var langPrompt=lang==='en'
+    ?'Write ONLY in English. No Urdu. No Roman Urdu. No explanations in brackets. Write exactly like a British/Pakistani school notebook — direct equations and steps only.'
+    :'صرف اردو میں لکھیں۔ کوئی رومن اردو نہیں۔ کوئی انگریزی وضاحت نہیں۔ براہ راست مساوات اور قدم لکھیں۔';
+
+  var stylePrompt={
+    step:'Write step by step. Each line is ONE equation or ONE short statement. No long explanations. Show all algebraic steps. End with "ANSWER: [value]".',
+    twocol:'Two parts side by side. Each part: label, Sol:, equations, ANSWER: boxed. Direct steps only.',
+    concept:'Brief definition (2 lines max). Then direct solution steps. ANSWER: at end.',
+    quick:'Minimum steps. Direct answer only. ANSWER: clearly.'
   };
 
   var cls=document.getElementById('clsInp').value||'';
   var chap=document.getElementById('chapInp').value||'';
   var qcnt=document.getElementById('qcnt').value||'2';
 
-  var sys=schoolName+' ke teacher '+teacherName+' hain.\n'+
-    'Subject: '+subject+' | Class: '+cls+' | '+chap+'\n'+
-    langInstr[lang]+'\n'+styleInstr[solStyle]+'\n\n'+
-    'Format:\nQUESTION: [question text]\nSOL:\n[steps]\nANSWER: [final answer]\n\n'+
-    'Solve '+qcnt+' question(s). Notebook style.';
+  // SYSTEM PROMPT — force blue-ink handwriting style output
+  var sys='You are '+teacherName+', teacher at '+schoolName+'.\n'+
+    'Subject: '+subject+' | '+cls+' | '+chap+'\n\n'+
+    langPrompt+'\n'+stylePrompt[solStyle]+'\n\n'+
+    'STRICT RULES:\n'+
+    '1. Write ONLY equations and steps — no paragraph explanations\n'+
+    '2. Each line = one equation or one very short step label\n'+
+    '3. Step labels: "From the first equation:", "Multiply by i:", "Put z = ...:" etc (max 6 words)\n'+
+    '4. For math: show EVERY algebraic step on its own line\n'+
+    '5. Final answer: write exactly "ANSWER: z = value, w = value"\n'+
+    '6. '+langPrompt+'\n'+
+    '7. NO long sentences. NO Roman Urdu ever.\n\n'+
+    'FORMAT:\nQUESTION: (ii) [equation 1]\n         [equation 2]\nSOL:\n[step label]\n[equation]\n[= result]\n...\nANSWER: [value]';
 
   var msgs=[{role:'system',content:sys}];
   if(uploadedImg){
     var b64=uploadedImg.split(',')[1];var mime=uploadedImg.split(';')[0].split(':')[1];
     msgs.push({role:'user',content:[
       {type:'image_url',image_url:{url:'data:'+mime+';base64,'+b64}},
-      {type:'text',text:txt?txt+'\nSolve these questions.':'Solve all questions in this image step by step.'}
+      {type:'text',text:txt?txt+'\nSolve all questions in this image.':'Solve all equations/questions in this image step by step. Show every algebraic step on its own line.'}
     ]});
   } else {msgs.push({role:'user',content:txt});}
 
   try{
-    var res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',
+    var res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
-      body:JSON.stringify({model:uploadedImg?'llama-3.2-90b-vision-preview':'llama-3.3-70b-versatile',max_tokens:3000,messages:msgs})
+      body:JSON.stringify({
+        model:uploadedImg?'llama-3.2-90b-vision-preview':'llama-3.3-70b-versatile',
+        max_tokens:3000,messages:msgs
+      })
     });
     var data=await res.json();
     if(data.choices&&data.choices[0]){
       currentSol=data.choices[0].message.content;
-      buildNb(currentSol,'nbBody','nbSpiral',cls,chap,document.getElementById('pgNum').value);
+      buildNb(currentSol,'nbBody','sp1',
+        document.getElementById('clsInp').value,
+        document.getElementById('chapInp').value,
+        document.getElementById('pgNum').value);
       document.getElementById('resDiv').style.display='block';
-      setTimeout(function(){applyZoom('nbWrap','nbPage','zL1');document.getElementById('resDiv').scrollIntoView({behavior:'smooth'});},100);
+      setTimeout(function(){applyZ('nWrap','nbPage','zL1');document.getElementById('resDiv').scrollIntoView({behavior:'smooth'});},100);
     } else toast('Error: '+(data.error&&data.error.message||'API error'),1);
   } catch(e){toast('Network error! Internet check karein.',1);}
   btn.innerHTML='⚡ SOLVE KARO';btn.disabled=false;
 }
 
-// BUILD NOTEBOOK
+// ===== BUILD NOTEBOOK — exact image 2 style =====
 function buildNb(text,bodyId,spiralId,cls,chap,pg){
   buildSpiral(spiralId);
   var body=document.getElementById(bodyId);
   var isUrdu=(lang==='ur');
-  var uCls=isUrdu?' urdu-nb':'';
   var html='';
+
+  // PAGE NUMBER
   html+='<div class="nb-pgnum">Page '+esc(pg||'1')+'</div>';
-  html+='<div class="nb-school-box"><span class="nb-school-title'+uCls+'">'+esc(schoolName)+'</span></div>';
+
+  // SCHOOL TITLE BOX
+  html+='<div class="nb-school-wrap"><span class="nb-school">'+esc(schoolName)+'</span></div>';
+
+  // CLASS LINE
   if(cls||subject) html+='<span class="nb-classline">'+esc((cls?cls+' ':'')+subject)+'</span>';
-  if(chap) html+='<span class="nb-chapter'+uCls+'">'+esc(chap)+'</span>';
-  html+='<hr class="nb-hdiv">';
 
+  // CHAPTER — red
+  if(chap) html+='<span class="nb-chapter">'+esc(chap)+'</span>';
+
+  html+='<hr class="nb-div">';
+
+  // PARSE
   var lines=text.split('\n');
-  var tcMode=false,colData=[];
+  var tcMode=false,cols=[];
 
-  function flushTC(){
-    if(!colData.length)return;
-    html+='<div class="nb-twocol">';
-    colData.forEach(function(col){
+  function flush(){
+    if(!cols.length)return;
+    html+='<div class="nb-2col">';
+    cols.forEach(function(col){
       html+='<div class="nb-col">';
-      if(col.head) html+='<span class="nb-part'+uCls+'">'+esc(col.head)+'</span> ';
-      if(col.headRest) html+='<span class="nb-desc'+uCls+'" style="display:inline;">'+esc(col.headRest)+'</span>';
+      if(col.part) html+='<span class="nb-part">'+esc(col.part)+'</span>';
+      if(col.eq) html+='&nbsp;<span class="nb-eq" style="display:inline;">'+esc(col.eq)+'</span>';
       html+='<br>';
       col.lines.forEach(function(l){
         if(l.t==='sol') html+='<span class="nb-sol">'+esc(l.v)+'</span><br>';
-        else if(l.t==='ans') html+='<div style="margin:4px 0;"><span class="nb-ansbox'+uCls+'">'+esc(l.v)+'</span></div>';
-        else if(l.t==='desc') html+='<span class="nb-desc'+uCls+'">'+esc(l.v)+'</span>';
+        else if(l.t==='ans') html+='<div style="margin:5px 0;"><span class="nb-ansbox">'+esc(l.v)+'</span></div>';
+        else if(l.t==='step'){
+          if(isUrdu) html+='<span class="nb-urdu">'+esc(l.v)+'</span>';
+          else html+='<span class="nb-step">'+esc(l.v)+'</span>';
+        }
         else if(l.t==='chain') html+='<span class="nb-chain">'+esc(l.v)+'</span>';
-        else html+='<span class="nb-eq">'+esc(l.v)+'</span>';
+        else{
+          if(isUrdu) html+='<span class="nb-urdu">'+esc(l.v)+'</span>';
+          else html+='<span class="nb-eq">'+esc(l.v)+'</span>';
+        }
       });
       html+='</div>';
     });
     html+='</div>';
-    tcMode=false;colData=[];
+    tcMode=false;cols=[];
   }
 
   lines.forEach(function(raw){
     var line=raw.trim();if(!line)return;
-    if(line.match(/^QUESTION:|^Question\s*\d+/i)){
-      if(tcMode)flushTC();
-      html+='<div style="margin:8px 0 3px;"><span class="nb-qhead'+uCls+'">'+esc(line)+'</span></div>';
-    } else if(line.match(/^\((ii|iii|iv|v|vi|vii)\)/i)&&solStyle==='twocol'){
-      if(!tcMode){tcMode=true;}
-      if(colData.length>=2)flushTC();
-      var pl=line.match(/^\(\w+\)/)[0],pr=line.replace(/^\(\w+\)\s*/,'');
-      colData.push({head:pl,headRest:pr,lines:[]});
-    } else if(line.match(/^\([ivx\d]+\)/i)){
-      if(tcMode)flushTC();
-      var pl=line.match(/^\(\w+\)/)[0],pr=line.replace(/^\(\w+\)\s*/,'');
-      html+='<div style="margin:6px 0 2px;"><span class="nb-part'+uCls+'">'+esc(pl)+'</span>&nbsp;<span class="nb-qhead'+uCls+'" style="display:inline;font-size:13px;">'+esc(pr)+'</span></div>';
-    } else if(line.match(/^Sol[:\.]?\s*$/i)||line.match(/^Solution:/i)){
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'sol',v:line});
+
+    // QUESTION heading
+    if(line.match(/^QUESTION:/i)||line.match(/^Question\s*\d+:/i)){
+      if(tcMode)flush();
+      html+='<div style="margin:8px 0 3px;"><span class="nb-qhead">'+esc(line)+'</span></div>';
+    }
+    // Two-col parts (ii), (iii) etc
+    else if(line.match(/^\((ii|iii|iv|v|vi)\)/i)&&solStyle==='twocol'){
+      if(!tcMode)tcMode=true;
+      if(cols.length>=2)flush();
+      var pm=line.match(/^\(\w+\)/)[0];
+      var rest=line.replace(/^\(\w+\)\s*/,'');
+      cols.push({part:pm,eq:rest,lines:[]});
+    }
+    // Single part label
+    else if(line.match(/^\([ivx\d]+\)/i)){
+      if(tcMode)flush();
+      var pm=line.match(/^\(\w+\)/)[0];
+      var rest=line.replace(/^\(\w+\)\s*/,'');
+      if(isUrdu) html+='<div style="margin:7px 0 2px;"><span class="nb-part">'+esc(pm)+'</span>&nbsp;<span class="nb-urdu" style="display:inline;">'+esc(rest)+'</span></div>';
+      else html+='<div style="margin:7px 0 2px;"><span class="nb-part">'+esc(pm)+'</span>&nbsp;<span class="nb-eq" style="display:inline;padding-left:0;">'+esc(rest)+'</span></div>';
+    }
+    // SOL:
+    else if(line.match(/^Sol[:\.]?\s*$/i)||line.match(/^Solution:/i)){
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'sol',v:line});
       else html+='<span class="nb-sol">'+esc(line)+'</span><br>';
-    } else if(line.match(/^ANSWER:|^Answer:/i)){
+    }
+    // ANSWER
+    else if(line.match(/^ANSWER:|^Answer:/i)){
       var ans=line.replace(/^ANSWER:\s*|^Answer:\s*/i,'');
-      if(tcMode)flushTC();
-      html+='<div style="margin:6px 0;"><span class="nb-ansbox'+uCls+'">'+esc(ans)+'</span></div>';
-    } else if(line.match(/^(Step\s*\d+|Multiply|From|Put|Comparing|Given|Since|Note|Let|Taking|Using|Now|So|Then|Therefore|Hence|Putting|Substitut|We get)/i)){
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'desc',v:line});
-      else html+='<span class="nb-desc'+uCls+'">'+esc(line)+'</span>';
-    } else if(line.match(/^\s*=/)&&!line.match(/^===/)){
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'chain',v:line});
+      if(tcMode)flush();
+      html+='<div style="margin:7px 0;"><span class="nb-ansbox">'+esc(ans)+'</span></div>';
+    }
+    // Urdu lines
+    else if(isUrdu&&line.match(/[\u0600-\u06FF]/)){
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'step',v:line});
+      else html+='<span class="nb-urdu">'+esc(line)+'</span>';
+    }
+    // Step descriptions (short)
+    else if(line.match(/^(From|Put|Multiply|Comparing|Given|Since|Let|Taking|Using|Now|So|Then|Therefore|Hence|Putting|Substitut|We get|Step)/i)){
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'step',v:line});
+      else html+='<span class="nb-step">'+esc(line)+'</span>';
+    }
+    // Equals-chain (starts with =)
+    else if(line.match(/^\s*=/)){
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'chain',v:line});
       else html+='<span class="nb-chain">'+esc(line)+'</span>';
-    } else if(line.match(/^\*\*(.*)\*\*$/)||line.match(/^#+\s/)){
-      if(tcMode)flushTC();
+    }
+    // Bold/heading
+    else if(line.match(/^\*\*(.*)\*\*$/)||line.match(/^#+\s/)){
+      if(tcMode)flush();
       var t=line.replace(/^\*\*|\*\*$/g,'').replace(/^#+\s*/,'');
-      html+='<span class="nb-desc" style="font-weight:700;color:#c0392b;text-decoration:underline;">'+esc(t)+'</span>';
-    } else if(line.match(/^[-•]\s/)){
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'desc',v:'• '+line.slice(2)});
-      else html+='<span class="nb-desc'+uCls+'">• '+esc(line.slice(2))+'</span>';
-    } else if(line.match(/[=+\-*/√²³±∑∫π]/)||line.match(/\d[a-zA-Z]/)){
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'eq',v:line});
+      if(isUrdu) html+='<span class="nb-urdu-head">'+esc(t)+'</span>';
+      else html+='<span class="nb-step" style="color:#cc2200;text-decoration:underline;font-weight:700;">'+esc(t)+'</span>';
+    }
+    // Bullets
+    else if(line.match(/^[-•]\s/)){
+      var bt=line.slice(2);
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'step',v:'• '+bt});
+      else{
+        if(isUrdu) html+='<span class="nb-urdu">• '+esc(bt)+'</span>';
+        else html+='<span class="nb-step">• '+esc(bt)+'</span>';
+      }
+    }
+    // Math equations
+    else if(line.match(/[=+\-*/√²³±∑∫πθ]/)||line.match(/\d[a-zA-Z]/)){
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'eq',v:line});
       else html+='<span class="nb-eq">'+esc(line)+'</span>';
-    } else {
-      if(tcMode&&colData.length>0)colData[colData.length-1].lines.push({t:'desc',v:line});
-      else html+='<span class="nb-desc'+uCls+'">'+esc(line)+'</span>';
+    }
+    // Everything else
+    else{
+      if(tcMode&&cols.length>0)cols[cols.length-1].lines.push({t:'step',v:line});
+      else{
+        if(isUrdu) html+='<span class="nb-urdu">'+esc(line)+'</span>';
+        else html+='<span class="nb-step">'+esc(line)+'</span>';
+      }
     }
   });
-  if(tcMode)flushTC();
+
+  if(tcMode)flush();
+
   html+='<div class="nb-footer">'+esc(schoolName)+' &nbsp;|&nbsp; Teacher: '+esc(teacherName)+'</div>';
   body.innerHTML=html;
 }
 
 function buildSpiral(id){
   var el=document.getElementById(id);if(!el)return;el.innerHTML='';
-  for(var i=0;i<20;i++){var r=document.createElement('div');r.className='nb-ring';el.appendChild(r);}
+  for(var i=0;i<22;i++){var r=document.createElement('div');r.className='nb-ring';el.appendChild(r);}
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
@@ -995,29 +929,28 @@ function saveNote(){
   if(!currentSol){toast('Pehle solve karein!',1);return;}
   var n={id:Date.now(),subject:subject,class:document.getElementById('clsInp').value||'',
     chapter:document.getElementById('chapInp').value||'',page:document.getElementById('pgNum').value||'1',
-    content:currentSol,style:solStyle,lang:lang,image:uploadedImg||null,
-    date:new Date().toLocaleDateString('en-PK')};
-  notes.unshift(n);localStorage.setItem('ghNotes7',JSON.stringify(notes));toast('Note save ho gaya! 💾');
+    content:currentSol,style:solStyle,lang:lang,
+    image:uploadedImg||null,date:new Date().toLocaleDateString('en-PK')};
+  notes.unshift(n);localStorage.setItem('ghNotes8',JSON.stringify(notes));toast('Note save ho gaya! 💾');
 }
 function resetAll(){document.getElementById('resDiv').style.display='none';document.getElementById('txtInp').value='';clearImg();currentSol='';window.scrollTo(0,0);}
 
 async function makePDF(pgId){
   toast('PDF ban raha hai...');
-  var el=document.getElementById(pgId);var origT=el.style.transform;el.style.transform='none';
+  var el=document.getElementById(pgId);var oT=el.style.transform;el.style.transform='none';
   try{
-    var canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#fffef5',logging:false});
-    el.style.transform=origT;
+    var canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#fffef4',logging:false});
+    el.style.transform=oT;
     var imgData=canvas.toDataURL('image/jpeg',0.95);
     var pdf=new jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
-    var ratio=canvas.height/canvas.width;var ih=pw*ratio;
+    var ratio=canvas.height/canvas.width,ih=pw*ratio;
     if(ih>ph)pdf.addImage(imgData,'JPEG',0,0,ph/ratio,ph);
     else pdf.addImage(imgData,'JPEG',0,0,pw,ih);
-    pdf.save(subject+'-'+new Date().toLocaleDateString().replace(/\//g,'-')+'.pdf');
-    toast('PDF download ho gaya! 📄');
-  }catch(e){el.style.transform=origT;toast('PDF error!',1);}
+    pdf.save(subject+'-'+Date.now()+'.pdf');
+    toast('PDF ready! 📄');
+  }catch(e){el.style.transform=oT;toast('PDF error!',1);}
 }
-
 function doPrint(pgId){
   var pz=document.getElementById('pzone');var el=document.getElementById(pgId);
   var cl=el.cloneNode(true);cl.style.transform='none';cl.style.width='100%';
@@ -1027,35 +960,35 @@ function doPrint(pgId){
 function doCopy(){navigator.clipboard.writeText(currentSol).then(function(){toast('Copied! 📋');});}
 
 function renderNotes(){
-  var grid=document.getElementById('notesGrid');
-  var srch=(document.getElementById('srchInp').value||'').toLowerCase();
-  var filtered=notes.filter(function(n){return(n.subject+' '+n.chapter+' '+n.class+' '+n.date).toLowerCase().includes(srch);});
-  document.getElementById('emptyNotes').style.display=filtered.length?'none':'block';
+  var grid=document.getElementById('ngrid');
+  var srch=(document.getElementById('srch').value||'').toLowerCase();
+  var fil=notes.filter(function(n){return(n.subject+' '+n.chapter+' '+n.class+' '+n.date).toLowerCase().includes(srch);});
+  document.getElementById('emptyN').style.display=fil.length?'none':'block';
   grid.innerHTML='';
-  filtered.forEach(function(n){
+  fil.forEach(function(n){
     var c=document.createElement('div');c.className='ncard';
-    var prev=n.content.split('\n').slice(0,4).map(function(l){return l.trim();}).filter(function(l){return l;}).join('<br>');
+    var prev=n.content.split('\n').slice(0,5).map(function(l){return l.trim();}).filter(function(l){return l;}).join('<br>');
     var th=n.image?'<img src="'+n.image+'" style="width:100%;height:100%;object-fit:cover;">'
-      :'<div class="ncard-thumb-txt">'+prev+'</div>';
+      :'<div class="ncard-txt">'+prev+'</div>';
     c.innerHTML='<div class="ncard-thumb">'+th+'</div>'+
       '<div class="ncard-info"><div class="ncard-title">'+esc(n.subject)+' — '+esc(n.chapter||'General')+'</div>'+
       '<div class="ncard-meta">'+esc(n.class)+' | Page '+esc(n.page)+' | '+esc(n.date)+'</div></div>'+
-      '<button class="ncard-del" onclick="delNote(event,'+n.id+')">✕</button>';
+      '<button class="ndel" onclick="delNote(event,'+n.id+')">✕</button>';
     c.onclick=function(){viewNote(n.id);};grid.appendChild(c);
   });
 }
-function delNote(e,id){e.stopPropagation();notes=notes.filter(function(n){return n.id!==id;});localStorage.setItem('ghNotes7',JSON.stringify(notes));renderNotes();toast('Note delete ho gaya');}
+function delNote(e,id){e.stopPropagation();notes=notes.filter(function(n){return n.id!==id;});localStorage.setItem('ghNotes8',JSON.stringify(notes));renderNotes();toast('Note delete ho gaya');}
 
 function viewNote(id){
   currentNote=notes.find(function(n){return n.id===id;});if(!currentNote)return;
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.getElementById('pgView').classList.add('on');
-  document.getElementById('vnTitle').textContent=currentNote.subject+' — '+(currentNote.chapter||'Note');
-  var oldLang=lang,oldSubj=subject;
+  document.getElementById('vnT').textContent=currentNote.subject+' — '+(currentNote.chapter||'Note');
+  var oL=lang,oS=subject;
   lang=currentNote.lang||'en';subject=currentNote.subject;
-  buildNb(currentNote.content,'savedBody','savedSpiral',currentNote.class,currentNote.chapter,currentNote.page);
-  lang=oldLang;subject=oldSubj;
-  setTimeout(function(){applyZoom('savedWrap','savedPage','zL2');},100);
+  buildNb(currentNote.content,'savedBody','sp2',currentNote.class,currentNote.chapter,currentNote.page);
+  lang=oL;subject=oS;
+  setTimeout(function(){applyZ('sWrap','savedPg','zL2');},100);
 }
 
 function toast(msg,isErr){
