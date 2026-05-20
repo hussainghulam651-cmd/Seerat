@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Math Solver - Al-Fareed Public School</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #c8b89a;
+  min-height: 100vh;
+  font-family: 'Kalam', cursive;
+  padding: 16px;
+}
+
+/* ── UPLOAD SCREEN ── */
+.upload-screen {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.upload-header {
+  background: linear-gradient(135deg, #1a1a6e, #2244cc);
+  border-radius: 16px 16px 0 0;
+  padding: 22px 20px 16px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.upload-header .logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.upload-header .logo-circle {
+  width: 48px; height: 48px;
+  border: 2.5px solid #ffcc44;
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.1);
+  font-size: 20px;
+}
+.upload-header h1 {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.upload-header p {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 3px;
+}
+
+.upload-body {
+  background: #fefefe;
+  border-radius: 0 0 16px 16px;
+  padding: 24px 20px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+}
+
+.upload-title {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: #1a1a6e;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Preview area */
+.preview-area {
+  width: 100%;
+  min-height: 200px;
+  border: 3px dashed #9ab;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f4f8ff;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.preview-area.has-image { border-style: solid; border-color: #2244cc; }
+.preview-area img {
+  width: 100%; max-height: 300px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+.preview-placeholder {
+  text-align: center;
+  color: #7788aa;
+  padding: 20px;
+}
+.preview-placeholder .big-icon { font-size: 52px; margin-bottom: 8px; }
+.preview-placeholder p { font-size: 14px; font-family: 'Caveat', cursive; }
+
+/* Buttons */
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.btn {
+  padding: 13px 10px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+.btn:active { transform: scale(0.97); }
+.btn-camera { background: linear-gradient(135deg, #e05, #f44); color: #fff; }
+.btn-gallery { background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; }
+.btn-solve {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #1a1a6e, #2244cc);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(34,68,204,0.4);
+  transition: transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-solve:active { transform: scale(0.98); }
+.btn-solve:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.hint-text {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-top: 10px;
+  font-family: 'Kalam', cursive;
+}
+
+/* hidden file inputs */
+#cameraInput, #galleryInput { display: none; }
+
+/* ── LOADING ── */
+.loading-screen {
+  display: none;
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fefefe;
+  border-radius: 16px;
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+}
+.spinner {
+  width: 56px; height: 56px;
+  border: 5px solid #e0e8ff;
+  border-top-color: #2244cc;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto 18px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-screen h2 {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: #1a1a6e;
+  margin-bottom: 8px;
+}
+.loading-screen p { font-size: 14px; color: #666; }
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+@keyframes dots {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
+  100% { content: ''; }
+}
+
+/* ── RESULT: NOTEBOOK ── */
+.result-screen { display: none; }
+
+.notebook {
+  background: #fefefe;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 4px 4px 20px rgba(0,0,0,0.35);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.spiral {
+  position: absolute;
+  left: -14px; top: 0;
+  width: 28px; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; z-index: 10;
+}
+.ring {
+  width: 22px; height: 22px;
+  border: 3px solid #555;
+  border-radius: 50%;
+  background: #888;
+  margin: 6px 0; flex-shrink: 0;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.page {
+  padding: 18px 24px 28px 48px;
+  position: relative;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px,
+    #b8d4f0 31px, #b8d4f0 32px
+  );
+  background-size: 100% 32px;
+  background-position: 0 60px;
+  min-height: 600px;
+}
+.page::before {
+  content: '';
+  position: absolute;
+  left: 42px; top: 0; bottom: 0;
+  width: 1.5px; background: #e88; opacity: 0.6;
+}
+
+.nb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #9bd;
+  gap: 8px;
+}
+.school-logo {
+  width: 56px; height: 56px;
+  border: 2.5px solid #c00; border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: linear-gradient(135deg,#fff 60%,#ffe);
+  flex-shrink: 0; font-size: 20px;
+}
+.logo-txt { font-family:'Caveat',cursive; font-size:8px; font-weight:700; color:#c00; text-align:center; line-height:1.2; }
+.school-title { flex:1; text-align:center; }
+.school-title h1 { font-family:'Caveat',cursive; font-size:22px; font-weight:700; color:#1a1a6e; }
+.school-title h2 { font-family:'Kalam',cursive; font-size:13px; color:#555; }
+.info-box {
+  border: 2px solid #66a; border-radius:6px;
+  padding: 5px 10px; font-size:12px; line-height:1.8;
+  background:#f8f8ff; min-width:140px; color:#222;
+}
+.info-box b { color:#111; }
+
+.nb-divider {
+  height:3px;
+  background: linear-gradient(to right,#f97,#fa5,#7cf,#7fc);
+  border-radius:2px; margin:6px 0 12px; opacity:0.8;
+}
+
+/* Rendered solution area */
+.solution-content {
+  font-family: 'Kalam', cursive;
+  font-size: 15px;
+  color: #111;
+  line-height: 2;
+}
+.solution-content .q-head {
+  display: inline-block;
+  padding: 2px 14px;
+  border-radius: 4px;
+  font-family: 'Caveat', cursive;
+  font-size: 18px; font-weight: 700;
+  margin: 10px 0 6px;
+  text-decoration: underline wavy;
+  text-underline-offset: 3px;
+}
+.solution-content .q-head.pink   { background:#ffb3cc; text-decoration-color:#d04; }
+.solution-content .q-head.green  { background:#b8f5c0; text-decoration-color:#090; }
+.solution-content .q-head.yellow { background:#fff176; text-decoration-color:#b80; }
+.solution-content .q-head.blue   { background:#c0e0ff; text-decoration-color:#04a; }
+
+.solution-content .sol-lbl {
+  font-family:'Caveat',cursive; font-size:17px;
+  color:#1155cc; text-decoration:underline;
+  font-weight:700; display:block; margin:4px 0 2px;
+}
+.solution-content .step-block {
+  padding-left: 16px;
+  border-left: 3px solid #dde;
+  margin: 4px 0 8px;
+}
+.solution-content .ans {
+  display:inline-block;
+  border: 2.5px solid #1155cc; border-radius:4px;
+  padding:2px 12px; font-weight:700;
+  color:#1a0080; background:#eef4ff; margin:2px 4px;
+}
+.solution-content .ans.green { border-color:#197; background:#efffef; color:#060; }
+.solution-content .ans.orange{ border-color:#e80; background:#fff8e0; color:#840; }
+.solution-content .sep { border:none; border-top:1.5px dashed #aac; margin:10px 0; }
+
+.written-by {
+  margin-top:20px;
+  font-family:'Caveat',cursive; font-size:15px; color:#1155cc;
+}
+.written-by .wname { font-size:19px; color:#111; font-weight:700; }
+
+/* Action buttons below notebook */
+.action-bar {
+  max-width: 700px;
+  margin: 14px auto 0;
+  display: flex; gap: 10px;
+}
+.action-bar .btn {
+  flex:1; font-size:16px; padding:12px;
+}
+.btn-new { background: linear-gradient(135deg,#7b2ff7,#a044ff); color:#fff; }
+.btn-print { background: linear-gradient(135deg,#0a7,#0c9); color:#fff; }
+
+/* Error */
+.error-box {
+  background:#fff0f0; border:2px solid #e44;
+  border-radius:10px; padding:16px; margin-top:14px;
+  font-size:14px; color:#c00; text-align:center;
+  font-family:'Kalam',cursive;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ UPLOAD SCREEN ══ -->
+<div class="upload-screen" id="uploadScreen">
+  <div class="upload-header">
+    <div class="logo-row">
+      <div class="logo-circle">📖</div>
+      <div>
+        <h1>Al-Fareed Public School</h1>
+        <p>Tando Jam, Sindh — AI Math Solver</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="upload-body">
+    <div class="upload-title">📸 Question ki Photo Lo</div>
+
+    <div class="preview-area" id="previewArea">
+      <div class="preview-placeholder" id="placeholder">
+        <div class="big-icon">🖼️</div>
+        <p>Camera ya Gallery se<br>question upload karo</p>
+      </div>
+      <img id="previewImg" style="display:none" alt="preview">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-camera" onclick="document.getElementById('cameraInput').click()">
+        📷 Camera
+      </button>
+      <button class="btn btn-gallery" onclick="document.getElementById('galleryInput').click()">
+        🖼️ Gallery
+      </button>
+    </div>
+
+    <input type="file" id="cameraInput" accept="image/*" capture="environment">
+    <input type="file" id="galleryInput" accept="image/*">
+
+    <button class="btn btn-solve" id="solveBtn" disabled onclick="solveQuestion()">
+      🤖 AI se Solve Karo
+    </button>
+
+    <p class="hint-text">Math, Physics, Chemistry — koi bhi question ✏️</p>
+  </div>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <h2>AI Solve kar raha hai<span class="loading-dots"></span></h2>
+  <p>Thodi der ruko — bilkul notes ki tarah likha jayega 📝</p>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div class="result-screen" id="resultScreen">
+  <div class="notebook">
+    <div class="spiral" id="spiralRings"></div>
+    <div class="page">
+      <div class="nb-header">
+        <div class="school-logo">
+          <span>📖</span>
+          <div class="logo-txt">AL-FAREED<br>PUBLIC<br>SCHOOL</div>
+        </div>
+        <div class="school-title">
+          <h1>Al-Fareed Public School</h1>
+          <h2>Tando Jam, Sindh</h2>
+        </div>
+        <div class="info-box" id="infoBox"></div>
+      </div>
+      <div class="nb-divider"></div>
+      <div class="solution-content" id="solutionContent"></div>
+      <div class="written-by">
+        <div style="text-decoration:underline">Written By:</div>
+        <div class="wname">Sir Ghulam Hussain</div>
+        <div>Al-Fareed Public School, Tando Jam</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn btn-new" onclick="resetApp()">🔄 Naya Sawal</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Print</button>
+  </div>
+</div>
+
+<script>
+var currentImageBase64 = null;
+var currentImageType = null;
+
+// Generate spiral rings
+(function() {
+  var sr = document.getElementById('spiralRings');
+  var html = '';
+  for (var i = 0; i < 28; i++) html += '<div class="ring"></div>';
+  sr.innerHTML = html;
+})();
+
+// File input handlers
+document.getElementById('cameraInput').addEventListener('change', function(e) {
+  handleFile(e.target.files[0]);
+});
+document.getElementById('galleryInput').addEventListener('change', function(e) {
+  handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var result = e.target.result;
+    // Extract base64
+    var parts = result.split(',');
+    currentImageBase64 = parts[1];
+    currentImageType = file.type || 'image/jpeg';
+
+    // Show preview
+    var img = document.getElementById('previewImg');
+    img.src = result;
+    img.style.display = 'block';
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('previewArea').classList.add('has-image');
+    document.getElementById('solveBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Get today's info
+function getTodayInfo() {
+  var now = new Date();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  var dd = String(now.getDate()).padStart(2,'0');
+  var mm = months[now.getMonth()];
+  var yyyy = now.getFullYear();
+  return {
+    date: dd + '/' + mm + '/' + yyyy,
+    day: days[now.getDay()]
+  };
+}
+
+function solveQuestion() {
+  if (!currentImageBase64) return;
+
+  document.getElementById('uploadScreen').style.display = 'none';
+  document.getElementById('loadingScreen').style.display = 'block';
+
+  var prompt = "You are an expert Pakistani school teacher (10th grade). A student has sent you a photo of their math/science question. Solve it completely step-by-step exactly like beautiful handwritten school notes.\n\nFormat your response as HTML using ONLY these classes (no other HTML tags except div/span/br):\n\n- Question heading: <div class=\"q-head pink\">Q.1 Question text here</div>\n  (use pink/green/yellow/blue alternately)\n- 'Solution:' label: <span class=\"sol-lbl\">Solution:</span>\n- Steps block: <div class=\"step-block\">step lines here<br>next line</div>\n- Sub-label (like 'Equate real and imaginary parts:'): <span style=\"font-family:Caveat,cursive;font-size:14px;color:#555\">label text</span>\n- Final answer box: <span class=\"ans\">x = 5</span> or <span class=\"ans green\">y = 3</span> or <span class=\"ans orange\">b = 7/2</span>\n- Separator between questions: <hr class=\"sep\">\n\nRules:\n1. Detect ALL questions in the image and solve each one\n2. Show every step clearly\n3. Box every final answer\n4. Write in a clean teacher style\n5. If it is Urdu text, answer in Urdu using the same HTML structure\n6. Return ONLY the HTML, no markdown, no explanation outside HTML\n7. For fractions write like: a/b style inline\n8. Detect subject automatically (Math/Physics/Chemistry/Biology etc.)";
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'image',
+            source: {
+              type: 'base64',
+              media_type: currentImageType,
+              data: currentImageBase64
+            }
+          },
+          {
+            type: 'text',
+            text: prompt
+          }
+        ]
+      }]
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var html = '';
+    if (data.content && data.content[0] && data.content[0].text) {
+      html = data.content[0].text;
+      // strip markdown fences if any
+      html = html.replace(/```html?/gi,'').replace(/```/g,'').trim();
+    } else {
+      html = '<div class="q-head pink">Error</div><div class="step-block">AI se jawab nahi mila. Dobara try karo.</div>';
+    }
+
+    // Fill info box
+    var info = getTodayInfo();
+    document.getElementById('infoBox').innerHTML =
+      '<div><span style="color:#555">Date: </span><b>' + info.date + '</b></div>' +
+      '<div><span style="color:#555">Day: </span><b>' + info.day + '</b></div>' +
+      '<div><span style="color:#555">School: </span><b>Al-Fareed</b></div>' +
+      '<div><span style="color:#555">AI Solved</span> &#10003;</div>';
+
+    document.getElementById('solutionContent').innerHTML = html;
+
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('resultScreen').style.display = 'block';
+    window.scrollTo(0,0);
+  })
+  .catch(function(err) {
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('uploadScreen').style.display = 'block';
+    var existing = document.querySelector('.error-box');
+    if (existing) existing.remove();
+    var errDiv = document.createElement('div');
+    errDiv.className = 'error-box';
+    errDiv.textContent = 'Error: ' + err.message + ' — Internet check karo aur dobara try karo.';
+    document.querySelector('.upload-body').appendChild(errDiv);
+  });
+}
+
+function resetApp() {
+  currentImageBase64 = null;
+  currentImageType = null;
+  document.getElementById('previewImg').style.display = 'none';
+  document.getElementById('placeholder').style.display = 'block';
+  document.getElementById('previewArea').classList.remove('has-image');
+  document.getElementById('solveBtn').disabled = true;
+  document.getElementById('cameraInput').value = '';
+  document.getElementById('galleryInput').value = '';
+  var err = document.querySelector('.error-box');
+  if (err) err.remove();
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('uploadScreen').style.display = 'block';
+  window.scrollTo(0,0);
+}
+</script>
+
+</body>
+</html>
