@@ -273,11 +273,11 @@ textarea{min-height:68px;resize:vertical;}
   <button class="nav-btn" onclick="sTab(1)" id="navHW">📒 Homework</button>
   <button class="nav-btn" onclick="sTab(2)" id="navAtt">✅ Attendance</button>
   <button class="nav-btn" onclick="sTab(3)" id="navAdmin">👑 Admin</button>
-  <button class="nav-btn" onclick="sTab(4)">📣 Publicity</button>
-  <button class="nav-btn" onclick="sTab(5)">📄 Exam Paper</button>
-  <button class="nav-btn" onclick="sTab(6)">🏆 Certificate</button>
-  <button class="nav-btn" onclick="sTab(7)">📅 Schedule</button>
-  <button class="nav-btn" onclick="sTab(8)">📋 Syllabus</button>
+  <button class="nav-btn" id="navPub" onclick="sTab(4)">📣 Publicity</button>
+  <button class="nav-btn" id="navEP" onclick="sTab(5)">📄 Exam Paper</button>
+  <button class="nav-btn" id="navCert" onclick="sTab(6)">🏆 Certificate</button>
+  <button class="nav-btn" id="navSch" onclick="sTab(7)">📅 Schedule</button>
+  <button class="nav-btn" id="navSyl" onclick="sTab(8)">📋 Syllabus</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -494,7 +494,7 @@ textarea{min-height:68px;resize:vertical;}
     <div><label>Date</label><input type="date" id="attSDate" value=""></div>
   </div>
   <!-- Add Student -->
-  <div style="display:flex;gap:7px;align-items:flex-end">
+  <div id="addStudForm" style="display:flex;gap:7px;align-items:flex-end">
     <div style="flex:1"><label>Student Name Add Karen</label><input type="text" id="newStudName" placeholder="Student ka naam..." style="margin-bottom:0"></div>
     <div><label>Roll No</label><input type="text" id="newStudRoll" placeholder="01" style="width:60px;margin-bottom:0"></div>
     <button class="btn-sm bsg" onclick="addStudent()" style="margin-bottom:0;padding:9px 12px">+ Add</button>
@@ -1599,10 +1599,15 @@ function doLogin(role){
       document.getElementById('loginWrap').style.display='none';
       document.getElementById('mainApp').style.display='block';
       document.getElementById('roleTag').textContent='👩‍🏫 '+found.name+' ▾';
-      // Teacher: hide admin panel
-      document.getElementById('navAdmin').style.display='none';
-      document.querySelectorAll('.nav-btn').forEach(function(b){b.style.display='';});
-      document.getElementById('navAdmin').style.display='none';
+      // Teacher: sirf Dashboard, Homework, Attendance dikhao
+      document.querySelectorAll('.nav-btn').forEach(function(b){b.style.display='none';});
+      var tAllow=['navHW','navAtt'];
+      tAllow.forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='';});
+      var firstNav=document.querySelector('.nav-btn');if(firstNav)firstNav.style.display='';
+      // Admin-only tabs pe lock
+      ['navAdmin','navPub','navEP','navCert','navSch','navSyl'].forEach(function(id){
+        var el=document.getElementById(id);if(el)el.style.display='none';
+      });
       if(document.getElementById('dwTch'))document.getElementById('dwTch').value=found.name;
       setupDashboard();
       toast('Welcome, '+found.name+'! ✅');
@@ -1684,6 +1689,11 @@ function loadTeacherDropdown(){
 // ═══════════════════════════════════════════
 function sTab(n){
   var i,el,btns,b;
+  // Security: Teacher sirf 0,1,2 access kar sakta hai
+  var teacherAllowed=[0,1,2];
+  if(currentRole==='teacher' && teacherAllowed.indexOf(n)<0){
+    toast('Yeh section sirf Admin ke liye hai!');return;
+  }
   // Hide all sections
   for(i=0;i<=8;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
   // Show target
@@ -1887,6 +1897,9 @@ function attSwitch(n){
   if(ad&&!ad.value)ad.value=td;
 }
 function loadStudentList(){
+  // Hide add-student form for teacher
+  var addForm=document.getElementById('addStudForm');
+  if(addForm)addForm.style.display=(currentRole==='admin')?'block':'none';
   var cls=document.getElementById('attSClass').value;
   document.getElementById('attSClassLbl').textContent=cls;
   var allStudents=ls_get(SK.STUDENTS)||{};
@@ -1894,6 +1907,7 @@ function loadStudentList(){
   renderStudentAttGrid(cls,students);
 }
 function addStudent(){
+  if(currentRole!=='admin'){toast('Sirf Admin student add kar sakta hai!');return;}
   var name=document.getElementById('newStudName').value.trim();
   var roll=document.getElementById('newStudRoll').value.trim()||String(Date.now()).slice(-3);
   var cls=document.getElementById('attSClass').value;
@@ -1955,6 +1969,7 @@ function setStudAtt(i,status){
   updateAttSummary((allSt[cls])||[]);
 }
 function editStudent(i){
+  if(currentRole!=='admin'){toast('Sirf Admin edit kar sakta hai!');return;}
   var cls=document.getElementById('attSClass').value;
   var allStudents=ls_get(SK.STUDENTS)||{};
   var s=allStudents[cls]&&allStudents[cls][i];
@@ -1969,6 +1984,7 @@ function editStudent(i){
   loadStudentList();toast('Student updated! ✅');
 }
 function deleteStudent(i){
+  if(currentRole!=='admin'){toast('Sirf Admin student delete kar sakta hai!');return;}
   if(!confirm('Is student ko delete karo?'))return;
   var cls=document.getElementById('attSClass').value;
   var allStudents=ls_get(SK.STUDENTS)||{};
@@ -3443,6 +3459,7 @@ function renderArrSummary(active,schoolTime){
     '</div>';
 }
 function saveArrival(){
+  if(currentRole!=='admin'){toast('Teacher arrival record sirf Admin save kar sakta hai!');return;}
   var dt=document.getElementById('arrDate').value||today();
   var sch=getSchSettings();
   var schoolTime=sch.start||'08:00';
@@ -3510,6 +3527,7 @@ function getSchSettings(){
   return {name:'Al-Fareed Public School',city:'Tando Jam, Sindh',princ:'Sir Ghulam Hussain',semis:'362',ph1:'03435272484',ph2:'03453655553',addr:'Near National Bank, Tando Jam',start:'08:00',end:'14:00',sess:'2025-26'};
 }
 function saveSchSettings(){
+  if(currentRole!=='admin'){toast('Sirf Admin settings change kar sakta hai!');return;}
   var ids={setSchName:'name',setSchCity:'city',setSchPrinc:'princ',setSchSemis:'semis',setSchPh1:'ph1',setSchPh2:'ph2',setSchAddr:'addr',setSchStart:'start',setSchEnd:'end',setSchSess:'sess'};
   var s={};
   Object.keys(ids).forEach(function(id){var el=document.getElementById(id);s[ids[id]]=el?el.value:'';});
