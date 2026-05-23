@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Al-Fareed SMS — Tando Jam</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2d6e;--blue:#1a56db;--sky:#3b82f6;--gold:#f59e0b;
+  --green:#059669;--red:#dc2626;--purple:#7c3aed;--orange:#ea580c;
+  --teal:#0891b2;--pink:#db2777;
+  --bg:#f0f4ff;--white:#ffffff;--card:#ffffff;
+  --text:#0f172a;--muted:#64748b;--border:#e2e8f0;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh;}
+input,select,textarea,button{font-family:'DM Sans',sans-serif;}
+input[type=file]{display:none!important;}
+
+/* ── SIDEBAR ── */
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:.3s;overflow-y:auto;}
+.sidebar.closed{left:-240px;}
+.sb-logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+.sb-logo h1{font-family:'Playfair Display',serif;font-size:16px;color:#fff;line-height:1.2;}
+.sb-logo h1 span{color:var(--gold);}
+.sb-logo p{font-size:10px;color:rgba(255,255,255,.5);margin-top:3px;}
+.sb-urdu{font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:rgba(255,255,255,.7);direction:rtl;margin-top:4px;}
+.sb-nav{flex:1;padding:10px 0;}
+.sb-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;padding:12px 16px 4px;}
+.sb-btn{display:flex;align-items:center;gap:10px;padding:10px 16px;color:rgba(255,255,255,.7);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-size:12px;font-weight:500;transition:.2s;border-left:3px solid transparent;}
+.sb-btn:hover{background:rgba(255,255,255,.08);color:#fff;}
+.sb-btn.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--gold);}
+.sb-btn .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.sb-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);}
+.sb-user{display:flex;align-items:center;gap:8px;}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--navy);flex-shrink:0;}
+.sb-uname{font-size:11px;color:#fff;font-weight:600;}
+.sb-urole{font-size:9px;color:rgba(255,255,255,.4);}
+
+/* ── MAIN ── */
+.main{flex:1;margin-left:240px;transition:.3s;min-width:0;}
+.main.full{margin-left:0;}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.menu-btn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--navy);padding:4px;}
+.topbar-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy);}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.tb-badge{background:var(--navy);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.tb-role{background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;}
+.content{padding:16px;}
+
+/* ── SECTIONS ── */
+.sec{display:none;}
+.sec.on{display:block;}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--border);}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.card-title{font-size:14px;font-weight:700;color:var(--navy);}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.page-hdr{margin-bottom:16px;}
+.page-hdr h2{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);}
+.page-hdr p{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.stat-card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--border);}
+.stat-num{font-size:28px;font-weight:800;line-height:1;}
+.stat-lbl{font-size:10px;color:var(--muted);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.stat-icon{font-size:22px;margin-bottom:6px;}
+
+/* ── FORM ── */
+label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+input[type=text],input[type=number],input[type=date],input[type=email],input[type=tel],input[type=password],select,textarea{
+  width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:13px;background:#fff;color:var(--text);outline:none;transition:.2s;margin-bottom:10px;}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);}
+textarea{resize:vertical;min-height:70px;}
+.row{display:flex;gap:10px;}
+.row>*{flex:1;}
+.btn{padding:10px 18px;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:var(--navy);}
+.btn-success{background:var(--green);color:#fff;}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-warning{background:var(--gold);color:#fff;}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:6px;}
+.btn-outline{background:none;border:1.5px solid var(--border);color:var(--text);}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--navy);color:#fff;padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8faff;}
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+.badge-green{background:#dcfce7;color:#166534;}
+.badge-red{background:#fee2e2;color:#991b1b;}
+.badge-blue{background:#dbeafe;color:#1e40af;}
+.badge-orange{background:#ffedd5;color:#9a3412;}
+.badge-purple{background:#ede9fe;color:#5b21b6;}
+.badge-gray{background:#f1f5f9;color:#475569;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:14px;overflow-x:auto;}
+.tab-btn{padding:7px 14px;border:none;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;background:none;color:var(--muted);white-space:nowrap;transition:.2s;}
+.tab-btn.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+
+/* ── ATTENDANCE GRID ── */
+.att-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.att-card{border:2px solid var(--border);border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:.2s;}
+.att-card.present{border-color:var(--green);background:#dcfce7;}
+.att-card.absent{border-color:var(--red);background:#fee2e2;}
+.att-card.leave{border-color:var(--orange);background:#ffedd5;}
+.att-card.late{border-color:var(--purple);background:#ede9fe;}
+.att-name{font-size:11px;font-weight:700;margin-bottom:4px;}
+.att-btns{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
+.att-btn{border:none;border-radius:4px;padding:3px 6px;font-size:9px;font-weight:700;cursor:pointer;}
+
+/* ── LOGIN ── */
+.login-wrap{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,#1a3a8f 50%,#0b4ea2 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:#fff;border-radius:20px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.login-logo{text-align:center;margin-bottom:20px;}
+.login-logo h1{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);line-height:1.2;}
+.login-logo h1 span{color:var(--gold);}
+.login-logo p{font-size:12px;color:var(--muted);margin-top:4px;}
+.login-urdu{font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--navy);direction:rtl;margin-top:4px;}
+.login-tabs{display:flex;gap:6px;margin-bottom:18px;}
+.login-tab{flex:1;padding:8px;border:2px solid var(--border);border-radius:8px;font-size:11px;font-weight:700;background:#f8faff;cursor:pointer;text-align:center;transition:.2s;}
+.login-tab.on{border-color:var(--blue);background:var(--blue);color:#fff;}
+.login-err{color:var(--red);font-size:11px;text-align:center;margin-bottom:8px;display:none;}
+
+/* ── FEE ── */
+.fee-card{background:linear-gradient(135deg,var(--blue),var(--navy));color:#fff;border-radius:14px;padding:18px;margin-bottom:12px;}
+.fee-amount{font-size:32px;font-weight:800;}
+.fee-label{font-size:11px;opacity:.7;margin-top:2px;}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.on{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-title{font-size:15px;font-weight:700;color:var(--navy);}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:30px;font-size:12px;font-weight:600;z-index:999;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;}
+
+/* ── PRINT ── */
+@media print{.sidebar,.topbar,#toast{display:none!important;}.main{margin-left:0!important;}}
+@media(max-width:768px){
+  .sidebar{left:-240px;}.sidebar.open{left:0;}
+  .main{margin-left:0;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .att-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginWrap" class="login-wrap">
+<div class="login-box">
+  <div class="login-logo">
+    <div style="font-size:40px;margin-bottom:8px">🏫</div>
+    <h1>AL-<span>FAREED</span> PUBLIC SCHOOL</h1>
+    <div class="login-urdu">الفرید پبلک اسکول، ٹنڈو جام</div>
+    <p>Smart School Management System</p>
+  </div>
+  <div class="login-tabs">
+    <div class="login-tab on" onclick="switchLT('admin',this)">👑 Admin</div>
+    <div class="login-tab" onclick="switchLT('teacher',this)">👩‍🏫 Teacher</div>
+    <div class="login-tab" onclick="switchLT('accountant',this)">💰 Accounts</div>
+  </div>
+  <div id="loginErr" class="login-err">❌ Wrong password!</div>
+  <div id="adminLF">
+    <label>Admin Password</label>
+    <input type="password" id="adminP" placeholder="Password..." onkeydown="if(event.key==='Enter')doLogin('admin')">
+    <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin('admin')">Login as Admin</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:8px">Default: 1234</p>
+  </div>
+  <div id="teacherLF" style="display:none">
+    <label>Select Teacher</label>
+    <select id="teacherSel"><option value="">-- Select --</option></select>
+    <label>Password</label>
+    <input type="password" id="teacherP" placeholder="Password..." onkeydown="if(event.key==='Enter')doLogin('teacher')">
+    <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin('teacher')">Login as Teacher</button>
+  </div>
+  <div id="accountantLF" style="display:none">
+    <label>Accountant Password</label>
+    <input type="password" id="accP" placeholder="Password..." onkeydown="if(event.key==='Enter')doLogin('accountant')">
+    <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin('accountant')">Login as Accountant</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:8px">Default: acc123</p>
+  </div>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" class="layout" style="display:none">
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <h1>AL-<span>FAREED</span><br>PUBLIC SCHOOL</h1>
+    <div class="sb-urdu">الفرید پبلک اسکول</div>
+    <p>Tando Jam, Sindh</p>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <button class="sb-btn on" onclick="sTab('dashboard',this)"><div class="icon" style="background:#1a56db22">🏠</div>Dashboard</button>
+
+    <div class="sb-section">Students</div>
+    <button class="sb-btn" onclick="sTab('admission',this)"><div class="icon" style="background:#f59e0b22">📋</div>Admissions</button>
+    <button class="sb-btn" onclick="sTab('students',this)"><div class="icon" style="background:#059669 22">👨‍🎓</div>Students</button>
+    <button class="sb-btn" onclick="sTab('attendance',this)"><div class="icon" style="background:#7c3aed22">✅</div>Attendance</button>
+    <button class="sb-btn" onclick="sTab('results',this)"><div class="icon" style="background:#db277722">📊</div>Results</button>
+    <button class="sb-btn" onclick="sTab('idcards',this)"><div class="icon" style="background:#0891b222">🪪</div>ID Cards</button>
+
+    <div class="sb-section">Finance</div>
+    <button class="sb-btn" onclick="sTab('fees',this)"><div class="icon" style="background:#ea580c22">💰</div>Fee Management</button>
+
+    <div class="sb-section">Academics</div>
+    <button class="sb-btn" onclick="sTab('homework',this)"><div class="icon" style="background:#1a56db22">📒</div>Homework</button>
+    <button class="sb-btn" onclick="sTab('exams',this)"><div class="icon" style="background:#db277722">📝</div>Online Exams</button>
+    <button class="sb-btn" onclick="sTab('library',this)"><div class="icon" style="background:#7c3aed22">📚</div>Library</button>
+
+    <div class="sb-section">Staff</div>
+    <button class="sb-btn" onclick="sTab('hr',this)"><div class="icon" style="background:#05966922">👥</div>HR / Staff</button>
+    <button class="sb-btn" onclick="sTab('staffatt',this)"><div class="icon" style="background:#0891b222">🕐</div>Staff Attendance</button>
+
+    <div class="sb-section">Operations</div>
+    <button class="sb-btn" onclick="sTab('transport',this)"><div class="icon" style="background:#ea580c22">🚌</div>Transport</button>
+    <button class="sb-btn" onclick="sTab('assets',this)"><div class="icon" style="background:#64748b22">🏷️</div>Assets</button>
+    <button class="sb-btn" onclick="sTab('complaints',this)"><div class="icon" style="background:#dc262622">📢</div>Complaints</button>
+    <button class="sb-btn" onclick="sTab('inquiry',this)"><div class="icon" style="background:#f59e0b22">🔍</div>Inquiry</button>
+    <button class="sb-btn" onclick="sTab('sms',this)"><div class="icon" style="background:#059669 22">💬</div>SMS / Notices</button>
+
+    <div class="sb-section">System</div>
+    <button class="sb-btn" id="navSettings" onclick="sTab('settings',this)"><div class="icon" style="background:#64748b22">⚙️</div>Settings</button>
+  </nav>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sbAvatar">A</div>
+      <div>
+        <div class="sb-uname" id="sbName">Admin</div>
+        <div class="sb-urole" id="sbRole">Administrator</div>
+      </div>
+      <button onclick="doLogout()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;padding:5px 8px;cursor:pointer;font-size:11px">Exit</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="main" id="mainContent">
+  <div class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title" id="topTitle">🏠 Dashboard</div>
+    <div class="topbar-right">
+      <span class="tb-badge">Al-Fareed School</span>
+      <span class="tb-role" id="roleTag">👑 Admin</span>
+    </div>
+  </div>
+  <div class="content">
+
+  <!-- ══════ DASHBOARD ══════ -->
+  <div class="sec on" id="s-dashboard">
+    <div class="page-hdr"><h2>🏠 School Dashboard</h2><p>Al-Fareed Public School, Tando Jam</p></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">👨‍🎓</div><div class="stat-num" id="dsTotalSt">0</div><div class="stat-lbl">Total Students</div></div>
+      <div class="stat-card"><div class="stat-icon">👩‍🏫</div><div class="stat-num" id="dsTotalSt2">0</div><div class="stat-lbl">Total Staff</div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" id="dsFeeColl">0</div><div class="stat-lbl">Fee Collected</div></div>
+      <div class="stat-card"><div class="stat-icon">📚</div><div class="stat-num" id="dsBooks">0</div><div class="stat-lbl">Library Books</div></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="dsPresent">-</div><div class="stat-lbl">Today Present</div></div>
+      <div class="stat-card"><div class="stat-icon">❌</div><div class="stat-num" id="dsAbsent">-</div><div class="stat-lbl">Today Absent</div></div>
+      <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-num" id="dsAdmissions">0</div><div class="stat-lbl">New Admissions</div></div>
+      <div class="stat-card"><div class="stat-icon">📢</div><div class="stat-num" id="dsComplaints">0</div><div class="stat-lbl">Open Complaints</div></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📅 Today: <span id="dsDate"></span></div></div>
+      <div id="dsQuickInfo" style="font-size:12px;color:var(--muted)">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">🔔 Recent Activity</div></div>
+      <div id="dsActivity" style="font-size:12px;color:var(--muted)">No recent activity.</div>
+    </div>
+  </div>
+
+  <!-- ══════ ADMISSIONS ══════ -->
+  <div class="sec" id="s-admission">
+    <div class="page-hdr"><h2>📋 Admission Management</h2><p>New student enrollment and inquiry tracking</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">➕ New Admission Form</div></div>
+      <div class="row"><div><label>Student Full Name</label><input type="text" id="adName" placeholder="Full name..."></div><div><label>Father Name</label><input type="text" id="adFather" placeholder="Father's name..."></div></div>
+      <div class="row"><div><label>Date of Birth</label><input type="date" id="adDob"></div><div><label>Class Applying For</label><select id="adClass"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div></div>
+      <div class="row"><div><label>Mobile Number</label><input type="tel" id="adMobile" placeholder="03XX-XXXXXXX"></div><div><label>Address</label><input type="text" id="adAddress" placeholder="Home address..."></div></div>
+      <div class="row"><div><label>Admission Date</label><input type="date" id="adDate"></div><div><label>Previous School</label><input type="text" id="adPrevSchool" placeholder="Previous school (if any)..."></div></div>
+      <div class="row"><div><label>Monthly Fee (Rs.)</label><input type="number" id="adFee" placeholder="0"></div><div><label>Status</label><select id="adStatus"><option>Confirmed</option><option>Pending</option><option>Rejected</option></select></div></div>
+      <button class="btn btn-primary" onclick="saveAdmission()">✅ Save Admission</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📋 Admission Records</div><button class="btn btn-sm btn-outline" onclick="renderAdmissions()">🔄 Refresh</button></div>
+      <div class="row" style="margin-bottom:10px">
+        <input type="text" id="adSearch" placeholder="Search by name..." style="margin-bottom:0" oninput="renderAdmissions()">
+        <select id="adFilter" style="margin-bottom:0" onchange="renderAdmissions()"><option value="">All Status</option><option>Confirmed</option><option>Pending</option><option>Rejected</option></select>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Father</th><th>Class</th><th>Mobile</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="adTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══════ STUDENTS ══════ -->
+  <div class="sec" id="s-students">
+    <div class="page-hdr"><h2>👨‍🎓 Student Records</h2><p>All enrolled students with complete profiles</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">👨‍🎓 Student List</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-outline" onclick="printStudents()">🖨️ Print</button>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <input type="text" id="stSearch" placeholder="Search student..." style="margin-bottom:0" oninput="renderStudents()">
+        <select id="stClsFilter" style="margin-bottom:0" onchange="renderStudents()"><option value="">All Classes</option><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Roll</th><th>Name</th><th>Father</th><th>Class</th><th>Mobile</th><th>Fee/Mo</th><th>Action</th></tr></thead><tbody id="stTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══════ ATTENDANCE ══════ -->
+  <div class="sec" id="s-attendance">
+    <div class="page-hdr"><h2>✅ Student Attendance</h2><p>Daily attendance marking and records</p></div>
+    <div class="card">
+      <div class="row">
+        <div><label>Class</label><select id="attCls" onchange="loadAttGrid()"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+        <div><label>Date</label><input type="date" id="attDate" style="margin-bottom:0"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn btn-sm btn-success" onclick="markAll('present')">✅ All Present</button>
+        <button class="btn btn-sm btn-danger" onclick="markAll('absent')">❌ All Absent</button>
+        <button class="btn btn-sm btn-warning" onclick="markAll('leave')">🕐 All Leave</button>
+        <button class="btn btn-sm btn-primary" onclick="saveAttendance()">💾 Save</button>
+      </div>
+      <div id="attGrid" class="att-grid"></div>
+      <div id="attSummary" style="margin-top:10px;font-size:12px;color:var(--muted)"></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📊 Attendance History</div></div>
+      <div class="row">
+        <div><label>Month</label><input type="month" id="attMonth" style="margin-bottom:0"></div>
+        <div><label>Class</label><select id="attHistCls" style="margin-bottom:0"><option>All</option><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-primary" onclick="loadAttHistory()">Show</button></div>
+      </div>
+      <div id="attHistory" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- ══════ RESULTS ══════ -->
+  <div class="sec" id="s-results">
+    <div class="page-hdr"><h2>📊 Result Management</h2><p>Exam marks entry and report cards</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchResultTab('marks',this)">📝 Marks Entry</button>
+      <button class="tab-btn" onclick="switchResultTab('report',this)">📋 Report Cards</button>
+      <button class="tab-btn" onclick="switchResultTab('toppers',this)">🏆 Toppers</button>
+    </div>
+    <div id="rt-marks">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📝 Enter Marks</div></div>
+        <div class="row">
+          <div><label>Exam Name</label><select id="exName"><option>Monthly Test</option><option>Mid Term</option><option>Annual Exam</option><option>Unit Test</option></select></div>
+          <div><label>Class</label><select id="exCls"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+        </div>
+        <div class="row">
+          <div><label>Subject</label><input type="text" id="exSubj" placeholder="e.g. English, Maths..."></div>
+          <div><label>Total Marks</label><input type="number" id="exTotal" value="100"></div>
+        </div>
+        <button class="btn btn-primary" onclick="loadMarksGrid()">📋 Load Students</button>
+        <div id="marksGrid" style="margin-top:12px"></div>
+        <div id="marksSaveBtn" style="display:none;margin-top:10px"><button class="btn btn-success" onclick="saveMarks()">💾 Save Marks</button></div>
+      </div>
+    </div>
+    <div id="rt-report" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📋 Student Report Card</div></div>
+        <div class="row">
+          <div><label>Class</label><select id="rpCls"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div>
+          <div><label>Exam</label><select id="rpExam"><option>Monthly Test</option><option>Mid Term</option><option>Annual Exam</option></select></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-primary" onclick="loadReportCards()">Load</button></div>
+        </div>
+        <div id="reportCards"></div>
+      </div>
+    </div>
+    <div id="rt-toppers" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">🏆 Class Toppers</div></div>
+        <div class="row">
+          <div><label>Exam</label><select id="tpExam"><option>Monthly Test</option><option>Mid Term</option><option>Annual Exam</option></select></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-primary" onclick="loadToppers()">Load</button></div>
+        </div>
+        <div id="toppersList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ ID CARDS ══════ -->
+  <div class="sec" id="s-idcards">
+    <div class="page-hdr"><h2>🪪 ID Card Generator</h2><p>Generate printable student and staff ID cards</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Student ID Card</div></div>
+      <div class="row">
+        <div><label>Class</label><select id="idCls" onchange="loadIdStudents()"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div>
+        <div><label>Session</label><input type="text" id="idSession" value="2025-26"></div>
+      </div>
+      <button class="btn btn-primary" onclick="genIdCards()">🖨️ Generate & Print ID Cards</button>
+    </div>
+    <div id="idCardsPreview" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ══════ FEES ══════ -->
+  <div class="sec" id="s-fees">
+    <div class="page-hdr"><h2>💰 Fee Management</h2><p>Fee collection, vouchers and payment records</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchFeeTab('collect',this)">💰 Collect Fee</button>
+      <button class="tab-btn" onclick="switchFeeTab('records',this)">📋 Records</button>
+      <button class="tab-btn" onclick="switchFeeTab('defaulters',this)">❌ Defaulters</button>
+      <button class="tab-btn" onclick="switchFeeTab('voucher',this)">🖨️ Voucher</button>
+    </div>
+    <div id="ft-collect">
+      <div class="card">
+        <div class="row">
+          <div><label>Class</label><select id="feeCls" onchange="loadFeeStudents()"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+          <div><label>Month</label><input type="month" id="feeMonth"></div>
+        </div>
+        <div id="feeGrid"></div>
+        <div id="feeSummary" style="margin-top:10px;font-size:13px;font-weight:700;color:var(--green)"></div>
+      </div>
+    </div>
+    <div id="ft-records" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📋 Fee Payment Records</div></div>
+        <div class="row" style="margin-bottom:10px">
+          <input type="text" id="feeRecSearch" placeholder="Search student..." style="margin-bottom:0" oninput="renderFeeRecords()">
+          <select id="feeRecMonth" style="margin-bottom:0" onchange="renderFeeRecords()"><option value="">All Months</option></select>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Class</th><th>Month</th><th>Amount</th><th>Date Paid</th><th>Status</th></tr></thead><tbody id="feeRecTable"></tbody></table></div>
+      </div>
+    </div>
+    <div id="ft-defaulters" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">❌ Fee Defaulters</div></div>
+        <div class="row" style="margin-bottom:10px">
+          <div><label>Month</label><input type="month" id="defMonth" style="margin-bottom:0"></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-danger" onclick="loadDefaulters()">Load</button></div>
+        </div>
+        <div id="defaultersList"></div>
+      </div>
+    </div>
+    <div id="ft-voucher" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">🖨️ Fee Voucher</div></div>
+        <div class="row">
+          <div><label>Student Name</label><input type="text" id="vchName"></div>
+          <div><label>Class</label><input type="text" id="vchCls"></div>
+        </div>
+        <div class="row">
+          <div><label>Month</label><input type="month" id="vchMonth"></div>
+          <div><label>Amount (Rs.)</label><input type="number" id="vchAmt"></div>
+        </div>
+        <div class="row">
+          <div><label>Due Date</label><input type="date" id="vchDue"></div>
+          <div><label>Fee Type</label><select id="vchType"><option>Monthly Fee</option><option>Admission Fee</option><option>Exam Fee</option><option>Transport Fee</option><option>Other</option></select></div>
+        </div>
+        <button class="btn btn-primary" onclick="printVoucher()">🖨️ Print Voucher</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ HOMEWORK ══════ -->
+  <div class="sec" id="s-homework">
+    <div class="page-hdr"><h2>📒 Homework Management</h2><p>Assign and track homework for all classes</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">➕ Add Homework</div></div>
+      <div class="row">
+        <div><label>Class</label><select id="hwCls"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+        <div><label>Subject</label><input type="text" id="hwSubj" placeholder="Subject name..."></div>
+      </div>
+      <div class="row">
+        <div><label>Date</label><input type="date" id="hwDate"></div>
+        <div><label>Due Date</label><input type="date" id="hwDue"></div>
+      </div>
+      <label>Homework Details</label>
+      <textarea id="hwDesc" placeholder="Write homework details..."></textarea>
+      <label>Teacher Name</label>
+      <input type="text" id="hwTeacher" placeholder="Teacher name...">
+      <button class="btn btn-primary" onclick="saveHomework()">💾 Save Homework</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📒 Homework Records</div></div>
+      <div class="row" style="margin-bottom:10px">
+        <select id="hwFilter" style="margin-bottom:0" onchange="renderHomework()"><option value="">All Classes</option><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select>
+        <input type="date" id="hwDateFilter" style="margin-bottom:0" onchange="renderHomework()">
+      </div>
+      <div id="hwList"></div>
+    </div>
+  </div>
+
+  <!-- ══════ ONLINE EXAMS ══════ -->
+  <div class="sec" id="s-exams">
+    <div class="page-hdr"><h2>📝 Online Exam System</h2><p>Create MCQ tests and manage online examinations</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchExamTab('create',this)">➕ Create Exam</button>
+      <button class="tab-btn" onclick="switchExamTab('list',this)">📋 Exam List</button>
+      <button class="tab-btn" onclick="switchExamTab('take',this)">✏️ Take Exam</button>
+    </div>
+    <div id="et-create">
+      <div class="card">
+        <div class="row">
+          <div><label>Exam Title</label><input type="text" id="exTitle" placeholder="e.g. English Mid Term..."></div>
+          <div><label>Class</label><select id="exClass"><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+        </div>
+        <div class="row">
+          <div><label>Subject</label><input type="text" id="exSubject" placeholder="Subject..."></div>
+          <div><label>Time (mins)</label><input type="number" id="exTime" value="30"></div>
+        </div>
+        <div class="card-hdr" style="margin-top:8px"><div class="card-title">MCQ Questions</div><button class="btn btn-sm btn-outline" onclick="addMCQ()">+ Add Question</button></div>
+        <div id="mcqBuilder"></div>
+        <button class="btn btn-success" style="margin-top:10px" onclick="saveExam()">💾 Save Exam</button>
+      </div>
+    </div>
+    <div id="et-list" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📋 Created Exams</div></div>
+        <div id="examList"></div>
+      </div>
+    </div>
+    <div id="et-take" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">✏️ Take Exam</div></div>
+        <div class="row">
+          <div><label>Student Name</label><input type="text" id="takeStName" placeholder="Your name..."></div>
+          <div><label>Select Exam</label><select id="takeExamSel"></select></div>
+        </div>
+        <button class="btn btn-primary" onclick="startExam()">▶️ Start Exam</button>
+        <div id="examArea" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ LIBRARY ══════ -->
+  <div class="sec" id="s-library">
+    <div class="page-hdr"><h2>📚 Library Management</h2><p>Books, issue records and returns</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchLibTab('books',this)">📚 Books</button>
+      <button class="tab-btn" onclick="switchLibTab('issue',this)">📤 Issue Book</button>
+      <button class="tab-btn" onclick="switchLibTab('return',this)">📥 Returns</button>
+    </div>
+    <div id="lt-books">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">➕ Add Book</div></div>
+        <div class="row">
+          <div><label>Book Title</label><input type="text" id="libTitle" placeholder="Book title..."></div>
+          <div><label>Author</label><input type="text" id="libAuthor" placeholder="Author name..."></div>
+        </div>
+        <div class="row">
+          <div><label>Category</label><select id="libCat"><option>Textbook</option><option>Novel</option><option>Islamic</option><option>Science</option><option>History</option><option>Other</option></select></div>
+          <div><label>Total Copies</label><input type="number" id="libCopies" value="1"></div>
+        </div>
+        <div class="row">
+          <div><label>Shelf/Rack</label><input type="text" id="libShelf" placeholder="A-1, B-2..."></div>
+          <div><label>Book Code</label><input type="text" id="libCode" placeholder="LIB-001..."></div>
+        </div>
+        <button class="btn btn-primary" onclick="addBook()">➕ Add Book</button>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📚 Book Catalog</div></div>
+        <input type="text" id="libSearch" placeholder="Search books..." oninput="renderBooks()">
+        <div class="tbl-wrap"><table><thead><tr><th>Code</th><th>Title</th><th>Author</th><th>Category</th><th>Copies</th><th>Available</th><th>Action</th></tr></thead><tbody id="libTable"></tbody></table></div>
+      </div>
+    </div>
+    <div id="lt-issue" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📤 Issue Book</div></div>
+        <div class="row">
+          <div><label>Student/Staff Name</label><input type="text" id="issName" placeholder="Name..."></div>
+          <div><label>Class/Designation</label><input type="text" id="issCls" placeholder="Class or designation..."></div>
+        </div>
+        <div class="row">
+          <div><label>Book Code</label><input type="text" id="issBook" placeholder="Book code..."></div>
+          <div><label>Issue Date</label><input type="date" id="issDate"></div>
+        </div>
+        <div><label>Return Due Date</label><input type="date" id="issDue"></div>
+        <button class="btn btn-primary" onclick="issueBook()">📤 Issue Book</button>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📋 Issued Books</div></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Class</th><th>Book</th><th>Issued</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="issTable"></tbody></table></div>
+      </div>
+    </div>
+    <div id="lt-return" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📥 Return Book</div></div>
+        <div class="row">
+          <div><label>Search Issued Record</label><input type="text" id="retSearch" placeholder="Student name or book code..." oninput="searchReturn()"></div>
+        </div>
+        <div id="retResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ HR ══════ -->
+  <div class="sec" id="s-hr">
+    <div class="page-hdr"><h2>👥 HR & Staff Management</h2><p>Teachers, employees, payroll and records</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchHRTab('list',this)">👥 Staff List</button>
+      <button class="tab-btn" onclick="switchHRTab('add',this)">➕ Add Staff</button>
+      <button class="tab-btn" onclick="switchHRTab('salary',this)">💵 Salary</button>
+    </div>
+    <div id="hr-list">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">👥 All Staff</div></div>
+        <div class="row" style="margin-bottom:10px">
+          <input type="text" id="hrSearch" placeholder="Search staff..." style="margin-bottom:0" oninput="renderStaff()">
+          <select id="hrFilter" style="margin-bottom:0" onchange="renderStaff()"><option value="">All Roles</option><option>Teacher</option><option>Accountant</option><option>Peon</option><option>Guard</option><option>Other</option></select>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Role</th><th>Subject</th><th>Mobile</th><th>Salary</th><th>Join Date</th><th>Action</th></tr></thead><tbody id="hrTable"></tbody></table></div>
+      </div>
+    </div>
+    <div id="hr-add" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">➕ Add Staff Member</div></div>
+        <div class="row"><div><label>Full Name</label><input type="text" id="hrName" placeholder="Full name..."></div><div><label>CNIC</label><input type="text" id="hrCnic" placeholder="XXXXX-XXXXXXX-X"></div></div>
+        <div class="row"><div><label>Role</label><select id="hrRole"><option>Teacher</option><option>Accountant</option><option>Peon</option><option>Guard</option><option>Other</option></select></div><div><label>Subject (if teacher)</label><input type="text" id="hrSubject" placeholder="Subject..."></div></div>
+        <div class="row"><div><label>Mobile</label><input type="tel" id="hrMobile" placeholder="03XX-XXXXXXX"></div><div><label>Monthly Salary</label><input type="number" id="hrSalary" placeholder="0"></div></div>
+        <div class="row"><div><label>Join Date</label><input type="date" id="hrJoin"></div><div><label>Address</label><input type="text" id="hrAddr" placeholder="Address..."></div></div>
+        <div class="row"><div><label>Login Password</label><input type="password" id="hrPass" placeholder="For teacher login..."></div><div><label>Qualification</label><input type="text" id="hrQual" placeholder="B.Ed, M.A..."></div></div>
+        <button class="btn btn-primary" onclick="saveStaff()">✅ Save Staff</button>
+      </div>
+    </div>
+    <div id="hr-salary" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">💵 Salary Management</div></div>
+        <div class="row">
+          <div><label>Month</label><input type="month" id="salMonth"></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-primary" onclick="loadSalary()">Load</button></div>
+        </div>
+        <div id="salaryGrid"></div>
+        <div id="salTotal" style="margin-top:10px;font-size:13px;font-weight:700;color:var(--green)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ STAFF ATTENDANCE ══════ -->
+  <div class="sec" id="s-staffatt">
+    <div class="page-hdr"><h2>🕐 Staff Attendance</h2><p>Daily staff attendance with arrival tracking</p></div>
+    <div class="card">
+      <div class="row">
+        <div><label>Date</label><input type="date" id="sattDate"></div>
+        <div style="display:flex;gap:6px;align-items:flex-end">
+          <button class="btn btn-sm btn-success" onclick="markAllStaff('present')">All P</button>
+          <button class="btn btn-sm btn-danger" onclick="markAllStaff('absent')">All A</button>
+          <button class="btn btn-sm btn-primary" onclick="saveStaffAtt()">💾 Save</button>
+        </div>
+      </div>
+      <div id="sattGrid" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📊 Staff Attendance History</div></div>
+      <div class="row">
+        <div><label>Month</label><input type="month" id="sattHistMonth"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn-sm btn-primary" onclick="loadSattHistory()">Show</button></div>
+      </div>
+      <div id="sattHistory" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- ══════ TRANSPORT ══════ -->
+  <div class="sec" id="s-transport">
+    <div class="page-hdr"><h2>🚌 Transport Management</h2><p>School vans, routes and transport fees</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchTransTab('routes',this)">🗺️ Routes</button>
+      <button class="tab-btn" onclick="switchTransTab('vehicles',this)">🚌 Vehicles</button>
+      <button class="tab-btn" onclick="switchTransTab('students',this)">👨‍🎓 Students</button>
+    </div>
+    <div id="tt-routes">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">🗺️ Add Route</div></div>
+        <div class="row"><div><label>Route Name</label><input type="text" id="rtName" placeholder="e.g. Route A - City Center"></div><div><label>Monthly Fee (Rs.)</label><input type="number" id="rtFee" placeholder="0"></div></div>
+        <div><label>Stops (comma separated)</label><input type="text" id="rtStops" placeholder="Stop 1, Stop 2, Stop 3..."></div>
+        <div><label>Driver Name</label><input type="text" id="rtDriver" placeholder="Driver name..."></div>
+        <button class="btn btn-primary" onclick="saveRoute()">✅ Save Route</button>
+      </div>
+      <div class="card"><div class="card-hdr"><div class="card-title">📋 Routes List</div></div><div id="routesList"></div></div>
+    </div>
+    <div id="tt-vehicles" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">🚌 Add Vehicle</div></div>
+        <div class="row"><div><label>Vehicle Number</label><input type="text" id="vhNum" placeholder="Registration no..."></div><div><label>Type</label><select id="vhType"><option>Van</option><option>Bus</option><option>Rickshaw</option></select></div></div>
+        <div class="row"><div><label>Capacity</label><input type="number" id="vhCap" placeholder="No. of seats"></div><div><label>Driver</label><input type="text" id="vhDriver" placeholder="Driver name..."></div></div>
+        <button class="btn btn-primary" onclick="saveVehicle()">✅ Save</button>
+      </div>
+      <div class="card"><div class="card-hdr"><div class="card-title">🚌 Vehicles</div></div><div id="vehiclesList"></div></div>
+    </div>
+    <div id="tt-students" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">👨‍🎓 Assign Transport</div></div>
+        <div class="row"><div><label>Student Name</label><input type="text" id="tsName" placeholder="Student name..."></div><div><label>Route</label><select id="tsRoute"></select></div></div>
+        <button class="btn btn-primary" onclick="saveTransStudent()">✅ Save</button>
+      </div>
+      <div class="card"><div class="card-hdr"><div class="card-title">📋 Transport Students</div></div><div id="transStudents"></div></div>
+    </div>
+  </div>
+
+  <!-- ══════ ASSETS ══════ -->
+  <div class="sec" id="s-assets">
+    <div class="page-hdr"><h2>🏷️ Assets Management</h2><p>Track furniture, electronics and equipment</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">➕ Add Asset</div></div>
+      <div class="row"><div><label>Asset Name</label><input type="text" id="asName" placeholder="e.g. Computer, Chair..."></div><div><label>Category</label><select id="asCat"><option>Furniture</option><option>Electronics</option><option>Sports</option><option>Stationery</option><option>Other</option></select></div></div>
+      <div class="row"><div><label>Quantity</label><input type="number" id="asQty" value="1"></div><div><label>Purchase Date</label><input type="date" id="asDate"></div></div>
+      <div class="row"><div><label>Cost (Rs.)</label><input type="number" id="asCost" placeholder="0"></div><div><label>Condition</label><select id="asCond"><option>Good</option><option>Average</option><option>Poor</option><option>Needs Repair</option></select></div></div>
+      <div><label>Location / Room</label><input type="text" id="asLoc" placeholder="e.g. Office, Class 5..."></div>
+      <button class="btn btn-primary" onclick="saveAsset()">✅ Add Asset</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📋 Assets List</div><button class="btn btn-sm btn-outline" onclick="printAssets()">🖨️ Print</button></div>
+      <div class="row" style="margin-bottom:10px">
+        <input type="text" id="asSearch" placeholder="Search assets..." style="margin-bottom:0" oninput="renderAssets()">
+        <select id="asFilter" style="margin-bottom:0" onchange="renderAssets()"><option value="">All Categories</option><option>Furniture</option><option>Electronics</option><option>Sports</option><option>Stationery</option><option>Other</option></select>
+      </div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Category</th><th>Qty</th><th>Cost</th><th>Condition</th><th>Location</th><th>Action</th></tr></thead><tbody id="asTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══════ COMPLAINTS ══════ -->
+  <div class="sec" id="s-complaints">
+    <div class="page-hdr"><h2>📢 Complaints System</h2><p>Register and resolve complaints digitally</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">➕ Register Complaint</div></div>
+      <div class="row"><div><label>Complainant Name</label><input type="text" id="cpName" placeholder="Name..."></div><div><label>Mobile</label><input type="tel" id="cpMobile" placeholder="03XX-XXXXXXX"></div></div>
+      <div class="row"><div><label>Category</label><select id="cpCat"><option>Teacher Behavior</option><option>Fee Issue</option><option>Facility Problem</option><option>Academic Issue</option><option>Bullying</option><option>Other</option></select></div><div><label>Priority</label><select id="cpPri"><option>Normal</option><option>High</option><option>Urgent</option></select></div></div>
+      <label>Complaint Details</label>
+      <textarea id="cpDesc" placeholder="Write complaint details..."></textarea>
+      <button class="btn btn-primary" onclick="saveComplaint()">📢 Submit Complaint</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📋 Complaints List</div></div>
+      <div class="row" style="margin-bottom:10px">
+        <select id="cpFilter" style="margin-bottom:0" onchange="renderComplaints()"><option value="">All Status</option><option>Open</option><option>In Progress</option><option>Resolved</option></select>
+      </div>
+      <div id="complaintsList"></div>
+    </div>
+  </div>
+
+  <!-- ══════ INQUIRY ══════ -->
+  <div class="sec" id="s-inquiry">
+    <div class="page-hdr"><h2>🔍 Inquiry Handling</h2><p>Manage admission inquiries and follow-ups</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">➕ New Inquiry</div></div>
+      <div class="row"><div><label>Parent Name</label><input type="text" id="inqName" placeholder="Parent name..."></div><div><label>Mobile</label><input type="tel" id="inqMobile" placeholder="03XX-XXXXXXX"></div></div>
+      <div class="row"><div><label>Student Name</label><input type="text" id="inqStName" placeholder="Child's name..."></div><div><label>Class Interested</label><select id="inqCls"><option>Nursery</option><option>KG</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option></select></div></div>
+      <div class="row"><div><label>Inquiry Date</label><input type="date" id="inqDate"></div><div><label>Source</label><select id="inqSrc"><option>Walk-in</option><option>Phone</option><option>WhatsApp</option><option>Reference</option><option>Social Media</option></select></div></div>
+      <label>Notes</label>
+      <textarea id="inqNote" placeholder="Any notes..."></textarea>
+      <button class="btn btn-primary" onclick="saveInquiry()">💾 Save Inquiry</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📋 Inquiry Records</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Parent</th><th>Student</th><th>Class</th><th>Mobile</th><th>Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="inqTable"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══════ SMS / NOTICES ══════ -->
+  <div class="sec" id="s-sms">
+    <div class="page-hdr"><h2>💬 SMS & Notice Board</h2><p>Send WhatsApp messages and school notices</p></div>
+    <div class="tabs">
+      <button class="tab-btn on" onclick="switchSmsTab('notice',this)">📋 Notice Board</button>
+      <button class="tab-btn" onclick="switchSmsTab('whatsapp',this)">📱 WhatsApp</button>
+    </div>
+    <div id="st-notice">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">➕ Post Notice</div></div>
+        <div class="row"><div><label>Notice Title</label><input type="text" id="ntTitle" placeholder="Notice title..."></div><div><label>Date</label><input type="date" id="ntDate"></div></div>
+        <div class="row"><div><label>Category</label><select id="ntCat"><option>General</option><option>Holiday</option><option>Exam</option><option>Fee</option><option>Event</option><option>Urgent</option></select></div><div><label>For</label><select id="ntFor"><option>All</option><option>Parents</option><option>Teachers</option><option>Students</option></select></div></div>
+        <label>Notice Content</label>
+        <textarea id="ntContent" placeholder="Write notice content..."></textarea>
+        <button class="btn btn-primary" onclick="saveNotice()">📌 Post Notice</button>
+      </div>
+      <div class="card"><div class="card-hdr"><div class="card-title">📋 Posted Notices</div></div><div id="noticeList"></div></div>
+    </div>
+    <div id="st-whatsapp" style="display:none">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📱 WhatsApp Message</div></div>
+        <div><label>Message Type</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="btn btn-sm btn-outline" onclick="setWaTemplate('fee')">💰 Fee Reminder</button>
+          <button class="btn btn-sm btn-outline" onclick="setWaTemplate('absent')">❌ Absent Alert</button>
+          <button class="btn btn-sm btn-outline" onclick="setWaTemplate('exam')">📝 Exam Notice</button>
+          <button class="btn btn-sm btn-outline" onclick="setWaTemplate('holiday')">🎉 Holiday</button>
+          <button class="btn btn-sm btn-outline" onclick="setWaTemplate('result')">📊 Result</button>
+        </div></div>
+        <label>Mobile Number</label>
+        <input type="tel" id="waMobile" placeholder="03XX-XXXXXXX">
+        <label>Message</label>
+        <textarea id="waMsg" placeholder="Type message..." style="min-height:100px"></textarea>
+        <button class="btn btn-success" onclick="sendWa()">📱 Send via WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SETTINGS ══════ -->
+  <div class="sec" id="s-settings">
+    <div class="page-hdr"><h2>⚙️ System Settings</h2><p>School info, passwords and configuration</p></div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">🏫 School Information</div></div>
+      <div class="row"><div><label>School Name</label><input type="text" id="setSchName" value="Al-Fareed Public School"></div><div><label>City</label><input type="text" id="setCity" value="Tando Jam"></div></div>
+      <div class="row"><div><label>Principal Name</label><input type="text" id="setPrincipal" value="Sir Ghulam Hussain"></div><div><label>Phone</label><input type="tel" id="setPhone" placeholder="03XX-XXXXXXX"></div></div>
+      <div class="row"><div><label>Session</label><input type="text" id="setSess" value="2025-26"></div><div><label>Email</label><input type="email" id="setEmail" placeholder="school@email.com"></div></div>
+      <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">🔐 Change Passwords</div></div>
+      <div class="row"><div><label>Admin Password</label><input type="password" id="setAdminP" placeholder="New admin password..."></div><div><label>Accountant Password</label><input type="password" id="setAccP" placeholder="New accountant password..."></div></div>
+      <button class="btn btn-warning" onclick="savePasswords()">🔐 Update Passwords</button>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">🗑️ Data Management</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-outline" onclick="exportData()">📤 Export All Data</button>
+        <button class="btn btn-sm btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title" id="modalTitle">Title</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════
+//  STORAGE
+// ═══════════════════════════
+function lg(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function ls(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function today(){var d=new Date();return d.toISOString().slice(0,10);}
+function nowMonth(){return new Date().toISOString().slice(0,7);}
+function fmtDate(s){if(!s)return '';var d=new Date(s);return d.toLocaleDateString('en-GB');}
+
+// ═══════════════════════════
+//  TOAST
+// ═══════════════════════════
+var _t=null;
+function toast(msg,type){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.style.background=type==='error'?'#dc2626':type==='success'?'#059669':'#0b2d6e';
+  el.style.opacity=1;
+  if(_t)clearTimeout(_t);
+  _t=setTimeout(function(){el.style.opacity=0;},3000);
+}
+
+// ═══════════════════════════
+//  MODAL
+// ═══════════════════════════
+function openModal(title,body){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalBody').innerHTML=body;
+  document.getElementById('modal').classList.add('on');
+}
+function closeModal(){document.getElementById('modal').classList.remove('on');}
+
+// ═══════════════════════════
+//  LOGIN
+// ═══════════════════════════
+var currentRole='';
+function switchLT(role,el){
+  document.querySelectorAll('.login-tab').forEach(function(b){b.classList.remove('on');});
+  el.classList.add('on');
+  document.getElementById('adminLF').style.display='none';
+  document.getElementById('teacherLF').style.display='none';
+  document.getElementById('accountantLF').style.display='none';
+  document.getElementById(role+'LF').style.display='block';
+  document.getElementById('loginErr').style.display='none';
+}
+
+function loadTeacherDropdown(){
+  var sel=document.getElementById('teacherSel');
+  sel.innerHTML='<option value="">-- Select --</option>';
+  var staff=lg('af_staff')||[];
+  staff.filter(function(s){return s.role==='Teacher';}).forEach(function(t){
+    var o=document.createElement('option');
+    o.value=t.id;o.textContent=t.name+' ('+t.subject+')';
+    sel.appendChild(o);
+  });
+}
+
+function doLogin(role){
+  var err=document.getElementById('loginErr');
+  err.style.display='none';
+  if(role==='admin'){
+    var p=document.getElementById('adminP').value;
+    var ap=lg('af_adminPass')||'1234';
+    if(p===ap){
+      currentRole='admin';
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('mainApp').style.display='flex';
+      document.getElementById('sbName').textContent='Admin';
+      document.getElementById('sbRole').textContent='Administrator';
+      document.getElementById('sbAvatar').textContent='A';
+      document.getElementById('roleTag').textContent='👑 Admin';
+      document.getElementById('navSettings').style.display='';
+      initApp();
+    }else{err.style.display='block';}
+    document.getElementById('adminP').value='';
+  } else if(role==='teacher'){
+    var tid=document.getElementById('teacherSel').value;
+    var tp=document.getElementById('teacherP').value;
+    var staff=lg('af_staff')||[];
+    var found=staff.find(function(s){return s.id===tid;});
+    if(found&&found.password===tp){
+      currentRole='teacher';
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('mainApp').style.display='flex';
+      document.getElementById('sbName').textContent=found.name;
+      document.getElementById('sbRole').textContent='Teacher - '+found.subject;
+      document.getElementById('sbAvatar').textContent=found.name[0];
+      document.getElementById('roleTag').textContent='👩\u200d🏫 '+found.name;
+      document.getElementById('navSettings').style.display='none';
+      // Teacher: only homework and attendance
+      document.querySelectorAll('.sb-btn').forEach(function(b){b.style.display='none';});
+      ['homework','attendance','staffatt'].forEach(function(id){
+        var btn=document.querySelector('[onclick*="\''+id+'\'"]');
+        if(btn)btn.style.display='';
+      });
+      document.querySelector('[onclick*="\'dashboard\'"]').style.display='';
+      initApp();sTab('dashboard');
+    }else{err.style.display='block';}
+    document.getElementById('teacherP').value='';
+  } else if(role==='accountant'){
+    var pp=document.getElementById('accP').value;
+    var ap2=lg('af_accPass')||'acc123';
+    if(pp===ap2){
+      currentRole='accountant';
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('mainApp').style.display='flex';
+      document.getElementById('sbName').textContent='Accountant';
+      document.getElementById('sbRole').textContent='Accounts Department';
+      document.getElementById('sbAvatar').textContent='₨';
+      document.getElementById('roleTag').textContent='💰 Accountant';
+      document.getElementById('navSettings').style.display='none';
+      document.querySelectorAll('.sb-btn').forEach(function(b){b.style.display='none';});
+      ['fees','students'].forEach(function(id){
+        var btn=document.querySelector('[onclick*="\''+id+'\'"]');
+        if(btn)btn.style.display='';
+      });
+      document.querySelector('[onclick*="\'dashboard\'"]').style.display='';
+      initApp();sTab('dashboard');
+    }else{err.style.display='block';}
+    document.getElementById('accP').value='';
+  }
+}
+
+function doLogout(){
+  if(!confirm('Logout karna chahte hain?'))return;
+  currentRole='';
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('loginWrap').style.display='flex';
+  document.querySelectorAll('.sb-btn').forEach(function(b){b.style.display='';});
+  document.getElementById('adminP').value='';
+}
+
+// ═══════════════════════════
+//  NAVIGATION
+// ═══════════════════════════
+var currentSec='dashboard';
+function sTab(name,btn){
+  document.querySelectorAll('.sec').forEach(function(s){s.style.display='none';});
+  var el=document.getElementById('s-'+name);
+  if(el)el.style.display='block';
+  document.querySelectorAll('.sb-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  currentSec=name;
+  var titles={dashboard:'🏠 Dashboard',admission:'📋 Admissions',students:'👨\u200d🎓 Students',attendance:'✅ Attendance',results:'📊 Results',idcards:'🪪 ID Cards',fees:'💰 Fee Management',homework:'📒 Homework',exams:'📝 Online Exams',library:'📚 Library',hr:'👥 HR & Staff',staffatt:'🕐 Staff Attendance',transport:'🚌 Transport',assets:'🏷️ Assets',complaints:'📢 Complaints',inquiry:'🔍 Inquiry',sms:'💬 SMS & Notices',settings:'⚙️ Settings'};
+  document.getElementById('topTitle').textContent=titles[name]||name;
+  // Close sidebar on mobile
+  if(window.innerWidth<=768)document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar(){
+  var sb=document.getElementById('sidebar');
+  if(window.innerWidth<=768){sb.classList.toggle('open');}
+  else{sb.classList.toggle('closed');document.getElementById('mainContent').classList.toggle('full');}
+}
+
+// ═══════════════════════════
+//  INIT
+// ═══════════════════════════
+function initApp(){
+  updateDashboard();
+  loadTeacherDropdown();
+  // Set today dates
+  var inputs=document.querySelectorAll('input[type=date]');
+  inputs.forEach(function(i){if(!i.value)i.value=today();});
+  var minputs=document.querySelectorAll('input[type=month]');
+  minputs.forEach(function(i){if(!i.value)i.value=nowMonth();});
+}
+
+// ═══════════════════════════
+//  DASHBOARD
+// ═══════════════════════════
+function updateDashboard(){
+  var admissions=lg('af_admissions')||[];
+  var staff=lg('af_staff')||[];
+  var books=lg('af_books')||[];
+  var fees=lg('af_fees')||[];
+  var complaints=lg('af_complaints')||[];
+  var att=lg('af_att_'+today())||{};
+
+  // Count students from admissions (confirmed)
+  var confirmed=admissions.filter(function(a){return a.status==='Confirmed';});
+  document.getElementById('dsTotalSt').textContent=confirmed.length;
+  document.getElementById('dsTotalSt2').textContent=staff.length;
+  document.getElementById('dsBooks').textContent=books.length;
+  document.getElementById('dsAdmissions').textContent=admissions.filter(function(a){return a.status==='Pending';}).length;
+  document.getElementById('dsComplaints').textContent=complaints.filter(function(c){return c.status==='Open';}).length;
+
+  // Fee collected this month
+  var month=nowMonth();
+  var collected=fees.filter(function(f){return f.month===month&&f.paid;}).reduce(function(s,f){return s+(f.amount||0);},0);
+  document.getElementById('dsFeeColl').textContent='Rs.'+collected.toLocaleString();
+
+  // Today attendance
+  var p=0,a=0;
+  Object.keys(att).forEach(function(k){att[k].forEach(function(s){if(s.status==='present')p++;else a++;});});
+  document.getElementById('dsPresent').textContent=p||'-';
+  document.getElementById('dsAbsent').textContent=a||'-';
+
+  document.getElementById('dsDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dsQuickInfo').textContent='Total Students: '+confirmed.length+' | Staff: '+staff.length+' | Books: '+books.length+' | Session: '+(lg('af_settings')||{}).session||'2025-26';
+}
+
+// ═══════════════════════════
+//  ADMISSIONS
+// ═══════════════════════════
+function saveAdmission(){
+  var name=document.getElementById('adName').value.trim();
+  if(!name){toast('Name required!','error');return;}
+  var admissions=lg('af_admissions')||[];
+  var rollNo='AF-'+(Date.now()+'').slice(-4);
+  admissions.push({id:Date.now(),roll:rollNo,name:name,father:document.getElementById('adFather').value,dob:document.getElementById('adDob').value,cls:document.getElementById('adClass').value,mobile:document.getElementById('adMobile').value,address:document.getElementById('adAddress').value,date:document.getElementById('adDate').value||today(),prevSchool:document.getElementById('adPrevSchool').value,fee:Number(document.getElementById('adFee').value)||0,status:document.getElementById('adStatus').value});
+  ls('af_admissions',admissions);
+  toast('Admission saved! Roll: '+rollNo,'success');
+  renderAdmissions();updateDashboard();
+  document.getElementById('adName').value='';document.getElementById('adFather').value='';
+}
+function renderAdmissions(){
+  var list=lg('af_admissions')||[];
+  var q=(document.getElementById('adSearch').value||'').toLowerCase();
+  var f=document.getElementById('adFilter').value;
+  if(q)list=list.filter(function(a){return a.name.toLowerCase().includes(q)||a.father.toLowerCase().includes(q);});
+  if(f)list=list.filter(function(a){return a.status===f;});
+  var h='';
+  if(!list.length){document.getElementById('adTable').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No records found</td></tr>';return;}
+  list.forEach(function(a,i){
+    var bc=a.status==='Confirmed'?'badge-green':a.status==='Pending'?'badge-orange':'badge-red';
+    h+='<tr><td>'+(i+1)+'</td><td><b>'+a.name+'</b><br><small style="color:var(--muted)">'+a.roll+'</small></td><td>'+a.father+'</td><td>'+a.cls+'</td><td>'+a.mobile+'</td><td>'+fmtDate(a.date)+'</td><td><span class="badge '+bc+'">'+a.status+'</span></td><td><button class="btn btn-sm btn-outline" onclick="editAdStatus('+a.id+')">✏️</button> <button class="btn btn-sm btn-danger" onclick="delAdmission('+a.id+')">🗑️</button></td></tr>';
+  });
+  document.getElementById('adTable').innerHTML=h;
+}
+function editAdStatus(id){
+  var list=lg('af_admissions')||[];
+  var a=list.find(function(x){return x.id===id;});
+  if(!a)return;
+  var ns=prompt('Change status (Confirmed/Pending/Rejected):',a.status);
+  if(!ns)return;
+  a.status=ns;ls('af_admissions',list);renderAdmissions();updateDashboard();toast('Status updated!','success');
+}
+function delAdmission(id){
+  if(!confirm('Delete this admission?'))return;
+  var list=lg('af_admissions')||[];
+  ls('af_admissions',list.filter(function(a){return a.id!==id;}));
+  renderAdmissions();updateDashboard();toast('Deleted!');
+}
+
+// ═══════════════════════════
+//  STUDENTS (from admissions)
+// ═══════════════════════════
+function renderStudents(){
+  var list=lg('af_admissions')||[];
+  list=list.filter(function(a){return a.status==='Confirmed';});
+  var q=(document.getElementById('stSearch').value||'').toLowerCase();
+  var f=document.getElementById('stClsFilter').value;
+  if(q)list=list.filter(function(a){return a.name.toLowerCase().includes(q)||a.father.toLowerCase().includes(q);});
+  if(f)list=list.filter(function(a){return a.cls===f;});
+  var h='';
+  if(!list.length){document.getElementById('stTable').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No students found</td></tr>';return;}
+  list.forEach(function(a,i){
+    h+='<tr><td>'+(i+1)+'</td><td><b>'+a.roll+'</b></td><td>'+a.name+'</td><td>'+a.father+'</td><td>'+a.cls+'</td><td>'+a.mobile+'</td><td>Rs.'+a.fee+'</td><td><button class="btn btn-sm btn-outline" onclick="viewStudent('+a.id+')">👁️</button></td></tr>';
+  });
+  document.getElementById('stTable').innerHTML=h;
+}
+function viewStudent(id){
+  var list=lg('af_admissions')||[];
+  var a=list.find(function(x){return x.id===id;});
+  if(!a)return;
+  openModal('Student Profile',
+    '<div style="font-size:13px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+    '<div><b>Name:</b> '+a.name+'</div><div><b>Roll:</b> '+a.roll+'</div>'+
+    '<div><b>Father:</b> '+a.father+'</div><div><b>Class:</b> '+a.cls+'</div>'+
+    '<div><b>DOB:</b> '+fmtDate(a.dob)+'</div><div><b>Mobile:</b> '+a.mobile+'</div>'+
+    '<div><b>Address:</b> '+a.address+'</div><div><b>Fee/Mo:</b> Rs.'+a.fee+'</div>'+
+    '<div><b>Admitted:</b> '+fmtDate(a.date)+'</div><div><b>Prev School:</b> '+(a.prevSchool||'-')+'</div>'+
+    '</div></div>'
+  );
+}
+function printStudents(){
+  var list=lg('af_admissions')||[];
+  list=list.filter(function(a){return a.status==='Confirmed';});
+  var h='<html><head><style>body{font-family:Arial;font-size:12px;margin:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:6px}th{background:#0b2d6e;color:#fff}h2{text-align:center;color:#0b2d6e}</style></head><body><h2>AL-FAREED PUBLIC SCHOOL — Student List</h2><table><tr><th>#</th><th>Roll</th><th>Name</th><th>Father</th><th>Class</th><th>Mobile</th><th>Fee/Mo</th></tr>';
+  list.forEach(function(a,i){h+='<tr><td>'+(i+1)+'</td><td>'+a.roll+'</td><td>'+a.name+'</td><td>'+a.father+'</td><td>'+a.cls+'</td><td>'+a.mobile+'</td><td>Rs.'+a.fee+'</td></tr>';});
+  h+='</table></body></html>';
+  var w=window.open('','_blank');w.document.write(h);w.document.close();w.print();
+}
+
+// ═══════════════════════════
+//  ATTENDANCE
+// ═══════════════════════════
+function loadAttGrid(){
+  var cls=document.getElementById('attCls').value;
+  var date=document.getElementById('attDate').value||today();
+  var students=getClassStudents(cls);
+  var saved=lg('af_att_'+date)||{};
+  var clsAtt=saved[cls]||students.map(function(s){return {id:s.id,name:s.name,status:'present'};});
+  var h='';
+  clsAtt.forEach(function(s,i){
+    var st=s.status||'present';
+    h+='<div class="att-card '+st+'" id="acard_'+i+'">'+
+      '<div class="att-name">'+s.name+'</div>'+
+      '<div class="att-btns">'+
+      '<button class="att-btn" style="background:#dcfce7;color:#166534" onclick="setAtt('+i+',\'present\')">P</button>'+
+      '<button class="att-btn" style="background:#fee2e2;color:#991b1b" onclick="setAtt('+i+',\'absent\')">A</button>'+
+      '<button class="att-btn" style="background:#ffedd5;color:#9a3412" onclick="setAtt('+i+',\'leave\')">L</button>'+
+      '<button class="att-btn" style="background:#ede9fe;color:#5b21b6" onclick="setAtt('+i+',\'late\')">Lt</button>'+
+      '</div></div>';
+  });
+  document.getElementById('attGrid').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No students in this class. Add via Admissions.</div>';
+  window._curAtt=clsAtt;
+  updateAttSummary();
+}
+function setAtt(i,status){
+  if(!window._curAtt)return;
+  window._curAtt[i].status=status;
+  var card=document.getElementById('acard_'+i);
+  card.className='att-card '+status;
+  updateAttSummary();
+}
+function markAll(status){
+  if(!window._curAtt)return;
+  window._curAtt.forEach(function(s,i){s.status=status;var c=document.getElementById('acard_'+i);if(c)c.className='att-card '+status;});
+  updateAttSummary();
+}
+function updateAttSummary(){
+  if(!window._curAtt)return;
+  var p=0,a=0,l=0,lt=0;
+  window._curAtt.forEach(function(s){if(s.status==='present')p++;else if(s.status==='absent')a++;else if(s.status==='leave')l++;else lt++;});
+  document.getElementById('attSummary').innerHTML='✅ Present: <b>'+p+'</b> | ❌ Absent: <b>'+a+'</b> | 🕐 Leave: <b>'+l+'</b> | ⏰ Late: <b>'+lt+'</b>';
+}
+function saveAttendance(){
+  if(!window._curAtt){toast('Load students first!','error');return;}
+  var cls=document.getElementById('attCls').value;
+  var date=document.getElementById('attDate').value||today();
+  var saved=lg('af_att_'+date)||{};
+  saved[cls]=window._curAtt;
+  ls('af_att_'+date,saved);
+  toast('Attendance saved! ✅','success');updateDashboard();
+}
+function loadAttHistory(){
+  var month=document.getElementById('attMonth').value||nowMonth();
+  var days=[];
+  var d=new Date(month+'-01');
+  while(d.toISOString().slice(0,7)===month){days.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1);}
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Class</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead><tbody>';
+  var found=false;
+  days.forEach(function(day){
+    var saved=lg('af_att_'+day)||{};
+    Object.keys(saved).forEach(function(cls){
+      found=true;
+      var p=0,a=0,l=0;
+      saved[cls].forEach(function(s){if(s.status==='present')p++;else if(s.status==='absent')a++;else l++;});
+      h+='<tr><td>'+fmtDate(day)+'</td><td>'+cls+'</td><td><span class="badge badge-green">'+p+'</span></td><td><span class="badge badge-red">'+a+'</span></td><td><span class="badge badge-orange">'+l+'</span></td></tr>';
+    });
+  });
+  if(!found)h+='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px">No attendance records for this month</td></tr>';
+  h+='</tbody></table></div>';
+  document.getElementById('attHistory').innerHTML=h;
+}
+function getClassStudents(cls){
+  var list=lg('af_admissions')||[];
+  return list.filter(function(a){return a.status==='Confirmed'&&a.cls===cls;});
+}
+
+// ═══════════════════════════
+//  RESULTS
+// ═══════════════════════════
+var _marksData=[];
+function switchResultTab(t,btn){
+  ['marks','report','toppers'].forEach(function(x){document.getElementById('rt-'+x).style.display='none';});
+  document.getElementById('rt-'+t).style.display='block';
+  document.querySelectorAll('#s-results .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+}
+function loadMarksGrid(){
+  var cls=document.getElementById('exCls').value;
+  var students=getClassStudents(cls);
+  if(!students.length){toast('No students in this class','error');return;}
+  _marksData=students.map(function(s){return {id:s.id,name:s.name,marks:''};});
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Marks Obtained</th><th>Total</th><th>Grade</th></tr></thead><tbody>';
+  _marksData.forEach(function(s,i){
+    h+='<tr><td>'+s.name+'</td><td><input type="number" style="width:80px;margin-bottom:0;padding:5px" id="mInp_'+i+'" placeholder="0" max="'+document.getElementById('exTotal').value+'" oninput="calcGrade('+i+')"></td><td>'+document.getElementById('exTotal').value+'</td><td id="mGrade_'+i+'">-</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('marksGrid').innerHTML=h;
+  document.getElementById('marksSaveBtn').style.display='block';
+}
+function calcGrade(i){
+  var inp=document.getElementById('mInp_'+i);
+  var total=Number(document.getElementById('exTotal').value)||100;
+  var pct=(Number(inp.value)/total)*100;
+  var g=pct>=80?'A+':pct>=70?'A':pct>=60?'B':pct>=50?'C':pct>=40?'D':'F';
+  document.getElementById('mGrade_'+i).textContent=g;
+}
+function saveMarks(){
+  var exam=document.getElementById('exName').value;
+  var cls=document.getElementById('exCls').value;
+  var subj=document.getElementById('exSubj').value||'General';
+  var total=Number(document.getElementById('exTotal').value)||100;
+  var results=lg('af_results')||[];
+  _marksData.forEach(function(s,i){
+    var m=Number(document.getElementById('mInp_'+i).value)||0;
+    var pct=(m/total)*100;
+    var g=pct>=80?'A+':pct>=70?'A':pct>=60?'B':pct>=50?'C':pct>=40?'D':'F';
+    results.push({id:s.id,name:s.name,cls:cls,exam:exam,subj:subj,marks:m,total:total,pct:Math.round(pct),grade:g,date:today()});
+  });
+  ls('af_results',results);toast('Marks saved! ✅','success');
+}
+function loadReportCards(){
+  var cls=document.getElementById('rpCls').value;
+  var exam=document.getElementById('rpExam').value;
+  var results=lg('af_results')||[];
+  var filtered=results.filter(function(r){return r.cls===cls&&r.exam===exam;});
+  var students={};
+  filtered.forEach(function(r){if(!students[r.id])students[r.id]={name:r.name,subjects:[]};students[r.id].subjects.push(r);});
+  var h='';
+  Object.values(students).forEach(function(st){
+    var total=st.subjects.reduce(function(s,x){return s+x.marks;},0);
+    var maxTotal=st.subjects.reduce(function(s,x){return s+x.total;},0);
+    var pct=maxTotal?Math.round((total/maxTotal)*100):0;
+    h+='<div class="card" style="break-inside:avoid"><div style="background:var(--navy);color:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><div><b>'+st.name+'</b><br><small>Class: '+cls+' | Exam: '+exam+'</small></div><div style="text-align:right"><div style="font-size:22px;font-weight:800">'+pct+'%</div><div style="font-size:10px">Overall</div></div></div><div class="tbl-wrap"><table><thead><tr><th>Subject</th><th>Marks</th><th>Total</th><th>%</th><th>Grade</th></tr></thead><tbody>';
+    st.subjects.forEach(function(r){h+='<tr><td>'+r.subj+'</td><td>'+r.marks+'</td><td>'+r.total+'</td><td>'+r.pct+'%</td><td><span class="badge '+(r.grade==='F'?'badge-red':'badge-green')+'">'+r.grade+'</span></td></tr>';});
+    h+='</tbody></table></div><div style="margin-top:8px;font-size:12px;text-align:right;color:var(--muted)">Total: '+total+'/'+maxTotal+' | '+pct+'%</div></div>';
+  });
+  document.getElementById('reportCards').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No results found for this class and exam.</div>';
+}
+function loadToppers(){
+  var exam=document.getElementById('tpExam').value;
+  var results=lg('af_results')||[];
+  var filtered=results.filter(function(r){return r.exam===exam;});
+  var students={};
+  filtered.forEach(function(r){
+    if(!students[r.cls+'-'+r.id])students[r.cls+'-'+r.id]={name:r.name,cls:r.cls,total:0,max:0};
+    students[r.cls+'-'+r.id].total+=r.marks;
+    students[r.cls+'-'+r.id].max+=r.total;
+  });
+  var byClass={};
+  Object.values(students).forEach(function(s){
+    s.pct=s.max?Math.round((s.total/s.max)*100):0;
+    if(!byClass[s.cls])byClass[s.cls]=[];
+    byClass[s.cls].push(s);
+  });
+  var h='';
+  Object.keys(byClass).sort().forEach(function(cls){
+    var top=byClass[cls].sort(function(a,b){return b.pct-a.pct;}).slice(0,3);
+    h+='<div class="card"><div class="card-title" style="margin-bottom:10px">'+cls+'</div>';
+    top.forEach(function(s,i){
+      var medals=['🥇','🥈','🥉'];
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:8px;background:#f8faff;border-radius:8px;margin-bottom:6px"><span style="font-size:20px">'+medals[i]+'</span><div><div style="font-weight:700">'+s.name+'</div><div style="font-size:11px;color:var(--muted)">'+s.total+' marks | '+s.pct+'%</div></div></div>';
+    });
+    h+='</div>';
+  });
+  document.getElementById('toppersList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No results found.</div>';
+}
+
+// ═══════════════════════════
+//  ID CARDS
+// ═══════════════════════════
+function loadIdStudents(){}
+function genIdCards(){
+  var cls=document.getElementById('idCls').value;
+  var sess=document.getElementById('idSession').value;
+  var students=getClassStudents(cls);
+  var settings=lg('af_settings')||{};
+  if(!students.length){toast('No students in this class','error');return;}
+  var h='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">';
+  students.forEach(function(s){
+    h+='<div style="border:2px solid var(--navy);border-radius:10px;overflow:hidden;font-size:11px">'+
+      '<div style="background:var(--navy);color:#fff;padding:8px;text-align:center">'+
+      '<b style="font-size:12px">AL-FAREED PUBLIC SCHOOL</b><br><span style="font-size:9px;color:var(--gold)">Tando Jam, Sindh</span></div>'+
+      '<div style="padding:10px">'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<div style="width:45px;height:55px;background:#e2e8f0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>'+
+      '<div><div style="font-weight:800;font-size:12px">'+s.name+'</div>'+
+      '<div>Father: <b>'+s.father+'</b></div>'+
+      '<div>Class: <b>'+cls+'</b></div>'+
+      '<div>Roll: <b>'+s.roll+'</b></div>'+
+      '<div>Session: <b>'+sess+'</b></div></div></div>'+
+      '</div>'+
+      '<div style="background:#f8faff;padding:5px 10px;display:flex;justify-content:space-between;font-size:9px;color:var(--muted)">'+
+      '<span>Ph: '+(settings.phone||'N/A')+'</span><span>Valid: '+sess+'</span></div>'+
+      '</div>';
+  });
+  h+='</div>';
+  document.getElementById('idCardsPreview').innerHTML=h+'<button class="btn btn-primary" style="margin-top:12px;width:100%" onclick="window.print()">🖨️ Print ID Cards</button>';
+}
+
+// ═══════════════════════════
+//  FEES
+// ═══════════════════════════
+function switchFeeTab(t,btn){
+  ['collect','records','defaulters','voucher'].forEach(function(x){document.getElementById('ft-'+x).style.display='none';});
+  document.getElementById('ft-'+t).style.display='block';
+  document.querySelectorAll('#s-fees .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='records')renderFeeRecords();
+}
+function loadFeeStudents(){
+  var cls=document.getElementById('feeCls').value;
+  var month=document.getElementById('feeMonth').value||nowMonth();
+  var students=getClassStudents(cls);
+  var fees=lg('af_fees')||[];
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Fee/Mo</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+  var coll=0;
+  students.forEach(function(s){
+    var paid=fees.find(function(f){return f.studentId===s.id&&f.month===month&&f.paid;});
+    coll+=(paid?s.fee:0);
+    h+='<tr><td>'+s.name+'</td><td>Rs.'+s.fee+'</td><td>'+(paid?'<span class="badge badge-green">✅ Paid</span>':'<span class="badge badge-red">❌ Unpaid</span>')+'</td>'+
+      '<td>'+(paid?'<button class="btn btn-sm btn-danger" onclick="markFee('+s.id+','+s.fee+',\''+cls+'\',\''+month+'\',false)">Undo</button>':'<button class="btn btn-sm btn-success" onclick="markFee('+s.id+','+s.fee+',\''+cls+'\',\''+month+'\',true)">Collect</button>')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('feeGrid').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No students.</div>';
+  document.getElementById('feeSummary').textContent='Collected this month: Rs.'+coll.toLocaleString();
+}
+function markFee(id,amount,cls,month,paid){
+  var fees=lg('af_fees')||[];
+  var idx=fees.findIndex(function(f){return f.studentId===id&&f.month===month;});
+  var admissions=lg('af_admissions')||[];
+  var student=admissions.find(function(a){return a.id===id;});
+  if(idx>=0){fees[idx].paid=paid;fees[idx].datePaid=paid?today():null;}
+  else{fees.push({studentId:id,studentName:student?student.name:'',cls:cls,month:month,amount:amount,paid:paid,datePaid:paid?today():null});}
+  ls('af_fees',fees);loadFeeStudents();updateDashboard();
+  toast(paid?'Fee collected! ✅':'Fee undone!');
+}
+function renderFeeRecords(){
+  var fees=lg('af_fees')||[];
+  var q=(document.getElementById('feeRecSearch').value||'').toLowerCase();
+  var fm=document.getElementById('feeRecMonth').value;
+  if(q)fees=fees.filter(function(f){return f.studentName.toLowerCase().includes(q);});
+  if(fm)fees=fees.filter(function(f){return f.month===fm;});
+  var h='';
+  fees.forEach(function(f){
+    var bc=f.paid?'badge-green':'badge-red';
+    h+='<tr><td>'+f.studentName+'</td><td>'+f.cls+'</td><td>'+f.month+'</td><td>Rs.'+f.amount+'</td><td>'+(f.datePaid?fmtDate(f.datePaid):'-')+'</td><td><span class="badge '+bc+'">'+(f.paid?'Paid':'Unpaid')+'</span></td></tr>';
+  });
+  document.getElementById('feeRecTable').innerHTML=h||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">No records</td></tr>';
+}
+function loadDefaulters(){
+  var month=document.getElementById('defMonth').value||nowMonth();
+  var fees=lg('af_fees')||[];
+  var admissions=lg('af_admissions')||[];
+  var confirmed=admissions.filter(function(a){return a.status==='Confirmed';});
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Class</th><th>Fee/Mo</th><th>Month</th><th>Action</th></tr></thead><tbody>';
+  var found=false;
+  confirmed.forEach(function(s){
+    var paid=fees.find(function(f){return f.studentId===s.id&&f.month===month&&f.paid;});
+    if(!paid){found=true;h+='<tr><td>'+s.name+'</td><td>'+s.cls+'</td><td>Rs.'+s.fee+'</td><td>'+month+'</td><td><button class="btn btn-sm btn-success" onclick="markFee('+s.id+','+s.fee+',\''+s.cls+'\',\''+month+'\',true)">Collect</button> <button class="btn btn-sm btn-outline" onclick="sendFeeReminder(\''+s.mobile+'\',\''+s.name+'\',\''+month+'\','+s.fee+')">📱 WA</button></td></tr>';}
+  });
+  if(!found)h+='<tr><td colspan="5" style="text-align:center;color:var(--green);padding:16px;font-weight:700">🎉 No defaulters!</td></tr>';
+  h+='</tbody></table></div>';
+  document.getElementById('defaultersList').innerHTML=h;
+}
+function sendFeeReminder(mobile,name,month,amount){
+  var msg='Assalam u Alaikum! Dear Parent, '+name+' ki '+month+' ki fee Rs.'+amount+' pending hai. Please Al-Fareed Public School mein jama karayen. Shukriya.';
+  var url='https://wa.me/92'+mobile.replace(/^0/,'').replace(/-/g,'')+  '?text='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
+function printVoucher(){
+  var h='<html><head><style>body{font-family:Arial;font-size:13px;margin:0}*{box-sizing:border-box}.voucher{width:300px;border:2px solid #0b2d6e;padding:0;margin:0}.hdr{background:#0b2d6e;color:#fff;padding:12px;text-align:center}.hdr h2{font-size:16px;margin:0}.hdr p{font-size:10px;margin:3px 0 0}.body{padding:14px}.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #ddd;font-size:12px}.amount{background:#0b2d6e;color:#fff;text-align:center;padding:10px;font-size:20px;font-weight:bold}.footer{text-align:center;padding:8px;font-size:10px;color:#666}</style></head><body><div class="voucher"><div class="hdr"><h2>AL-FAREED PUBLIC SCHOOL</h2><p>Tando Jam, Sindh</p><p>FEE VOUCHER</p></div><div class="body"><div class="row"><span>Student Name:</span><b>'+document.getElementById('vchName').value+'</b></div><div class="row"><span>Class:</span><b>'+document.getElementById('vchCls').value+'</b></div><div class="row"><span>Month:</span><b>'+document.getElementById('vchMonth').value+'</b></div><div class="row"><span>Fee Type:</span><b>'+document.getElementById('vchType').value+'</b></div><div class="row"><span>Due Date:</span><b>'+fmtDate(document.getElementById('vchDue').value)+'</b></div></div><div class="amount">Rs. '+document.getElementById('vchAmt').value+'</div><div class="footer">Please pay before due date. Late fee will be charged.</div></div></body></html>';
+  var w=window.open('','_blank');w.document.write(h);w.document.close();w.print();
+}
+
+// ═══════════════════════════
+//  HOMEWORK
+// ═══════════════════════════
+function saveHomework(){
+  var hw=lg('af_hw')||[];
+  var cls=document.getElementById('hwCls').value;
+  var subj=document.getElementById('hwSubj').value.trim();
+  var desc=document.getElementById('hwDesc').value.trim();
+  if(!subj||!desc){toast('Subject and homework required!','error');return;}
+  hw.push({id:Date.now(),cls:cls,subj:subj,desc:desc,date:document.getElementById('hwDate').value||today(),due:document.getElementById('hwDue').value,teacher:document.getElementById('hwTeacher').value||currentRole});
+  ls('af_hw',hw);toast('Homework saved! ✅','success');renderHomework();
+  document.getElementById('hwSubj').value='';document.getElementById('hwDesc').value='';
+}
+function renderHomework(){
+  var hw=lg('af_hw')||[];
+  var f=document.getElementById('hwFilter').value;
+  var fd=document.getElementById('hwDateFilter').value;
+  if(f)hw=hw.filter(function(h){return h.cls===f;});
+  if(fd)hw=hw.filter(function(h){return h.date===fd;});
+  var h='';
+  hw.slice().reverse().forEach(function(entry){
+    h+='<div class="card" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div><span class="badge badge-blue">'+entry.cls+'</span> <span class="badge badge-purple">'+entry.subj+'</span></div><div style="font-size:10px;color:var(--muted)">'+fmtDate(entry.date)+'</div></div><div style="font-size:13px">'+entry.desc+'</div><div style="font-size:10px;color:var(--muted);margin-top:6px">Due: '+fmtDate(entry.due)+' | By: '+entry.teacher+'</div><div style="margin-top:8px"><button class="btn btn-sm btn-danger" onclick="delHW('+entry.id+')">🗑️ Delete</button></div></div>';
+  });
+  document.getElementById('hwList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No homework records.</div>';
+}
+function delHW(id){
+  if(currentRole!=='admin'&&currentRole!=='teacher'){toast('Not allowed!','error');return;}
+  if(!confirm('Delete?'))return;
+  ls('af_hw',(lg('af_hw')||[]).filter(function(h){return h.id!==id;}));renderHomework();
+}
+
+// ═══════════════════════════
+//  ONLINE EXAMS
+// ═══════════════════════════
+var _mcqCount=0;
+function switchExamTab(t,btn){
+  ['create','list','take'].forEach(function(x){document.getElementById('et-'+x).style.display='none';});
+  document.getElementById('et-'+t).style.display='block';
+  document.querySelectorAll('#s-exams .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='list')renderExamList();
+  if(t==='take')loadExamSelect();
+}
+function addMCQ(){
+  _mcqCount++;var n=_mcqCount;
+  var d=document.createElement('div');
+  d.style.cssText='background:#f8faff;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid var(--border)';
+  d.id='mcq_'+n;
+  d.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:8px"><b style="font-size:12px">Q'+n+'</b><button class="btn btn-sm btn-danger" onclick="document.getElementById(\'mcq_'+n+'\').remove()">✕</button></div>'+
+    '<input type="text" id="mq_'+n+'" placeholder="Question..." style="margin-bottom:8px">'+
+    '<div class="row"><div><input type="text" id="ma_'+n+'" placeholder="A. Option..."></div><div><input type="text" id="mb_'+n+'" placeholder="B. Option..."></div></div>'+
+    '<div class="row"><div><input type="text" id="mc_'+n+'" placeholder="C. Option..."></div><div><input type="text" id="md_'+n+'" placeholder="D. Option..."></div></div>'+
+    '<div><label>Correct Answer</label><select id="mans_'+n+'" style="margin-bottom:0"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div>';
+  document.getElementById('mcqBuilder').appendChild(d);
+}
+function saveExam(){
+  var title=document.getElementById('exTitle').value.trim();
+  if(!title){toast('Exam title required!','error');return;}
+  var questions=[];
+  for(var i=1;i<=_mcqCount;i++){
+    var qEl=document.getElementById('mcq_'+i);
+    if(!qEl)continue;
+    questions.push({q:document.getElementById('mq_'+i).value,a:document.getElementById('ma_'+i).value,b:document.getElementById('mb_'+i).value,c:document.getElementById('mc_'+i).value,d:document.getElementById('md_'+i).value,ans:document.getElementById('mans_'+i).value});
+  }
+  if(!questions.length){toast('Add at least one question!','error');return;}
+  var exams=lg('af_exams')||[];
+  exams.push({id:Date.now(),title:title,cls:document.getElementById('exClass').value,subject:document.getElementById('exSubject').value,time:Number(document.getElementById('exTime').value)||30,questions:questions,date:today()});
+  ls('af_exams',exams);toast('Exam saved! ✅','success');
+  document.getElementById('mcqBuilder').innerHTML='';_mcqCount=0;
+}
+function renderExamList(){
+  var exams=lg('af_exams')||[];
+  var h='';
+  exams.forEach(function(e){
+    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:700">'+e.title+'</div><div style="font-size:11px;color:var(--muted)">'+e.cls+' | '+e.subject+' | '+e.questions.length+' Qs | '+e.time+' mins</div></div><button class="btn btn-sm btn-danger" onclick="delExam('+e.id+')">🗑️</button></div></div>';
+  });
+  document.getElementById('examList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No exams created yet.</div>';
+}
+function delExam(id){if(!confirm('Delete exam?'))return;ls('af_exams',(lg('af_exams')||[]).filter(function(e){return e.id!==id;}));renderExamList();}
+function loadExamSelect(){
+  var sel=document.getElementById('takeExamSel');
+  sel.innerHTML='';
+  (lg('af_exams')||[]).forEach(function(e){var o=document.createElement('option');o.value=e.id;o.textContent=e.title+' ('+e.cls+')';sel.appendChild(o);});
+}
+var _examTimer=null,_examData=null,_userAnswers={};
+function startExam(){
+  var name=document.getElementById('takeStName').value.trim();
+  var eid=Number(document.getElementById('takeExamSel').value);
+  if(!name){toast('Enter your name!','error');return;}
+  var exam=(lg('af_exams')||[]).find(function(e){return e.id===eid;});
+  if(!exam){toast('Select exam!','error');return;}
+  _examData=exam;_userAnswers={};
+  var h='<div style="background:var(--navy);color:#fff;padding:12px;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between"><div><b>'+exam.title+'</b><br><small>'+exam.cls+' | '+exam.subject+'</small></div><div id="examTimer" style="font-size:20px;font-weight:800;color:var(--gold)">'+exam.time+':00</div></div>';
+  exam.questions.forEach(function(q,i){
+    h+='<div style="background:#f8faff;border-radius:10px;padding:12px;margin-bottom:10px"><div style="font-weight:700;margin-bottom:8px">Q'+(i+1)+'. '+q.q+'</div>';
+    ['A','B','C','D'].forEach(function(opt){
+      var val=q[opt.toLowerCase()];if(!val)return;
+      h+='<label style="display:flex;align-items:center;gap:8px;padding:6px;cursor:pointer;border-radius:6px;margin-bottom:4px;border:1.5px solid var(--border)"><input type="radio" name="q'+i+'" value="'+opt+'" onchange="_userAnswers['+i+']=this.value"> '+opt+'. '+val+'</label>';
+    });
+    h+='</div>';
+  });
+  h+='<button class="btn btn-success" style="width:100%" onclick="submitExam(\''+name+'\')">✅ Submit Exam</button>';
+  document.getElementById('examArea').innerHTML=h;
+  // Timer
+  var secs=exam.time*60;
+  if(_examTimer)clearInterval(_examTimer);
+  _examTimer=setInterval(function(){
+    secs--;
+    var m=Math.floor(secs/60),s=secs%60;
+    var el=document.getElementById('examTimer');
+    if(el)el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    if(secs<=0){clearInterval(_examTimer);submitExam(name);}
+  },1000);
+}
+function submitExam(name){
+  if(_examTimer)clearInterval(_examTimer);
+  var exam=_examData;if(!exam)return;
+  var correct=0;
+  exam.questions.forEach(function(q,i){if(_userAnswers[i]===q.ans)correct++;});
+  var pct=Math.round((correct/exam.questions.length)*100);
+  var results=lg('af_examResults')||[];
+  results.push({name:name,exam:exam.title,cls:exam.cls,correct:correct,total:exam.questions.length,pct:pct,date:today()});
+  ls('af_examResults',results);
+  document.getElementById('examArea').innerHTML='<div style="text-align:center;padding:30px"><div style="font-size:50px">'+( pct>=50?'🎉':'😔')+'</div><div style="font-size:28px;font-weight:800;color:'+(pct>=50?'var(--green)':'var(--red)')+'">'+pct+'%</div><div style="font-size:14px;margin-top:8px">'+correct+' out of '+exam.questions.length+' correct</div><div style="font-size:12px;color:var(--muted);margin-top:4px">'+(pct>=50?'Passed! ✅':'Failed ❌')+'</div></div>';
+}
+
+// ═══════════════════════════
+//  LIBRARY
+// ═══════════════════════════
+function switchLibTab(t,btn){
+  ['books','issue','return'].forEach(function(x){document.getElementById('lt-'+x).style.display='none';});
+  document.getElementById('lt-'+t).style.display='block';
+  document.querySelectorAll('#s-library .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='books')renderBooks();
+  if(t==='issue')renderIssued();
+}
+function addBook(){
+  var title=document.getElementById('libTitle').value.trim();
+  if(!title){toast('Book title required!','error');return;}
+  var books=lg('af_books')||[];
+  var code=document.getElementById('libCode').value.trim()||'LIB-'+(books.length+1);
+  books.push({id:Date.now(),code:code,title:title,author:document.getElementById('libAuthor').value,cat:document.getElementById('libCat').value,copies:Number(document.getElementById('libCopies').value)||1,available:Number(document.getElementById('libCopies').value)||1,shelf:document.getElementById('libShelf').value});
+  ls('af_books',books);toast('Book added! ✅','success');renderBooks();updateDashboard();
+  document.getElementById('libTitle').value='';document.getElementById('libCode').value='';
+}
+function renderBooks(){
+  var books=lg('af_books')||[];
+  var q=(document.getElementById('libSearch').value||'').toLowerCase();
+  if(q)books=books.filter(function(b){return b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q)||b.code.toLowerCase().includes(q);});
+  var h='';
+  books.forEach(function(b){
+    h+='<tr><td>'+b.code+'</td><td><b>'+b.title+'</b></td><td>'+b.author+'</td><td>'+b.cat+'</td><td>'+b.copies+'</td><td><span class="badge '+(b.available>0?'badge-green':'badge-red')+'">'+b.available+'</span></td><td><button class="btn btn-sm btn-danger" onclick="delBook('+b.id+')">🗑️</button></td></tr>';
+  });
+  document.getElementById('libTable').innerHTML=h||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px">No books in catalog.</td></tr>';
+}
+function delBook(id){
+  if(!confirm('Delete book?'))return;
+  ls('af_books',(lg('af_books')||[]).filter(function(b){return b.id!==id;}));renderBooks();updateDashboard();
+}
+function issueBook(){
+  var name=document.getElementById('issName').value.trim();
+  var code=document.getElementById('issBook').value.trim();
+  if(!name||!code){toast('Name and book code required!','error');return;}
+  var books=lg('af_books')||[];
+  var book=books.find(function(b){return b.code===code;});
+  if(!book){toast('Book code not found!','error');return;}
+  if(book.available<=0){toast('No copies available!','error');return;}
+  book.available--;ls('af_books',books);
+  var issued=lg('af_issued')||[];
+  issued.push({id:Date.now(),name:name,cls:document.getElementById('issCls').value,code:code,title:book.title,date:document.getElementById('issDate').value||today(),due:document.getElementById('issDue').value,returned:false});
+  ls('af_issued',issued);toast('Book issued! ✅','success');renderIssued();
+  document.getElementById('issName').value='';document.getElementById('issBook').value='';
+}
+function renderIssued(){
+  var issued=lg('af_issued')||[];
+  var h='';
+  issued.filter(function(i){return !i.returned;}).forEach(function(i){
+    var overdue=i.due&&new Date(i.due)<new Date()&&!i.returned;
+    h+='<tr><td>'+i.name+'</td><td>'+i.cls+'</td><td>'+i.title+' ('+i.code+')</td><td>'+fmtDate(i.date)+'</td><td><span class="'+(overdue?'badge badge-red':'')+'">'+fmtDate(i.due)+'</span></td><td><span class="badge badge-orange">Issued</span></td><td><button class="btn btn-sm btn-success" onclick="returnBook('+i.id+')">Return</button></td></tr>';
+  });
+  document.getElementById('issTable').innerHTML=h||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px">No books currently issued.</td></tr>';
+}
+function returnBook(id){
+  var issued=lg('af_issued')||[];
+  var rec=issued.find(function(i){return i.id===id;});
+  if(!rec)return;
+  rec.returned=true;rec.returnDate=today();
+  ls('af_issued',issued);
+  var books=lg('af_books')||[];
+  var book=books.find(function(b){return b.code===rec.code;});
+  if(book){book.available++;ls('af_books',books);}
+  toast('Book returned! ✅','success');renderIssued();
+}
+function searchReturn(){
+  var q=(document.getElementById('retSearch').value||'').toLowerCase();
+  var issued=lg('af_issued')||[];
+  var matches=issued.filter(function(i){return !i.returned&&(i.name.toLowerCase().includes(q)||i.code.toLowerCase().includes(q));});
+  var h='';
+  matches.forEach(function(i){
+    h+='<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><b>'+i.name+'</b><br><small>'+i.title+' ('+i.code+') | Due: '+fmtDate(i.due)+'</small></div><button class="btn btn-sm btn-success" onclick="returnBook('+i.id+')">Return</button></div>';
+  });
+  document.getElementById('retResults').innerHTML=h;
+}
+
+// ═══════════════════════════
+//  HR / STAFF
+// ═══════════════════════════
+function switchHRTab(t,btn){
+  ['list','add','salary'].forEach(function(x){document.getElementById('hr-'+x).style.display='none';});
+  document.getElementById('hr-'+t).style.display='block';
+  document.querySelectorAll('#s-hr .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='list')renderStaff();
+}
+function saveStaff(){
+  var name=document.getElementById('hrName').value.trim();
+  if(!name){toast('Name required!','error');return;}
+  var staff=lg('af_staff')||[];
+  staff.push({id:'ST'+Date.now(),name:name,cnic:document.getElementById('hrCnic').value,role:document.getElementById('hrRole').value,subject:document.getElementById('hrSubject').value,mobile:document.getElementById('hrMobile').value,salary:Number(document.getElementById('hrSalary').value)||0,join:document.getElementById('hrJoin').value||today(),address:document.getElementById('hrAddr').value,password:document.getElementById('hrPass').value||'1234',qual:document.getElementById('hrQual').value});
+  ls('af_staff',staff);toast('Staff added! ✅','success');renderStaff();loadTeacherDropdown();updateDashboard();
+  document.getElementById('hrName').value='';document.getElementById('hrPass').value='';
+}
+function renderStaff(){
+  var staff=lg('af_staff')||[];
+  var q=(document.getElementById('hrSearch').value||'').toLowerCase();
+  var f=document.getElementById('hrFilter').value;
+  if(q)staff=staff.filter(function(s){return s.name.toLowerCase().includes(q);});
+  if(f)staff=staff.filter(function(s){return s.role===f;});
+  var h='';
+  staff.forEach(function(s,i){
+    h+='<tr><td>'+(i+1)+'</td><td><b>'+s.name+'</b></td><td><span class="badge badge-blue">'+s.role+'</span></td><td>'+(s.subject||'-')+'</td><td>'+s.mobile+'</td><td>Rs.'+s.salary.toLocaleString()+'</td><td>'+fmtDate(s.join)+'</td><td><button class="btn btn-sm btn-danger" onclick="delStaff(\''+s.id+'\')">🗑️</button></td></tr>';
+  });
+  document.getElementById('hrTable').innerHTML=h||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No staff records.</td></tr>';
+}
+function delStaff(id){
+  if(!confirm('Delete staff member?'))return;
+  ls('af_staff',(lg('af_staff')||[]).filter(function(s){return s.id!==id;}));renderStaff();loadTeacherDropdown();updateDashboard();
+}
+function loadSalary(){
+  var month=document.getElementById('salMonth').value||nowMonth();
+  var staff=lg('af_staff')||[];
+  var salaries=lg('af_salaries')||[];
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Role</th><th>Salary</th><th>Status</th><th>Action</th></tr></thead><tbody>';
+  var total=0;
+  staff.forEach(function(s){
+    var paid=salaries.find(function(x){return x.staffId===s.id&&x.month===month&&x.paid;});
+    total+=(paid?s.salary:0);
+    h+='<tr><td>'+s.name+'</td><td>'+s.role+'</td><td>Rs.'+s.salary.toLocaleString()+'</td><td>'+(paid?'<span class="badge badge-green">✅ Paid</span>':'<span class="badge badge-red">❌ Pending</span>')+'</td>'+
+      '<td>'+(paid?'<span style="font-size:11px;color:var(--muted)">Paid on '+fmtDate(paid.date)+'</span>':'<button class="btn btn-sm btn-success" onclick="paySalary(\''+s.id+'\','+s.salary+',\''+month+'\')">Pay</button>')+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('salaryGrid').innerHTML=h;
+  document.getElementById('salTotal').textContent='Total Paid: Rs.'+total.toLocaleString();
+}
+function paySalary(id,amount,month){
+  var salaries=lg('af_salaries')||[];
+  salaries.push({staffId:id,amount:amount,month:month,paid:true,date:today()});
+  ls('af_salaries',salaries);toast('Salary paid! ✅','success');loadSalary();
+}
+
+// ═══════════════════════════
+//  STAFF ATTENDANCE
+// ═══════════════════════════
+function loadSattGrid(){
+  var staff=lg('af_staff')||[];
+  var date=document.getElementById('sattDate').value||today();
+  var saved=lg('af_satt_'+date)||{};
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Role</th><th>Arrival</th><th>Status</th></tr></thead><tbody>';
+  staff.forEach(function(s){
+    var st=saved[s.id]||{status:'present',arrival:''};
+    h+='<tr id="sattr_'+s.id+'"><td>'+s.name+'</td><td>'+s.role+'</td>'+
+      '<td><input type="time" id="sarr_'+s.id+'" value="'+st.arrival+'" style="margin-bottom:0;padding:4px;width:110px;font-size:11px"></td>'+
+      '<td><select id="sst_'+s.id+'" style="margin-bottom:0;padding:4px;font-size:11px"><option value="present"'+(st.status==='present'?' selected':'')+'>✅ Present</option><option value="absent"'+(st.status==='absent'?' selected':'')+'>❌ Absent</option><option value="leave"'+(st.status==='leave'?' selected':'')+'>🕐 Leave</option></select></td></tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('sattGrid').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No staff found. Add staff in HR section.</div>';
+}
+function markAllStaff(status){
+  var staff=lg('af_staff')||[];
+  staff.forEach(function(s){var el=document.getElementById('sst_'+s.id);if(el)el.value=status;});
+}
+function saveStaffAtt(){
+  var staff=lg('af_staff')||[];
+  var date=document.getElementById('sattDate').value||today();
+  var data={};
+  staff.forEach(function(s){
+    var stEl=document.getElementById('sst_'+s.id);
+    var arrEl=document.getElementById('sarr_'+s.id);
+    if(stEl)data[s.id]={status:stEl.value,arrival:arrEl?arrEl.value:''};
+  });
+  ls('af_satt_'+date,data);toast('Staff attendance saved! ✅','success');
+}
+function loadSattHistory(){
+  var month=document.getElementById('sattHistMonth').value||nowMonth();
+  var days=[];var d=new Date(month+'-01');
+  while(d.toISOString().slice(0,7)===month){days.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1);}
+  var staff=lg('af_staff')||[];
+  var h='<div class="tbl-wrap"><table><thead><tr><th>Staff</th>';
+  days.forEach(function(day){h+='<th style="font-size:9px">'+day.slice(5)+'</th>';});
+  h+='</tr></thead><tbody>';
+  staff.forEach(function(s){
+    h+='<tr><td style="white-space:nowrap"><b>'+s.name+'</b><br><small>'+s.role+'</small></td>';
+    days.forEach(function(day){
+      var saved=lg('af_satt_'+day)||{};
+      var st=saved[s.id]?saved[s.id].status:'';
+      var icon=st==='present'?'✅':st==='absent'?'❌':st==='leave'?'🕐':'—';
+      h+='<td style="text-align:center;font-size:12px">'+icon+'</td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  document.getElementById('sattHistory').innerHTML=h;
+}
+
+// ═══════════════════════════
+//  TRANSPORT
+// ═══════════════════════════
+function switchTransTab(t,btn){
+  ['routes','vehicles','students'].forEach(function(x){document.getElementById('tt-'+x).style.display='none';});
+  document.getElementById('tt-'+t).style.display='block';
+  document.querySelectorAll('#s-transport .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='routes')renderRoutes();
+  if(t==='vehicles')renderVehicles();
+  if(t==='students'){loadTransRouteSelect();renderTransStudents();}
+}
+function saveRoute(){
+  var name=document.getElementById('rtName').value.trim();if(!name){toast('Route name required!','error');return;}
+  var routes=lg('af_routes')||[];
+  routes.push({id:Date.now(),name:name,fee:Number(document.getElementById('rtFee').value)||0,stops:document.getElementById('rtStops').value,driver:document.getElementById('rtDriver').value});
+  ls('af_routes',routes);toast('Route saved! ✅','success');renderRoutes();
+  document.getElementById('rtName').value='';
+}
+function renderRoutes(){
+  var routes=lg('af_routes')||[];
+  var h='';
+  routes.forEach(function(r){
+    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><b>'+r.name+'</b><br><small style="color:var(--muted)">Driver: '+r.driver+' | Fee: Rs.'+r.fee+'/mo</small><br><small>Stops: '+r.stops+'</small></div><button class="btn btn-sm btn-danger" onclick="delRoute('+r.id+')">🗑️</button></div></div>';
+  });
+  document.getElementById('routesList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No routes added.</div>';
+}
+function delRoute(id){if(!confirm('Delete route?'))return;ls('af_routes',(lg('af_routes')||[]).filter(function(r){return r.id!==id;}));renderRoutes();}
+function saveVehicle(){
+  var num=document.getElementById('vhNum').value.trim();if(!num){toast('Vehicle number required!','error');return;}
+  var vehicles=lg('af_vehicles')||[];
+  vehicles.push({id:Date.now(),num:num,type:document.getElementById('vhType').value,cap:Number(document.getElementById('vhCap').value)||0,driver:document.getElementById('vhDriver').value});
+  ls('af_vehicles',vehicles);toast('Vehicle saved! ✅','success');renderVehicles();
+  document.getElementById('vhNum').value='';
+}
+function renderVehicles(){
+  var vehicles=lg('af_vehicles')||[];
+  var h='';
+  vehicles.forEach(function(v){
+    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div><b>'+v.num+'</b> <span class="badge badge-blue">'+v.type+'</span><br><small>Capacity: '+v.cap+' | Driver: '+v.driver+'</small></div><button class="btn btn-sm btn-danger" onclick="delVehicle('+v.id+')">🗑️</button></div></div>';
+  });
+  document.getElementById('vehiclesList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No vehicles added.</div>';
+}
+function delVehicle(id){if(!confirm('Delete?'))return;ls('af_vehicles',(lg('af_vehicles')||[]).filter(function(v){return v.id!==id;}));renderVehicles();}
+function loadTransRouteSelect(){
+  var sel=document.getElementById('tsRoute');sel.innerHTML='';
+  (lg('af_routes')||[]).forEach(function(r){var o=document.createElement('option');o.value=r.id;o.textContent=r.name;sel.appendChild(o);});
+}
+function saveTransStudent(){
+  var name=document.getElementById('tsName').value.trim();if(!name){toast('Name required!','error');return;}
+  var ts=lg('af_transStudents')||[];
+  var routes=lg('af_routes')||[];
+  var rid=Number(document.getElementById('tsRoute').value);
+  var route=routes.find(function(r){return r.id===rid;});
+  ts.push({id:Date.now(),name:name,routeId:rid,routeName:route?route.name:'',fee:route?route.fee:0});
+  ls('af_transStudents',ts);toast('Saved! ✅','success');renderTransStudents();
+  document.getElementById('tsName').value='';
+}
+function renderTransStudents(){
+  var ts=lg('af_transStudents')||[];
+  var h='';
+  ts.forEach(function(t){
+    h+='<div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><b>'+t.name+'</b><br><small>Route: '+t.routeName+' | Fee: Rs.'+t.fee+'/mo</small></div><button class="btn btn-sm btn-danger" onclick="delTransSt('+t.id+')">🗑️</button></div>';
+  });
+  document.getElementById('transStudents').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No transport students.</div>';
+}
+function delTransSt(id){ls('af_transStudents',(lg('af_transStudents')||[]).filter(function(t){return t.id!==id;}));renderTransStudents();}
+
+// ═══════════════════════════
+//  ASSETS
+// ═══════════════════════════
+function saveAsset(){
+  var name=document.getElementById('asName').value.trim();if(!name){toast('Asset name required!','error');return;}
+  var assets=lg('af_assets')||[];
+  assets.push({id:Date.now(),name:name,cat:document.getElementById('asCat').value,qty:Number(document.getElementById('asQty').value)||1,date:document.getElementById('asDate').value||today(),cost:Number(document.getElementById('asCost').value)||0,cond:document.getElementById('asCond').value,loc:document.getElementById('asLoc').value});
+  ls('af_assets',assets);toast('Asset added! ✅','success');renderAssets();
+  document.getElementById('asName').value='';
+}
+function renderAssets(){
+  var assets=lg('af_assets')||[];
+  var q=(document.getElementById('asSearch').value||'').toLowerCase();
+  var f=document.getElementById('asFilter').value;
+  if(q)assets=assets.filter(function(a){return a.name.toLowerCase().includes(q);});
+  if(f)assets=assets.filter(function(a){return a.cat===f;});
+  var h='';
+  assets.forEach(function(a,i){
+    var bc=a.cond==='Good'?'badge-green':a.cond==='Average'?'badge-orange':'badge-red';
+    h+='<tr><td>'+(i+1)+'</td><td><b>'+a.name+'</b></td><td>'+a.cat+'</td><td>'+a.qty+'</td><td>Rs.'+a.cost.toLocaleString()+'</td><td><span class="badge '+bc+'">'+a.cond+'</span></td><td>'+a.loc+'</td><td><button class="btn btn-sm btn-danger" onclick="delAsset('+a.id+')">🗑️</button></td></tr>';
+  });
+  document.getElementById('asTable').innerHTML=h||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No assets found.</td></tr>';
+}
+function delAsset(id){if(!confirm('Delete asset?'))return;ls('af_assets',(lg('af_assets')||[]).filter(function(a){return a.id!==id;}));renderAssets();}
+function printAssets(){
+  var assets=lg('af_assets')||[];
+  var h='<html><head><style>body{font-family:Arial;font-size:12px;margin:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:6px}th{background:#0b2d6e;color:#fff}h2{text-align:center;color:#0b2d6e}</style></head><body><h2>AL-FAREED PUBLIC SCHOOL — Assets List</h2><table><tr><th>#</th><th>Name</th><th>Category</th><th>Qty</th><th>Cost</th><th>Condition</th><th>Location</th></tr>';
+  assets.forEach(function(a,i){h+='<tr><td>'+(i+1)+'</td><td>'+a.name+'</td><td>'+a.cat+'</td><td>'+a.qty+'</td><td>Rs.'+a.cost+'</td><td>'+a.cond+'</td><td>'+a.loc+'</td></tr>';});
+  h+='</table></body></html>';
+  var w=window.open('','_blank');w.document.write(h);w.document.close();w.print();
+}
+
+// ═══════════════════════════
+//  COMPLAINTS
+// ═══════════════════════════
+function saveComplaint(){
+  var name=document.getElementById('cpName').value.trim();
+  var desc=document.getElementById('cpDesc').value.trim();
+  if(!name||!desc){toast('Name and details required!','error');return;}
+  var complaints=lg('af_complaints')||[];
+  complaints.push({id:Date.now(),name:name,mobile:document.getElementById('cpMobile').value,cat:document.getElementById('cpCat').value,priority:document.getElementById('cpPri').value,desc:desc,date:today(),status:'Open'});
+  ls('af_complaints',complaints);toast('Complaint registered! ✅','success');renderComplaints();updateDashboard();
+  document.getElementById('cpName').value='';document.getElementById('cpDesc').value='';
+}
+function renderComplaints(){
+  var list=lg('af_complaints')||[];
+  var f=document.getElementById('cpFilter').value;
+  if(f)list=list.filter(function(c){return c.status===f;});
+  var h='';
+  list.slice().reverse().forEach(function(c){
+    var pc=c.priority==='Urgent'?'badge-red':c.priority==='High'?'badge-orange':'badge-gray';
+    var sc=c.status==='Resolved'?'badge-green':c.status==='In Progress'?'badge-orange':'badge-red';
+    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><div><b>'+c.name+'</b> <span class="badge '+pc+'">'+c.priority+'</span><br><small style="color:var(--muted)">'+c.cat+' | '+fmtDate(c.date)+'</small></div><span class="badge '+sc+'">'+c.status+'</span></div><div style="font-size:12px;margin-bottom:8px">'+c.desc+'</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-warning" onclick="updateComplaint('+c.id+',\'In Progress\')">🔄 In Progress</button><button class="btn btn-sm btn-success" onclick="updateComplaint('+c.id+',\'Resolved\')">✅ Resolved</button><button class="btn btn-sm btn-danger" onclick="delComplaint('+c.id+')">🗑️</button></div></div>';
+  });
+  document.getElementById('complaintsList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No complaints found.</div>';
+}
+function updateComplaint(id,status){
+  var list=lg('af_complaints')||[];
+  var c=list.find(function(x){return x.id===id;});
+  if(c){c.status=status;ls('af_complaints',list);renderComplaints();updateDashboard();toast('Status updated!','success');}
+}
+function delComplaint(id){if(!confirm('Delete complaint?'))return;ls('af_complaints',(lg('af_complaints')||[]).filter(function(c){return c.id!==id;}));renderComplaints();updateDashboard();}
+
+// ═══════════════════════════
+//  INQUIRY
+// ═══════════════════════════
+function saveInquiry(){
+  var name=document.getElementById('inqName').value.trim();if(!name){toast('Parent name required!','error');return;}
+  var inq=lg('af_inquiries')||[];
+  inq.push({id:Date.now(),name:name,mobile:document.getElementById('inqMobile').value,stName:document.getElementById('inqStName').value,cls:document.getElementById('inqCls').value,date:document.getElementById('inqDate').value||today(),source:document.getElementById('inqSrc').value,note:document.getElementById('inqNote').value,status:'New'});
+  ls('af_inquiries',inq);toast('Inquiry saved! ✅','success');renderInquiries();
+  document.getElementById('inqName').value='';document.getElementById('inqNote').value='';
+}
+function renderInquiries(){
+  var list=lg('af_inquiries')||[];
+  var h='';
+  list.slice().reverse().forEach(function(i,idx){
+    var sc=i.status==='Converted'?'badge-green':i.status==='Interested'?'badge-orange':'badge-blue';
+    h+='<tr><td>'+(idx+1)+'</td><td>'+i.name+'</td><td>'+i.stName+'</td><td>'+i.cls+'</td><td>'+i.mobile+'</td><td>'+fmtDate(i.date)+'</td><td><span class="badge '+sc+'">'+i.status+'</span></td><td><select style="font-size:10px;padding:2px;margin-bottom:0" onchange="updateInquiry('+i.id+',this.value)"><option>New</option><option>Interested</option><option>Converted</option><option>Not Interested</option></select> <button class="btn btn-sm btn-danger" onclick="delInquiry('+i.id+')">🗑️</button></td></tr>';
+  });
+  document.getElementById('inqTable').innerHTML=h||'<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:16px">No inquiries.</td></tr>';
+}
+function updateInquiry(id,status){
+  var list=lg('af_inquiries')||[];
+  var i=list.find(function(x){return x.id===id;});
+  if(i){i.status=status;ls('af_inquiries',list);renderInquiries();toast('Updated!','success');}
+}
+function delInquiry(id){if(!confirm('Delete?'))return;ls('af_inquiries',(lg('af_inquiries')||[]).filter(function(i){return i.id!==id;}));renderInquiries();}
+
+// ═══════════════════════════
+//  SMS / NOTICES
+// ═══════════════════════════
+function switchSmsTab(t,btn){
+  ['notice','whatsapp'].forEach(function(x){document.getElementById('st-'+x).style.display='none';});
+  document.getElementById('st-'+t).style.display='block';
+  document.querySelectorAll('#s-sms .tab-btn').forEach(function(b){b.classList.remove('on');});
+  if(btn)btn.classList.add('on');
+  if(t==='notice')renderNotices();
+}
+function saveNotice(){
+  var title=document.getElementById('ntTitle').value.trim();if(!title){toast('Title required!','error');return;}
+  var notices=lg('af_notices')||[];
+  notices.push({id:Date.now(),title:title,date:document.getElementById('ntDate').value||today(),cat:document.getElementById('ntCat').value,forWho:document.getElementById('ntFor').value,content:document.getElementById('ntContent').value});
+  ls('af_notices',notices);toast('Notice posted! ✅','success');renderNotices();
+  document.getElementById('ntTitle').value='';document.getElementById('ntContent').value='';
+}
+function renderNotices(){
+  var list=lg('af_notices')||[];
+  var h='';
+  list.slice().reverse().forEach(function(n){
+    var cc={'General':'badge-blue','Holiday':'badge-green','Exam':'badge-purple','Fee':'badge-orange','Event':'badge-pink','Urgent':'badge-red'}[n.cat]||'badge-gray';
+    h+='<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><div><b>'+n.title+'</b> <span class="badge '+cc+'">'+n.cat+'</span> <span class="badge badge-gray">'+n.forWho+'</span></div><small style="color:var(--muted)">'+fmtDate(n.date)+'</small></div><div style="font-size:12px">'+n.content+'</div><div style="margin-top:8px"><button class="btn btn-sm btn-danger" onclick="delNotice('+n.id+')">🗑️</button></div></div>';
+  });
+  document.getElementById('noticeList').innerHTML=h||'<div style="text-align:center;padding:20px;color:var(--muted)">No notices posted.</div>';
+}
+function delNotice(id){if(!confirm('Delete notice?'))return;ls('af_notices',(lg('af_notices')||[]).filter(function(n){return n.id!==id;}));renderNotices();}
+var _waTemplates={
+  fee:'Assalam u Alaikum! Al-Fareed Public School ki taraf se aapko yaad dilaya jata hai ke is maah ki fee abhi tak jama nahi hui. Meherbani kar ke jald from school mein jama karayen. Shukriya.',
+  absent:'Assalam u Alaikum! Aapka bacha aaj school mein haazir nahi tha. Meherba farmayen aur school se rabta karayen. Al-Fareed Public School, Tando Jam.',
+  exam:'Assalam u Alaikum! Al-Fareed Public School ke imtihaan jald shuru hone waley hain. Apne bache ki tayyari ka khayal rakhen. Schedule ke liye school se rabta karayen.',
+  holiday:'Assalam u Alaikum! Al-Fareed Public School ki taraf se itlaa di jati hai ke agle ... school mein chutti rahegi. Shukriya.',
+  result:'Assalam u Alaikum! Aapke bache ka result tayaar hai. School se result card hasil karayen. Al-Fareed Public School, Tando Jam.'
+};
+function setWaTemplate(type){document.getElementById('waMsg').value=_waTemplates[type]||'';}
+function sendWa(){
+  var mobile=document.getElementById('waMobile').value.replace(/\D/g,'');
+  var msg=document.getElementById('waMsg').value.trim();
+  if(!mobile||!msg){toast('Mobile and message required!','error');return;}
+  if(mobile.startsWith('0'))mobile='92'+mobile.slice(1);
+  window.open('https://wa.me/'+mobile+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// ═══════════════════════════
+//  SETTINGS
+// ═══════════════════════════
+function saveSettings(){
+  var s={name:document.getElementById('setSchName').value,city:document.getElementById('setCity').value,principal:document.getElementById('setPrincipal').value,phone:document.getElementById('setPhone').value,session:document.getElementById('setSess').value,email:document.getElementById('setEmail').value};
+  ls('af_settings',s);toast('Settings saved! ✅','success');
+}
+function savePasswords(){
+  var ap=document.getElementById('setAdminP').value;
+  var ac=document.getElementById('setAccP').value;
+  if(ap)ls('af_adminPass',ap);
+  if(ac)ls('af_accPass',ac);
+  toast('Passwords updated! ✅','success');
+  document.getElementById('setAdminP').value='';document.getElementById('setAccP').value='';
+}
+function exportData(){
+  var keys=['af_admissions','af_staff','af_fees','af_books','af_issued','af_hw','af_exams','af_results','af_complaints','af_inquiries','af_notices','af_routes','af_vehicles','af_assets','af_settings'];
+  var data={};
+  keys.forEach(function(k){data[k]=lg(k);});
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='alfareed_backup_'+today()+'.json';a.click();
+  toast('Data exported! ✅','success');
+}
+function clearAllData(){
+  if(!confirm('ALL DATA DELETE ho jaega! Sure?'))return;
+  if(!confirm('Last chance! Pakka delete karna hai?'))return;
+  localStorage.clear();toast('All data cleared!');location.reload();
+}
+
+// ═══════════════════════════
+//  ON LOAD
+// ═══════════════════════════
+window.onload=function(){
+  // Load settings into form
+  var s=lg('af_settings')||{};
+  if(s.name)document.getElementById('setSchName').value=s.name;
+  if(s.city)document.getElementById('setCity').value=s.city;
+  if(s.principal)document.getElementById('setPrincipal').value=s.principal;
+  if(s.phone)document.getElementById('setPhone').value=s.phone;
+  if(s.session)document.getElementById('setSess').value=s.session;
+  if(s.email)document.getElementById('setEmail').value=s.email;
+  loadTeacherDropdown();
+  // Set today dates
+  document.querySelectorAll('input[type=date]').forEach(function(i){if(!i.value)i.value=today();});
+  document.querySelectorAll('input[type=month]').forEach(function(i){if(!i.value)i.value=nowMonth();});
+};
+</script>
+</body>
+</html>
