@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holiday Homework Card - Al-Fareed Public School</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8963e;
+    --dark-green: #1a4a2e;
+    --light-green: #2d7a4f;
+    --cream: #fdf6e3;
+    --red: #b22222;
+    --blue: #1a3a6b;
+    --orange: #e07b2a;
+    --shadow: 0 8px 32px rgba(0,0,0,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: linear-gradient(135deg, #1a4a2e 0%, #2d7a4f 50%, #1a3a6b 100%);
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===== EDITOR PANEL ===== */
+  .editor-panel {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    direction: ltr;
+  }
+
+  .editor-panel h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dark-green);
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+    text-align: center;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 8px;
+  }
+
+  .field-group {
+    margin-bottom: 12px;
+  }
+
+  .field-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .field-group input, .field-group select, .field-group textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field-group input:focus, .field-group textarea:focus {
+    border-color: var(--dark-green);
+  }
+
+  .field-group textarea {
+    min-height: 80px;
+    resize: vertical;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    direction: rtl;
+    font-size: 0.85rem;
+    line-height: 1.9;
+  }
+
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .subject-card-edit {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+  }
+
+  .subject-card-edit .subj-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .subject-card-edit input {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+    font-family: inherit;
+  }
+
+  .subject-card-edit textarea {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    min-height: 65px;
+    resize: vertical;
+    direction: rtl;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    line-height: 1.8;
+  }
+
+  .btn-generate {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--dark-green), var(--light-green));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-generate:hover { opacity: 0.9; }
+
+  .btn-print {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, var(--gold), #e8b84b);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-print:hover { opacity: 0.9; }
+
+  /* ===== CARD OUTPUT ===== */
+  .card-wrapper {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .hw-card {
+    background: linear-gradient(160deg, #e8f5e9 0%, #fff8e1 40%, #e3f2fd 100%);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    border: 3px solid var(--gold);
+    font-family: 'Noto Nastaliq Urdu', serif;
+    direction: rtl;
+  }
+
+  /* Header */
+  .card-header {
+    background: linear-gradient(135deg, var(--dark-green) 0%, #1a3a6b 100%);
+    padding: 16px 18px 12px;
+    text-align: center;
+    position: relative;
+  }
+
+  .card-header::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 10px, transparent 10px, transparent 20px);
+  }
+
+  .school-name {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    direction: ltr;
+    text-transform: uppercase;
+  }
+
+  .card-title {
+    color: white;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 1.3rem;
+    margin-top: 6px;
+    line-height: 1.6;
+  }
+
+  .card-class {
+    color: #ffd54f;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 1.1rem;
+    margin-top: 4px;
+  }
+
+  /* Subjects */
+  .subjects-area {
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .subject-block {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border-right: 5px solid var(--dark-green);
+  }
+
+  .subject-block.urdu   { border-right-color: #c0392b; }
+  .subject-block.english { border-right-color: #2980b9; }
+  .subject-block.science { border-right-color: #16a085; }
+  .subject-block.math   { border-right-color: #8e44ad; }
+  .subject-block.islamiat { border-right-color: #e67e22; }
+  .subject-block.sindhi { border-right-color: #27ae60; }
+  .subject-block.social { border-right-color: #d35400; }
+  .subject-block.computer { border-right-color: #2c3e50; }
+
+  .subject-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.04);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .subject-icon {
+    font-size: 1.2rem;
+  }
+
+  .subject-name-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    direction: ltr;
+  }
+
+  .subject-block.urdu   .subject-name-display { color: #c0392b; }
+  .subject-block.english .subject-name-display { color: #2980b9; }
+  .subject-block.science .subject-name-display { color: #16a085; }
+  .subject-block.math   .subject-name-display { color: #8e44ad; }
+  .subject-block.islamiat .subject-name-display { color: #e67e22; }
+  .subject-block.sindhi .subject-name-display { color: #27ae60; }
+  .subject-block.social .subject-name-display { color: #d35400; }
+  .subject-block.computer .subject-name-display { color: #2c3e50; }
+
+  .subject-content {
+    padding: 8px 12px 10px;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 0.82rem;
+    line-height: 2;
+    color: #222;
+    white-space: pre-wrap;
+  }
+
+  /* Footer */
+  .card-footer {
+    background: linear-gradient(135deg, #1a3a6b, var(--dark-green));
+    padding: 10px 16px;
+    text-align: center;
+    direction: ltr;
+  }
+
+  .footer-text {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* Decorative dots */
+  .deco-divider {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1rem;
+    margin: 4px 0;
+    letter-spacing: 6px;
+    opacity: 0.7;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .editor-panel, .btn-print { display: none !important; }
+    .card-wrapper { max-width: 100%; }
+    .hw-card { box-shadow: none; border: 2px solid var(--gold); }
+  }
+</style>
+</head>
+<body>
+
+<!-- EDITOR PANEL -->
+<div class="editor-panel">
+  <h2>✏️ Holiday Homework Card Editor</h2>
+
+  <div class="field-group">
+    <label>School Name</label>
+    <input type="text" id="schoolName" value="AL-FAREED PUBLIC SCHOOL TANDO JAM">
+  </div>
+
+  <div class="field-group">
+    <label>Card Title (Urdu)</label>
+    <input type="text" id="cardTitle" value="موسم گرما میں چھٹیوں کا کام" style="direction:rtl; font-family:'Noto Nastaliq Urdu',serif; font-size:1rem;">
+  </div>
+
+  <div class="field-group">
+    <label>Class (Urdu)</label>
+    <input type="text" id="cardClass" value="برائے جماعت پنجم" style="direction:rtl; font-family:'Noto Nastaliq Urdu',serif; font-size:1rem;">
+  </div>
+
+  <hr style="margin: 14px 0; border-color: #eee;">
+  <p style="font-size:0.8rem; color:#666; margin-bottom:10px; direction:ltr;">✏️ Edit each subject below. Leave blank to hide.</p>
+
+  <div class="subjects-grid" id="subjectsEditor"></div>
+
+  <button class="btn-generate" onclick="generateCard()">🎨 Generate Card</button>
+  <button class="btn-print" onclick="window.print()">🖨️ Print / Save</button>
+</div>
+
+<!-- CARD OUTPUT -->
+<div class="card-wrapper">
+  <div class="hw-card" id="hwCard">
+    <div class="card-header">
+      <div class="school-name" id="dispSchool">AL-FAREED PUBLIC SCHOOL TANDO JAM</div>
+      <div class="card-title" id="dispTitle">موسم گرما میں چھٹیوں کا کام</div>
+      <div class="card-class" id="dispClass">برائے جماعت پنجم</div>
+    </div>
+    <div class="subjects-area" id="subjectsArea"></div>
+    <div class="deco-divider">❖ ❖ ❖</div>
+    <div class="card-footer">
+      <div class="footer-text" id="dispFooter">AL-FAREED PUBLIC SCHOOL TANDO JAM &nbsp;|&nbsp; Knowledge is Light</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var subjectData = [
+  {
+    key: 'urdu',
+    icon: '📖',
+    name: 'اردو',
+    displayName: 'اردو',
+    color: 'urdu',
+    content: 'حصہ نثر: سبق نمبر 1 تا سبق 8 تمام مشقی سوالات لکھ کر اور یاد کرکے آئیں۔\nدرخواستیں: حصول سر ٹیفیکیٹ، فیس معافی، ضروری کام لکھ کر یاد کرکے آئیں۔\nمضامین: حضرت محمدؐ، قائداعظم، علامہ اقبال، میرا استاد۔\nگرامر: کلمہ، مثل، اسم، فعل، حرف، فاعل، مفعول، فعل ماضی، حال، مستقبل۔'
+  },
+  {
+    key: 'english',
+    icon: '🇬🇧',
+    name: 'English',
+    displayName: 'English',
+    color: 'english',
+    content: 'Lesson translation & exercise Ch 1 to 6\nStories: Thirsty Crow, Fox & Grapes, Greed is Curse\nLetters: To Father & Uncle\nApplications: Urgent work & Sick leave\nEssays: Allama Iqbal, My Teacher, My Book\nGrammar: Sentence, Noun, Verb, Preposition, Conjunction, Adverb'
+  },
+  {
+    key: 'science',
+    icon: '🔬',
+    name: 'General Science',
+    displayName: 'جنرل سائنس',
+    color: 'science',
+    content: 'یونٹ نمبر 1 تا یونٹ نمبر 5 تمام مشقی سوالات کے جوابات لکھ کر اور یاد کرکے آئیں۔'
+  },
+  {
+    key: 'math',
+    icon: '➗',
+    name: 'Maths',
+    displayName: 'ریاضی',
+    color: 'math',
+    content: 'یونٹ نمبر 1 سے یونٹ نمبر 5 لکھ کر اور یاد کرکے آئیں۔'
+  },
+  {
+    key: 'islamiat',
+    icon: '☪️',
+    name: 'Islamiat',
+    displayName: 'اسلامیات',
+    color: 'islamiat',
+    content: 'یونٹ نمبر 2 اور 3 کی تمام مشقی سوالات لکھیں اور تمام نظمیں یاد کرکے آئیں۔'
+  },
+  {
+    key: 'sindhi',
+    icon: '📜',
+    name: 'Sindhi',
+    displayName: 'سنڌي',
+    color: 'sindhi',
+    content: 'سبق نمبر 1 کان 6 تائين سڀ مشقي سوال لکو ۽ ياد ڪري اچو۔'
+  },
+  {
+    key: 'social',
+    icon: '🗺️',
+    name: 'Social Studies',
+    displayName: 'معاشرتی علوم',
+    color: 'social',
+    content: 'یونٹ نمبر 1 تا 4 تمام سوالات کے جوابات لکھ کر یاد کرکے آئیں۔'
+  },
+  {
+    key: 'computer',
+    icon: '💻',
+    name: 'Computer',
+    displayName: 'کمپیوٹر',
+    color: 'computer',
+    content: 'چیپٹر 1 تا 3 تمام مشقی سوالات لکھ کر اور یاد کرکے آئیں۔'
+  }
+];
+
+function buildEditor() {
+  var grid = document.getElementById('subjectsEditor');
+  var html = '';
+  for (var i = 0; i < subjectData.length; i++) {
+    var s = subjectData[i];
+    html += '<div class="subject-card-edit">';
+    html += '<div class="subj-label">' + s.icon + ' ' + s.name + '</div>';
+    html += '<input type="text" id="name_' + s.key + '" value="' + s.displayName + '" placeholder="Subject Urdu Name" style="direction:rtl;font-family:\'Noto Nastaliq Urdu\',serif;">';
+    html += '<textarea id="content_' + s.key + '" placeholder="Homework content...">' + s.content + '</textarea>';
+    html += '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+function generateCard() {
+  var school = document.getElementById('schoolName').value || 'AL-FAREED PUBLIC SCHOOL';
+  var title = document.getElementById('cardTitle').value;
+  var cls = document.getElementById('cardClass').value;
+
+  document.getElementById('dispSchool').textContent = school;
+  document.getElementById('dispTitle').textContent = title;
+  document.getElementById('dispClass').textContent = cls;
+  document.getElementById('dispFooter').textContent = school + ' | Knowledge is Light';
+
+  var area = document.getElementById('subjectsArea');
+  var html = '';
+
+  for (var i = 0; i < subjectData.length; i++) {
+    var s = subjectData[i];
+    var nameEl = document.getElementById('name_' + s.key);
+    var contentEl = document.getElementById('content_' + s.key);
+    if (!nameEl || !contentEl) continue;
+    var nameVal = nameEl.value.trim();
+    var contentVal = contentEl.value.trim();
+    if (!contentVal) continue;
+
+    html += '<div class="subject-block ' + s.color + '">';
+    html += '<div class="subject-header">';
+    html += '<span class="subject-icon">' + s.icon + '</span>';
+    html += '<span class="subject-name-display">' + (s.key === 'english' ? nameVal : nameVal) + '</span>';
+    html += '</div>';
+    html += '<div class="subject-content">' + escapeHtml(contentVal) + '</div>';
+    html += '</div>';
+
+    if (i < subjectData.length - 1) {
+      html += '<div class="deco-divider" style="font-size:0.6rem; margin:0;">· · · · ·</div>';
+    }
+  }
+
+  area.innerHTML = html;
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Init
+buildEditor();
+generateCard();
+</script>
+</body>
+</html>
