@@ -405,9 +405,12 @@ textarea{min-height:68px;resize:vertical;}
 <div class="page-title">📒 Homework Diary</div>
 
 <!-- Sub Tabs -->
-<div style="display:flex;gap:8px;margin-bottom:12px">
-  <button id="hwTab0" onclick="hwSwitch(0)" style="flex:1;padding:10px;background:var(--g);color:var(--gold);border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📒 Homework</button>
-  <button id="hwTab1" onclick="hwSwitch(1)" style="flex:1;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📋 Daily Work</button>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px">
+  <button id="hwTab0" onclick="hwSwitch(0)" style="padding:10px 6px;background:var(--g);color:var(--gold);border:none;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">📒 Homework</button>
+  <button id="hwTab1" onclick="hwSwitch(1)" style="padding:10px 6px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">📋 Daily Work</button>
+  <button id="hwTab2" onclick="hwSwitch(2)" style="padding:10px 6px;background:#fff;color:#e65100;border:2px solid #e65100;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">☀️ Summer HW</button>
+  <button id="hwTab3" onclick="hwSwitch(3)" style="padding:10px 6px;background:#fff;color:#1565c0;border:2px solid #1565c0;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">❄️ Winter HW</button>
+  <button id="hwTab4" onclick="hwSwitch(4)" style="grid-column:1/-1;padding:10px 6px;background:#fff;color:#6a1b9a;border:2px solid #6a1b9a;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">📅 Weekly HW</button>
 </div>
 
 <!-- HOMEWORK TAB -->
@@ -520,7 +523,234 @@ textarea{min-height:68px;resize:vertical;}
 <div class="card"><div class="card-title">📝 Principal Note</div><textarea id="dwNote" placeholder="Principal ke liye note..."></textarea></div>
 <button class="btn-g btn-full" onclick="genDW()">📋 Generate Report & Share</button>
 </div>
+<!-- ══ SUMMER VACATION HOMEWORK ══ -->
+<div id="sumSec" style="display:none">
+<div style="background:linear-gradient(135deg,#e65100,#ff8f00);border-radius:12px;overflow:hidden;margin-bottom:11px;box-shadow:0 4px 16px rgba(230,81,0,.3)">
+  <div style="padding:11px 13px;display:flex;align-items:center;gap:10px;border-bottom:3px solid #ffeb3b">
+    <div class="app-logo" onclick="document.getElementById('sumLLf').click()"><img id="sumLLi" alt=""><span id="sumLLt" style="font-size:12px;font-weight:900;color:#ffeb3b">AF</span></div>
+    <input type="file" id="sumLLf" accept="image/*" onchange="ldVacL('sum',0,this)">
+    <div style="flex:1;text-align:center;line-height:1.2">
+      <div style="font-size:17px;font-weight:800;color:#fff">AL - Fareed Public School</div>
+      <div style="font-size:14px;font-weight:700;color:#ffeb3b">Tandojam</div>
+    </div>
+    <div class="app-logo" onclick="document.getElementById('sumLRf').click()"><img id="sumLRi" alt=""><span id="sumLRt" style="font-size:12px;font-weight:900;color:#ffeb3b">AF</span></div>
+    <input type="file" id="sumLRf" accept="image/*" onchange="ldVacL('sum',1,this)">
+  </div>
+  <div style="padding:9px 13px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
+    <div style="background:#ffeb3b;color:#e65100;font-size:16px;font-weight:900;padding:6px 14px;border-radius:8px">&#9728;&#65039; SUMMER VACATION</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#ffeb3b">Class:</span>
+        <select id="sumCls" style="padding:4px 7px;border:2px solid #ffeb3b;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:auto">
+          <option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#ffeb3b">Session:</span>
+        <input type="text" id="sumSess" value="2025-26" style="padding:4px 8px;border:2px solid #ffeb3b;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:80px">
+      </div>
+    </div>
+  </div>
+  <div style="padding:8px 13px;background:rgba(0,0,0,.1);display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+    <span style="font-size:10px;font-weight:700;color:#ffeb3b">Vacation:</span>
+    <input type="date" id="sumFrom" style="padding:4px 8px;border:2px solid #ffeb3b;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+    <span style="font-size:11px;font-weight:700;color:#fff">to</span>
+    <input type="date" id="sumTo" style="padding:4px 8px;border:2px solid #ffeb3b;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+  </div>
 </div>
+<div class="card">
+  <div class="card-title">&#128218; Subject Select Karen</div>
+  <div class="r3" style="margin-bottom:10px">
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'English')">&#128215; English</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Urdu')">&#128216; &#1575;&#1585;&#1583;&#1608;</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Math')">&#128208; Math</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Science')">&#128302; Science</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Social St.')">&#127757; Social</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Islamiat')">&#128214; Islamiat</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Computer')">&#128187; Computer</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Sindhi')">&#128309; &#1587;&#1606;&#1672;&#1607;&#1610;</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Chemistry')">&#9879;&#65039; Chem</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Biology')">&#129516; Bio</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Physics')">&#9889; Physics</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Drawing')">&#127912; Drawing</button>
+    <button class="sub-btn" onclick="vacSelSub('sum',this,'Other')">&#128221; Other</button>
+  </div>
+  <div id="sumInpBox" style="display:none;background:#fff3e0;border-radius:9px;padding:11px;border:2px solid #e65100">
+    <div style="font-size:12px;font-weight:700;color:#e65100;margin-bottom:7px">&#9728;&#65039; <span id="sumSubLbl"></span> Homework:</div>
+    <textarea id="sumInp" placeholder="Summer homework yahan likhein..." style="min-height:68px;margin-bottom:8px;font-size:14px"></textarea>
+    <button style="width:100%;padding:11px;background:#e65100;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif" onclick="vacAddEntry('sum')">&#10003; Add Karo</button>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">&#128203; Summer HW Preview <button class="btn-sm bsr" onclick="vacClear('sum')" style="margin-left:auto">Clear All</button></div>
+  <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr style="background:#e65100;color:#fff">
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:90px">Subject</th>
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left">Homework</th>
+      <th style="padding:9px 4px;border:2px solid #000;width:26px"></th>
+    </tr></thead>
+    <tbody id="sumTbody"><tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr></tbody>
+  </table></div>
+</div>
+<div class="card">
+  <div class="card-title">&#128221; Special Instructions</div>
+  <textarea id="sumNote" placeholder="Jaise: Tamam homework school wapis aane se pehle complete karen..." style="min-height:55px"></textarea>
+  <div style="margin-top:8px" class="card-title">&#128222; Footer</div>
+  <div class="r2"><div><label>Phone 1</label><input type="text" id="sumP1" value="03435272484"></div><div><label>Phone 2</label><input type="text" id="sumP2" value="03453655553"></div></div>
+</div>
+<button style="width:100%;padding:13px;background:linear-gradient(135deg,#e65100,#ff8f00);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif;margin-bottom:9px" onclick="genVacHW('sum')">&#9728;&#65039; Generate Summer HW &amp; Share</button>
+</div>
+
+<!-- ══ WINTER VACATION HOMEWORK ══ -->
+<div id="winSec" style="display:none">
+<div style="background:linear-gradient(135deg,#1565c0,#0d47a1);border-radius:12px;overflow:hidden;margin-bottom:11px;box-shadow:0 4px 16px rgba(21,101,192,.3)">
+  <div style="padding:11px 13px;display:flex;align-items:center;gap:10px;border-bottom:3px solid #90caf9">
+    <div class="app-logo" onclick="document.getElementById('winLLf').click()"><img id="winLLi" alt=""><span id="winLLt" style="font-size:12px;font-weight:900;color:#90caf9">AF</span></div>
+    <input type="file" id="winLLf" accept="image/*" onchange="ldVacL('win',0,this)">
+    <div style="flex:1;text-align:center;line-height:1.2">
+      <div style="font-size:17px;font-weight:800;color:#fff">AL - Fareed Public School</div>
+      <div style="font-size:14px;font-weight:700;color:#90caf9">Tandojam</div>
+    </div>
+    <div class="app-logo" onclick="document.getElementById('winLRf').click()"><img id="winLRi" alt=""><span id="winLRt" style="font-size:12px;font-weight:900;color:#90caf9">AF</span></div>
+    <input type="file" id="winLRf" accept="image/*" onchange="ldVacL('win',1,this)">
+  </div>
+  <div style="padding:9px 13px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
+    <div style="background:#90caf9;color:#0d47a1;font-size:16px;font-weight:900;padding:6px 14px;border-radius:8px">&#10052;&#65039; WINTER VACATION</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#90caf9">Class:</span>
+        <select id="winCls" style="padding:4px 7px;border:2px solid #90caf9;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:auto">
+          <option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#90caf9">Session:</span>
+        <input type="text" id="winSess" value="2025-26" style="padding:4px 8px;border:2px solid #90caf9;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:80px">
+      </div>
+    </div>
+  </div>
+  <div style="padding:8px 13px;background:rgba(0,0,0,.1);display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+    <span style="font-size:10px;font-weight:700;color:#90caf9">Vacation:</span>
+    <input type="date" id="winFrom" style="padding:4px 8px;border:2px solid #90caf9;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+    <span style="font-size:11px;font-weight:700;color:#fff">to</span>
+    <input type="date" id="winTo" style="padding:4px 8px;border:2px solid #90caf9;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">&#128218; Subject Select Karen</div>
+  <div class="r3" style="margin-bottom:10px">
+    <button class="sub-btn" onclick="vacSelSub('win',this,'English')">&#128215; English</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Urdu')">&#128216; &#1575;&#1585;&#1583;&#1608;</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Math')">&#128208; Math</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Science')">&#128302; Science</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Social St.')">&#127757; Social</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Islamiat')">&#128214; Islamiat</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Computer')">&#128187; Computer</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Sindhi')">&#128309; &#1587;&#1606;&#1672;&#1607;&#1610;</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Chemistry')">&#9879;&#65039; Chem</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Biology')">&#129516; Bio</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Physics')">&#9889; Physics</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Drawing')">&#127912; Drawing</button>
+    <button class="sub-btn" onclick="vacSelSub('win',this,'Other')">&#128221; Other</button>
+  </div>
+  <div id="winInpBox" style="display:none;background:#e3f2fd;border-radius:9px;padding:11px;border:2px solid #1565c0">
+    <div style="font-size:12px;font-weight:700;color:#1565c0;margin-bottom:7px">&#10052;&#65039; <span id="winSubLbl"></span> Homework:</div>
+    <textarea id="winInp" placeholder="Winter homework yahan likhein..." style="min-height:68px;margin-bottom:8px;font-size:14px"></textarea>
+    <button style="width:100%;padding:11px;background:#1565c0;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif" onclick="vacAddEntry('win')">&#10003; Add Karo</button>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">&#128203; Winter HW Preview <button class="btn-sm bsr" onclick="vacClear('win')" style="margin-left:auto">Clear All</button></div>
+  <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr style="background:#1565c0;color:#fff">
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:90px">Subject</th>
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left">Homework</th>
+      <th style="padding:9px 4px;border:2px solid #000;width:26px"></th>
+    </tr></thead>
+    <tbody id="winTbody"><tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr></tbody>
+  </table></div>
+</div>
+<div class="card">
+  <div class="card-title">&#128221; Special Instructions</div>
+  <textarea id="winNote" placeholder="Jaise: Tamam homework school wapis aane se pehle complete karen..." style="min-height:55px"></textarea>
+  <div style="margin-top:8px" class="card-title">&#128222; Footer</div>
+  <div class="r2"><div><label>Phone 1</label><input type="text" id="winP1" value="03435272484"></div><div><label>Phone 2</label><input type="text" id="winP2" value="03453655553"></div></div>
+</div>
+<button style="width:100%;padding:13px;background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif;margin-bottom:9px" onclick="genVacHW('win')">&#10052;&#65039; Generate Winter HW &amp; Share</button>
+</div>
+
+<!-- ══ WEEKLY HOMEWORK ══ -->
+<div id="wkSec" style="display:none">
+<div style="background:linear-gradient(135deg,#6a1b9a,#4a148c);border-radius:12px;overflow:hidden;margin-bottom:11px;box-shadow:0 4px 16px rgba(106,27,154,.3)">
+  <div style="padding:11px 13px;display:flex;align-items:center;gap:10px;border-bottom:3px solid #ce93d8">
+    <div class="app-logo" onclick="document.getElementById('wkLLf').click()"><img id="wkLLi" alt=""><span id="wkLLt" style="font-size:12px;font-weight:900;color:#ce93d8">AF</span></div>
+    <input type="file" id="wkLLf" accept="image/*" onchange="ldVacL('wk',0,this)">
+    <div style="flex:1;text-align:center;line-height:1.2">
+      <div style="font-size:17px;font-weight:800;color:#fff">AL - Fareed Public School</div>
+      <div style="font-size:14px;font-weight:700;color:#ce93d8">Tandojam</div>
+    </div>
+    <div class="app-logo" onclick="document.getElementById('wkLRf').click()"><img id="wkLRi" alt=""><span id="wkLRt" style="font-size:12px;font-weight:900;color:#ce93d8">AF</span></div>
+    <input type="file" id="wkLRf" accept="image/*" onchange="ldVacL('wk',1,this)">
+  </div>
+  <div style="padding:9px 13px;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">
+    <div style="background:#ce93d8;color:#4a148c;font-size:16px;font-weight:900;padding:6px 14px;border-radius:8px">&#128197; WEEKLY HOMEWORK</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#ce93d8">Class:</span>
+        <select id="wkCls" style="padding:4px 7px;border:2px solid #ce93d8;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:auto">
+          <option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;font-weight:700;color:#ce93d8">Week:</span>
+        <input type="text" id="wkWeek" placeholder="Week 1" style="padding:4px 8px;border:2px solid #ce93d8;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0;width:80px">
+      </div>
+    </div>
+  </div>
+  <div style="padding:8px 13px;background:rgba(0,0,0,.1);display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+    <span style="font-size:10px;font-weight:700;color:#ce93d8">Week Dates:</span>
+    <input type="date" id="wkFrom" style="padding:4px 8px;border:2px solid #ce93d8;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+    <span style="font-size:11px;font-weight:700;color:#fff">to</span>
+    <input type="date" id="wkTo" style="padding:4px 8px;border:2px solid #ce93d8;border-radius:6px;font-size:12px;background:#fff;color:#000;margin:0">
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">&#128218; Subject Select Karen</div>
+  <div class="r3" style="margin-bottom:10px">
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'English')">&#128215; English</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Urdu')">&#128216; &#1575;&#1585;&#1583;&#1608;</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Math')">&#128208; Math</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Science')">&#128302; Science</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Social St.')">&#127757; Social</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Islamiat')">&#128214; Islamiat</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Computer')">&#128187; Computer</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Sindhi')">&#128309; &#1587;&#1606;&#1672;&#1607;&#1610;</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Chemistry')">&#9879;&#65039; Chem</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Biology')">&#129516; Bio</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Physics')">&#9889; Physics</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Drawing')">&#127912; Drawing</button>
+    <button class="sub-btn" onclick="vacSelSub('wk',this,'Other')">&#128221; Other</button>
+  </div>
+  <div id="wkInpBox" style="display:none;background:#f3e5f5;border-radius:9px;padding:11px;border:2px solid #6a1b9a">
+    <div style="font-size:12px;font-weight:700;color:#6a1b9a;margin-bottom:7px">&#128197; <span id="wkSubLbl"></span> Homework:</div>
+    <textarea id="wkInp" placeholder="Weekly homework yahan likhein..." style="min-height:68px;margin-bottom:8px;font-size:14px"></textarea>
+    <button style="width:100%;padding:11px;background:#6a1b9a;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif" onclick="vacAddEntry('wk')">&#10003; Add Karo</button>
+  </div>
+</div>
+<div class="card">
+  <div class="card-title">&#128203; Weekly HW Preview <button class="btn-sm bsr" onclick="vacClear('wk')" style="margin-left:auto">Clear All</button></div>
+  <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr style="background:#6a1b9a;color:#fff">
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left;min-width:90px">Subject</th>
+      <th style="padding:9px 7px;border:2px solid #000;text-align:left">Homework</th>
+      <th style="padding:9px 4px;border:2px solid #000;width:26px"></th>
+    </tr></thead>
+    <tbody id="wkTbody"><tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr></tbody>
+  </table></div>
+</div>
+<div class="card">
+  <div class="card-title">&#128221; Note / Instructions</div>
+  <textarea id="wkNote" placeholder="Note ya hidayaat yahan likhein..." style="min-height:55px"></textarea>
+  <div style="margin-top:8px" class="card-title">&#128222; Footer</div>
+  <div class="r2"><div><label>Phone 1</label><input type="text" id="wkP1" value="03435272484"></div><div><label>Phone 2</label><input type="text" id="wkP2" value="03453655553"></div></div>
+</div>
+<button style="width:100%;padding:13px;background:linear-gradient(135deg,#6a1b9a,#4a148c);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif;margin-bottom:9px" onclick="genVacHW('wk')">&#128197; Generate Weekly HW &amp; Share</button>
+</div>
+</div><!-- /s1 -->
 
 <!-- ══════════════════════════════
   TAB 2 — ATTENDANCE
@@ -2519,11 +2749,176 @@ function renderDashDW(){
 //  HOMEWORK
 // ═══════════════════════════════════════════
 function hwSwitch(n){
-  document.getElementById('hwSec').style.display=n===0?'block':'none';
-  document.getElementById('dwSec').style.display=n===1?'block':'none';
-  var t0=document.getElementById('hwTab0'),t1=document.getElementById('hwTab1');
-  t0.style.background=n===0?'var(--g)':'#fff';t0.style.color=n===0?'var(--gold)':'var(--g)';t0.style.border=n===0?'none':'2px solid var(--g)';
-  t1.style.background=n===1?'var(--g)':'#fff';t1.style.color=n===1?'var(--gold)':'var(--g)';t1.style.border=n===1?'none':'2px solid var(--g)';
+  var secs=['hwSec','dwSec','sumSec','winSec','wkSec'];
+  var tabs=['hwTab0','hwTab1','hwTab2','hwTab3','hwTab4'];
+  var colors=['var(--g)','var(--g)','#e65100','#1565c0','#6a1b9a'];
+  secs.forEach(function(id,i){
+    var el=document.getElementById(id);if(el)el.style.display=i===n?'block':'none';
+  });
+  tabs.forEach(function(id,i){
+    var el=document.getElementById(id);if(!el)return;
+    if(i===n){el.style.background=colors[i];el.style.color=(i===0||i===1)?'var(--gold)':'#fff';el.style.border='none';}
+    else{el.style.background='#fff';el.style.color=colors[i];el.style.border='2px solid '+colors[i];}
+  });
+}
+
+// ═══════════════════════════════════════════
+//  VACATION & WEEKLY HOMEWORK JS
+// ═══════════════════════════════════════════
+var vacEntries={sum:[],win:[],wk:[]};
+var vacActiveSub={sum:'',win:'',wk:''};
+
+function vacSelSub(type,el,sub){
+  // Clear all sub-btns in that section
+  var sec=document.getElementById(type+'Sec');
+  if(sec)sec.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('on');});
+  if(el)el.classList.add('on');
+  vacActiveSub[type]=sub;
+  var lbl=document.getElementById(type+'SubLbl');if(lbl)lbl.textContent=sub+' \u2014';
+  var box=document.getElementById(type+'InpBox');if(box)box.style.display='block';
+  var inp=document.getElementById(type+'Inp');if(inp){inp.value='';inp.focus();}
+}
+
+function vacAddEntry(type){
+  var sub=vacActiveSub[type];
+  if(!sub){toast('Subject select karen!');return;}
+  var inp=document.getElementById(type+'Inp');
+  var txt=inp?inp.value.trim():'';
+  if(!txt){toast('Homework likhein!');return;}
+  vacEntries[type].push({sub:sub,hw:txt});
+  if(inp)inp.value='';
+  vacRender(type);
+  toast(sub+' add! \u2705');
+}
+
+function vacRender(type){
+  var tb=document.getElementById(type+'Tbody');if(!tb)return;
+  var clr={sum:'#e65100',win:'#1565c0',wk:'#6a1b9a'};
+  var entries=vacEntries[type];
+  if(!entries.length){
+    tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:#aaa;border:1px solid #ddd">Subject click karo phir homework likho</td></tr>';
+    return;
+  }
+  var h='';
+  entries.forEach(function(e,i){
+    h+='<tr style="background:'+(i%2?'#f5f5f5':'#fff')+'">'+
+      '<td style="padding:8px 7px;border:2px solid #000;font-weight:700;vertical-align:top;white-space:nowrap;color:'+clr[type]+'">'+e.sub+'</td>'+
+      '<td style="padding:8px 7px;border:2px solid #000;vertical-align:top">'+e.hw+'</td>'+
+      '<td style="padding:5px 3px;border:2px solid #000;text-align:center;vertical-align:middle">'+
+      '<button onclick="vacDel(\''+type+'\','+i+')" style="background:#c0392b;color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;line-height:1">x</button></td></tr>';
+  });
+  tb.innerHTML=h;
+}
+
+function vacDel(type,i){vacEntries[type].splice(i,1);vacRender(type);}
+
+function vacClear(type){
+  vacEntries[type]=[];vacActiveSub[type]='';
+  vacRender(type);
+  var sec=document.getElementById(type+'Sec');
+  if(sec)sec.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('on');});
+  var box=document.getElementById(type+'InpBox');if(box)box.style.display='none';
+}
+
+function ldVacL(type,side,inp){
+  if(!inp.files||!inp.files[0])return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var d=e.target.result;
+    var imgId=type+(side===0?'LLi':'LRi');
+    var txtId=type+(side===0?'LLt':'LRt');
+    var im=document.getElementById(imgId);var tx=document.getElementById(txtId);
+    if(im){im.src=d;im.style.display='block';}if(tx)tx.style.display='none';
+  };r.readAsDataURL(inp.files[0]);
+}
+
+function genVacHW(type){
+  var entries=vacEntries[type];
+  if(!entries.length){toast('Pehle subjects add karo!');return;}
+
+  var cfg={
+    sum:{label:'SUMMER VACATION HOMEWORK',badge:'SUMMER VACATION',color:'#e65100',light:'#fff3e0',accent:'#ffeb3b',dark:'#c43200',emoji:'&#9728;&#65039;'},
+    win:{label:'WINTER VACATION HOMEWORK',badge:'WINTER VACATION',color:'#1565c0',light:'#e3f2fd',accent:'#90caf9',dark:'#0d47a1',emoji:'&#10052;&#65039;'},
+    wk:{label:'WEEKLY HOMEWORK',badge:'WEEKLY HOMEWORK',color:'#6a1b9a',light:'#f3e5f5',accent:'#ce93d8',dark:'#4a148c',emoji:'&#128197;'}
+  };
+  var c=cfg[type];
+
+  var cls=document.getElementById(type+'Cls').value;
+  var note=document.getElementById(type+'Note').value.trim();
+  var ph1=document.getElementById(type+'P1').value||'03435272484';
+  var ph2=document.getElementById(type+'P2').value||'03453655553';
+
+  // Date/period label
+  var fromEl=document.getElementById(type+'From');
+  var toEl=document.getElementById(type+'To');
+  var periodTxt='';
+  if(type==='wk'){
+    var wk=document.getElementById('wkWeek').value||'';
+    periodTxt=wk?(wk+': '):'';
+    if(fromEl&&fromEl.value&&toEl&&toEl.value)periodTxt+=fmtDate(fromEl.value)+' \u2014 '+fmtDate(toEl.value);
+  }else{
+    var sessEl=document.getElementById(type+'Sess');var sess=sessEl?sessEl.value:'';
+    if(sess)periodTxt='Session: '+sess;
+    if(fromEl&&fromEl.value&&toEl&&toEl.value)periodTxt+=(periodTxt?' | ':'')+'Vacation: '+fmtDate(fromEl.value)+' \u2014 '+fmtDate(toEl.value);
+  }
+
+  // Logos
+  var li=document.getElementById(type+'LLi'),ri=document.getElementById(type+'LRi');
+  var ls2=(li&&li.src&&li.src.length>20)?li.src:(gL||'');
+  var rs=(ri&&ri.src&&ri.src.length>20)?ri.src:(gL||'');
+
+  // Table rows — pad to 9
+  var rows=entries.slice();while(rows.length<9)rows.push(null);
+  var trs='';
+  rows.forEach(function(e){
+    trs+='<tr style="height:44px">'+
+      '<td style="border:2px solid #000;padding:5px 8px;font-weight:700;font-size:13px;vertical-align:middle;min-width:90px;color:'+c.color+'">'+(e?e.sub:'')+'</td>'+
+      '<td style="border:2px solid #000;padding:5px 8px;font-size:13px;vertical-align:middle">'+(e?e.hw:'')+'</td></tr>';
+  });
+
+  var html=
+    '<div style="max-width:640px;margin:0 auto;font-family:Arial,sans-serif;background:'+c.color+';border-radius:12px;overflow:hidden">'+
+    '<div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:4px solid '+c.accent+'">'+
+    mkLogo(ls2,58,58)+
+    '<div style="flex:1;text-align:center;line-height:1.2">'+
+    '<div style="font-size:18px;font-weight:900;color:#fff">AL - Fareed Public School</div>'+
+    '<div style="font-size:13px;font-weight:700;color:'+c.accent+'">Tandojam</div>'+
+    '</div>'+
+    mkLogo(rs,58,58)+'</div>'+
+    '<div style="background:'+c.dark+';padding:9px 13px;border-bottom:3px solid '+c.accent+';display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px">'+
+    '<div style="background:'+c.accent+';color:'+c.color+';font-size:16px;font-weight:900;padding:6px 16px;border-radius:8px">'+c.emoji+' '+c.badge+'</div>'+
+    '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'+
+    '<div style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;color:#fff;font-size:12px;font-weight:700">Class: '+cls+'</div>'+
+    (periodTxt?'<div style="background:rgba(255,255,255,.1);padding:3px 9px;border-radius:6px;color:'+c.accent+';font-size:11px;font-weight:700">'+periodTxt+'</div>':'')+
+    '</div></div>'+
+    '<div style="background:#fff">'+
+    '<table style="width:100%;border-collapse:collapse">'+
+    '<thead><tr style="background:'+c.color+'"><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:13px;font-weight:700;text-align:left;min-width:90px">Subject</th><th style="padding:10px 8px;border:2px solid #000;color:#fff;font-size:13px;font-weight:700;text-align:left">'+c.emoji+' Homework</th></tr></thead>'+
+    '<tbody>'+trs+'</tbody></table></div>'+
+    (note?'<div style="padding:9px 13px;background:'+c.light+';border-top:3px solid '+c.accent+'"><strong style="color:'+c.color+'">&#128221; Note:</strong> '+note+'</div>':'')+
+    '<div style="padding:11px 14px;background:'+c.dark+';border-top:4px solid '+c.accent+';display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px">'+
+    '<div><div style="color:#fff;font-size:12px;font-weight:900;margin-bottom:5px">PHONE / WhatsApp</div>'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<div style="width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">&#9990;</div>'+
+    '<div><div style="color:#fff;font-size:14px;font-weight:900">'+ph1+'</div><div style="color:#fff;font-size:14px;font-weight:900">'+ph2+'</div></div>'+
+    '</div></div>'+
+    '<div style="text-align:center">'+
+    '<div style="width:80px;height:1px;background:rgba(255,255,255,.5);margin:22px auto 3px"></div>'+
+    '<div style="font-size:11px;font-weight:700;color:#fff">Sir Ghulam Hussain</div>'+
+    '<div style="font-size:10px;color:'+c.accent+'">Principal</div></div>'+
+    '</div></div>';
+
+  // WhatsApp text
+  var wa='*AL-FAREED PUBLIC SCHOOL TANDOJAM*\n*'+c.label+'*\nClass: '+cls+(periodTxt?'\n'+periodTxt:'')+'\n================================\n\n';
+  entries.forEach(function(e,i){wa+=(i+1)+'. *'+e.sub+'*\n'+e.hw+'\n\n';});
+  if(note)wa+='Note: '+note+'\n\n';
+  wa+='Tel: '+ph1+' / '+ph2+'\nPrincipal: Sir Ghulam Hussain';
+
+  // Save to activity log
+  var by=currentTeacher?currentTeacher.name:'Admin';
+  logActivity('hw',c.badge+': '+cls,'Subjects: '+entries.map(function(e){return e.sub;}).join(', '),by);
+
+  showOv(html,wa);
 }
 function ldHWL(side,inp){
   if(!inp.files||!inp.files[0])return;
