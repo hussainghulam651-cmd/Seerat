@@ -9,6 +9,7 @@
 <title>Al-Fareed Public School</title>
 <!-- Firebase SDK -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
   --g:#0d5c3a;--g2:#1a7a4f;--gold:#c9a84c;--cream:#faf7f0;
@@ -323,6 +324,7 @@ textarea{min-height:68px;resize:vertical;}
   <button class="nav-btn" onclick="sTab(6)">🏆 Certificate</button>
   <button class="nav-btn" onclick="sTab(7)">📅 Schedule</button>
   <button class="nav-btn" onclick="sTab(8)">📋 Syllabus</button>
+  <button class="nav-btn" onclick="sTab(9)" id="navFees">💰 Fees</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -352,6 +354,37 @@ textarea{min-height:68px;resize:vertical;}
     <span class="stat-icon">📒</span>
     <div class="stat-val" id="dsTodayHW">0</div>
     <div class="stat-lbl">Today's HW Entries</div>
+  </div>
+</div>
+
+<!-- Weather Widget -->
+<div class="card" id="weatherCard">
+  <div class="card-title">&#127780;&#65039; School Weather
+    <label style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#666;cursor:pointer">
+      <span id="wtToggleLbl">ON</span>
+      <input type="checkbox" id="wtToggle" checked onchange="toggleWeather()" style="width:32px;height:18px;cursor:pointer">
+    </label>
+  </div>
+  <div id="weatherBody">
+    <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Loading weather...</div>
+  </div>
+</div>
+
+<!-- Upcoming Holidays -->
+<div class="card">
+  <div class="card-title">&#127881; Upcoming Holidays
+    <button onclick="openHolidayMgr()" style="margin-left:auto;padding:4px 9px;background:var(--g);color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer">+ Manage</button>
+  </div>
+  <div id="dashHolidayList">
+    <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Loading...</div>
+  </div>
+</div>
+
+<!-- Birthday Tracker -->
+<div class="card">
+  <div class="card-title">&#127874; Upcoming Birthdays</div>
+  <div id="dashBdayList">
+    <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi birthday set nahi</div>
   </div>
 </div>
 
@@ -779,9 +812,12 @@ textarea{min-height:68px;resize:vertical;}
     <div><label>Date</label><input type="date" id="attSDate" value=""></div>
   </div>
   <!-- Add Student -->
-  <div style="display:flex;gap:7px;align-items:flex-end">
+  <div style="display:flex;gap:7px;align-items:flex-end;margin-bottom:8px">
     <div style="flex:1"><label>Student Name Add Karen</label><input type="text" id="newStudName" placeholder="Student ka naam..." style="margin-bottom:0"></div>
     <div><label>Roll No</label><input type="text" id="newStudRoll" placeholder="01" style="width:60px;margin-bottom:0"></div>
+  </div>
+  <div style="display:flex;gap:7px;align-items:flex-end">
+    <div style="flex:1"><label>&#128241; Parent WhatsApp Number</label><input type="text" id="newStudWa" placeholder="03XXXXXXXXX" style="margin-bottom:0"></div>
     <button class="btn-sm bsg" onclick="addStudent()" style="margin-bottom:0;padding:9px 12px">+ Add</button>
   </div>
 </div>
@@ -1059,6 +1095,72 @@ textarea{min-height:68px;resize:vertical;}
     <button class="btn-sm bsr" onclick="revokeParent()" style="padding:11px 14px">🚫 Revoke Parent Access</button>
   </div>
   <div id="parentCodeStatus" style="font-size:11px;margin-top:8px;color:#888"></div>
+</div>
+<!-- WEATHER LOCATION SETTINGS -->
+<div class="card" style="border:2px solid #0288d1;background:#e1f5fe">
+  <div class="card-title" style="color:#0288d1">&#127780;&#65039; Weather Widget Settings</div>
+  <div class="r2">
+    <div><label>Latitude</label><input type="text" id="wtLat" value="25.4286" placeholder="25.4286"></div>
+    <div><label>Longitude</label><input type="text" id="wtLon" value="68.5341" placeholder="68.5341"></div>
+  </div>
+  <div style="font-size:10px;color:#666;margin-bottom:9px">Default: Tando Jam, Sindh coordinates</div>
+  <button class="btn-sm" style="background:#0288d1;color:#fff" onclick="saveWeatherLoc()">&#128190; Save Location</button>
+</div>
+
+<!-- HOLIDAY MANAGER -->
+<div class="card" style="border:2px solid #c62828;background:#ffebee" id="holidayMgrCard">
+  <div class="card-title" style="color:#c62828">&#127881; Holiday Manager</div>
+  <div class="r2">
+    <div><label>Holiday Name</label><input type="text" id="holName" placeholder="e.g. Eid-ul-Fitr"></div>
+    <div><label>Type</label>
+      <select id="holType">
+        <option value="islamic">&#9789;&#65039; Islamic</option>
+        <option value="national">&#127480;&#127472; National</option>
+        <option value="school">&#127979; School</option>
+      </select>
+    </div>
+  </div>
+  <div class="r2">
+    <div><label>From Date</label><input type="date" id="holFrom"></div>
+    <div><label>To Date (agar 1 din to same)</label><input type="date" id="holTo"></div>
+  </div>
+  <button class="btn-sm" style="background:#c62828;color:#fff;width:100%;margin-bottom:11px" onclick="addHoliday()">&#10003; Holiday Add Karo</button>
+  <div id="holidayMgrList"></div>
+  <div style="display:flex;gap:8px;margin-top:9px">
+    <button class="btn-sm" style="background:#6a1b9a;color:#fff;flex:1" onclick="loadIslamicHolidaysPK()">&#9789;&#65039; Auto-Load Islamic Holidays</button>
+    <button class="btn-sm bsr" onclick="clearAllHolidays()">Clear All</button>
+  </div>
+</div>
+
+<!-- BIRTHDAY MANAGER -->
+<div class="card" style="border:2px solid #d81b60;background:#fce4ec">
+  <div class="card-title" style="color:#d81b60">&#127874; Birthday Manager</div>
+  <div class="r2">
+    <div><label>Name</label><input type="text" id="bdayName" placeholder="Naam..."></div>
+    <div><label>Type</label>
+      <select id="bdayType"><option value="teacher">&#128104;&#8205;&#127979; Teacher</option><option value="student">&#128118; Student</option></select>
+    </div>
+  </div>
+  <div class="r2">
+    <div><label>Date of Birth</label><input type="date" id="bdayDate"></div>
+    <div><label>Class (sirf student)</label><input type="text" id="bdayCls" placeholder="e.g. Class 5"></div>
+  </div>
+  <button class="btn-sm" style="background:#d81b60;color:#fff;width:100%;margin-bottom:11px" onclick="addBirthday()">&#10003; Birthday Add Karo</button>
+  <div id="bdayMgrList"></div>
+</div>
+
+<!-- DATA ERASE PANEL -->
+<div class="card" style="border:2px solid #b71c1c;background:#fff3f3">
+  <div class="card-title" style="color:#b71c1c">&#9888;&#65039; Erase Saved Data</div>
+  <div style="font-size:11px;color:#888;margin-bottom:11px">Yeh permanently saved data delete karega. Bohot ehtiyat se use karen — yeh wapis nahi aa sakta!</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <button class="btn-sm bsr btn-full" onclick="eraseHWData()">&#128465;&#65039; Erase Homework Diary Data (Sab Classes)</button>
+    <button class="btn-sm bsr btn-full" onclick="eraseVacHWData('sum')">&#128465;&#65039; Erase Summer Vacation HW Data</button>
+    <button class="btn-sm bsr btn-full" onclick="eraseVacHWData('win')">&#128465;&#65039; Erase Winter Vacation HW Data</button>
+    <button class="btn-sm bsr btn-full" onclick="eraseVacHWData('wk')">&#128465;&#65039; Erase Weekly HW Data</button>
+    <button class="btn-sm bsr btn-full" onclick="eraseDWData()">&#128465;&#65039; Erase Daily Work Reports</button>
+    <button class="btn-sm bsr btn-full" onclick="eraseAttData()">&#128465;&#65039; Erase Attendance Records</button>
+  </div>
 </div>
 </div>
 
@@ -1555,6 +1657,65 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 </div>
+
+<!-- ══════════════════════════════
+  TAB 9 — FEES MANAGEMENT
+══════════════════════════════ -->
+<div class="sec" id="s9" style="display:none">
+<div class="page-title">&#128176; Fees Management</div>
+
+<div class="card">
+  <div class="card-title">&#128221; Add Fee Record</div>
+  <div class="r2">
+    <div><label>Class</label>
+      <select id="feeCls">
+        <option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+      </select>
+    </div>
+    <div><label>Student</label><select id="feeStud"><option value="">-- Select --</option></select></div>
+  </div>
+  <div class="r2">
+    <div><label>Fee Type</label>
+      <select id="feeType"><option value="monthly">Monthly Fee</option><option value="exam">Exam Fee</option><option value="admission">Admission Fee</option><option value="other">Other</option></select>
+    </div>
+    <div><label>Month/Title</label><input type="text" id="feeMonth" placeholder="e.g. June 2026"></div>
+  </div>
+  <div class="r2">
+    <div><label>Amount (Rs.)</label><input type="number" id="feeAmount" placeholder="2000"></div>
+    <div><label>Due Date</label><input type="date" id="feeDue"></div>
+  </div>
+  <div class="r2">
+    <div><label>Status</label><select id="feeStatus"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
+    <div><label>Paid Date (agar paid)</label><input type="date" id="feePaidDate"></div>
+  </div>
+  <button class="btn-g btn-full" onclick="addFeeRecord()">&#10003; Fee Record Save Karo</button>
+</div>
+
+<div class="card">
+  <div class="card-title">&#128202; Fee Records
+    <select id="feeFilterCls" onchange="renderFeeList()" style="margin-left:auto;width:auto;padding:5px 8px;font-size:11px;margin-bottom:0">
+      <option value="">Sab Classes</option><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+    </select>
+  </div>
+  <div id="feeListBody"></div>
+</div>
+
+<div class="card" style="border:2px solid #2e7d32;background:#e8f5e9">
+  <div class="card-title" style="color:#2e7d32">&#128241; WhatsApp Fee Reminder (PDF)</div>
+  <div style="font-size:11px;color:#555;margin-bottom:9px">Unpaid fees ke liye PDF reminder banayen aur WhatsApp pe parents ko bhejen.</div>
+  <div class="r2">
+    <div><label>Class</label>
+      <select id="feeRemCls">
+        <option value="">Sab Classes</option><option>Nursery</option><option>KG-1</option><option>KG-2</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+      </select>
+    </div>
+    <div><label>Fee Type</label><select id="feeRemType"><option value="">Sab Types</option><option value="monthly">Monthly</option><option value="exam">Exam</option></select></div>
+  </div>
+  <button class="btn-g btn-full" onclick="generateFeeReminders()">&#128196; Generate PDF Reminders for Unpaid Fees</button>
+  <div id="feeRemResult" style="margin-top:11px"></div>
+</div>
+</div>
+
 </div><!-- end mainApp -->
 
 <!-- OVERLAY -->
@@ -1585,7 +1746,12 @@ var SK={
   STUD_ATT:'af_stud_att',
   TEACH_ATT:'af_teach_att',
   GLOGO:'af_glogo',
-  ACTIVITY:'af_activity_log'
+  ACTIVITY:'af_activity_log',
+  HOLIDAYS:'af_holidays',
+  BIRTHDAYS:'af_birthdays',
+  WEATHER_LOC:'af_weather_loc',
+  WEATHER_ON:'af_weather_on',
+  FEES:'af_fees'
 };
 
 // ═══════════════════════════════════════════
@@ -1678,7 +1844,7 @@ function clearActivityLog(){
 }
 
 function notifIcon(type){
-  var icons={hw:'📒',dw:'📋',stud_att:'✅',teach_att:'👩‍\u200D🏫',arrival:'🕐',teacher_add:'➕',teacher_del:'🗑️',login:'🔑'};
+  var icons={hw:'📒',dw:'📋',stud_att:'✅',teach_att:'👩‍\u200D🏫',arrival:'🕐',teacher_add:'➕',teacher_del:'🗑️',login:'🔑',holiday:'🎉',fee:'💰'};
   return icons[type]||'📌';
 }
 
@@ -1731,16 +1897,499 @@ function renderDashAct(){
   });
   el.innerHTML=h;
 }
+
 // ═══════════════════════════════════════════
-//  STORAGE — JSONBin.io SYNC
-//  Sab devices pe data share hoga
+//  WEATHER WIDGET
+// ═══════════════════════════════════════════
+function toggleWeather(){
+  var on=document.getElementById('wtToggle').checked;
+  ls_set(SK.WEATHER_ON,on);
+  document.getElementById('wtToggleLbl').textContent=on?'ON':'OFF';
+  if(on){initWeather();}else{
+    document.getElementById('weatherBody').innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Weather widget OFF hai</div>';
+  }
+}
+function saveWeatherLoc(){
+  var lat=document.getElementById('wtLat').value.trim()||'25.4286';
+  var lon=document.getElementById('wtLon').value.trim()||'68.5341';
+  ls_set(SK.WEATHER_LOC,{lat:lat,lon:lon});
+  toast('Weather location save ho gayi! \u2705');
+  initWeather();
+}
+function loadWeatherLocUI(){
+  var loc=ls_get(SK.WEATHER_LOC)||{lat:'25.4286',lon:'68.5341'};
+  var latEl=document.getElementById('wtLat'),lonEl=document.getElementById('wtLon');
+  if(latEl)latEl.value=loc.lat;
+  if(lonEl)lonEl.value=loc.lon;
+}
+function weatherIcon(code){
+  if(code===0)return '\u2600\uFE0F';
+  if(code<=3)return '\u26C5';
+  if(code<=49)return '\uD83C\uDF2B\uFE0F';
+  if(code<=69)return '\uD83C\uDF27\uFE0F';
+  if(code<=79)return '\u2744\uFE0F';
+  if(code<=99)return '\u26C8\uFE0F';
+  return '\u2600\uFE0F';
+}
+function weatherDesc(code){
+  if(code===0)return 'Clear Sky';
+  if(code<=3)return 'Partly Cloudy';
+  if(code<=49)return 'Foggy';
+  if(code<=59)return 'Drizzle';
+  if(code<=69)return 'Rain';
+  if(code<=79)return 'Snow';
+  if(code<=99)return 'Thunderstorm';
+  return 'Clear';
+}
+function initWeather(){
+  var on=ls_get(SK.WEATHER_ON);
+  if(on===null||on===undefined)on=true;
+  var toggle=document.getElementById('wtToggle');
+  if(toggle){toggle.checked=on;document.getElementById('wtToggleLbl').textContent=on?'ON':'OFF';}
+  if(!on){
+    var b=document.getElementById('weatherBody');
+    if(b)b.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Weather widget OFF hai</div>';
+    return;
+  }
+  var loc=ls_get(SK.WEATHER_LOC)||{lat:'25.4286',lon:'68.5341'};
+  fetchWeather(loc.lat,loc.lon);
+}
+function fetchWeather(lat,lon){
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto';
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',url,true);
+  xhr.onreadystatechange=function(){
+    if(xhr.readyState===4){
+      var body=document.getElementById('weatherBody');
+      if(!body)return;
+      if(xhr.status===200){
+        try{
+          var data=JSON.parse(xhr.responseText);
+          renderWeather(data);
+        }catch(e){
+          body.innerHTML='<div style="text-align:center;padding:16px;color:#c62828;font-size:12px">Weather data load nahi hui</div>';
+        }
+      }else{
+        body.innerHTML='<div style="text-align:center;padding:16px;color:#c62828;font-size:12px">Weather load nahi hua (internet check karen)</div>';
+      }
+    }
+  };
+  xhr.send();
+}
+function renderWeather(data){
+  var body=document.getElementById('weatherBody');
+  if(!body||!data.current)return;
+  var cur=data.current;
+  var icon=weatherIcon(cur.weather_code);
+  var desc=weatherDesc(cur.weather_code);
+  var h='<div style="background:linear-gradient(135deg,#0288d1,#01579b);border-radius:12px;padding:14px;color:#fff">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center">';
+  h+='<div><div style="font-size:34px;font-weight:900">'+Math.round(cur.temperature_2m)+'\u00B0C</div>';
+  h+='<div style="font-size:12px;opacity:.9">'+desc+'</div></div>';
+  h+='<div style="font-size:42px">'+icon+'</div></div>';
+  h+='<div style="display:flex;gap:14px;margin-top:9px;font-size:11px;opacity:.9">';
+  h+='<span>\uD83D\uDCA7 Humidity: '+cur.relative_humidity_2m+'%</span>';
+  h+='<span>\uD83D\uDCA8 Wind: '+Math.round(cur.wind_speed_10m)+' km/h</span>';
+  h+='</div></div>';
+  if(data.daily){
+    h+='<div style="display:flex;gap:6px;margin-top:9px;overflow-x:auto">';
+    for(var i=0;i<Math.min(5,data.daily.time.length);i++){
+      var d=new Date(data.daily.time[i]);
+      var dayName=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+      h+='<div style="flex:1;min-width:56px;text-align:center;background:'+(i===0?'var(--lg)':'#f5f5f5')+';border-radius:8px;padding:7px 3px">';
+      h+='<div style="font-size:10px;font-weight:700;color:#555">'+(i===0?'Today':dayName)+'</div>';
+      h+='<div style="font-size:18px">'+weatherIcon(data.daily.weather_code[i])+'</div>';
+      h+='<div style="font-size:10px;font-weight:700">'+Math.round(data.daily.temperature_2m_max[i])+'\u00B0/'+Math.round(data.daily.temperature_2m_min[i])+'\u00B0</div>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  body.innerHTML=h;
+}
+
+// ═══════════════════════════════════════════
+//  HOLIDAYS (with Islamic holidays)
+// ═══════════════════════════════════════════
+function openHolidayMgr(){
+  sTab(3);
+  setTimeout(function(){
+    var card=document.getElementById('holidayMgrCard');
+    if(card)card.scrollIntoView({behavior:'smooth'});
+  },200);
+}
+function addHoliday(){
+  var name=document.getElementById('holName').value.trim();
+  var type=document.getElementById('holType').value;
+  var from=document.getElementById('holFrom').value;
+  var to=document.getElementById('holTo').value||from;
+  if(!name||!from){toast('Naam aur date dalen!');return;}
+  var hols=ls_get(SK.HOLIDAYS)||[];
+  hols.push({name:name,type:type,from:from,to:to});
+  ls_set(SK.HOLIDAYS,hols);
+  document.getElementById('holName').value='';
+  document.getElementById('holFrom').value='';
+  document.getElementById('holTo').value='';
+  renderHolidayMgr();renderHolidays();
+  logActivity('holiday','Holiday Added: '+name,from+' to '+to,currentTeacher?currentTeacher.name:'Admin');
+  toast(name+' add ho gaya! \u2705');
+}
+function delHoliday(i){
+  var hols=ls_get(SK.HOLIDAYS)||[];
+  hols.splice(i,1);
+  ls_set(SK.HOLIDAYS,hols);
+  renderHolidayMgr();renderHolidays();
+}
+function clearAllHolidays(){
+  if(!confirm('Tamam holidays delete karen?'))return;
+  ls_set(SK.HOLIDAYS,[]);
+  renderHolidayMgr();renderHolidays();
+  toast('Holidays clear ho gaye!');
+}
+function holTypeIcon(type){return type==='islamic'?'\u262A\uFE0F':type==='national'?'\uD83C\uDDF5\uD83C\uDDF0':'\uD83C\uDFEB';}
+function holTypeColor(type){return type==='islamic'?'#2e7d32':type==='national'?'#1565c0':'#e65100';}
+function renderHolidayMgr(){
+  var el=document.getElementById('holidayMgrList');
+  if(!el)return;
+  var hols=(ls_get(SK.HOLIDAYS)||[]).slice().sort(function(a,b){return a.from.localeCompare(b.from);});
+  if(!hols.length){el.innerHTML='<div style="text-align:center;padding:12px;color:#aaa;font-size:12px">Koi holiday add nahi hua</div>';return;}
+  var h='';
+  hols.forEach(function(hd,i){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 11px;margin-bottom:6px;border-left:3px solid '+holTypeColor(hd.type)+'">'+
+      '<div><div style="font-size:12px;font-weight:700">'+holTypeIcon(hd.type)+' '+hd.name+'</div>'+
+      '<div style="font-size:10px;color:#888">'+fmtDate(hd.from)+(hd.to&&hd.to!==hd.from?' \u2014 '+fmtDate(hd.to):'')+'</div></div>'+
+      '<button onclick="delHoliday('+i+')" style="background:#c0392b;color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:10px;cursor:pointer">\uD83D\uDDD1\uFE0F</button>'+
+      '</div>';
+  });
+  el.innerHTML=h;
+}
+function renderHolidays(){
+  var el=document.getElementById('dashHolidayList');
+  if(!el)return;
+  var hols=ls_get(SK.HOLIDAYS)||[];
+  var td=today();
+  var upcoming=hols.filter(function(hd){return hd.to>=td;}).sort(function(a,b){return a.from.localeCompare(b.from);});
+  if(!upcoming.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi upcoming holiday nahi. Admin panel se add karen.</div>';return;}
+  var h='';
+  upcoming.slice(0,6).forEach(function(hd){
+    var daysLeft=Math.ceil((new Date(hd.from)-new Date(td))/(1000*60*60*24));
+    var isOngoing=hd.from<=td&&hd.to>=td;
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:'+(isOngoing?'#e8f5e9':'#fafafa')+';border-radius:8px;padding:9px 11px;margin-bottom:6px;border-left:3px solid '+holTypeColor(hd.type)+'">'+
+      '<div><div style="font-size:12px;font-weight:700">'+holTypeIcon(hd.type)+' '+hd.name+'</div>'+
+      '<div style="font-size:10px;color:#888">'+fmtDate(hd.from)+(hd.to&&hd.to!==hd.from?' \u2014 '+fmtDate(hd.to):'')+'</div></div>'+
+      '<div style="font-size:11px;font-weight:700;color:'+(isOngoing?'#2e7d32':'#888')+'">'+(isOngoing?'Today':(daysLeft===0?'Today':daysLeft+' din')) +'</div>'+
+      '</div>';
+  });
+  el.innerHTML=h;
+}
+function loadIslamicHolidaysPK(){
+  // Approximate Islamic & national holidays for Pakistan (admin can edit dates as moon-sighting varies)
+  var hols=ls_get(SK.HOLIDAYS)||[];
+  var preset=[
+    {name:'Eid-ul-Fitr',type:'islamic',from:'2026-03-20',to:'2026-03-22'},
+    {name:'Eid-ul-Adha',type:'islamic',from:'2026-05-27',to:'2026-05-29'},
+    {name:'Ashura (9th & 10th Muharram)',type:'islamic',from:'2026-06-26',to:'2026-06-27'},
+    {name:'Eid Milad-un-Nabi',type:'islamic',from:'2026-08-25',to:'2026-08-25'},
+    {name:'Pakistan Day',type:'national',from:'2026-03-23',to:'2026-03-23'},
+    {name:'Independence Day',type:'national',from:'2026-08-14',to:'2026-08-14'},
+    {name:'Defence Day',type:'national',from:'2026-09-06',to:'2026-09-06'},
+    {name:'Iqbal Day',type:'national',from:'2026-11-09',to:'2026-11-09'},
+    {name:'Quaid-e-Azam Day',type:'national',from:'2026-12-25',to:'2026-12-25'}
+  ];
+  preset.forEach(function(p){
+    var exists=hols.some(function(h){return h.name===p.name&&h.from===p.from;});
+    if(!exists)hols.push(p);
+  });
+  ls_set(SK.HOLIDAYS,hols);
+  renderHolidayMgr();renderHolidays();
+  toast('Islamic & National holidays load ho gaye! \u2705 Dates check karen (moon-sighting se vary ho sakti hain)');
+}
+
+// ═══════════════════════════════════════════
+//  BIRTHDAY TRACKER
+// ═══════════════════════════════════════════
+function addBirthday(){
+  var name=document.getElementById('bdayName').value.trim();
+  var type=document.getElementById('bdayType').value;
+  var dob=document.getElementById('bdayDate').value;
+  var cls=document.getElementById('bdayCls').value.trim();
+  if(!name||!dob){toast('Naam aur date of birth dalen!');return;}
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  bdays.push({name:name,type:type,dob:dob,cls:cls});
+  ls_set(SK.BIRTHDAYS,bdays);
+  document.getElementById('bdayName').value='';
+  document.getElementById('bdayDate').value='';
+  document.getElementById('bdayCls').value='';
+  renderBdayMgr();renderBirthdays();
+  toast(name+' ki birthday add ho gayi! \u2705');
+}
+function delBirthday(i){
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  bdays.splice(i,1);
+  ls_set(SK.BIRTHDAYS,bdays);
+  renderBdayMgr();renderBirthdays();
+}
+function nextBdayDays(dob){
+  var td=new Date();td.setHours(0,0,0,0);
+  var d=new Date(dob);
+  var next=new Date(td.getFullYear(),d.getMonth(),d.getDate());
+  if(next<td)next=new Date(td.getFullYear()+1,d.getMonth(),d.getDate());
+  return Math.round((next-td)/(1000*60*60*24));
+}
+function renderBdayMgr(){
+  var el=document.getElementById('bdayMgrList');
+  if(!el)return;
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  if(!bdays.length){el.innerHTML='<div style="text-align:center;padding:12px;color:#aaa;font-size:12px">Koi birthday add nahi hua</div>';return;}
+  var h='';
+  bdays.forEach(function(b,i){
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+      '<div><div style="font-size:12px;font-weight:700">'+(b.type==='teacher'?'\uD83D\uDC68\u200D\uD83C\uDFEB':'\uD83D\uDC66')+' '+b.name+(b.cls?' ('+b.cls+')':'')+'</div>'+
+      '<div style="font-size:10px;color:#888">DOB: '+fmtDate(b.dob)+'</div></div>'+
+      '<button onclick="delBirthday('+i+')" style="background:#c0392b;color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:10px;cursor:pointer">\uD83D\uDDD1\uFE0F</button>'+
+      '</div>';
+  });
+  el.innerHTML=h;
+}
+function renderBirthdays(){
+  var el=document.getElementById('dashBdayList');
+  if(!el)return;
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  if(!bdays.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi birthday set nahi. Admin panel se add karen.</div>';return;}
+  var withDays=bdays.map(function(b){return {b:b,days:nextBdayDays(b.dob)};}).sort(function(a,c){return a.days-c.days;});
+  var h='';
+  withDays.slice(0,6).forEach(function(item){
+    var b=item.b,days=item.days;
+    var isToday=days===0;
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:'+(isToday?'#fce4ec':'#fafafa')+';border-radius:8px;padding:9px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+      '<div><div style="font-size:12px;font-weight:700">'+(b.type==='teacher'?'\uD83D\uDC68\u200D\uD83C\uDFEB':'\uD83D\uDC66')+' '+b.name+(b.cls?' ('+b.cls+')':'')+(isToday?' \uD83C\uDF89':'')+'</div>'+
+      '<div style="font-size:10px;color:#888">'+fmtDate(b.dob)+'</div></div>'+
+      '<div style="font-size:11px;font-weight:700;color:'+(isToday?'#d81b60':'#888')+'">'+(isToday?'Today!':days+' din')+'</div>'+
+      '</div>';
+  });
+  el.innerHTML=h;
+}
+
+// ═══════════════════════════════════════════
+//  DATA ERASE FUNCTIONS
+// ═══════════════════════════════════════════
+function eraseHWData(){
+  if(!confirm('Tamam Homework Diary data DELETE karen? Yeh wapis nahi aayega!'))return;
+  if(!confirm('Pakka? Final confirmation \u2014 Homework Diary completely erase ho jayegi.'))return;
+  ls_set(SK.HW,[]);
+  try{hwEntries=[];hwRender();}catch(e){}
+  updateDashboard();
+  logActivity('hw','Homework Diary Data Erased','Admin ne tamam saved homework delete kar diya','Admin');
+  toast('Homework Diary data erase ho gayi! \u2705');
+}
+function eraseVacHWData(type){
+  var labels={sum:'Summer Vacation',win:'Winter Vacation',wk:'Weekly'};
+  if(!confirm(labels[type]+' Homework data DELETE karen? Yeh wapis nahi aayega!'))return;
+  if(typeof vacEntries!=='undefined'&&vacEntries[type])vacEntries[type]=[];
+  try{vacRender(type);}catch(e){}
+  logActivity('hw',labels[type]+' HW Data Erased','Admin ne data clear kar diya','Admin');
+  toast(labels[type]+' homework erase ho gaya! \u2705');
+}
+function eraseDWData(){
+  if(!confirm('Tamam Daily Work Reports DELETE karen? Yeh wapis nahi aayega!'))return;
+  ls_set(SK.DW,[]);
+  updateDashboard();
+  logActivity('dw','Daily Work Data Erased','Admin ne tamam reports delete kar diye','Admin');
+  toast('Daily Work data erase ho gaya! \u2705');
+}
+function eraseAttData(){
+  if(!confirm('Tamam Attendance Records DELETE karen (Student + Teacher + Arrival)? Yeh wapis nahi aayega!'))return;
+  if(!confirm('Pakka? Final confirmation \u2014 Attendance records completely erase ho jayenge.'))return;
+  ls_set(SK.STUD_ATT,[]);
+  ls_set(SK.TEACH_ATT,[]);
+  ls_set('af_arrival',[]);
+  updateDashboard();
+  logActivity('stud_att','Attendance Data Erased','Admin ne tamam attendance records delete kar diye','Admin');
+  toast('Attendance data erase ho gaya! \u2705');
+}
+
+// ═══════════════════════════════════════════
+//  FEES MANAGEMENT
+// ═══════════════════════════════════════════
+function loadFeeClassDropdown(){
+  var clsEl=document.getElementById('feeCls');
+  if(!clsEl)return;
+  if(!clsEl.getAttribute('data-bound')){
+    clsEl.addEventListener('change',loadFeeStudentDropdown);
+    clsEl.setAttribute('data-bound','1');
+  }
+  loadFeeStudentDropdown();
+}
+function loadFeeStudentDropdown(){
+  var cls=document.getElementById('feeCls').value;
+  var allStudents=ls_get(SK.STUDENTS)||{};
+  var students=allStudents[cls]||[];
+  var sel=document.getElementById('feeStud');
+  if(!sel)return;
+  var h='<option value="">-- Select --</option>';
+  students.forEach(function(s,i){h+='<option value="'+i+'">'+s.name+' (Roll: '+s.roll+')</option>';});
+  sel.innerHTML=h;
+}
+function addFeeRecord(){
+  var cls=document.getElementById('feeCls').value;
+  var studIdx=document.getElementById('feeStud').value;
+  var type=document.getElementById('feeType').value;
+  var month=document.getElementById('feeMonth').value.trim();
+  var amount=document.getElementById('feeAmount').value;
+  var due=document.getElementById('feeDue').value;
+  var status=document.getElementById('feeStatus').value;
+  var paidDate=document.getElementById('feePaidDate').value;
+  if(studIdx===''){toast('Student select karen!');return;}
+  if(!amount||!due){toast('Amount aur due date dalen!');return;}
+  var allStudents=ls_get(SK.STUDENTS)||{};
+  var stud=allStudents[cls]&&allStudents[cls][studIdx];
+  if(!stud){toast('Student nahi mila!');return;}
+  var fees=ls_get(SK.FEES)||[];
+  fees.push({
+    id:'fee_'+Date.now(),
+    cls:cls,studName:stud.name,studRoll:stud.roll,studWa:stud.wa||'',
+    type:type,month:month||type,amount:parseFloat(amount),due:due,
+    status:status,paidDate:paidDate||''
+  });
+  ls_set(SK.FEES,fees);
+  document.getElementById('feeMonth').value='';
+  document.getElementById('feeAmount').value='';
+  document.getElementById('feeDue').value='';
+  document.getElementById('feePaidDate').value='';
+  renderFeeList();
+  logActivity('fee','Fee Record Added: '+stud.name,month+' \u2014 Rs.'+amount,currentTeacher?currentTeacher.name:'Admin');
+  toast('Fee record save ho gaya! \u2705');
+}
+function delFeeRecord(id){
+  if(!confirm('Yeh fee record delete karen?'))return;
+  var fees=(ls_get(SK.FEES)||[]).filter(function(f){return f.id!==id;});
+  ls_set(SK.FEES,fees);
+  renderFeeList();
+}
+function toggleFeeStatus(id){
+  var fees=ls_get(SK.FEES)||[];
+  fees.forEach(function(f){
+    if(f.id===id){
+      f.status=f.status==='paid'?'unpaid':'paid';
+      if(f.status==='paid')f.paidDate=today();
+    }
+  });
+  ls_set(SK.FEES,fees);
+  renderFeeList();
+}
+function renderFeeList(){
+  var el=document.getElementById('feeListBody');
+  if(!el)return;
+  var filterCls=document.getElementById('feeFilterCls')?document.getElementById('feeFilterCls').value:'';
+  var fees=(ls_get(SK.FEES)||[]).slice().reverse();
+  if(filterCls)fees=fees.filter(function(f){return f.cls===filterCls;});
+  if(!fees.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi fee record nahi</div>';return;}
+  var h='';
+  fees.forEach(function(f){
+    var isPaid=f.status==='paid';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:'+(isPaid?'#e8f5e9':'#ffebee')+';border-radius:8px;padding:9px 11px;margin-bottom:7px;border-left:3px solid '+(isPaid?'#2e7d32':'#c62828')+'">'+
+      '<div style="flex:1"><div style="font-size:12px;font-weight:700">'+f.studName+' <span style="color:#888;font-weight:400">('+f.cls+')</span></div>'+
+      '<div style="font-size:10px;color:#888">'+f.month+' &middot; Rs.'+f.amount+' &middot; Due: '+fmtDate(f.due)+(f.studWa?' &middot; \uD83D\uDCF1'+f.studWa:'')+'</div></div>'+
+      '<div style="display:flex;gap:5px;align-items:center">'+
+      '<button onclick="toggleFeeStatus(\''+f.id+'\')" style="padding:4px 9px;background:'+(isPaid?'#2e7d32':'#c62828')+';color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">'+(isPaid?'Paid \u2713':'Unpaid')+'</button>'+
+      '<button onclick="delFeeRecord(\''+f.id+'\')" style="padding:4px 8px;background:#888;color:#fff;border:none;border-radius:5px;font-size:10px;cursor:pointer">\uD83D\uDDD1\uFE0F</button>'+
+      '</div></div>';
+  });
+  el.innerHTML=h;
+}
+function generateFeeReminders(){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui. Internet check karen.');return;}
+  var cls=document.getElementById('feeRemCls').value;
+  var type=document.getElementById('feeRemType').value;
+  var fees=ls_get(SK.FEES)||[];
+  var unpaid=fees.filter(function(f){
+    if(f.status!=='unpaid')return false;
+    if(cls&&f.cls!==cls)return false;
+    if(type&&f.type!==type)return false;
+    return true;
+  });
+  if(!unpaid.length){
+    document.getElementById('feeRemResult').innerHTML='<div style="text-align:center;padding:12px;color:#888;font-size:12px">Koi unpaid fee nahi mili is filter ke liye</div>';
+    return;
+  }
+  var schName=document.getElementById('setSchName')?document.getElementById('setSchName').value:'AL-Fareed Public School';
+  var schAddr=document.getElementById('setSchAddr')?document.getElementById('setSchAddr').value:'Near National Bank, Tando Jam';
+  var schPh1=document.getElementById('setSchPh1')?document.getElementById('setSchPh1').value:'03435272484';
+  var schPrinc=document.getElementById('setSchPrinc')?document.getElementById('setSchPrinc').value:'Sir Ghulam Hussain';
+
+  var resultHtml='<div style="font-size:11px;font-weight:700;color:#2e7d32;margin-bottom:8px">'+unpaid.length+' PDF reminders generate ho gaye:</div>';
+
+  unpaid.forEach(function(f,idx){
+    var jsPDFlib=window.jspdf.jsPDF;
+    var doc=new jsPDFlib();
+    doc.setFontSize(16);
+    doc.setTextColor(13,92,58);
+    doc.text(schName,105,20,{align:'center'});
+    doc.setFontSize(10);
+    doc.setTextColor(80,80,80);
+    doc.text(schAddr+' | Ph: '+schPh1,105,27,{align:'center'});
+    doc.setDrawColor(201,168,76);
+    doc.setLineWidth(0.8);
+    doc.line(15,32,195,32);
+
+    doc.setFontSize(14);
+    doc.setTextColor(198,40,40);
+    doc.text('FEE REMINDER',105,42,{align:'center'});
+
+    doc.setFontSize(11);
+    doc.setTextColor(0,0,0);
+    var y=55;
+    doc.text('Student Name: '+f.studName,20,y);y+=8;
+    doc.text('Class: '+f.cls+'   Roll No: '+f.studRoll,20,y);y+=8;
+    doc.text('Fee Type: '+(f.type==='monthly'?'Monthly Fee':f.type==='exam'?'Exam Fee':f.type),20,y);y+=8;
+    doc.text('Period/Title: '+f.month,20,y);y+=8;
+    doc.setFontSize(13);
+    doc.setTextColor(198,40,40);
+    doc.text('Amount Due: Rs. '+f.amount,20,y);y+=8;
+    doc.setFontSize(11);
+    doc.setTextColor(0,0,0);
+    doc.text('Due Date: '+fmtDate(f.due),20,y);y+=14;
+
+    doc.setFontSize(10);
+    doc.setTextColor(80,80,80);
+    var note='Dear Parents/Guardians, this is a reminder that the above fee is currently unpaid. Kindly clear the dues at the earliest to avoid late fee charges. For any query, contact the school office.';
+    var lines=doc.splitTextToSize(note,170);
+    doc.text(lines,20,y);y+=lines.length*6+12;
+
+    doc.setFontSize(11);
+    doc.setTextColor(0,0,0);
+    doc.text('_______________________',140,y+12);
+    doc.text(schPrinc,140,y+19);
+    doc.setFontSize(9);
+    doc.setTextColor(120,120,120);
+    doc.text('Principal',140,y+25);
+
+    var fname=(f.studName+'_'+f.month+'_fee_reminder').replace(/[^a-zA-Z0-9]/g,'_')+'.pdf';
+    doc.save(fname);
+
+    resultHtml+='<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 11px;margin-bottom:6px;border:1px solid #ddd">'+
+      '<div style="font-size:12px"><strong>'+f.studName+'</strong> ('+f.cls+') &mdash; Rs.'+f.amount+'</div>'+
+      (f.studWa?'<button onclick="shareFeeOnWhatsApp(\''+f.studWa+'\',\''+f.studName.replace(/'/g,"")+'\',\''+f.month.replace(/'/g,"")+'\','+f.amount+',\''+f.due+'\')" style="padding:5px 10px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">\uD83D\uDCF1 WhatsApp</button>':'<span style="font-size:10px;color:#c62828">No WA number</span>')+
+      '</div>';
+  });
+
+  document.getElementById('feeRemResult').innerHTML=resultHtml+'<div style="font-size:10px;color:#888;margin-top:8px">PDF files download ho gayi hain. WhatsApp button dabakar parents ko text bhejen (PDF ko phir manually attach karen, kyunke WhatsApp Web seedha PDF attach nahi karne deta).</div>';
+  logActivity('fee','Fee Reminders Generated','Count: '+unpaid.length+(cls?' | Class: '+cls:''),currentTeacher?currentTeacher.name:'Admin');
+}
+function shareFeeOnWhatsApp(wa,name,month,amount,due){
+  var num=wa.replace(/[^0-9]/g,'');
+  if(num.length===11&&num.charAt(0)==='0')num='92'+num.substring(1);
+  var msg='Dear Parent,\n\nThis is a reminder that the fee for *'+name+'* is currently UNPAID.\n\nPeriod: '+month+'\nAmount Due: Rs. '+amount+'\nDue Date: '+fmtDate(due)+'\n\nKindly clear the dues at the earliest. A PDF reminder has also been downloaded \u2014 please attach it manually.\n\nAl-Fareed Public School, Tando Jam';
+  var url='https://wa.me/'+num+'?text='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
+
 // ═══════════════════════════════════════════
 var JB_KEY = ''; // JSONBin Master Key (Admin Panel se set hota hai)
 var JB_BIN = ''; // JSONBin Bin ID
 var JB_BASE = 'https://api.jsonbin.io/v3/b';
 var JB_SYNCING = false;
 var JB_QUEUE = {}; // pending writes
-var SHARED_KEYS = ['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students','af_activity_log'];
+var SHARED_KEYS = ['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students','af_activity_log','af_holidays','af_birthdays','af_fees'];
 
 function ls_get(k){
   try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}
@@ -2097,7 +2746,7 @@ function loadTeacherDropdown(){
 function sTab(n){
   var i,el,btns,b;
   // Hide all sections
-  for(i=0;i<=8;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
+  for(i=0;i<=9;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
   // Show target
   el=document.getElementById('s'+n);if(el)el.style.display='block';
   // Nav highlight
@@ -2110,12 +2759,13 @@ function sTab(n){
   }
   // Tab-specific logic
   try{if(n===0)updateDashboard();}catch(e){}
-  try{if(n===3&&currentRole==='admin'){renderTeacherList();loadSchSettingsUI();loadFbConfigUI();}}catch(e){}
+  try{if(n===3&&currentRole==='admin'){renderTeacherList();loadSchSettingsUI();loadFbConfigUI();renderHolidayMgr();renderBdayMgr();loadWeatherLocUI();}}catch(e){}
   try{if(n===4)initPubDefaults();}catch(e){}
   try{if(n===5)initEpDefaults();}catch(e){}
   try{if(n===6)initCertDefaults();}catch(e){}
   try{if(n===7){etInit();initSchDefaults();}}catch(e){}
   try{if(n===8){sylInitRows();initSchemeDefaults();}}catch(e){}
+  try{if(n===9){loadFeeClassDropdown();renderFeeList();}}catch(e){}
 }
 
 // ═══════════════════════════════════════════
@@ -2311,13 +2961,14 @@ function loadStudentList(){
 function addStudent(){
   var name=document.getElementById('newStudName').value.trim();
   var roll=document.getElementById('newStudRoll').value.trim()||String(Date.now()).slice(-3);
+  var wa=document.getElementById('newStudWa').value.trim();
   var cls=document.getElementById('attSClass').value;
   if(!name){toast('Naam likhein!');return;}
   var allStudents=ls_get(SK.STUDENTS)||{};
   if(!allStudents[cls])allStudents[cls]=[];
-  allStudents[cls].push({name:name,roll:roll,status:'present'});
+  allStudents[cls].push({name:name,roll:roll,status:'present',wa:wa});
   ls_set(SK.STUDENTS,allStudents);
-  document.getElementById('newStudName').value='';document.getElementById('newStudRoll').value='';
+  document.getElementById('newStudName').value='';document.getElementById('newStudRoll').value='';document.getElementById('newStudWa').value='';
   loadStudentList();
   updateStudentStats();
   toast(name+' add! ✅');
@@ -2338,7 +2989,7 @@ function renderStudentAttGrid(cls,students){
     var st=s.status||'present';
     h+='<div class="att-student '+stClass(st)+'" id="asc_'+i+'">'+
       '<div class="att-name">'+s.name+'</div>'+
-      '<div class="att-roll">Roll: '+s.roll+'</div>'+
+      '<div class="att-roll">Roll: '+s.roll+(s.wa?' &middot; &#128241;'+s.wa:'')+'</div>'+
       '<div class="att-status" style="color:'+stColor(st)+'">'+stLabel(st)+'</div>'+
       '<div class="att-btn-row">'+
       '<button class="att-btn ab-p" onclick="setStudAtt('+i+',\'present\')">P</button>'+
@@ -2378,8 +3029,11 @@ function editStudent(i){
   if(newName===null)return;
   var newRoll=prompt('Roll No edit karo:',s.roll);
   if(newRoll===null)return;
+  var newWa=prompt('Parent WhatsApp Number edit karo:',s.wa||'');
+  if(newWa===null)return;
   allStudents[cls][i].name=newName.trim()||s.name;
   allStudents[cls][i].roll=newRoll.trim()||s.roll;
+  allStudents[cls][i].wa=newWa.trim();
   ls_set(SK.STUDENTS,allStudents);
   loadStudentList();toast('Student updated! ✅');
 }
@@ -2596,7 +3250,7 @@ function saveTeachAtt(){
 function setupDashboard(){
   // Show dashboard tab
   var i,el;
-  for(i=0;i<=8;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
+  for(i=0;i<=9;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
   el=document.getElementById('s0');if(el)el.style.display='block';
   try{updateDashboard();}catch(e){}
   try{updateStudentStats();}catch(e){}
@@ -2647,6 +3301,8 @@ function updateDashboard(){
   renderDashArr();
   // Activity log
   try{renderDashAct();renderNotifBadge();}catch(e){}
+  // New features
+  try{renderHolidays();renderBirthdays();initWeather();}catch(e){}
 }
 
 function renderDashHW(){
