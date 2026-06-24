@@ -536,8 +536,16 @@ select:focus { border-color: var(--accent); }
   <div class="app-logo">📚</div>
   <div>
     <div class="app-title">AI Smart Notes Maker</div>
-    <div class="app-sub">Book page → Beautiful handwritten-style notes with diagrams → PDF</div>
+    <div class="app-sub">Book page &rarr; Beautiful handwritten-style notes &rarr; PDF</div>
   </div>
+</div>
+
+<!-- API Key Bar -->
+<div id="apiKeyBar" style="background:#1e1830;border-bottom:1px solid #3a2a60;padding:12px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+  <span style="font-size:13px;color:#b0a0d0;white-space:nowrap;">🔑 Groq API Key:</span>
+  <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx" style="flex:1;min-width:180px;background:#0f0f18;border:1px solid #4a3a70;border-radius:8px;color:#e0d8ff;padding:8px 12px;font-size:13px;font-family:monospace;outline:none;">
+  <button onclick="saveApiKey()" style="background:#7c5cbf;border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap;">Save</button>
+  <a href="https://console.groq.com/keys" target="_blank" style="font-size:11px;color:#9b6ee8;white-space:nowrap;">Free key lo &rarr;</a>
 </div>
 
 <div class="main">
@@ -648,8 +656,22 @@ select:focus { border-color: var(--accent); }
 <div class="toast" id="toast"></div>
 
 <script>
+function saveApiKey() {
+  var key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) { showToast('Key khali hai!', '\u26a0\ufe0f'); return; }
+  localStorage.setItem('groq_api_key', key);
+  showToast('API Key save ho gayi!', '\u2705');
+}
+
 var uploadedImageBase64 = null;
 var uploadedImageType = null;
+window.onload = function() {
+  var saved = localStorage.getItem('groq_api_key');
+  if (saved) {
+    document.getElementById('apiKeyInput').value = saved;
+    document.getElementById('apiKeyBar').style.borderBottom = '1px solid #2a6040';
+  }
+};
 var generatedNotesData = null;
 
 function showToast(msg, icon) {
@@ -751,31 +773,67 @@ function generateNotes() {
     'Rules:\n- Make 3-5 sections\n- Each section has 3-6 bullet points\n- Points should be SIMPLE and CLEAR, not complex\n- Include at least 1 diagram (flow/cycle/comparison) where appropriate\n- highlight type: "definition" for definitions, "important" for key info, "example" for examples\n- color values: color1, color2, color3, color4, color5 (use different colors for each section)\n- diagram type "none" if no diagram needed for that section\n\n' +
     (textInput ? 'Content to make notes from:\n' + textInput : 'Make notes from the provided image/document.');
 
-  var messages = [];
-  if (uploadedImageBase64) {
-    var contentArr = [];
-    if (uploadedImageType === 'application/pdf') {
-      contentArr.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: uploadedImageBase64 } });
-    } else {
-      contentArr.push({ type: 'image', source: { type: 'base64', media_type: uploadedImageType || 'image/jpeg', data: uploadedImageBase64 } });
+  // Get or ask for Groq API key
+  var apiKey = localStorage.getItem('groq_api_key') || '';
+  if (!apiKey) {
+    apiKey = document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) {
+      document.getElementById('progressArea').className = 'progress-area';
+      document.getElementById('generateBtn').disabled = false;
+      showToast('Pehle Groq API Key daalo upar!', '\ud83d\udd11');
+      document.getElementById('apiKeyInput').focus();
+      return;
     }
-    contentArr.push({ type: 'text', text: prompt });
-    messages.push({ role: 'user', content: contentArr });
-  } else {
-    messages.push({ role: 'user', content: prompt });
+    localStorage.setItem('groq_api_key', apiKey);
   }
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  var messages = [];
+  var model = 'llama-3.3-70b-versatile';
+
+  if (uploadedImageBase64 && uploadedImageType !== 'application/pdf') {
+    // Image input — use vision model
+    model = 'meta-llama/llama-4-scout-17b-16e-instruct';
+    messages.push({
+      role: 'user',
+      content: [
+        { type: 'image_url', image_url: { url: 'data:' + (uploadedImageType || 'image/jpeg') + ';base64,' + uploadedImageBase64 } },
+        { type: 'text', text: prompt }
+      ]
+    });
+  } else {
+    // Text only
+    var fullPrompt = prompt;
+    if (uploadedImageType === 'application/pdf') {
+      fullPrompt = prompt + '\n\n(Note: PDF uploaded but use general knowledge to make good notes on the topic)';
+    }
+    messages.push({ role: 'user', content: fullPrompt });
+  }
+
+  fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, messages: messages })
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify({
+      model: model,
+      max_tokens: 2500,
+      temperature: 0.7,
+      messages: messages
+    })
   })
-  .then(function(r){ return r.json(); })
+  .then(function(r) {
+    if (r.status === 401) {
+      localStorage.removeItem('groq_api_key');
+      throw new Error('invalid_key');
+    }
+    return r.json();
+  })
   .then(function(data) {
     setStep(4);
     var text = '';
-    if (data.content && data.content[0] && data.content[0].text) {
-      text = data.content[0].text.trim();
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      text = data.choices[0].message.content.trim();
     }
     text = text.replace(/```json|```/g, '').trim();
 
@@ -788,27 +846,31 @@ function generateNotes() {
     try {
       var notesData = JSON.parse(text);
       generatedNotesData = notesData;
-      setTimeout(function(){
+      setTimeout(function() {
         setStep(5);
-        setTimeout(function(){
+        setTimeout(function() {
           renderNotes(notesData, theme);
           document.getElementById('progressFill').style.width = '100%';
           document.getElementById('progressArea').className = 'progress-area';
           document.getElementById('previewSection').style.display = 'block';
           document.getElementById('generateBtn').disabled = false;
-          showToast('Notes tayyar hain! PDF download karo.', '🎉');
+          showToast('Notes tayyar hain! PDF download karo.', '\ud83c\udf89');
         }, 500);
       }, 800);
     } catch(e) {
       document.getElementById('progressArea').className = 'progress-area';
       document.getElementById('generateBtn').disabled = false;
-      showToast('Error aaya. Dobara try karo.', '❌');
+      showToast('JSON parse error. Dobara try karo.', '\u274c');
     }
   })
   .catch(function(err) {
     document.getElementById('progressArea').className = 'progress-area';
     document.getElementById('generateBtn').disabled = false;
-    showToast('Connection error. Check internet.', '❌');
+    if (err.message === 'invalid_key') {
+      showToast('API key ghalat hai! Dobara enter karo.', '\ud83d\udd11');
+    } else {
+      showToast('Connection error. Internet check karo.', '\u274c');
+    }
   });
 }
 
