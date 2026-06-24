@@ -768,9 +768,16 @@ function generateNotes() {
 
   var prompt = 'You are an expert note-maker for students. Create beautiful structured notes from the given content.\n\n' +
     langInstruction + '\n' + styleInstruction + '\nSubject type: ' + subject + '\n\n' +
+    'CRITICAL RULES FOR MATH AND FORMULAS:\n' +
+    '- NEVER use LaTeX syntax. No \\sqrt, \\frac, \\theta, \\circ, \\sin, \\cos, $...$ or any backslash commands.\n' +
+    '- Write math in plain readable form: sqrt(2) not \\sqrt{2}, use / for fractions like 1/2 not \\frac{1}{2}\n' +
+    '- Use these symbols directly: \u00b2 \u00b3 \u00d7 \u00f7 \u221a \u03b8 \u03c0 \u00b0 \u2260 \u2264 \u2265 \u00b1 \u221e\n' +
+    '- Example: write "x\u00b2 + y\u00b2 = r\u00b2" not "$x^{2}+y^{2}=r^{2}$"\n' +
+    '- Example: write "\u221a2 \u00d7 (cos 315\u00b0 + i\u00b7sin 315\u00b0)" not "$\\sqrt{2}(\\cos 315^{\\circ}...)$"\n' +
+    '- Write formulas as normal readable text that a student can easily read\n\n' +
     'Return ONLY a JSON object (no markdown, no backticks) with this exact structure:\n' +
     '{"title":"Main Topic Title","date":"Today","subject":"Subject Name","sections":[{"heading":"Section Heading","color":"color1","points":["Point 1 - detailed simple explanation","Point 2","Point 3"],"highlight":{"type":"definition/important/remember/example","label":"Label","text":"Content"},"diagram":{"title":"Diagram Title","type":"flow/cycle/comparison/list/none","items":["Item 1","Item 2","Item 3"],"connections":[["Item 1","Item 2"],["Item 2","Item 3"]]}}],"keyFacts":["Key fact 1","Key fact 2","Key fact 3"],"rememberBox":"Most important thing to remember"}\n\n' +
-    'Rules:\n- Make 3-5 sections\n- Each section has 3-6 bullet points\n- Points should be SIMPLE and CLEAR, not complex\n- Include at least 1 diagram (flow/cycle/comparison) where appropriate\n- highlight type: "definition" for definitions, "important" for key info, "example" for examples\n- color values: color1, color2, color3, color4, color5 (use different colors for each section)\n- diagram type "none" if no diagram needed for that section\n\n' +
+    'More Rules:\n- Make 3-5 sections\n- Each section has 3-6 bullet points\n- Points should be SIMPLE and CLEAR\n- Include at least 1 diagram where appropriate\n- highlight type: "definition" for definitions, "important" for key info, "example" for examples\n- color values: color1, color2, color3, color4, color5\n- diagram type "none" if no diagram needed\n\n' +
     (textInput ? 'Content to make notes from:\n' + textInput : 'Make notes from the provided image/document.');
 
   // Get or ask for Groq API key
@@ -1029,6 +1036,48 @@ function escSvg(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// Clean any leftover LaTeX from AI response
+function cleanLatex(str) {
+  if (!str) return '';
+  return str
+    .replace(/\$\$[\s\S]*?\$\$/g, function(m){ return m.replace(/\$/g,'').replace(/\\/g,''); })
+    .replace(/\$([^$]+)\$/g, '$1')
+    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1/$2)')
+    .replace(/\\sqrt\{([^}]+)\}/g, '\u221a($1)')
+    .replace(/\\sqrt/g, '\u221a')
+    .replace(/\^{\\circ}/g, '\u00b0')
+    .replace(/\^\\circ/g, '\u00b0')
+    .replace(/\\circ/g, '\u00b0')
+    .replace(/\\theta/g, '\u03b8')
+    .replace(/\\pi/g, '\u03c0')
+    .replace(/\\alpha/g, '\u03b1')
+    .replace(/\\beta/g, '\u03b2')
+    .replace(/\\gamma/g, '\u03b3')
+    .replace(/\\delta/g, '\u03b4')
+    .replace(/\\omega/g, '\u03c9')
+    .replace(/\\sin/g, 'sin')
+    .replace(/\\cos/g, 'cos')
+    .replace(/\\tan/g, 'tan')
+    .replace(/\\log/g, 'log')
+    .replace(/\\ln/g, 'ln')
+    .replace(/\\pm/g, '\u00b1')
+    .replace(/\\times/g, '\u00d7')
+    .replace(/\\div/g, '\u00f7')
+    .replace(/\\infty/g, '\u221e')
+    .replace(/\\neq/g, '\u2260')
+    .replace(/\\leq/g, '\u2264')
+    .replace(/\\geq/g, '\u2265')
+    .replace(/\^{([^}]+)}/g, function(m,p){ return p==='2'?'\u00b2':p==='3'?'\u00b3':'^'+p; })
+    .replace(/\^2/g, '\u00b2')
+    .replace(/\^3/g, '\u00b3')
+    .replace(/_{([^}]+)}/g, '_$1')
+    .replace(/\\\[|\\\]/g, '')
+    .replace(/\\\(|\\\)/g, '')
+    .replace(/\{|\}/g, '')
+    .replace(/\\/g, '')
+    .trim();
+}
+
 // ========================
 // RENDER NOTES HTML
 // ========================
@@ -1048,8 +1097,8 @@ function renderNotes(data, theme) {
   html += '<div class="notes-content">';
 
   // Title
-  html += '<div class="main-heading">' + (data.title || 'Notes') + '</div>';
-  html += '<div class="date-line">📅 ' + (data.date || new Date().toLocaleDateString('en-GB')) + ' &nbsp;&nbsp; 📚 ' + (data.subject || '') + '</div>';
+  html += '<div class="main-heading">' + cleanLatex(data.title || 'Notes') + '</div>';
+  html += '<div class="date-line">\ud83d\udcc5 ' + cleanLatex(data.date || new Date().toLocaleDateString('en-GB')) + ' &nbsp;&nbsp; \ud83d\udcda ' + cleanLatex(data.subject || '') + '</div>';
 
   // Sections
   var sections = data.sections || [];
@@ -1058,13 +1107,13 @@ function renderNotes(data, theme) {
     var colorClass = sec.color || sectionColors[i % sectionColors.length];
 
     html += '<div class="notes-section">';
-    html += '<div class="section-heading ' + colorClass + '">' + (sec.heading || '') + '</div>';
+    html += '<div class="section-heading ' + colorClass + '">' + cleanLatex(sec.heading || '') + '</div>';
 
     // Points
     if (sec.points && sec.points.length) {
       html += '<div class="notes-body">';
       for (var p = 0; p < sec.points.length; p++) {
-        html += '<div class="note-point"><span class="note-bullet">' + bulletEmojis[p % bulletEmojis.length] + '</span><span class="note-text">' + sec.points[p] + '</span></div>';
+        html += '<div class="note-point"><span class="note-bullet">' + bulletEmojis[p % bulletEmojis.length] + '</span><span class="note-text">' + cleanLatex(sec.points[p]) + '</span></div>';
       }
       html += '</div>';
     }
@@ -1073,14 +1122,16 @@ function renderNotes(data, theme) {
     if (sec.highlight && sec.highlight.text) {
       var hl = sec.highlight;
       var hlColor = highlightColors[i % highlightColors.length];
-      var hlIcon = hl.type === 'definition' ? '📖' : hl.type === 'example' ? '💡' : hl.type === 'remember' ? '⭐' : '📌';
-      html += '<div class="highlight-box ' + hlColor + '"><div class="box-label">' + hlIcon + ' ' + (hl.label || hl.type || 'NOTE') + '</div>' + hl.text + '</div>';
+      var hlIcon = hl.type === 'definition' ? '\ud83d\udcd6' : hl.type === 'example' ? '\ud83d\udca1' : hl.type === 'remember' ? '\u2b50' : '\ud83d\udccc';
+      html += '<div class="highlight-box ' + hlColor + '"><div class="box-label">' + hlIcon + ' ' + cleanLatex(hl.label || hl.type || 'NOTE') + '</div>' + cleanLatex(hl.text) + '</div>';
     }
 
     // Diagram
     if (sec.diagram && sec.diagram.type !== 'none' && sec.diagram.items && sec.diagram.items.length > 1) {
       html += '<div class="diagram-wrap">';
-      if (sec.diagram.title) html += '<div class="diagram-title">📊 ' + sec.diagram.title + '</div>';
+      if (sec.diagram.title) html += '<div class="diagram-title">\ud83d\udcca ' + cleanLatex(sec.diagram.title) + '</div>';
+      // Clean diagram items too
+      sec.diagram.items = sec.diagram.items.map(function(it){ return cleanLatex(it); });
       html += makeDiagram(sec.diagram, theme);
       html += '</div>';
     }
@@ -1091,16 +1142,16 @@ function renderNotes(data, theme) {
   // Key Facts
   if (data.keyFacts && data.keyFacts.length) {
     html += '<div class="definition-box">';
-    html += '<div class="def-term">🔑 Key Points</div>';
+    html += '<div class="def-term">\ud83d\udd11 Key Points</div>';
     for (var k = 0; k < data.keyFacts.length; k++) {
-      html += '<div class="def-meaning">✦ ' + data.keyFacts[k] + '</div>';
+      html += '<div class="def-meaning">\u2746 ' + cleanLatex(data.keyFacts[k]) + '</div>';
     }
     html += '</div>';
   }
 
   // Remember box
   if (data.rememberBox) {
-    html += '<div class="remember-box"><div class="remember-title">⭐ Remember This!</div><div class="notes-body">' + data.rememberBox + '</div></div>';
+    html += '<div class="remember-box"><div class="remember-title">\u2b50 Remember This!</div><div class="notes-body">' + cleanLatex(data.rememberBox) + '</div></div>';
   }
 
   // Footer
