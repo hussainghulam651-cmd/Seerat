@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Smart Notes Maker</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+/* ===== APP UI ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root {
+  --bg: #0f0f13;
+  --panel: #17171f;
+  --border: #2a2a38;
+  --accent: #7c5cbf;
+  --accent2: #e8805a;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --green: #4eca8b;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #1a1030 0%, #0f0f13 60%, #1a2010 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.app-logo {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.app-title { font-size: 20px; font-weight: 600; }
+.app-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+/* Upload Area */
+.upload-section { margin-bottom: 20px; }
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.upload-box {
+  background: var(--panel);
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.upload-box:hover {border-color: var(--accent); background: rgba(124,92,191,0.06);}
+.upload-box.active {border-color: var(--green); border-style: solid; background: rgba(78,202,139,0.05);}
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.upload-sub { font-size: 11px; color: var(--muted); }
+.upload-box input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%; }
+
+.text-area-wrap { position: relative; }
+textarea {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 14px 16px;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.6;
+}
+textarea:focus { border-color: var(--accent); }
+textarea::placeholder { color: var(--muted); }
+
+/* Options Row */
+.options-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: flex-end;
+}
+.opt-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
+.opt-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+select, .opt-select {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+select:focus { border-color: var(--accent); }
+
+.btn {
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #9b6ee8);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124,92,191,0.35);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 25px rgba(124,92,191,0.5); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--text); }
+.btn-green {
+  background: linear-gradient(135deg, var(--green), #2db872);
+  color: #000;
+  font-weight: 700;
+}
+.btn-green:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(78,202,139,0.4); }
+
+/* Progress */
+.progress-area {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: none;
+}
+.progress-area.visible { display: block; }
+.progress-text { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+.step-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.step-item {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+.step-item.active { color: var(--accent); }
+.step-item.done { color: var(--green); }
+.step-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; flex-shrink: 0;
+}
+
+/* Preview */
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.preview-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ===== NOTES PAPER STYLES ===== */
+#notesPreview {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  display: none;
+}
+#notesPreview.visible { display: block; }
+
+.notes-page {
+  background: #f5f0ff;
+  padding: 48px 52px 52px;
+  font-family: 'Kalam', 'Caveat', cursive;
+  position: relative;
+  min-height: 800px;
+  /* Ruled lines — visible but subtle */
+  background-image:
+    linear-gradient(transparent 35px, #c8bfe8 35px, #c8bfe8 37px, transparent 37px);
+  background-size: 100% 38px;
+  background-position: 0 52px;
+}
+
+/* Left margin red line */
+.notes-page::before {
+  content: '';
+  position: absolute;
+  left: 80px; top: 0; bottom: 0;
+  width: 2.5px;
+  background: rgba(200,40,40,0.55);
+}
+
+/* Holes */
+.notes-page::after {
+  content: '';
+  position: absolute;
+  left: 20px; top: 0; bottom: 0;
+  width: 40px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 90px,
+    #ddd 90px,
+    #ddd 92px,
+    transparent 92px,
+    transparent 120px
+  );
+}
+
+/* Page number spiral */
+.spiral-holes {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  gap: 28px;
+  pointer-events: none;
+}
+.spiral-hole {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 3px solid #b0a8c0;
+  background: #d8d0e8;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ===== NOTES CONTENT ===== */
+.notes-content { position: relative; z-index: 1; }
+
+.main-heading {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  display: inline-block;
+  position: relative;
+  padding: 4px 18px 10px 8px;
+  color: #1a0a40;
+  letter-spacing: 0.5px;
+}
+.main-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.date-line {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  color: #5533aa;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.date-line::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: #9977cc;
+  opacity: 0.4;
+}
+
+/* Sections */
+.notes-section { margin-bottom: 28px; }
+
+.section-heading {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 32px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 14px;
+  position: relative;
+  letter-spacing: 0.3px;
+}
+.section-heading.color1 { color: #1040c0; background: rgba(37,99,235,0.12); border-left: 5px solid #1040c0; }
+.section-heading.color2 { color: #7010c0; background: rgba(147,51,234,0.12); border-left: 5px solid #7010c0; }
+.section-heading.color3 { color: #b01010; background: rgba(220,38,38,0.12); border-left: 5px solid #b01010; }
+.section-heading.color4 { color: #0a7040; background: rgba(5,150,105,0.12); border-left: 5px solid #0a7040; }
+.section-heading.color5 { color: #a04000; background: rgba(217,119,6,0.12); border-left: 5px solid #a04000; }
+
+.notes-body {
+  font-family: 'Kalam', cursive;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 2.2;
+  color: #0a0820;
+}
+
+/* Bullet points */
+.note-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding-left: 8px;
+}
+.note-bullet {
+  font-size: 20px;
+  line-height: 2.2;
+  flex-shrink: 0;
+}
+.note-text { flex: 1; color: #0a0820; font-weight: 700; }
+
+/* Highlight boxes */
+.highlight-box {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  position: relative;
+  font-family: 'Kalam', cursive;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.9;
+}
+.highlight-box.yellow { background: #fff8cc; border: 3px solid #d4a800; color: #3d2800; }
+.highlight-box.blue   { background: #ddeeff; border: 3px solid #1a5cc8; color: #081840; }
+.highlight-box.green  { background: #d4ffea; border: 3px solid #0a8040; color: #052810; }
+.highlight-box.pink   { background: #ffd6ea; border: 3px solid #c01060; color: #500020; }
+.highlight-box.orange { background: #ffe8cc; border: 3px solid #b85000; color: #401800; }
+
+.box-label {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Diagram / SVG boxes */
+.diagram-wrap {
+  margin: 18px 0;
+  text-align: center;
+}
+.diagram-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 22px;
+  color: #2a1a70;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.diagram-svg {
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* Definition box */
+.definition-box {
+  background: #ece8ff;
+  border: 3px solid #7040c8;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+.def-term {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 26px;
+  color: #3a10a0;
+  margin-bottom: 6px;
+}
+.def-meaning {
+  font-family: 'Kalam', cursive;
+  font-size: 19px;
+  font-weight: 700;
+  color: #0e0840;
+  line-height: 1.8;
+}
+
+/* Remember box */
+.remember-box {
+  background: linear-gradient(135deg, #fff5cc, #ffe8a0);
+  border: 3px solid #c89000;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  position: relative;
+}
+.remember-box::before {
+  content: '⭐';
+  position: absolute;
+  top: -14px; left: 16px;
+  font-size: 24px;
+  background: #fff5cc;
+  padding: 0 4px;
+}
+.remember-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 24px;
+  color: #7a3000;
+  margin-bottom: 6px;
+}
+
+/* Page footer */
+.page-footer {
+  margin-top: 36px;
+  padding-top: 14px;
+  border-top: 2px dashed #9080b0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  color: #3a2880;
+}
+.page-num {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  background: #5533aa;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 20px;
+  background: #1a1a28;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.toast.show { display: flex; animation: slideUp 0.3s ease; }
+@keyframes slideUp { from { transform: translateY(10px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+
+/* Preview image thumb */
+.img-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: none;
+  border: 1px solid var(--border);
+}
+.img-preview.show { display: block; }
+
+/* Color schemes for headings */
+.scheme-purple .main-heading { color: #5533bb; }
+.scheme-blue .main-heading { color: #1a4db0; }
+.scheme-green .main-heading { color: #0d6e40; }
+.scheme-orange .main-heading { color: #b84500; }
+.scheme-pink .main-heading { color: #9a1a5a; }
+
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="app-header">
+  <div class="app-logo">📚</div>
+  <div>
+    <div class="app-title">AI Smart Notes Maker</div>
+    <div class="app-sub">Book page → Beautiful handwritten-style notes with diagrams → PDF</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Input Section -->
+  <div class="upload-section">
+    <div class="section-label">📷 Book Page Upload karo ya Text Type karo</div>
+
+    <div class="upload-grid">
+      <div class="upload-box" id="imgBox">
+        <input type="file" accept="image/*" id="imgInput" onchange="handleImage(this)">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">Book ka Photo</div>
+        <div class="upload-sub">Camera se ya Gallery se<br>JPG, PNG, WEBP</div>
+      </div>
+      <div class="upload-box" id="pdfBox">
+        <input type="file" accept="application/pdf" id="pdfInput" onchange="handlePDF(this)">
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">PDF Page</div>
+        <div class="upload-sub">PDF file upload karo<br>Koi bhi page</div>
+      </div>
+    </div>
+
+    <img id="imgThumb" class="img-preview" alt="preview">
+
+    <div class="text-area-wrap" style="margin-top:10px;">
+      <textarea id="textInput" placeholder="Ya yahan text paste karo / type karo... (book ka content, chapter, paragraph, kuch bhi)" rows="5"></textarea>
+    </div>
+  </div>
+
+  <!-- Options -->
+  <div class="options-row">
+    <div class="opt-group">
+      <div class="opt-label">📖 Notes Language</div>
+      <select id="langSelect">
+        <option value="urdu">اردو (Urdu)</option>
+        <option value="english" selected>English</option>
+        <option value="both">Urdu + English (Mixed)</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🎨 Color Theme</div>
+      <select id="themeSelect">
+        <option value="purple">Purple 💜</option>
+        <option value="blue">Blue 💙</option>
+        <option value="green">Green 💚</option>
+        <option value="orange">Orange 🧡</option>
+        <option value="pink">Pink 🩷</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">📝 Notes Style</div>
+      <select id="styleSelect">
+        <option value="detailed">Detailed Notes</option>
+        <option value="summary">Short Summary</option>
+        <option value="exam">Exam Prep</option>
+        <option value="concept">Concept Map</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">📐 Subject Type</div>
+      <select id="subjectSelect">
+        <option value="science">Science / Biology</option>
+        <option value="physics">Physics / Math</option>
+        <option value="history">History / Social</option>
+        <option value="literature">Literature / Urdu</option>
+        <option value="general">General</option>
+        <option value="islamiat">Islamiat / Quran</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+    <button class="btn btn-primary" id="generateBtn" onclick="generateNotes()">
+      ✨ Notes Banao
+    </button>
+    <button class="btn btn-outline" onclick="clearAll()">🗑️ Clear</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-text" id="progressText">AI notes bana raha hai...</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="step-list">
+      <div class="step-item" id="step1"><div class="step-dot">1</div> Content analyze kar raha hai</div>
+      <div class="step-item" id="step2"><div class="step-dot">2</div> Main topics dhundh raha hai</div>
+      <div class="step-item" id="step3"><div class="step-dot">3</div> Notes structure bana raha hai</div>
+      <div class="step-item" id="step4"><div class="step-dot">4</div> Diagrams add kar raha hai</div>
+      <div class="step-item" id="step5"><div class="step-dot">5</div> Beautiful design apply kar raha hai</div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div id="previewSection" style="display:none;">
+    <div class="preview-header">
+      <div class="section-label" style="margin-bottom:0;">✅ Notes Tayyar Hain!</div>
+      <div class="preview-actions">
+        <button class="btn btn-green" onclick="downloadPDF()">⬇️ PDF Download</button>
+        <button class="btn btn-outline" onclick="generateNotes()">🔄 Dobara Banao</button>
+      </div>
+    </div>
+    <div id="notesPreview" class="visible"></div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+var uploadedImageBase64 = null;
+var uploadedImageType = null;
+var generatedNotesData = null;
+
+function showToast(msg, icon) {
+  icon = icon || '💡';
+  var t = document.getElementById('toast');
+  t.innerHTML = icon + ' ' + msg;
+  t.className = 'toast show';
+  setTimeout(function(){ t.className = 'toast'; }, 3000);
+}
+
+function handleImage(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    uploadedImageBase64 = e.target.result.split(',')[1];
+    uploadedImageType = file.type;
+    document.getElementById('imgThumb').src = e.target.result;
+    document.getElementById('imgThumb').className = 'img-preview show';
+    document.getElementById('imgBox').className = 'upload-box active';
+    showToast('Image upload ho gayi!', '📷');
+  };
+  reader.readAsDataURL(file);
+}
+
+function handlePDF(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    uploadedImageBase64 = e.target.result.split(',')[1];
+    uploadedImageType = 'application/pdf';
+    document.getElementById('pdfBox').className = 'upload-box active';
+    showToast('PDF upload ho gayi!', '📄');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearAll() {
+  uploadedImageBase64 = null;
+  uploadedImageType = null;
+  document.getElementById('textInput').value = '';
+  document.getElementById('imgThumb').className = 'img-preview';
+  document.getElementById('imgBox').className = 'upload-box';
+  document.getElementById('pdfBox').className = 'upload-box';
+  document.getElementById('imgInput').value = '';
+  document.getElementById('pdfInput').value = '';
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('progressArea').className = 'progress-area';
+  showToast('Sab clear ho gaya!', '🗑️');
+}
+
+function setStep(n) {
+  for (var i = 1; i <= 5; i++) {
+    var el = document.getElementById('step' + i);
+    if (i < n) { el.className = 'step-item done'; el.querySelector('.step-dot').textContent = '✓'; }
+    else if (i === n) { el.className = 'step-item active'; }
+    else { el.className = 'step-item'; el.querySelector('.step-dot').textContent = i; }
+  }
+  document.getElementById('progressFill').style.width = ((n-1)/5*100) + '%';
+  document.getElementById('progressText').textContent = ['','Content analyze kar raha hai...','Main topics dhundh raha hai...','Notes structure bana raha hai...','Diagrams add kar raha hai...','Beautiful design apply kar raha hai...'][n];
+}
+
+function generateNotes() {
+  var textInput = document.getElementById('textInput').value.trim();
+  if (!uploadedImageBase64 && !textInput) {
+    showToast('Pehle image/PDF upload karo ya text type karo!', '⚠️');
+    return;
+  }
+
+  var lang = document.getElementById('langSelect').value;
+  var style = document.getElementById('styleSelect').value;
+  var subject = document.getElementById('subjectSelect').value;
+  var theme = document.getElementById('themeSelect').value;
+
+  document.getElementById('progressArea').className = 'progress-area visible';
+  document.getElementById('previewSection').style.display = 'none';
+  document.getElementById('generateBtn').disabled = true;
+
+  setStep(1);
+  setTimeout(function(){ setStep(2); }, 600);
+  setTimeout(function(){ setStep(3); }, 1200);
+
+  var langInstruction = '';
+  if (lang === 'urdu') langInstruction = 'Write ALL notes content in Urdu language (use Urdu script). Headings in Urdu. Points in Urdu.';
+  else if (lang === 'english') langInstruction = 'Write all notes in clear simple English.';
+  else langInstruction = 'Write headings in English, but explanations/points can be in simple Urdu. Mix both languages naturally.';
+
+  var styleInstruction = '';
+  if (style === 'summary') styleInstruction = 'Make SHORT summary notes - only most important points, 3-4 per section.';
+  else if (style === 'exam') styleInstruction = 'Focus on exam-important points, definitions, formulas, key facts. Add a "Remember!" box with most important facts.';
+  else if (style === 'concept') styleInstruction = 'Create concept-focused notes with clear definitions, relationships between ideas, and a simple diagram.';
+  else styleInstruction = 'Make detailed notes with thorough explanation of each point in simple easy words.';
+
+  var prompt = 'You are an expert note-maker for students. Create beautiful structured notes from the given content.\n\n' +
+    langInstruction + '\n' + styleInstruction + '\nSubject type: ' + subject + '\n\n' +
+    'Return ONLY a JSON object (no markdown, no backticks) with this exact structure:\n' +
+    '{"title":"Main Topic Title","date":"Today","subject":"Subject Name","sections":[{"heading":"Section Heading","color":"color1","points":["Point 1 - detailed simple explanation","Point 2","Point 3"],"highlight":{"type":"definition/important/remember/example","label":"Label","text":"Content"},"diagram":{"title":"Diagram Title","type":"flow/cycle/comparison/list/none","items":["Item 1","Item 2","Item 3"],"connections":[["Item 1","Item 2"],["Item 2","Item 3"]]}}],"keyFacts":["Key fact 1","Key fact 2","Key fact 3"],"rememberBox":"Most important thing to remember"}\n\n' +
+    'Rules:\n- Make 3-5 sections\n- Each section has 3-6 bullet points\n- Points should be SIMPLE and CLEAR, not complex\n- Include at least 1 diagram (flow/cycle/comparison) where appropriate\n- highlight type: "definition" for definitions, "important" for key info, "example" for examples\n- color values: color1, color2, color3, color4, color5 (use different colors for each section)\n- diagram type "none" if no diagram needed for that section\n\n' +
+    (textInput ? 'Content to make notes from:\n' + textInput : 'Make notes from the provided image/document.');
+
+  var messages = [];
+  if (uploadedImageBase64) {
+    var contentArr = [];
+    if (uploadedImageType === 'application/pdf') {
+      contentArr.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: uploadedImageBase64 } });
+    } else {
+      contentArr.push({ type: 'image', source: { type: 'base64', media_type: uploadedImageType || 'image/jpeg', data: uploadedImageBase64 } });
+    }
+    contentArr.push({ type: 'text', text: prompt });
+    messages.push({ role: 'user', content: contentArr });
+  } else {
+    messages.push({ role: 'user', content: prompt });
+  }
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2500, messages: messages })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    setStep(4);
+    var text = '';
+    if (data.content && data.content[0] && data.content[0].text) {
+      text = data.content[0].text.trim();
+    }
+    text = text.replace(/```json|```/g, '').trim();
+
+    var firstBrace = text.indexOf('{');
+    var lastBrace = text.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1) {
+      text = text.substring(firstBrace, lastBrace + 1);
+    }
+
+    try {
+      var notesData = JSON.parse(text);
+      generatedNotesData = notesData;
+      setTimeout(function(){
+        setStep(5);
+        setTimeout(function(){
+          renderNotes(notesData, theme);
+          document.getElementById('progressFill').style.width = '100%';
+          document.getElementById('progressArea').className = 'progress-area';
+          document.getElementById('previewSection').style.display = 'block';
+          document.getElementById('generateBtn').disabled = false;
+          showToast('Notes tayyar hain! PDF download karo.', '🎉');
+        }, 500);
+      }, 800);
+    } catch(e) {
+      document.getElementById('progressArea').className = 'progress-area';
+      document.getElementById('generateBtn').disabled = false;
+      showToast('Error aaya. Dobara try karo.', '❌');
+    }
+  })
+  .catch(function(err) {
+    document.getElementById('progressArea').className = 'progress-area';
+    document.getElementById('generateBtn').disabled = false;
+    showToast('Connection error. Check internet.', '❌');
+  });
+}
+
+// ========================
+// SVG DIAGRAM GENERATORS
+// ========================
+function makeDiagram(diagram, theme) {
+  if (!diagram || diagram.type === 'none' || !diagram.items || diagram.items.length < 2) return '';
+
+  var colors = {
+    purple: { fill: '#f0eeff', stroke: '#7c5cbf', text: '#3a1f8f', arrow: '#9b6ee8' },
+    blue:   { fill: '#e8f0ff', stroke: '#2563eb', text: '#1a3080', arrow: '#4080e0' },
+    green:  { fill: '#e8fff0', stroke: '#059669', text: '#0a4030', arrow: '#40b878' },
+    orange: { fill: '#fff0e0', stroke: '#d97706', text: '#804010', arrow: '#e09040' },
+    pink:   { fill: '#ffe8f4', stroke: '#db2777', text: '#700040', arrow: '#e060a0' }
+  };
+  var c = colors[theme] || colors.purple;
+
+  var items = diagram.items.slice(0, 6);
+  var n = items.length;
+  var title = diagram.title || '';
+  var type = diagram.type;
+
+  if (type === 'flow') return makeFlowDiagram(items, c, title);
+  if (type === 'cycle') return makeCycleDiagram(items, c, title);
+  if (type === 'comparison' && n >= 2) return makeComparisonDiagram(items, c, title);
+  return makeListDiagram(items, c, title);
+}
+
+function makeFlowDiagram(items, c, title) {
+  var n = items.length;
+  var boxW = 130, boxH = 44, gapX = 30, gapY = 50;
+  var cols = n <= 3 ? n : Math.ceil(n / 2);
+  var rows = Math.ceil(n / cols);
+  var svgW = cols * (boxW + gapX) - gapX + 40;
+  var svgH = rows * (boxH + gapY) - gapY + 80;
+
+  var svg = '<svg class="diagram-svg" width="' + svgW + '" height="' + svgH + '" viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg">';
+  if (title) {
+    svg += '<text x="' + (svgW/2) + '" y="22" text-anchor="middle" font-family="Caveat,cursive" font-size="16" font-weight="bold" fill="' + c.text + '">' + escSvg(title) + '</text>';
+  }
+
+  var startY = title ? 40 : 10;
+  var positions = [];
+  for (var i = 0; i < n; i++) {
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    var x = col * (boxW + gapX) + 20;
+    var y = startY + row * (boxH + gapY);
+    positions.push({x:x, y:y});
+
+    // Arrow
+    if (i > 0) {
+      var prev = positions[i-1];
+      if (row === Math.floor((i-1)/cols)) {
+        // Same row: horizontal arrow
+        svg += '<line x1="' + (prev.x + boxW) + '" y1="' + (prev.y + boxH/2) + '" x2="' + x + '" y2="' + (y + boxH/2) + '" stroke="' + c.arrow + '" stroke-width="2" marker-end="url(#arr)"/>';
+      } else {
+        // New row: down then left
+        svg += '<line x1="' + (prev.x + boxW/2) + '" y1="' + (prev.y + boxH) + '" x2="' + (x + boxW/2) + '" y2="' + y + '" stroke="' + c.arrow + '" stroke-width="2" marker-end="url(#arr)" stroke-dasharray="4,3"/>';
+      }
+    }
+
+    // Box
+    svg += '<rect x="' + x + '" y="' + y + '" width="' + boxW + '" height="' + boxH + '" rx="8" fill="' + c.fill + '" stroke="' + c.stroke + '" stroke-width="2"/>';
+    svg += '<text x="' + (x + boxW/2) + '" y="' + (y + boxH/2 + 5) + '" text-anchor="middle" font-family="Kalam,cursive" font-size="13" fill="' + c.text + '">';
+    var words = items[i].split(' ');
+    if (words.length > 3) {
+      svg += '<tspan x="' + (x+boxW/2) + '" dy="-8">' + escSvg(words.slice(0,Math.ceil(words.length/2)).join(' ')) + '</tspan>';
+      svg += '<tspan x="' + (x+boxW/2) + '" dy="16">' + escSvg(words.slice(Math.ceil(words.length/2)).join(' ')) + '</tspan>';
+    } else {
+      svg += escSvg(items[i]);
+    }
+    svg += '</text>';
+  }
+
+  svg += '<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="' + c.arrow + '"/></marker></defs></svg>';
+  return svg;
+}
+
+function makeCycleDiagram(items, c, title) {
+  var n = items.length;
+  var cx = 200, cy = 140, r = 100, boxW = 100, boxH = 36;
+  var svgW = 400, svgH = 300;
+  var svg = '<svg class="diagram-svg" width="' + svgW + '" height="' + svgH + '" viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg">';
+  if (title) svg += '<text x="' + cx + '" y="18" text-anchor="middle" font-family="Caveat,cursive" font-size="15" font-weight="bold" fill="' + c.text + '">' + escSvg(title) + '</text>';
+
+  svg += '<circle cx="' + cx + '" cy="' + (cy+10) + '" r="' + (r-20) + '" fill="none" stroke="' + c.stroke + '" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>';
+
+  for (var i = 0; i < n; i++) {
+    var angle = (i / n) * 2 * Math.PI - Math.PI/2;
+    var x = cx + r * Math.cos(angle);
+    var y = (cy + 10) + r * Math.sin(angle);
+
+    // Arrow to next
+    var nextAngle = ((i+1) / n) * 2 * Math.PI - Math.PI/2;
+    var nx = cx + r * Math.cos(nextAngle);
+    var ny = (cy+10) + r * Math.sin(nextAngle);
+    var midAngle = ((i + 0.5) / n) * 2 * Math.PI - Math.PI/2;
+    var mx = cx + (r+15) * Math.cos(midAngle);
+    var my = (cy+10) + (r+15) * Math.sin(midAngle);
+    svg += '<path d="M' + x + ',' + y + ' Q' + mx + ',' + my + ' ' + nx + ',' + ny + '" fill="none" stroke="' + c.arrow + '" stroke-width="2" marker-end="url(#arrc)"/>';
+
+    svg += '<rect x="' + (x - boxW/2) + '" y="' + (y - boxH/2) + '" width="' + boxW + '" height="' + boxH + '" rx="8" fill="' + c.fill + '" stroke="' + c.stroke + '" stroke-width="2"/>';
+    svg += '<text x="' + x + '" y="' + (y+5) + '" text-anchor="middle" font-family="Kalam,cursive" font-size="12" fill="' + c.text + '">' + escSvg(items[i].substring(0,14)) + '</text>';
+  }
+  svg += '<defs><marker id="arrc" markerWidth="6" markerHeight="6" refX="5" refY="2.5" orient="auto"><path d="M0,0 L0,5 L6,2.5 z" fill="' + c.arrow + '"/></marker></defs></svg>';
+  return svg;
+}
+
+function makeComparisonDiagram(items, c, title) {
+  var half = Math.ceil(items.length / 2);
+  var col1 = items.slice(0, half);
+  var col2 = items.slice(half);
+  var svgW = 400, rowH = 40, svgH = Math.max(col1.length, col2.length) * rowH + 80;
+  var svg = '<svg class="diagram-svg" width="' + svgW + '" height="' + svgH + '" viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg">';
+  if (title) svg += '<text x="200" y="20" text-anchor="middle" font-family="Caveat,cursive" font-size="15" font-weight="bold" fill="' + c.text + '">' + escSvg(title) + '</text>';
+
+  // Headers
+  svg += '<rect x="10" y="30" width="175" height="30" rx="6" fill="' + c.stroke + '"/>';
+  svg += '<text x="97" y="50" text-anchor="middle" font-family="Caveat,cursive" font-size="14" font-weight="bold" fill="#fff">Column A</text>';
+  svg += '<rect x="215" y="30" width="175" height="30" rx="6" fill="' + c.arrow + '"/>';
+  svg += '<text x="302" y="50" text-anchor="middle" font-family="Caveat,cursive" font-size="14" font-weight="bold" fill="#fff">Column B</text>';
+
+  var maxRows = Math.max(col1.length, col2.length);
+  for (var i = 0; i < maxRows; i++) {
+    var y = 70 + i * rowH;
+    var bg = i % 2 === 0 ? c.fill : '#fff';
+    svg += '<rect x="10" y="' + y + '" width="175" height="' + (rowH-2) + '" rx="4" fill="' + bg + '" stroke="' + c.stroke + '" stroke-width="1"/>';
+    if (col1[i]) svg += '<text x="20" y="' + (y + rowH/2 + 4) + '" font-family="Kalam,cursive" font-size="12" fill="' + c.text + '">' + escSvg(col1[i].substring(0,22)) + '</text>';
+    svg += '<rect x="215" y="' + y + '" width="175" height="' + (rowH-2) + '" rx="4" fill="' + bg + '" stroke="' + c.arrow + '" stroke-width="1"/>';
+    if (col2[i]) svg += '<text x="225" y="' + (y + rowH/2 + 4) + '" font-family="Kalam,cursive" font-size="12" fill="' + c.text + '">' + escSvg(col2[i].substring(0,22)) + '</text>';
+    svg += '<line x1="195" y1="' + (y + rowH/2) + '" x2="210" y2="' + (y + rowH/2) + '" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>';
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+function makeListDiagram(items, c, title) {
+  var svgW = 380, rowH = 38, svgH = items.length * rowH + 60;
+  var svg = '<svg class="diagram-svg" width="' + svgW + '" height="' + svgH + '" viewBox="0 0 ' + svgW + ' ' + svgH + '" xmlns="http://www.w3.org/2000/svg">';
+  if (title) svg += '<text x="190" y="20" text-anchor="middle" font-family="Caveat,cursive" font-size="15" font-weight="bold" fill="' + c.text + '">' + escSvg(title) + '</text>';
+  for (var i = 0; i < items.length; i++) {
+    var y = 30 + i * rowH;
+    svg += '<rect x="10" y="' + y + '" width="360" height="' + (rowH-4) + '" rx="6" fill="' + (i%2===0?c.fill:'#fff') + '" stroke="' + c.stroke + '" stroke-width="1.5"/>';
+    svg += '<circle cx="30" cy="' + (y+rowH/2-2) + '" r="8" fill="' + c.stroke + '"/>';
+    svg += '<text x="30" cy="' + (y+rowH/2+3) + '" text-anchor="middle" y="' + (y+rowH/2+3) + '" font-family="sans-serif" font-size="10" fill="#fff" font-weight="bold">' + (i+1) + '</text>';
+    svg += '<text x="48" y="' + (y+rowH/2+4) + '" font-family="Kalam,cursive" font-size="13" fill="' + c.text + '">' + escSvg(items[i].substring(0,38)) + '</text>';
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+function escSvg(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ========================
+// RENDER NOTES HTML
+// ========================
+function renderNotes(data, theme) {
+  theme = theme || 'purple';
+  var highlightColors = ['yellow','blue','green','pink','orange'];
+  var sectionColors = ['color1','color2','color3','color4','color5'];
+  var bulletEmojis = ['✏️','📌','🔹','▸','◆','→'];
+
+  var html = '<div class="notes-page scheme-' + theme + '">';
+
+  // Spiral holes
+  html += '<div class="spiral-holes">';
+  for (var h = 0; h < 8; h++) html += '<div class="spiral-hole"></div>';
+  html += '</div>';
+
+  html += '<div class="notes-content">';
+
+  // Title
+  html += '<div class="main-heading">' + (data.title || 'Notes') + '</div>';
+  html += '<div class="date-line">📅 ' + (data.date || new Date().toLocaleDateString('en-GB')) + ' &nbsp;&nbsp; 📚 ' + (data.subject || '') + '</div>';
+
+  // Sections
+  var sections = data.sections || [];
+  for (var i = 0; i < sections.length; i++) {
+    var sec = sections[i];
+    var colorClass = sec.color || sectionColors[i % sectionColors.length];
+
+    html += '<div class="notes-section">';
+    html += '<div class="section-heading ' + colorClass + '">' + (sec.heading || '') + '</div>';
+
+    // Points
+    if (sec.points && sec.points.length) {
+      html += '<div class="notes-body">';
+      for (var p = 0; p < sec.points.length; p++) {
+        html += '<div class="note-point"><span class="note-bullet">' + bulletEmojis[p % bulletEmojis.length] + '</span><span class="note-text">' + sec.points[p] + '</span></div>';
+      }
+      html += '</div>';
+    }
+
+    // Highlight box
+    if (sec.highlight && sec.highlight.text) {
+      var hl = sec.highlight;
+      var hlColor = highlightColors[i % highlightColors.length];
+      var hlIcon = hl.type === 'definition' ? '📖' : hl.type === 'example' ? '💡' : hl.type === 'remember' ? '⭐' : '📌';
+      html += '<div class="highlight-box ' + hlColor + '"><div class="box-label">' + hlIcon + ' ' + (hl.label || hl.type || 'NOTE') + '</div>' + hl.text + '</div>';
+    }
+
+    // Diagram
+    if (sec.diagram && sec.diagram.type !== 'none' && sec.diagram.items && sec.diagram.items.length > 1) {
+      html += '<div class="diagram-wrap">';
+      if (sec.diagram.title) html += '<div class="diagram-title">📊 ' + sec.diagram.title + '</div>';
+      html += makeDiagram(sec.diagram, theme);
+      html += '</div>';
+    }
+
+    html += '</div>';
+  }
+
+  // Key Facts
+  if (data.keyFacts && data.keyFacts.length) {
+    html += '<div class="definition-box">';
+    html += '<div class="def-term">🔑 Key Points</div>';
+    for (var k = 0; k < data.keyFacts.length; k++) {
+      html += '<div class="def-meaning">✦ ' + data.keyFacts[k] + '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Remember box
+  if (data.rememberBox) {
+    html += '<div class="remember-box"><div class="remember-title">⭐ Remember This!</div><div class="notes-body">' + data.rememberBox + '</div></div>';
+  }
+
+  // Footer
+  html += '<div class="page-footer"><div class="footer-text">AI Smart Notes Maker • Al-Fareed School</div><div class="page-num">1</div></div>';
+
+  html += '</div></div>';
+  document.getElementById('notesPreview').innerHTML = html;
+}
+
+// ========================
+// PDF DOWNLOAD
+// ========================
+function downloadPDF() {
+  var el = document.getElementById('notesPreview');
+  if (!el) return;
+  showToast('PDF ban rahi hai...', '⏳');
+  var opt = {
+    margin: 0,
+    filename: 'smart-notes.pdf',
+    image: { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(el).save().then(function(){
+    showToast('PDF download ho gayi!', '✅');
+  });
+}
+</script>
+</body>
+</html>
