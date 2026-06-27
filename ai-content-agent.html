@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AI Content Agent - Al-Fareed School</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Noto+Nastaliq+Urdu&family=Poppins:wght@400;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1a7a4a;
+    --green-light: #2ecc71;
+    --green-pale: #e8f8f0;
+    --gold: #f0a500;
+    --dark: #1a1a2e;
+    --white: #ffffff;
+    --gray: #f4f6f9;
+    --shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--gray);
+    color: var(--dark);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--green) 0%, #0d5c37 100%);
+    color: white;
+    padding: 18px 16px 14px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  .header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .header p {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+  .school-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* AGENT MODES */
+  .modes-section {
+    padding: 16px;
+  }
+  .modes-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mode-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .mode-card:active { transform: scale(0.97); }
+  .mode-card.active {
+    border-color: var(--green);
+    background: var(--green-pale);
+  }
+  .mode-card .icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  .mode-card .label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .mode-card .sublabel {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* IMAGE INPUT */
+  .input-section {
+    padding: 0 16px 16px;
+  }
+  .camera-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--green), var(--green-light));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(26,122,74,0.4);
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .camera-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+  .preview-box {
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #e0e0e0;
+    display: none;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .preview-box img {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .preview-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+  .change-photo {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* EXTRA INPUT */
+  .extra-input {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .extra-input label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .extra-input input, .extra-input select, .extra-input textarea {
+    width: 100%;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    outline: none;
+    background: var(--gray);
+  }
+  .extra-input input:focus, .extra-input select:focus, .extra-input textarea:focus {
+    border-color: var(--green);
+    background: white;
+  }
+  .extra-input textarea { resize: none; height: 70px; }
+
+  /* GENERATE BTN */
+  .generate-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  }
+  .generate-btn:active { transform: scale(0.98); }
+  .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* LOADING */
+  .loading-box {
+    display: none;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin: 16px;
+    box-shadow: var(--shadow);
+  }
+  .spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid var(--green-pale);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 14px; font-weight: 600; color: var(--green); }
+  .loading-sub { font-size: 11px; color: #888; margin-top: 4px; }
+
+  /* OUTPUT */
+  .output-section {
+    margin: 16px;
+    display: none;
+  }
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .output-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .action-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .action-btn {
+    background: white;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--dark);
+    transition: all 0.2s;
+  }
+  .action-btn:active { transform: scale(0.96); }
+  .action-btn.share { border-color: #25d366; color: #25d366; }
+  .action-btn.copy { border-color: var(--green); color: var(--green); }
+
+  /* OUTPUT CARDS */
+  .output-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--green);
+  }
+  .output-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .output-card .content {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #333;
+    white-space: pre-wrap;
+  }
+
+  /* NOTES STYLE */
+  .notes-card {
+    background: #fffdf0;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    font-family: 'Kalam', cursive;
+    position: relative;
+    overflow: hidden;
+  }
+  .notes-card::before {
+    content: '';
+    position: absolute;
+    left: 44px;
+    top: 0; bottom: 0;
+    width: 1.5px;
+    background: #ff9999;
+  }
+  .notes-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 10px;
+    padding-left: 50px;
+  }
+  .notes-card .content {
+    font-size: 14px;
+    line-height: 2;
+    color: #333;
+    padding-left: 50px;
+    white-space: pre-wrap;
+  }
+
+  /* MCQ STYLE */
+  .mcq-item {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+  .mcq-q { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+  .mcq-opt {
+    font-size: 12px;
+    color: #555;
+    padding: 5px 8px;
+    border-radius: 8px;
+    margin: 3px 0;
+    background: var(--gray);
+  }
+  .mcq-opt.correct { background: var(--green-pale); color: var(--green); font-weight: 600; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: #999;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .nav-item.active { color: var(--green); }
+  .nav-item .nav-icon { font-size: 20px; }
+
+  /* HISTORY */
+  .history-section { padding: 16px; display: none; }
+  .history-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .history-thumb {
+    width: 50px; height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--gray);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .history-info .title { font-size: 13px; font-weight: 600; }
+  .history-info .meta { font-size: 11px; color: #888; margin-top: 3px; }
+
+  /* SETTINGS */
+  .settings-section { padding: 16px; display: none; }
+  .setting-item {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .setting-item label { font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px; }
+  .setting-item input, .setting-item select {
+    width: 100%;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    background: var(--gray);
+    outline: none;
+  }
+  .setting-item input:focus { border-color: var(--green); background: white; }
+  .save-setting-btn {
+    width: 100%;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  #fileInput { display: none; }
+
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
+
+  .empty-history {
+    text-align: center;
+    padding: 40px 20px;
+    color: #aaa;
+  }
+  .empty-history .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-history p { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="school-badge">AL-FAREED PUBLIC SCHOOL</div>
+  <h1>🤖 AI Content Agent</h1>
+  <p>Photo se Notes • MCQs • Lesson Plans</p>
+</div>
+
+<!-- MAIN CONTENT AREA -->
+<div id="homeSection">
+
+  <!-- MODE SELECTION -->
+  <div class="modes-section">
+    <div class="modes-title">📌 Mode Chunein</div>
+    <div class="modes-grid">
+      <div class="mode-card active" onclick="selectMode('notes', this)">
+        <div class="icon">📒</div>
+        <div class="label">Handwritten Notes</div>
+        <div class="sublabel">Book se notes banayein</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('mcq', this)">
+        <div class="icon">❓</div>
+        <div class="label">MCQ Maker</div>
+        <div class="sublabel">Exam questions banayein</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('lesson', this)">
+        <div class="icon">📋</div>
+        <div class="label">Lesson Plan</div>
+        <div class="sublabel">Teaching plan banayein</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('summary', this)">
+        <div class="icon">✍️</div>
+        <div class="label">Summary</div>
+        <div class="sublabel">Short summary banayein</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE INPUT -->
+  <div class="input-section">
+    <button class="camera-btn" onclick="document.getElementById('fileInput').click()">
+      📸 Photo Lein ya Gallery se Chunein
+    </button>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handleImage(event)">
+
+    <div class="preview-box" id="previewBox">
+      <img id="previewImg" src="" alt="preview">
+      <span class="preview-label">✅ Image Ready</span>
+      <button class="change-photo" onclick="document.getElementById('fileInput').click()">Change</button>
+    </div>
+
+    <!-- EXTRA OPTIONS -->
+    <div class="extra-input">
+      <label>📚 Subject</label>
+      <select id="subjectSelect">
+        <option value="General">General</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Science">Science / Physics / Chemistry</option>
+        <option value="English">English</option>
+        <option value="Urdu">Urdu</option>
+        <option value="Islamiyat">Islamiyat</option>
+        <option value="Pakistan Studies">Pakistan Studies</option>
+        <option value="Computer">Computer</option>
+        <option value="Biology">Biology</option>
+      </select>
+    </div>
+
+    <div class="extra-input">
+      <label>🎓 Class</label>
+      <select id="classSelect">
+        <option value="Primary (1-5)">Primary (Class 1-5)</option>
+        <option value="Middle (6-8)">Middle (Class 6-8)</option>
+        <option value="Matric (9-10)" selected>Matric (Class 9-10)</option>
+      </select>
+    </div>
+
+    <div class="extra-input" id="extraNoteDiv">
+      <label>💬 Extra Instruction (Optional)</label>
+      <textarea id="extraNote" placeholder="Jaise: Urdu mein likhein, 10 MCQs banayein, simple language use karein..."></textarea>
+    </div>
+
+    <button class="generate-btn" id="generateBtn" onclick="generateContent()">
+      ⚡ Generate Karo
+    </button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-box" id="loadingBox">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">AI Kaam Kar Raha Hai...</div>
+  <div class="loading-sub" id="loadingSub">Image analyze ho rahi hai</div>
+</div>
+
+<!-- OUTPUT -->
+<div class="output-section" id="outputSection">
+  <div class="output-header">
+    <div class="output-title" id="outputTitle">✅ Content Tayyar!</div>
+    <div class="action-btns">
+      <button class="action-btn copy" onclick="copyContent()">📋 Copy</button>
+      <button class="action-btn share" onclick="shareWhatsApp()">📲 Share</button>
+    </div>
+  </div>
+  <div id="outputContent"></div>
+  <button class="generate-btn" style="margin-top:8px" onclick="resetApp()">
+    🔄 Naya Content Banayein
+  </button>
+</div>
+
+<!-- HISTORY SECTION -->
+<div class="history-section" id="historySection">
+  <div id="historyList"></div>
+</div>
+
+<!-- SETTINGS SECTION -->
+<div class="settings-section" id="settingsSection">
+  <div class="setting-item">
+    <label>🏫 School Name</label>
+    <input type="text" id="schoolName" placeholder="Al-Fareed Public School">
+  </div>
+  <div class="setting-item">
+    <label>👤 Teacher Name</label>
+    <input type="text" id="teacherName" placeholder="Sir Ghulam Hussain">
+  </div>
+  <div class="setting-item">
+    <label>🌐 Language Preference</label>
+    <select id="langPref">
+      <option value="Urdu">Urdu mein output</option>
+      <option value="English" selected>English mein output</option>
+      <option value="Both">Dono (Bilingual)</option>
+    </select>
+  </div>
+  <div class="setting-item">
+    <label>🔑 Groq API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxx">
+  </div>
+  <button class="save-setting-btn" onclick="saveSettings()">💾 Settings Save Karein</button>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="showSection('home')">
+    <span class="nav-icon">🏠</span>Home
+  </div>
+  <div class="nav-item" id="nav-history" onclick="showSection('history')">
+    <span class="nav-icon">📂</span>History
+  </div>
+  <div class="nav-item" id="nav-settings" onclick="showSection('settings')">
+    <span class="nav-icon">⚙️</span>Settings
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var currentMode = 'notes';
+var currentImageBase64 = null;
+var currentImageType = null;
+var generatedText = '';
+var history = [];
+
+// Load settings
+function loadSettings() {
+  var saved = localStorage.getItem('aiAgentSettings');
+  if (saved) {
+    var s = JSON.parse(saved);
+    if (s.schoolName) document.getElementById('schoolName').value = s.schoolName;
+    if (s.teacherName) document.getElementById('teacherName').value = s.teacherName;
+    if (s.langPref) document.getElementById('langPref').value = s.langPref;
+    if (s.apiKey) document.getElementById('apiKeyInput').value = s.apiKey;
+  }
+  var h = localStorage.getItem('aiAgentHistory');
+  if (h) history = JSON.parse(h);
+}
+
+function saveSettings() {
+  var s = {
+    schoolName: document.getElementById('schoolName').value,
+    teacherName: document.getElementById('teacherName').value,
+    langPref: document.getElementById('langPref').value,
+    apiKey: document.getElementById('apiKeyInput').value
+  };
+  localStorage.setItem('aiAgentSettings', JSON.stringify(s));
+  showToast('✅ Settings save ho gayi!');
+}
+
+function getSettings() {
+  var saved = localStorage.getItem('aiAgentSettings');
+  return saved ? JSON.parse(saved) : {};
+}
+
+function selectMode(mode, el) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(function(c) { c.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function handleImage(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  currentImageType = file.type;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var result = e.target.result;
+    currentImageBase64 = result.split(',')[1];
+    document.getElementById('previewImg').src = result;
+    document.getElementById('previewBox').style.display = 'block';
+    showToast('📸 Image ready hai!');
+  };
+  reader.readAsDataURL(file);
+}
+
+function buildPrompt() {
+  var subject = document.getElementById('subjectSelect').value;
+  var classLevel = document.getElementById('classSelect').value;
+  var extra = document.getElementById('extraNote').value;
+  var settings = getSettings();
+  var lang = settings.langPref || 'English';
+  var school = settings.schoolName || 'Al-Fareed Public School';
+  var teacher = settings.teacherName || '';
+
+  var langInstr = lang === 'Urdu' ? 'Please respond in clear Urdu (Roman Urdu is also acceptable).' :
+                  lang === 'Both' ? 'Please respond in both English and Urdu (bilingual).' :
+                  'Please respond in clear English.';
+
+  var modePrompts = {
+    notes: 'Create detailed, well-structured handwritten-style NOTES from this textbook/book page image. Include: Topic heading, key points with bullet points, important definitions, examples, and a quick summary at the end. Make it student-friendly for ' + classLevel + ' students.',
+    mcq: 'Create 10 Multiple Choice Questions (MCQs) from this textbook page image. Format each as:\nQ1. [Question]\nA) option  B) option  C) option  D) option\nAnswer: [correct option]\n\nMake questions suitable for ' + classLevel + ' exam level.',
+    lesson: 'Create a detailed LESSON PLAN based on this textbook page image for a ' + subject + ' teacher teaching ' + classLevel + ' students. Include: Learning objectives, introduction, main teaching activities, examples to use, questions to ask students, and assessment/homework.',
+    summary: 'Create a clear, concise SUMMARY of this textbook page content. Include: Main topic, key points, important facts/formulas, and 3 revision questions at the end. Suitable for ' + classLevel + ' students.'
+  };
+
+  var prompt = 'You are an expert educational content creator for ' + school + '.\n\n';
+  prompt += 'Subject: ' + subject + '\n';
+  prompt += 'Class Level: ' + classLevel + '\n';
+  if (teacher) prompt += 'Teacher: ' + teacher + '\n';
+  prompt += '\nTask: ' + modePrompts[currentMode] + '\n\n';
+  prompt += langInstr + '\n';
+  if (extra) prompt += '\nExtra Instructions: ' + extra;
+
+  return prompt;
+}
+
+function generateContent() {
+  if (!currentImageBase64) {
+    showToast('⚠️ Pehle photo lein ya select karein!');
+    return;
+  }
+
+  var settings = getSettings();
+  var apiKey = settings.apiKey || '';
+
+  if (!apiKey) {
+    showToast('⚠️ Settings mein Groq API key darayein!');
+    showSection('settings');
+    return;
+  }
+
+  var loadingMessages = [
+    ['📸 Image analyze ho rahi hai...', 'AI ko content samajh aa raha hai'],
+    ['✍️ Content likh raha hai...', 'Thora wait karein'],
+    ['🎯 Final touches...', 'Almost done!']
+  ];
+  var msgIdx = 0;
+
+  document.getElementById('homeSection').style.display = 'none';
+  document.getElementById('outputSection').style.display = 'none';
+  document.getElementById('loadingBox').style.display = 'block';
+
+  var interval = setInterval(function() {
+    msgIdx = (msgIdx + 1) % loadingMessages.length;
+    document.getElementById('loadingText').textContent = loadingMessages[msgIdx][0];
+    document.getElementById('loadingSub').textContent = loadingMessages[msgIdx][1];
+  }, 2000);
+
+  var prompt = buildPrompt();
+  var mediaType = currentImageType || 'image/jpeg';
+
+  var payload = {
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    max_tokens: 2000,
+    messages: [{
+      role: 'user',
+      content: [
+        { type: 'image_url', image_url: { url: 'data:' + mediaType + ';base64,' + currentImageBase64 } },
+        { type: 'text', text: prompt }
+      ]
+    }]
+  };
+
+  fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    clearInterval(interval);
+    document.getElementById('loadingBox').style.display = 'none';
+
+    if (data.error) {
+      showToast('❌ Error: ' + (data.error.message || 'API error'));
+      document.getElementById('homeSection').style.display = 'block';
+      return;
+    }
+
+    var text = data.choices && data.choices[0] && data.choices[0].message
+      ? data.choices[0].message.content
+      : 'Content generate nahi hua.';
+
+    generatedText = text;
+    displayOutput(text);
+    saveToHistory(text);
+  })
+  .catch(function(err) {
+    clearInterval(interval);
+    document.getElementById('loadingBox').style.display = 'none';
+    document.getElementById('homeSection').style.display = 'block';
+    showToast('❌ Network error. Check karein.');
+  });
+}
+
+function displayOutput(text) {
+  var titles = {
+    notes: '📒 Handwritten Notes',
+    mcq: '❓ MCQ Questions',
+    lesson: '📋 Lesson Plan',
+    summary: '✍️ Summary'
+  };
+  document.getElementById('outputTitle').textContent = '✅ ' + titles[currentMode] + ' Tayyar!';
+
+  var container = document.getElementById('outputContent');
+
+  if (currentMode === 'mcq') {
+    container.innerHTML = renderMCQ(text);
+  } else if (currentMode === 'notes') {
+    container.innerHTML = '<div class="notes-card"><h3>📒 Notes</h3><div class="content">' + escHtml(text) + '</div></div>';
+  } else {
+    container.innerHTML = '<div class="output-card"><h3>' + titles[currentMode] + '</h3><div class="content">' + escHtml(text) + '</div></div>';
+  }
+
+  document.getElementById('outputSection').style.display = 'block';
+}
+
+function renderMCQ(text) {
+  var lines = text.split('\n');
+  var html = '';
+  var currentQ = null;
+  var opts = [];
+  var answer = '';
+
+  lines.forEach(function(line) {
+    line = line.trim();
+    if (!line) {
+      if (currentQ) {
+        html += buildMCQItem(currentQ, opts, answer);
+        currentQ = null; opts = []; answer = '';
+      }
+      return;
+    }
+    if (/^Q?\d+[\.\)]/i.test(line)) {
+      if (currentQ) { html += buildMCQItem(currentQ, opts, answer); opts = []; answer = ''; }
+      currentQ = line;
+    } else if (/^[A-D][\.\)]/i.test(line)) {
+      opts.push(line);
+    } else if (/^Answer:/i.test(line)) {
+      answer = line;
+    }
+  });
+  if (currentQ) html += buildMCQItem(currentQ, opts, answer);
+
+  if (!html) {
+    html = '<div class="output-card"><h3>❓ MCQs</h3><div class="content">' + escHtml(text) + '</div></div>';
+  }
+  return html;
+}
+
+function buildMCQItem(q, opts, answer) {
+  var ans = answer.replace(/^Answer:\s*/i, '').trim().toUpperCase().charAt(0);
+  var html = '<div class="mcq-item"><div class="mcq-q">' + escHtml(q) + '</div>';
+  opts.forEach(function(opt) {
+    var letter = opt.trim().toUpperCase().charAt(0);
+    var isCorrect = ans && letter === ans;
+    html += '<div class="mcq-opt' + (isCorrect ? ' correct' : '') + '">' + escHtml(opt) + (isCorrect ? ' ✅' : '') + '</div>';
+  });
+  if (answer) html += '<div style="font-size:11px;color:var(--green);margin-top:6px;font-weight:600">' + escHtml(answer) + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function escHtml(t) {
+  return (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function copyContent() {
+  if (!generatedText) return;
+  var ta = document.createElement('textarea');
+  ta.value = generatedText;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast('📋 Content copy ho gaya!');
+}
+
+function shareWhatsApp() {
+  if (!generatedText) return;
+  var settings = getSettings();
+  var school = settings.schoolName || 'Al-Fareed Public School';
+  var msg = '*' + school + ' - AI Content Agent*\n\n' + generatedText.substring(0, 1500) + (generatedText.length > 1500 ? '...' : '');
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function saveToHistory(text) {
+  var subject = document.getElementById('subjectSelect').value;
+  var modeLabels = { notes:'Notes', mcq:'MCQ', lesson:'Lesson Plan', summary:'Summary' };
+  history.unshift({
+    id: Date.now(),
+    mode: currentMode,
+    modeLabel: modeLabels[currentMode],
+    subject: subject,
+    text: text,
+    date: new Date().toLocaleDateString('en-PK')
+  });
+  if (history.length > 20) history = history.slice(0, 20);
+  localStorage.setItem('aiAgentHistory', JSON.stringify(history));
+}
+
+function resetApp() {
+  currentImageBase64 = null;
+  generatedText = '';
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('previewImg').src = '';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('extraNote').value = '';
+  document.getElementById('outputSection').style.display = 'none';
+  document.getElementById('homeSection').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function showSection(section) {
+  document.getElementById('homeSection').style.display = section === 'home' ? 'block' : 'none';
+  document.getElementById('historySection').style.display = section === 'history' ? 'block' : 'none';
+  document.getElementById('settingsSection').style.display = section === 'settings' ? 'block' : 'none';
+  document.getElementById('outputSection').style.display = 'none';
+  document.getElementById('loadingBox').style.display = 'none';
+
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('nav-' + section).classList.add('active');
+
+  if (section === 'history') renderHistory();
+}
+
+function renderHistory() {
+  var container = document.getElementById('historyList');
+  if (!history.length) {
+    container.innerHTML = '<div class="empty-history"><div class="icon">📂</div><p>Abhi koi history nahi hai.<br>Content generate karein!</p></div>';
+    return;
+  }
+  var html = '<div class="modes-title">📂 History (' + history.length + ')</div>';
+  var icons = { notes:'📒', mcq:'❓', lesson:'📋', summary:'✍️' };
+  history.forEach(function(item, i) {
+    html += '<div class="history-card" onclick="viewHistory(' + i + ')">';
+    html += '<div class="history-thumb">' + (icons[item.mode] || '📄') + '</div>';
+    html += '<div class="history-info">';
+    html += '<div class="title">' + item.modeLabel + ' - ' + item.subject + '</div>';
+    html += '<div class="meta">' + item.date + ' • ' + item.text.substring(0, 40) + '...</div>';
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function viewHistory(idx) {
+  var item = history[idx];
+  if (!item) return;
+  generatedText = item.text;
+  currentMode = item.mode;
+  displayOutput(item.text);
+  document.getElementById('historySection').style.display = 'none';
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('nav-home').classList.add('active');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// INIT
+loadSettings();
+</script>
+</body>
+</html>
