@@ -796,6 +796,7 @@ textarea{min-height:68px;resize:vertical;}
   <button id="attTab0" onclick="attSwitch(0)" style="flex:1;min-width:80px;padding:10px;background:var(--g);color:var(--gold);border:none;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">👨‍🎓 Student</button>
   <button id="attTab1" onclick="attSwitch(1)" style="flex:1;min-width:80px;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">👩‍🏫 Teacher</button>
   <button id="attTab2" onclick="attSwitch(2)" style="flex:1;min-width:80px;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">🕐 Arrival</button>
+  <button id="attTab3" onclick="attSwitch(3)" style="flex:1;min-width:80px;padding:10px;background:#fff;color:#6a1b9a;border:2px solid #6a1b9a;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer">📊 Report</button>
 </div>
 
 <!-- STUDENT ATTENDANCE -->
@@ -816,10 +817,11 @@ textarea{min-height:68px;resize:vertical;}
     <div style="flex:1"><label>Student Name Add Karen</label><input type="text" id="newStudName" placeholder="Student ka naam..." style="margin-bottom:0"></div>
     <div><label>Roll No</label><input type="text" id="newStudRoll" placeholder="01" style="width:60px;margin-bottom:0"></div>
   </div>
-  <div style="display:flex;gap:7px;align-items:flex-end">
+  <div style="display:flex;gap:7px;align-items:flex-end;margin-bottom:8px">
     <div style="flex:1"><label>&#128241; Parent WhatsApp Number</label><input type="text" id="newStudWa" placeholder="03XXXXXXXXX" style="margin-bottom:0"></div>
-    <button class="btn-sm bsg" onclick="addStudent()" style="margin-bottom:0;padding:9px 12px">+ Add</button>
+    <div><label>&#127874; Date of Birth</label><input type="date" id="newStudDob" style="margin-bottom:0"></div>
   </div>
+  <button class="btn-sm bsg btn-full" onclick="addStudent()" style="margin-bottom:0;padding:11px">+ Student Add Karo</button>
 </div>
 
 <div class="card">
@@ -919,6 +921,73 @@ textarea{min-height:68px;resize:vertical;}
   <div class="card-title">📊 Today Arrival Summary</div>
   <div id="arrSummary"></div>
 </div>
+</div>
+
+<!-- ══ MONTHLY ATTENDANCE REPORT ══ -->
+<div id="attReportSec" style="display:none">
+
+<!-- Filters -->
+<div class="card">
+  <div class="card-title">📊 Monthly Attendance Report</div>
+  <div class="r2">
+    <div><label>Report Type</label>
+      <select id="rptType" onchange="renderAttReport()">
+        <option value="student">👨‍🎓 Student</option>
+        <option value="teacher">👩‍🏫 Teacher</option>
+      </select>
+    </div>
+    <div><label>Month</label>
+      <select id="rptMonth" onchange="renderAttReport()">
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+    </div>
+  </div>
+  <div class="r2">
+    <div><label>Year</label>
+      <select id="rptYear" onchange="renderAttReport()">
+        <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+      </select>
+    </div>
+    <div id="rptClsWrap"><label>Class</label>
+      <select id="rptCls" onchange="renderAttReport()">
+        <option value="">All Classes</option>
+        <option>Nursery</option><option>KG-1</option><option>KG-2</option>
+        <option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option>
+        <option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
+        <option>Class 9</option><option>Class 10</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Overall Pi Chart -->
+<div class="card">
+  <div class="card-title" id="rptOverallTitle">📈 Overall Monthly Summary</div>
+  <div style="display:flex;justify-content:center;margin:10px 0">
+    <canvas id="piOverall" width="220" height="220"></canvas>
+  </div>
+  <div id="piOverallLegend" style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px"></div>
+  <div id="rptOverallStats" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px"></div>
+</div>
+
+<!-- Individual Cards with Pi Charts -->
+<div id="rptIndividualList"></div>
+
+<!-- PDF + WhatsApp Button -->
+<div class="card" style="border:2px solid #25D366;background:#f0fff4">
+  <div class="card-title" style="color:#1a7a4f">&#128196; Report PDF Banao &amp; Share Karen</div>
+  <div style="font-size:11px;color:#555;margin-bottom:11px">Monthly attendance report ka professional PDF banao aur WhatsApp pe parents ya staff ko bhejen.</div>
+  <div><label>&#128241; WhatsApp Number (jis ko bhejna ho)</label>
+    <input type="text" id="rptWaNum" placeholder="03XXXXXXXXX (ya khali chhodo class-wise send ke liye)" style="margin-bottom:8px">
+  </div>
+  <button onclick="generateAttPDF()" style="width:100%;padding:13px;background:linear-gradient(135deg,#1a7a4f,#0d5c3a);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif">&#128196; PDF Generate &amp; Download</button>
+  <button onclick="shareAttOnWhatsApp()" style="width:100%;padding:13px;background:#25D366;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;font-family:Playfair Display,serif">&#128241; WhatsApp pe Text Report Bhejen</button>
+  <div style="font-size:10px;color:#888;margin-top:7px;text-align:center">PDF download hogi → manually WhatsApp pe attach karen. Ya Text Report seedha WhatsApp mein jaayega.</div>
+</div>
+
 </div>
 </div>
 
@@ -2172,6 +2241,169 @@ function renderBirthdays(){
 // ═══════════════════════════════════════════
 //  DATA ERASE FUNCTIONS
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  ATTENDANCE REPORT PDF + WHATSAPP
+// ═══════════════════════════════════════════
+function generateAttPDF(){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui. Internet check karen.');return;}
+  var d=lastRptData;
+  if(!d.rows.length){toast('Pehle report generate karo (month/year select karo)!');return;}
+
+  var jsPDFLib=window.jspdf.jsPDF;
+  var doc=new jsPDFLib();
+  var schName='AL-Fareed Public School';
+  var schAddr='Near National Bank, Tando Jam, Sindh';
+  var schPh='03435272484';
+  var schPrinc='Sir Ghulam Hussain';
+  var typeLabel=d.type==='student'?'STUDENT':'TEACHER';
+  var title=typeLabel+' MONTHLY ATTENDANCE REPORT';
+
+  // ── Header ──
+  doc.setFillColor(13,92,58);
+  doc.rect(0,0,210,35,'F');
+  doc.setTextColor(201,168,76);
+  doc.setFontSize(16);doc.setFont('helvetica','bold');
+  doc.text(schName,105,13,{align:'center'});
+  doc.setFontSize(9);doc.setTextColor(220,220,200);
+  doc.text(schAddr+' | '+schPh,105,20,{align:'center'});
+  doc.setFillColor(201,168,76);doc.rect(0,26,210,9,'F');
+  doc.setTextColor(13,92,58);doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text(title,105,32,{align:'center'});
+
+  // ── Period info ──
+  doc.setTextColor(0,0,0);doc.setFontSize(10);doc.setFont('helvetica','normal');
+  var y=44;
+  doc.text('Month: '+d.mName+' '+d.year+(d.cls?' | Class: '+d.cls:' | All Classes'),15,y);
+  doc.text('Report Type: '+(d.type==='student'?'Student Attendance':'Teacher Attendance'),15,y+7);
+  doc.text('School Days Recorded: '+d.totDays+'   Generated: '+fmtDate(today()),15,y+14);
+
+  // ── Summary Box ──
+  y+=24;
+  var total=d.totP+d.totA+d.totL+(d.totLate||0);
+  doc.setFillColor(240,250,244);doc.roundedRect(12,y,186,22,3,3,'F');
+  doc.setDrawColor(46,125,50);doc.roundedRect(12,y,186,22,3,3,'S');
+  doc.setFont('helvetica','bold');doc.setFontSize(9);
+  var cols=[
+    {label:'PRESENT',val:d.totP,pct:total?Math.round(d.totP/total*100):0,color:[46,125,50],x:30},
+    {label:'ABSENT',val:d.totA,pct:total?Math.round(d.totA/total*100):0,color:[198,40,40],x:75},
+    {label:'LEAVE',val:d.totL,pct:total?Math.round(d.totL/total*100):0,color:[230,81,0],x:120},
+    {label:'TOTAL',val:total,pct:100,color:[21,101,192],x:163}
+  ];
+  cols.forEach(function(c){
+    doc.setTextColor(c.color[0],c.color[1],c.color[2]);
+    doc.setFontSize(14);doc.text(String(c.val),c.x,y+11,{align:'center'});
+    doc.setFontSize(7);doc.text(c.label,c.x,y+17,{align:'center'});
+    doc.text(c.pct+'%',c.x,y+21,{align:'center'});
+  });
+
+  // ── Table ──
+  y+=30;
+  doc.setFillColor(13,92,58);doc.rect(12,y,186,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont('helvetica','bold');
+  var isStudent=d.type==='student';
+  var cols2=isStudent?
+    [{t:'#',x:16,w:8},{t:'Name',x:26,w:55},{t:'Class',x:82,w:28},{t:'Present',x:112,w:20},{t:'Absent',x:133,w:20},{t:'Leave',x:154,w:20},{t:'Late',x:174,w:14},{t:'%',x:190,w:10}]:
+    [{t:'#',x:16,w:8},{t:'Teacher Name',x:26,w:80},{t:'Present',x:108,w:22},{t:'Absent',x:132,w:22},{t:'Leave',x:155,w:22},{t:'Att. %',x:179,w:18}];
+  cols2.forEach(function(c){doc.text(c.t,c.x,y+5.5);});
+  y+=9;
+
+  d.rows.forEach(function(r,i){
+    if(y>270){doc.addPage();y=15;
+      doc.setFillColor(13,92,58);doc.rect(12,y,186,8,'F');
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8);
+      cols2.forEach(function(c){doc.text(c.t,c.x,y+5.5);});y+=9;
+    }
+    var rowBg=i%2===0?[255,255,255]:[245,250,247];
+    doc.setFillColor(rowBg[0],rowBg[1],rowBg[2]);
+    doc.rect(12,y,186,7,'F');
+    doc.setDrawColor(220,220,220);doc.rect(12,y,186,7,'S');
+    doc.setTextColor(50,50,50);doc.setFont('helvetica','normal');doc.setFontSize(8);
+
+    var pctNum=parseInt(r.pct)||0;
+    var pctColor=pctNum>=80?[46,125,50]:pctNum>=60?[230,81,0]:[198,40,40];
+
+    if(isStudent){
+      doc.text(String(i+1),cols2[0].x,y+4.8);
+      doc.setFont('helvetica','bold');doc.text(r.name,cols2[1].x,y+4.8);doc.setFont('helvetica','normal');
+      doc.text(r.cls,cols2[2].x,y+4.8);
+      doc.setTextColor(46,125,50);doc.text(String(r.p),cols2[3].x,y+4.8);
+      doc.setTextColor(198,40,40);doc.text(String(r.a),cols2[4].x,y+4.8);
+      doc.setTextColor(230,81,0);doc.text(String(r.l),cols2[5].x,y+4.8);
+      doc.setTextColor(106,27,154);doc.text(String(r.late||0),cols2[6].x,y+4.8);
+      doc.setTextColor(pctColor[0],pctColor[1],pctColor[2]);doc.setFont('helvetica','bold');
+      doc.text(r.pct,cols2[7].x,y+4.8);
+    }else{
+      doc.text(String(i+1),cols2[0].x,y+4.8);
+      doc.setFont('helvetica','bold');doc.text(r.name,cols2[1].x,y+4.8);doc.setFont('helvetica','normal');
+      doc.setTextColor(46,125,50);doc.text(String(r.p),cols2[2].x,y+4.8);
+      doc.setTextColor(198,40,40);doc.text(String(r.a),cols2[3].x,y+4.8);
+      doc.setTextColor(230,81,0);doc.text(String(r.l),cols2[4].x,y+4.8);
+      doc.setTextColor(pctColor[0],pctColor[1],pctColor[2]);doc.setFont('helvetica','bold');
+      doc.text(r.pct,cols2[5].x,y+4.8);
+    }
+    doc.setTextColor(0,0,0);
+    y+=7;
+  });
+
+  // ── Footer ──
+  y+=10;
+  doc.setDrawColor(201,168,76);doc.setLineWidth(0.6);doc.line(12,y,198,y);
+  y+=7;
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,100,100);
+  doc.text('This report was generated by Al-Fareed School Management System.',15,y);
+  y+=6;
+  doc.text('For queries, contact: '+schPh,15,y);
+  y+=10;
+  doc.text('_______________________',130,y);y+=5;
+  doc.setFont('helvetica','bold');doc.setTextColor(13,92,58);
+  doc.text(schPrinc,130,y);y+=4;
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(120,120,120);
+  doc.text('Principal, Al-Fareed Public School',130,y);
+
+  var fname='Attendance_Report_'+typeLabel+'_'+d.mName+'_'+d.year+'.pdf';
+  doc.save(fname);
+  toast('PDF download ho gaya! \u2705');
+  logActivity('fee','Attendance PDF Generated',d.mName+' '+d.year+' '+typeLabel,currentTeacher?currentTeacher.name:'Admin');
+}
+
+function shareAttOnWhatsApp(){
+  var d=lastRptData;
+  if(!d.rows.length){toast('Pehle report generate karo!');return;}
+  var waNum=document.getElementById('rptWaNum').value.trim();
+
+  var typeLabel=d.type==='student'?'STUDENT ATTENDANCE':'TEACHER ATTENDANCE';
+  var txt='*AL-FAREED PUBLIC SCHOOL, TANDO JAM*\n';
+  txt+='*'+typeLabel+' REPORT*\n';
+  txt+='Month: *'+d.mName+' '+d.year+'*'+(d.cls?' | Class: *'+d.cls+'*':'')+'\n';
+  txt+='School Days: '+d.totDays+'\n';
+  txt+='================================\n';
+  txt+='*SUMMARY*\n';
+  var tot=d.totP+d.totA+d.totL+(d.totLate||0);
+  txt+='\u2705 Present: '+d.totP+(tot?' ('+Math.round(d.totP/tot*100)+'%)':'')+'\n';
+  txt+='\u274C Absent:  '+d.totA+(tot?' ('+Math.round(d.totA/tot*100)+'%)':'')+'\n';
+  txt+='\uD83D\uDD50 Leave:   '+d.totL+(tot?' ('+Math.round(d.totL/tot*100)+'%)':'')+'\n';
+  if(d.totLate)txt+='\u23F0 Late:    '+d.totLate+'\n';
+  txt+='================================\n';
+  txt+='*INDIVIDUAL REPORT*\n\n';
+  d.rows.forEach(function(r,i){
+    var pctNum=parseInt(r.pct)||0;
+    var flag=pctNum>=80?'\u2705':pctNum>=60?'\u26A0\uFE0F':'\uD83D\uDD34';
+    txt+=(i+1)+'. *'+r.name+'*'+(r.cls&&r.cls!=='Teacher'?' ('+r.cls+')':'')+'\n';
+    txt+='   P:'+r.p+' A:'+r.a+' L:'+r.l+(r.late?' Late:'+r.late:'')+' | *'+r.pct+'* '+flag+'\n';
+  });
+  txt+='\n\u2139\uFE0F PDF bhi download ho sakta hai school app se.\n';
+  txt+='*Principal: Sir Ghulam Hussain*\n';
+  txt+='Tel: 03435272484';
+
+  var num='';
+  if(waNum){
+    num=waNum.replace(/[^0-9]/g,'');
+    if(num.length===11&&num.charAt(0)==='0')num='92'+num.substring(1);
+  }
+  var url='https://wa.me/'+(num||'')+'\?text='+encodeURIComponent(txt);
+  window.open(url,'_blank');
+}
+
 function eraseHWData(){
   if(!confirm('Tamam Homework Diary data DELETE karen? Yeh wapis nahi aayega!'))return;
   if(!confirm('Pakka? Final confirmation \u2014 Homework Diary completely erase ho jayegi.'))return;
@@ -2196,6 +2428,368 @@ function eraseDWData(){
   logActivity('dw','Daily Work Data Erased','Admin ne tamam reports delete kar diye','Admin');
   toast('Daily Work data erase ho gaya! \u2705');
 }
+// ═══════════════════════════════════════════
+//  MONTHLY ATTENDANCE REPORT + PI CHARTS
+// ═══════════════════════════════════════════
+var lastRptData={type:'student',month:0,year:2026,mName:'',cls:'',totP:0,totA:0,totL:0,totLate:0,totDays:0,rows:[]};
+
+function initRptDefaults(){
+  var now=new Date();
+  var mEl=document.getElementById('rptMonth');
+  var yEl=document.getElementById('rptYear');
+  if(mEl&&!mEl.getAttribute('data-init')){mEl.value=String(now.getMonth());mEl.setAttribute('data-init','1');}
+  if(yEl&&!yEl.getAttribute('data-init')){yEl.value=String(now.getFullYear());yEl.setAttribute('data-init','1');}
+}
+
+function drawPie(canvasId,data){
+  // data = [{label,value,color}]
+  var canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var total=0;
+  data.forEach(function(d){total+=d.value;});
+  if(!total){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#eee';
+    ctx.beginPath();ctx.arc(110,110,100,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#aaa';ctx.font='12px Arial';ctx.textAlign='center';
+    ctx.fillText('No data',110,115);
+    return;
+  }
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  var startAngle=-Math.PI/2;
+  var cx=110,cy=110,r=100;
+  data.forEach(function(d){
+    if(!d.value)return;
+    var slice=(d.value/total)*(Math.PI*2);
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startAngle,startAngle+slice);
+    ctx.closePath();
+    ctx.fillStyle=d.color;
+    ctx.fill();
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    // Label inside if slice big enough
+    if(slice>0.3){
+      var midAngle=startAngle+slice/2;
+      var lx=cx+Math.cos(midAngle)*r*0.65;
+      var ly=cy+Math.sin(midAngle)*r*0.65;
+      ctx.fillStyle='#fff';
+      ctx.font='bold 13px Arial';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      var pct=Math.round((d.value/total)*100);
+      ctx.fillText(pct+'%',lx,ly);
+    }
+    startAngle+=slice;
+  });
+  // Center circle (donut style)
+  ctx.beginPath();ctx.arc(cx,cy,42,0,Math.PI*2);
+  ctx.fillStyle='#fff';ctx.fill();
+  ctx.fillStyle='#333';ctx.font='bold 14px Arial';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(total+' Days',cx,cy-8);
+  ctx.font='10px Arial';ctx.fillStyle='#888';
+  ctx.fillText('Total',cx,cy+10);
+}
+
+function makeLegend(data){
+  var h='';
+  data.forEach(function(d){
+    h+='<div style="display:flex;align-items:center;gap:5px">'+
+      '<div style="width:12px;height:12px;border-radius:3px;background:'+d.color+';flex-shrink:0"></div>'+
+      '<span style="font-size:11px;font-weight:700;color:#333">'+d.label+': '+d.value+'</span>'+
+      '</div>';
+  });
+  return h;
+}
+
+function makeStatCards(p,a,l,late){
+  var total=p+a+l+(late||0);
+  var pct=function(n){return total?Math.round((n/total)*100)+'%':'0%';};
+  return '<div style="background:#e8f5e9;border-radius:9px;padding:10px;text-align:center;border-top:3px solid #2e7d32">'+
+    '<div style="font-size:20px;font-weight:900;color:#2e7d32">'+p+'</div>'+
+    '<div style="font-size:10px;font-weight:700;color:#555">Present</div>'+
+    '<div style="font-size:11px;font-weight:700;color:#2e7d32">'+pct(p)+'</div></div>'+
+    '<div style="background:#ffebee;border-radius:9px;padding:10px;text-align:center;border-top:3px solid #c62828">'+
+    '<div style="font-size:20px;font-weight:900;color:#c62828">'+a+'</div>'+
+    '<div style="font-size:10px;font-weight:700;color:#555">Absent</div>'+
+    '<div style="font-size:11px;font-weight:700;color:#c62828">'+pct(a)+'</div></div>'+
+    '<div style="background:#fff3e0;border-radius:9px;padding:10px;text-align:center;border-top:3px solid #e65100">'+
+    '<div style="font-size:20px;font-weight:900;color:#e65100">'+l+'</div>'+
+    '<div style="font-size:10px;font-weight:700;color:#555">Leave</div>'+
+    '<div style="font-size:11px;font-weight:700;color:#e65100">'+pct(l)+'</div></div>';
+}
+
+function renderAttReport(){
+  var type=document.getElementById('rptType').value;
+  var month=parseInt(document.getElementById('rptMonth').value);
+  var year=parseInt(document.getElementById('rptYear').value);
+  var cls=document.getElementById('rptCls')?document.getElementById('rptCls').value:'';
+  var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var mName=monthNames[month];
+
+  // Show/hide class filter
+  var cw=document.getElementById('rptClsWrap');
+  if(cw)cw.style.display=type==='student'?'block':'none';
+
+  document.getElementById('rptOverallTitle').textContent=(type==='student'?'👨‍🎓':'👩‍🏫')+' Overall — '+mName+' '+year;
+
+  if(type==='student'){
+    renderStudentReport(month,year,cls,mName);
+  }else{
+    renderTeacherReport(month,year,mName);
+  }
+}
+
+function renderStudentReport(month,year,cls,mName){
+  var allAtt=ls_get(SK.STUD_ATT)||[];
+  // Filter by month+year (+class if selected)
+  var filtered=allAtt.filter(function(r){
+    var d=new Date(r.date);
+    return d.getMonth()===month&&d.getFullYear()===year&&(!cls||r.cls===cls);
+  });
+
+  // Overall totals across all records
+  var totP=0,totA=0,totL=0,totLate=0,totDays=0;
+  filtered.forEach(function(r){
+    r.students.forEach(function(s){
+      if(s.status==='present')totP++;
+      else if(s.status==='absent')totA++;
+      else if(s.status==='leave')totL++;
+      else if(s.status==='late')totLate++;
+    });
+    totDays++;
+  });
+
+  var pieData=[
+    {label:'Present',value:totP,color:'#2e7d32'},
+    {label:'Absent',value:totA,color:'#c62828'},
+    {label:'Leave',value:totL,color:'#e65100'},
+    {label:'Late',value:totLate,color:'#6a1b9a'}
+  ].filter(function(d){return d.value>0;});
+
+  // Store for PDF/WhatsApp
+  lastRptData={type:'student',month:month,year:year,mName:mName,cls:cls,totP:totP,totA:totA,totL:totL,totLate:totLate,totDays:totDays,rows:[]};
+
+  drawPie('piOverall',pieData);
+  document.getElementById('piOverallLegend').innerHTML=makeLegend(pieData);
+  document.getElementById('rptOverallStats').innerHTML=makeStatCards(totP,totA,totL,totLate)+
+    '<div style="background:#e3f2fd;border-radius:9px;padding:10px;text-align:center;border-top:3px solid #1565c0;grid-column:1/-1">'+
+    '<div style="font-size:16px;font-weight:900;color:#1565c0">'+totDays+'</div>'+
+    '<div style="font-size:10px;font-weight:700;color:#555">School Days Recorded</div></div>';
+
+  // Individual student breakdown
+  var stuMap={};
+  filtered.forEach(function(r){
+    r.students.forEach(function(s){
+      var key=(r.cls||'?')+'||'+s.name;
+      if(!stuMap[key])stuMap[key]={name:s.name,cls:r.cls,p:0,a:0,l:0,late:0};
+      if(s.status==='present')stuMap[key].p++;
+      else if(s.status==='absent')stuMap[key].a++;
+      else if(s.status==='leave')stuMap[key].l++;
+      else if(s.status==='late')stuMap[key].late++;
+    });
+  });
+
+  var keys=Object.keys(stuMap);
+  if(!keys.length){
+    document.getElementById('rptIndividualList').innerHTML='<div class="card"><div style="text-align:center;padding:18px;color:#aaa;font-size:12px">'+mName+' '+year+' mein koi attendance record nahi mila'+(cls?' for '+cls:'')+'</div></div>';
+    return;
+  }
+
+  var h='<div class="card"><div class="card-title">&#128100; Individual Student Report — '+mName+'</div>';
+  h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px">';
+  h+='<thead><tr style="background:#0d5c3a;color:#fff"><th style="padding:8px;border:1px solid #ccc;text-align:left">Student</th><th style="padding:8px;border:1px solid #ccc;text-align:left">Class</th><th style="padding:8px;border:1px solid #ccc;color:#90ee90">&#10003; P</th><th style="padding:8px;border:1px solid #ccc;color:#ff9999">&#10007; A</th><th style="padding:8px;border:1px solid #ccc;color:#ffd580">L</th><th style="padding:8px;border:1px solid #ccc;color:#d8b4fe">Late</th><th style="padding:8px;border:1px solid #ccc">%</th></tr></thead><tbody>';
+  keys.sort(function(a,b){return stuMap[a].cls.localeCompare(stuMap[b].cls)||stuMap[a].name.localeCompare(stuMap[b].name);}).forEach(function(k,i){
+    var s=stuMap[k];
+    var tot=s.p+s.a+s.l+s.late;
+    var pct=tot?Math.round((s.p/tot)*100)+'%':'—';
+    lastRptData.rows.push({name:s.name,cls:s.cls,p:s.p,a:s.a,l:s.l,late:s.late,pct:pct});
+    var rowBg=i%2?'#f9f9f9':'#fff';
+    var pctColor=parseInt(pct)>=80?'#2e7d32':parseInt(pct)>=60?'#e65100':'#c62828';
+    h+='<tr style="background:'+rowBg+'">'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-weight:700">'+s.name+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;color:#888">'+s.cls+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;text-align:center;color:#2e7d32;font-weight:700">'+s.p+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;text-align:center;color:#c62828;font-weight:700">'+s.a+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;text-align:center;color:#e65100;font-weight:700">'+s.l+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;text-align:center;color:#6a1b9a;font-weight:700">'+s.late+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;text-align:center;font-weight:900;color:'+pctColor+'">'+pct+'</td>'+
+      '</tr>';
+  });
+  h+='</tbody></table></div></div>';
+
+  // Per-class mini pi charts
+  var clsMap={};
+  keys.forEach(function(k){
+    var s=stuMap[k];
+    if(!clsMap[s.cls])clsMap[s.cls]={p:0,a:0,l:0,late:0};
+    clsMap[s.cls].p+=s.p;clsMap[s.cls].a+=s.a;clsMap[s.cls].l+=s.l;clsMap[s.cls].late+=s.late;
+  });
+  var clsKeys=Object.keys(clsMap).sort();
+  h+='<div class="card"><div class="card-title">&#128202; Class-wise Breakdown</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  clsKeys.forEach(function(c,idx){
+    var cd=clsMap[c];
+    var cid='piCls'+idx;
+    h+='<div style="background:#f9f9f9;border-radius:10px;padding:10px;text-align:center">'+
+      '<div style="font-size:11px;font-weight:700;color:var(--deep);margin-bottom:6px">'+c+'</div>'+
+      '<canvas id="'+cid+'" width="140" height="140"></canvas>'+
+      '<div style="font-size:9px;margin-top:5px;color:#555">'+
+      '<span style="color:#2e7d32;font-weight:700">P:'+cd.p+'</span> '+
+      '<span style="color:#c62828;font-weight:700">A:'+cd.a+'</span> '+
+      '<span style="color:#e65100;font-weight:700">L:'+cd.l+'</span>'+
+      (cd.late?'<span style="color:#6a1b9a;font-weight:700"> Late:'+cd.late+'</span>':'')+
+      '</div></div>';
+  });
+  h+='</div></div>';
+  document.getElementById('rptIndividualList').innerHTML=h;
+
+  // Draw mini pie charts after DOM update
+  setTimeout(function(){
+    clsKeys.forEach(function(c,idx){
+      var cd=clsMap[c];
+      var miniCanvas=document.getElementById('piCls'+idx);
+      if(!miniCanvas)return;
+      var miniCtx=miniCanvas.getContext('2d');
+      var miniData=[
+        {label:'P',value:cd.p,color:'#2e7d32'},
+        {label:'A',value:cd.a,color:'#c62828'},
+        {label:'L',value:cd.l,color:'#e65100'}
+      ];
+      if(cd.late)miniData.push({label:'Late',value:cd.late,color:'#6a1b9a'});
+      // draw mini
+      var tot=cd.p+cd.a+cd.l+cd.late;
+      var sa=-Math.PI/2,cx2=70,cy2=70,r2=62;
+      miniCtx.clearRect(0,0,140,140);
+      miniData.forEach(function(md){
+        if(!md.value)return;
+        var sl=(md.value/tot)*(Math.PI*2);
+        miniCtx.beginPath();miniCtx.moveTo(cx2,cy2);
+        miniCtx.arc(cx2,cy2,r2,sa,sa+sl);miniCtx.closePath();
+        miniCtx.fillStyle=md.color;miniCtx.fill();
+        miniCtx.strokeStyle='#fff';miniCtx.lineWidth=2;miniCtx.stroke();
+        if(sl>0.35){
+          var mid=sa+sl/2;
+          miniCtx.fillStyle='#fff';miniCtx.font='bold 11px Arial';
+          miniCtx.textAlign='center';miniCtx.textBaseline='middle';
+          miniCtx.fillText(Math.round((md.value/tot)*100)+'%',cx2+Math.cos(mid)*r2*0.65,cy2+Math.sin(mid)*r2*0.65);
+        }
+        sa+=sl;
+      });
+      miniCtx.beginPath();miniCtx.arc(cx2,cy2,28,0,Math.PI*2);
+      miniCtx.fillStyle='#fff';miniCtx.fill();
+    });
+  },100);
+}
+
+function renderTeacherReport(month,year,mName){
+  var allAtt=ls_get(SK.TEACH_ATT)||[];
+  var filtered=allAtt.filter(function(r){
+    var d=new Date(r.date);return d.getMonth()===month&&d.getFullYear()===year;
+  });
+
+  var totP=0,totA=0,totL=0,totDays=0;
+  var teachMap={};
+  filtered.forEach(function(r){
+    totDays++;
+    (r.records||[]).forEach(function(t){
+      if(!teachMap[t.name])teachMap[t.name]={name:t.name,p:0,a:0,l:0};
+      if(t.status==='present'){teachMap[t.name].p++;totP++;}
+      else if(t.status==='absent'){teachMap[t.name].a++;totA++;}
+      else if(t.status==='leave'){teachMap[t.name].l++;totL++;}
+    });
+  });
+
+  var pieData=[
+    {label:'Present',value:totP,color:'#2e7d32'},
+    {label:'Absent',value:totA,color:'#c62828'},
+    {label:'Leave',value:totL,color:'#e65100'}
+  ].filter(function(d){return d.value>0;});
+
+  // Store for PDF/WhatsApp
+  lastRptData={type:'teacher',month:month,year:year,mName:mName,cls:'',totP:totP,totA:totA,totL:totL,totLate:0,totDays:totDays,rows:[]};
+
+  drawPie('piOverall',pieData);
+  document.getElementById('piOverallLegend').innerHTML=makeLegend(pieData);
+  document.getElementById('rptOverallStats').innerHTML=makeStatCards(totP,totA,totL,0)+
+    '<div style="background:#e3f2fd;border-radius:9px;padding:10px;text-align:center;border-top:3px solid #1565c0;grid-column:1/-1">'+
+    '<div style="font-size:16px;font-weight:900;color:#1565c0">'+totDays+'</div>'+
+    '<div style="font-size:10px;font-weight:700;color:#555">School Days Recorded</div></div>';
+
+  var keys=Object.keys(teachMap);
+  if(!keys.length){
+    document.getElementById('rptIndividualList').innerHTML='<div class="card"><div style="text-align:center;padding:18px;color:#aaa;font-size:12px">'+mName+' '+year+' mein koi teacher attendance nahi mila</div></div>';
+    return;
+  }
+  // Store teacher rows
+  keys.sort().forEach(function(k){
+    var t=teachMap[k];
+    var tot=t.p+t.a+t.l;
+    var pct=tot?Math.round((t.p/tot)*100)+'%':'—';
+    lastRptData.rows.push({name:t.name,cls:'Teacher',p:t.p,a:t.a,l:t.l,late:0,pct:pct});
+  });
+
+  var h='<div class="card"><div class="card-title">&#128104;&#8205;&#127979; Individual Teacher Report — '+mName+'</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:5px">';
+  keys.sort().forEach(function(k,idx){
+    var t=teachMap[k];
+    var tot=t.p+t.a+t.l;
+    var pct=tot?Math.round((t.p/tot)*100):0;
+    var cid='piTch'+idx;
+    var color=pct>=90?'#2e7d32':pct>=70?'#e65100':'#c62828';
+    h+='<div style="background:#f5f5f5;border-radius:11px;padding:11px;text-align:center;border-top:3px solid '+color+'">'+
+      '<div style="font-size:12px;font-weight:800;color:var(--deep);margin-bottom:5px">'+t.name+'</div>'+
+      '<canvas id="'+cid+'" width="130" height="130"></canvas>'+
+      '<div style="margin-top:6px">'+
+      '<div style="font-size:18px;font-weight:900;color:'+color+'">'+pct+'%</div>'+
+      '<div style="font-size:9px;color:#555;font-weight:700">Attendance Rate</div></div>'+
+      '<div style="font-size:9px;margin-top:5px">'+
+      '<span style="color:#2e7d32;font-weight:700">P:'+t.p+'</span>  '+
+      '<span style="color:#c62828;font-weight:700">A:'+t.a+'</span>  '+
+      '<span style="color:#e65100;font-weight:700">L:'+t.l+'</span>'+
+      '</div></div>';
+  });
+  h+='</div></div>';
+  document.getElementById('rptIndividualList').innerHTML=h;
+
+  // Draw individual teacher pi charts
+  setTimeout(function(){
+    keys.sort().forEach(function(k,idx){
+      var t=teachMap[k];
+      var canvas2=document.getElementById('piTch'+idx);
+      if(!canvas2)return;
+      var ctx2=canvas2.getContext('2d');
+      var tot=t.p+t.a+t.l;
+      var dt=[{v:t.p,c:'#2e7d32'},{v:t.a,c:'#c62828'},{v:t.l,c:'#e65100'}];
+      var sa=-Math.PI/2,cx3=65,cy3=65,r3=58;
+      ctx2.clearRect(0,0,130,130);
+      if(!tot){
+        ctx2.fillStyle='#eee';ctx2.beginPath();ctx2.arc(cx3,cy3,r3,0,Math.PI*2);ctx2.fill();
+        return;
+      }
+      dt.forEach(function(d){
+        if(!d.v)return;
+        var sl=(d.v/tot)*(Math.PI*2);
+        ctx2.beginPath();ctx2.moveTo(cx3,cy3);
+        ctx2.arc(cx3,cy3,r3,sa,sa+sl);ctx2.closePath();
+        ctx2.fillStyle=d.c;ctx2.fill();
+        ctx2.strokeStyle='#fff';ctx2.lineWidth=2;ctx2.stroke();
+        if(sl>0.4){
+          var mid=sa+sl/2;
+          ctx2.fillStyle='#fff';ctx2.font='bold 11px Arial';
+          ctx2.textAlign='center';ctx2.textBaseline='middle';
+          ctx2.fillText(Math.round((d.v/tot)*100)+'%',cx3+Math.cos(mid)*r3*0.65,cy3+Math.sin(mid)*r3*0.65);
+        }
+        sa+=sl;
+      });
+      ctx2.beginPath();ctx2.arc(cx3,cy3,24,0,Math.PI*2);ctx2.fillStyle='#fff';ctx2.fill();
+    });
+  },100);
+}
+
 function eraseAttData(){
   if(!confirm('Tamam Attendance Records DELETE karen (Student + Teacher + Arrival)? Yeh wapis nahi aayega!'))return;
   if(!confirm('Pakka? Final confirmation \u2014 Attendance records completely erase ho jayenge.'))return;
@@ -2938,6 +3532,8 @@ function attSwitch(n){
   document.getElementById('attTeachSec').style.display=n===1?'block':'none';
   var arrSec=document.getElementById('attArrSec');
   if(arrSec)arrSec.style.display=n===2?'block':'none';
+  var rptSec=document.getElementById('attReportSec');
+  if(rptSec)rptSec.style.display=n===3?'block':'none';
   [0,1,2].forEach(function(i){
     var b=document.getElementById('attTab'+i);
     if(!b)return;
@@ -2945,8 +3541,16 @@ function attSwitch(n){
     b.style.color=i===n?'var(--gold)':'var(--g)';
     b.style.border=i===n?'none':'2px solid var(--g)';
   });
+  // Report tab (purple color)
+  var bt3=document.getElementById('attTab3');
+  if(bt3){
+    bt3.style.background=n===3?'#6a1b9a':'#fff';
+    bt3.style.color=n===3?'#fff':'#6a1b9a';
+    bt3.style.border=n===3?'none':'2px solid #6a1b9a';
+  }
   if(n===1)renderTeachAttGrid();
   if(n===2)renderArrGrid();
+  if(n===3){initRptDefaults();renderAttReport();}
   var td=today();
   var ad=document.getElementById('arrDate');
   if(ad&&!ad.value)ad.value=td;
@@ -2962,16 +3566,20 @@ function addStudent(){
   var name=document.getElementById('newStudName').value.trim();
   var roll=document.getElementById('newStudRoll').value.trim()||String(Date.now()).slice(-3);
   var wa=document.getElementById('newStudWa').value.trim();
+  var dob=document.getElementById('newStudDob').value;
   var cls=document.getElementById('attSClass').value;
   if(!name){toast('Naam likhein!');return;}
   var allStudents=ls_get(SK.STUDENTS)||{};
   if(!allStudents[cls])allStudents[cls]=[];
-  allStudents[cls].push({name:name,roll:roll,status:'present',wa:wa});
+  allStudents[cls].push({name:name,roll:roll,status:'present',wa:wa,dob:dob});
   ls_set(SK.STUDENTS,allStudents);
-  document.getElementById('newStudName').value='';document.getElementById('newStudRoll').value='';document.getElementById('newStudWa').value='';
+  document.getElementById('newStudName').value='';
+  document.getElementById('newStudRoll').value='';
+  document.getElementById('newStudWa').value='';
+  document.getElementById('newStudDob').value='';
   loadStudentList();
   updateStudentStats();
-  toast(name+' add! ✅');
+  toast(name+' add! \u2705');
 }
 function stColor(st){return st==='present'?'#2e7d32':st==='absent'?'#c62828':st==='leave'?'#e65100':'#6a1b9a';}
 function stLabel(st){return st==='present'?'✅ P':st==='absent'?'❌ A':st==='leave'?'🕐 L':'⏰ Late';}
@@ -2981,15 +3589,22 @@ function stClass(st){return st==='present'?'present':st==='absent'?'absent':st==
 function renderStudentAttGrid(cls,students){
   var grid=document.getElementById('attStudGrid');
   if(!students.length){
-    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Koi student nahi — upar naam add karo</div>';
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:18px;color:#aaa;font-size:12px">Koi student nahi \u2014 upar naam add karo</div>';
     document.getElementById('attSummaryCard').style.display='none';return;
   }
   var h='';
   students.forEach(function(s,i){
     var st=s.status||'present';
     h+='<div class="att-student '+stClass(st)+'" id="asc_'+i+'">'+
-      '<div class="att-name">'+s.name+'</div>'+
-      '<div class="att-roll">Roll: '+s.roll+(s.wa?' &middot; &#128241;'+s.wa:'')+'</div>'+
+      // Normal view
+      '<div id="asc_view_'+i+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:4px">'+
+      '<div><div class="att-name">'+s.name+'</div>'+
+      '<div class="att-roll">Roll: '+s.roll+(s.wa?'<br>&#128241; '+s.wa:'')+(s.dob?'<br>&#127874; DOB: '+fmtDate(s.dob):'')+'</div></div>'+
+      '<div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end">'+
+      '<button onclick="startEditStudent('+i+')" style="padding:3px 9px;background:#1565c0;color:#fff;border:none;border-radius:5px;font-size:10px;cursor:pointer;font-weight:700">&#9998; Edit</button>'+
+      '<button onclick="deleteStudent('+i+')" style="padding:3px 9px;background:#c0392b;color:#fff;border:none;border-radius:5px;font-size:10px;cursor:pointer;font-weight:700">&#128465; Del</button>'+
+      '</div></div>'+
       '<div class="att-status" style="color:'+stColor(st)+'">'+stLabel(st)+'</div>'+
       '<div class="att-btn-row">'+
       '<button class="att-btn ab-p" onclick="setStudAtt('+i+',\'present\')">P</button>'+
@@ -2997,15 +3612,57 @@ function renderStudentAttGrid(cls,students){
       '<button class="att-btn" style="background:#e65100;color:#fff" onclick="setStudAtt('+i+',\'leave\')">L</button>'+
       '<button class="att-btn ab-lt" onclick="setStudAtt('+i+',\'late\')">Late</button>'+
       '</div>'+
-      '<div style="display:flex;gap:4px;justify-content:center;margin-top:4px">'+
-      '<button onclick="editStudent('+i+')" style="padding:2px 7px;background:#1565c0;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">✏️</button>'+
-      '<button onclick="deleteStudent('+i+')" style="padding:2px 7px;background:#c0392b;color:#fff;border:none;border-radius:5px;font-size:9px;cursor:pointer">🗑️</button>'+
+      '</div>'+
+      // Inline edit form (hidden by default)
+      '<div id="asc_edit_'+i+'" style="display:none;background:#fff;border-radius:8px;padding:9px;margin-top:4px">'+
+      '<div style="font-size:11px;font-weight:700;color:#1565c0;margin-bottom:7px">&#9998; Edit Student</div>'+
+      '<label style="font-size:10px;font-weight:700;color:#555">Naam</label>'+
+      '<input type="text" id="esi_name_'+i+'" value="'+s.name.replace(/"/g,'&quot;')+'" style="font-size:13px;padding:7px 10px;border:2px solid #1565c0;border-radius:7px;width:100%;margin-bottom:6px">'+
+      '<div style="display:flex;gap:6px;margin-bottom:6px">'+
+      '<div style="flex:1"><label style="font-size:10px;font-weight:700;color:#555">Roll No</label>'+
+      '<input type="text" id="esi_roll_'+i+'" value="'+s.roll.replace(/"/g,'&quot;')+'" style="font-size:13px;padding:7px 10px;border:2px solid #aaa;border-radius:7px;width:100%"></div>'+
+      '</div>'+
+      '<label style="font-size:10px;font-weight:700;color:#555">&#128241; Parent WhatsApp</label>'+
+      '<input type="text" id="esi_wa_'+i+'" value="'+(s.wa||'').replace(/"/g,'&quot;')+'" placeholder="03XXXXXXXXX" style="font-size:13px;padding:7px 10px;border:2px solid #aaa;border-radius:7px;width:100%;margin-bottom:6px">'+
+      '<label style="font-size:10px;font-weight:700;color:#555">&#127874; Date of Birth</label>'+
+      '<input type="date" id="esi_dob_'+i+'" value="'+(s.dob||'')+'" style="font-size:13px;padding:7px 10px;border:2px solid #aaa;border-radius:7px;width:100%;margin-bottom:8px">'+
+      '<div style="display:flex;gap:6px">'+
+      '<button onclick="saveEditStudent('+i+')" style="flex:1;padding:9px;background:#2e7d32;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">&#10003; Save</button>'+
+      '<button onclick="cancelEditStudent('+i+')" style="padding:9px 14px;background:#888;color:#fff;border:none;border-radius:7px;font-size:12px;cursor:pointer">&#10005;</button>'+
+      '</div>'+
       '</div>'+
       '</div>';
   });
   grid.innerHTML=h;
   document.getElementById('attSummaryCard').style.display='block';
   updateAttSummary(students);
+}
+function startEditStudent(i){
+  document.getElementById('asc_view_'+i).style.display='none';
+  document.getElementById('asc_edit_'+i).style.display='block';
+  var nameEl=document.getElementById('esi_name_'+i);
+  if(nameEl)nameEl.focus();
+}
+function cancelEditStudent(i){
+  document.getElementById('asc_view_'+i).style.display='block';
+  document.getElementById('asc_edit_'+i).style.display='none';
+}
+function saveEditStudent(i){
+  var cls=document.getElementById('attSClass').value;
+  var allStudents=ls_get(SK.STUDENTS)||{};
+  var s=allStudents[cls]&&allStudents[cls][i];
+  if(!s)return;
+  var newName=(document.getElementById('esi_name_'+i).value||'').trim()||s.name;
+  var newRoll=(document.getElementById('esi_roll_'+i).value||'').trim()||s.roll;
+  var newWa=(document.getElementById('esi_wa_'+i).value||'').trim();
+  var newDob=(document.getElementById('esi_dob_'+i).value||'').trim();
+  allStudents[cls][i].name=newName;
+  allStudents[cls][i].roll=newRoll;
+  allStudents[cls][i].wa=newWa;
+  allStudents[cls][i].dob=newDob;
+  ls_set(SK.STUDENTS,allStudents);
+  loadStudentList();
+  toast(newName+' update ho gaya! \u2705');
 }
 function setStudAtt(i,status){
   var cls=document.getElementById('attSClass').value;
@@ -3019,23 +3676,6 @@ function setStudAtt(i,status){
   }
   var allSt=ls_get(SK.STUDENTS)||{};
   updateAttSummary((allSt[cls])||[]);
-}
-function editStudent(i){
-  var cls=document.getElementById('attSClass').value;
-  var allStudents=ls_get(SK.STUDENTS)||{};
-  var s=allStudents[cls]&&allStudents[cls][i];
-  if(!s)return;
-  var newName=prompt('Naam edit karo:',s.name);
-  if(newName===null)return;
-  var newRoll=prompt('Roll No edit karo:',s.roll);
-  if(newRoll===null)return;
-  var newWa=prompt('Parent WhatsApp Number edit karo:',s.wa||'');
-  if(newWa===null)return;
-  allStudents[cls][i].name=newName.trim()||s.name;
-  allStudents[cls][i].roll=newRoll.trim()||s.roll;
-  allStudents[cls][i].wa=newWa.trim();
-  ls_set(SK.STUDENTS,allStudents);
-  loadStudentList();toast('Student updated! ✅');
 }
 function deleteStudent(i){
   if(!confirm('Is student ko delete karo?'))return;
