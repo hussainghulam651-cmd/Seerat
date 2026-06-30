@@ -335,22 +335,22 @@ textarea{min-height:68px;resize:vertical;}
 
 <!-- Stats -->
 <div class="stats-grid" id="dashStats">
-  <div class="stat-card" style="border-left-color:#2e7d32">
+  <div class="stat-card" id="statTeachers" style="border-left-color:#2e7d32">
     <span class="stat-icon">👩‍🏫</span>
     <div class="stat-val" id="dsTotalTeachers">0</div>
     <div class="stat-lbl">Total Teachers</div>
   </div>
-  <div class="stat-card" style="border-left-color:#1565c0">
+  <div class="stat-card" id="statStudents" style="border-left-color:#1565c0">
     <span class="stat-icon">🏫</span>
     <div class="stat-val" id="dsTotalStudents">0</div>
     <div class="stat-lbl">Students Registered</div>
   </div>
-  <div class="stat-card" style="border-left-color:#c9a84c">
+  <div class="stat-card" id="statAtt" style="border-left-color:#c9a84c">
     <span class="stat-icon">✅</span>
     <div class="stat-val" id="dsTodayAtt">-</div>
     <div class="stat-lbl">Today's Attendance</div>
   </div>
-  <div class="stat-card" style="border-left-color:#e65100">
+  <div class="stat-card" id="statHW" style="border-left-color:#e65100">
     <span class="stat-icon">📒</span>
     <div class="stat-val" id="dsTodayHW">0</div>
     <div class="stat-lbl">Today's HW Entries</div>
@@ -360,7 +360,7 @@ textarea{min-height:68px;resize:vertical;}
 <!-- Weather Widget -->
 <div class="card" id="weatherCard">
   <div class="card-title">&#127780;&#65039; School Weather
-    <label style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#666;cursor:pointer">
+    <label id="wtToggleWrap" style="margin-left:auto;display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#666;cursor:pointer">
       <span id="wtToggleLbl">ON</span>
       <input type="checkbox" id="wtToggle" checked onchange="toggleWeather()" style="width:32px;height:18px;cursor:pointer">
     </label>
@@ -373,7 +373,7 @@ textarea{min-height:68px;resize:vertical;}
 <!-- Upcoming Holidays -->
 <div class="card">
   <div class="card-title">&#127881; Upcoming Holidays
-    <button onclick="openHolidayMgr()" style="margin-left:auto;padding:4px 9px;background:var(--g);color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer">+ Manage</button>
+    <button id="holMgrBtn" onclick="openHolidayMgr()" style="margin-left:auto;padding:4px 9px;background:var(--g);color:#fff;border:none;border-radius:6px;font-size:10px;cursor:pointer">+ Manage</button>
   </div>
   <div id="dashHolidayList">
     <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Loading...</div>
@@ -397,7 +397,7 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 <!-- Today's Attendance Summary -->
-<div class="card">
+<div class="card" id="cardAttSummary">
   <div class="card-title">✅ Today's Attendance Summary</div>
   <div id="dashAttList">
     <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Aaj ki koi attendance nahi</div>
@@ -405,7 +405,7 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 <!-- Teacher Arrival Summary on Dashboard -->
-<div class="card">
+<div class="card" id="cardArrSummary">
   <div class="card-title">🕐 Today Teacher Arrivals</div>
   <div id="dashArrList">
     <div style="text-align:center;padding:14px;color:#aaa;font-size:12px">Koi arrival record nahi</div>
@@ -413,7 +413,7 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 <!-- Teacher Daily Work -->
-<div class="card">
+<div class="card" id="cardDWSummary">
   <div class="card-title">📋 Teacher Daily Work Reports</div>
   <div id="dashDWList">
     <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi daily work report nahi</div>
@@ -850,6 +850,12 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 
 <button class="btn-g btn-full" onclick="saveStudAtt()">💾 Save & Generate Report</button>
+
+<div style="display:flex;gap:8px;margin-top:9px">
+  <button onclick="generateDailyAttPDF()" style="flex:1;padding:12px;background:linear-gradient(135deg,#1a7a4f,#0d5c3a);color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif">&#128196; PDF Card Banao</button>
+  <button onclick="shareDailyAttWhatsApp()" style="flex:1;padding:12px;background:#25D366;color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:Playfair Display,serif">&#128241; WhatsApp Bhejen</button>
+</div>
+<div style="font-size:10px;color:#888;margin-top:6px;text-align:center">Pehle attendance Save karen, phir PDF card ya WhatsApp pe bhejen</div>
 </div>
 
 <!-- TEACHER ATTENDANCE -->
@@ -2211,10 +2217,16 @@ function renderBdayMgr(){
   if(!bdays.length){el.innerHTML='<div style="text-align:center;padding:12px;color:#aaa;font-size:12px">Koi birthday add nahi hua</div>';return;}
   var h='';
   bdays.forEach(function(b,i){
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:8px;padding:8px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+    h+='<div style="background:#fff;border-radius:8px;padding:8px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
       '<div><div style="font-size:12px;font-weight:700">'+(b.type==='teacher'?'\uD83D\uDC68\u200D\uD83C\uDFEB':'\uD83D\uDC66')+' '+b.name+(b.cls?' ('+b.cls+')':'')+'</div>'+
       '<div style="font-size:10px;color:#888">DOB: '+fmtDate(b.dob)+'</div></div>'+
       '<button onclick="delBirthday('+i+')" style="background:#c0392b;color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:10px;cursor:pointer">\uD83D\uDDD1\uFE0F</button>'+
+      '</div>'+
+      '<div style="display:flex;gap:6px;margin-top:7px">'+
+      '<button onclick="generateBdayPDF('+i+')" style="flex:1;padding:6px;background:#1a7a4f;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">&#127881; PDF Card</button>'+
+      '<button onclick="shareBdayWhatsApp('+i+')" style="flex:1;padding:6px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">&#128241; WhatsApp</button>'+
+      '</div>'+
       '</div>';
   });
   el.innerHTML=h;
@@ -2224,18 +2236,140 @@ function renderBirthdays(){
   if(!el)return;
   var bdays=ls_get(SK.BIRTHDAYS)||[];
   if(!bdays.length){el.innerHTML='<div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi birthday set nahi. Admin panel se add karen.</div>';return;}
-  var withDays=bdays.map(function(b){return {b:b,days:nextBdayDays(b.dob)};}).sort(function(a,c){return a.days-c.days;});
+  var withDays=bdays.map(function(b,origIdx){return {b:b,days:nextBdayDays(b.dob),idx:origIdx};}).sort(function(a,c){return a.days-c.days;});
   var h='';
   withDays.slice(0,6).forEach(function(item){
-    var b=item.b,days=item.days;
+    var b=item.b,days=item.days,idx=item.idx;
     var isToday=days===0;
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:'+(isToday?'#fce4ec':'#fafafa')+';border-radius:8px;padding:9px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+    h+='<div style="background:'+(isToday?'#fce4ec':'#fafafa')+';border-radius:8px;padding:9px 11px;margin-bottom:6px;border-left:3px solid #d81b60">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
       '<div><div style="font-size:12px;font-weight:700">'+(b.type==='teacher'?'\uD83D\uDC68\u200D\uD83C\uDFEB':'\uD83D\uDC66')+' '+b.name+(b.cls?' ('+b.cls+')':'')+(isToday?' \uD83C\uDF89':'')+'</div>'+
       '<div style="font-size:10px;color:#888">'+fmtDate(b.dob)+'</div></div>'+
       '<div style="font-size:11px;font-weight:700;color:'+(isToday?'#d81b60':'#888')+'">'+(isToday?'Today!':days+' din')+'</div>'+
+      '</div>'+
+      (currentRole==='admin'?'<div style="display:flex;gap:6px;margin-top:7px">'+
+      '<button onclick="generateBdayPDF('+idx+')" style="flex:1;padding:6px;background:#1a7a4f;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">&#127881; PDF Card</button>'+
+      '<button onclick="shareBdayWhatsApp('+idx+')" style="flex:1;padding:6px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer">&#128241; WhatsApp</button>'+
+      '</div>':'')+
       '</div>';
   });
   el.innerHTML=h;
+}
+
+// ═══════════════════════════════════════════
+//  BIRTHDAY PDF CARD + WHATSAPP
+// ═══════════════════════════════════════════
+function generateBdayPDF(idx){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui. Internet check karen.');return;}
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  var b=bdays[idx];
+  if(!b){toast('Birthday record nahi mila!');return;}
+
+  var jsPDFLib=window.jspdf.jsPDF;
+  var doc=new jsPDFLib({unit:'mm',format:[148,148]}); // square-ish greeting card
+  var isTeacher=b.type==='teacher';
+  var mainColor=isTeacher?[21,101,192]:[216,27,96];
+  var lightColor=isTeacher?[227,242,253]:[252,228,236];
+  var goldColor=[201,168,76];
+
+  // ── Decorative Background ──
+  doc.setFillColor(mainColor[0],mainColor[1],mainColor[2]);
+  doc.rect(0,0,148,148,'F');
+
+  // Inner white card
+  doc.setFillColor(255,255,255);
+  doc.roundedRect(6,6,136,136,6,6,'F');
+
+  // Top gold ribbon
+  doc.setFillColor(goldColor[0],goldColor[1],goldColor[2]);
+  doc.roundedRect(6,6,136,18,6,6,'F');
+  doc.setFillColor(255,255,255);
+  doc.rect(6,17,136,7,'F'); // square off bottom of ribbon
+
+  doc.setTextColor(mainColor[0],mainColor[1],mainColor[2]);
+  doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text('AL-FAREED PUBLIC SCHOOL',74,15,{align:'center'});
+  doc.setFontSize(7);doc.setFont('helvetica','normal');
+  doc.text('Tando Jam, Sindh',74,20.5,{align:'center'});
+
+  // Balloons / confetti dots decoration
+  var dotColors=[mainColor,goldColor,[255,255,255]];
+  for(var i=0;i<14;i++){
+    var dx=10+Math.random()*128;
+    var dy=28+Math.random()*8;
+    var dc=dotColors[i%3];
+    doc.setFillColor(dc[0],dc[1],dc[2]);
+    doc.circle(dx,dy,1.2,'F');
+  }
+
+  // Big Birthday Text
+  doc.setTextColor(mainColor[0],mainColor[1],mainColor[2]);
+  doc.setFontSize(22);doc.setFont('helvetica','bold');
+  doc.text('HAPPY BIRTHDAY!',74,48,{align:'center'});
+
+  // Circle avatar placeholder
+  doc.setFillColor(lightColor[0],lightColor[1],lightColor[2]);
+  doc.circle(74,72,22,'F');
+  doc.setDrawColor(goldColor[0],goldColor[1],goldColor[2]);
+  doc.setLineWidth(1.2);doc.circle(74,72,22,'S');
+  doc.setTextColor(mainColor[0],mainColor[1],mainColor[2]);
+  doc.setFontSize(20);doc.setFont('helvetica','bold');
+  var initial=(b.name||'?').trim().charAt(0).toUpperCase();
+  doc.text(initial,74,77,{align:'center'});
+
+  // Name
+  doc.setTextColor(40,40,40);
+  doc.setFontSize(15);doc.setFont('helvetica','bold');
+  doc.text(b.name,74,102,{align:'center'});
+
+  // Role/Class badge
+  doc.setFillColor(lightColor[0],lightColor[1],lightColor[2]);
+  var badgeText=isTeacher?'TEACHER':(b.cls?'STUDENT \u2022 '+b.cls:'STUDENT');
+  var badgeW=doc.getTextWidth(badgeText)*0.6+16;
+  doc.roundedRect(74-badgeW/2,106,badgeW,7,3,3,'F');
+  doc.setTextColor(mainColor[0],mainColor[1],mainColor[2]);
+  doc.setFontSize(8);doc.setFont('helvetica','bold');
+  doc.text(badgeText,74,110.5,{align:'center'});
+
+  // DOB
+  doc.setTextColor(120,120,120);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Date of Birth: '+fmtDate(b.dob),74,118,{align:'center'});
+
+  // Wish message
+  doc.setTextColor(80,80,80);
+  doc.setFontSize(7.5);doc.setFont('helvetica','italic');
+  var wish=isTeacher?'Wishing you a wonderful year ahead filled with happiness and success!':'Wishing you a fantastic birthday full of fun, joy and sweet surprises!';
+  var wishLines=doc.splitTextToSize(wish,118);
+  doc.text(wishLines,74,126,{align:'center'});
+
+  // Footer
+  doc.setDrawColor(goldColor[0],goldColor[1],goldColor[2]);
+  doc.setLineWidth(0.4);
+  doc.line(20,136,128,136);
+  doc.setFontSize(7);doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
+  doc.text('With love, Al-Fareed Public School Family',74,140.5,{align:'center'});
+
+  var fname='Birthday_Card_'+b.name.replace(/[^a-zA-Z0-9]/g,'_')+'.pdf';
+  doc.save(fname);
+  toast('Birthday card PDF download ho gayi! \uD83C\uDF89');
+  logActivity('hw','Birthday Card Generated: '+b.name,b.type==='teacher'?'Teacher':'Student','Admin');
+}
+function shareBdayWhatsApp(idx){
+  var bdays=ls_get(SK.BIRTHDAYS)||[];
+  var b=bdays[idx];
+  if(!b){toast('Birthday record nahi mila!');return;}
+  var isTeacher=b.type==='teacher';
+  var txt='\uD83C\uDF89\uD83C\uDF82 *HAPPY BIRTHDAY* \uD83C\uDF82\uD83C\uDF89\n\n';
+  txt+='Dear *'+b.name+'*,\n\n';
+  txt+=isTeacher?
+    'On behalf of Al-Fareed Public School, we wish you a very Happy Birthday! May this year bring you continued success, good health, and happiness.\n\n':
+    'Al-Fareed Public School wishes you a very Happy Birthday! May your day be filled with fun, laughter, and lots of sweet surprises!\n\n';
+  txt+='\uD83C\uDF82 Date of Birth: '+fmtDate(b.dob)+'\n';
+  if(b.cls)txt+='\uD83C\uDFEB Class: '+b.cls+'\n';
+  txt+='\n\u2728 A special birthday card PDF has also been prepared \u2014 please attach it here.\n\n';
+  txt+='*AL-FAREED PUBLIC SCHOOL*\nTando Jam, Sindh\nPrincipal: Sir Ghulam Hussain';
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
 }
 
 // ═══════════════════════════════════════════
@@ -3225,6 +3359,7 @@ function doLogin(role){
       var bell=document.getElementById('notifBell');if(bell)bell.style.display='block';
       setupDashboard();
       logActivity('login','Admin Login','','Admin');
+      try{applyDashboardRoleVisibility();}catch(e){}
       toast('Admin login! \u2705');
     }else{
       document.getElementById('loginErr').style.display='block';
@@ -3258,6 +3393,7 @@ function doLogin(role){
       if(document.getElementById('dwTch'))document.getElementById('dwTch').value=found.name;
       setupDashboard();
       logActivity('login',found.name+' Login (Teacher)','Subject: '+found.subject,found.name);
+      try{applyDashboardRoleVisibility();}catch(e){}
       toast('Welcome, '+found.name+'! \u2705');
     }else{
       document.getElementById('loginErr').style.display='block';
@@ -3281,6 +3417,7 @@ function doLogin(role){
       document.getElementById('navAdmin').style.display='none';
       setupDashboard();
       sTab(0);
+      try{applyDashboardRoleVisibility();}catch(e){}
       toast('Parent login! Homework & Attendance dekhein ✅');
     }else{
       document.getElementById('loginErr').style.display='block';
@@ -3750,7 +3887,138 @@ function saveStudAtt(){
   var wa='*STUDENT ATTENDANCE*\n*Al-Fareed Public School*\nClass: '+cls+' | '+fmtDate(dt)+'\nBy: '+(currentTeacher?currentTeacher.name:'Admin')+'\n\n';
   students.forEach(function(s,i){var st=s.status||'present';wa+=(i+1)+'. '+s.name+' — '+(st==='present'?'✅ Present':st==='absent'?'❌ Absent':st==='leave'?'🕐 Leave':'⏰ Late')+'\n';});
   wa+='\nPresent: '+p+' | Absent: '+a+' | Leave: '+l+' | Late: '+lt+'\nTotal: '+students.length;
+  lastDailyAtt={cls:cls,dt:dt,students:students,p:p,a:a,l:l,lt:lt};
   showOv(html,wa);
+}
+var lastDailyAtt=null;
+function generateDailyAttPDF(){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui. Internet check karen.');return;}
+  if(!lastDailyAtt){toast('Pehle attendance save karo!');return;}
+  var d=lastDailyAtt;
+  var jsPDFLib=window.jspdf.jsPDF;
+  var doc=new jsPDFLib();
+  var schName='AL-FAREED PUBLIC SCHOOL';
+  var schAddr='Tando Jam, Sindh';
+  var schPh='03435272484';
+  var schPrinc='Sir Ghulam Hussain';
+
+  // ── Card-style Header ──
+  doc.setFillColor(13,92,58);
+  doc.roundedRect(10,10,190,30,4,4,'F');
+  doc.setTextColor(201,168,76);
+  doc.setFontSize(17);doc.setFont('helvetica','bold');
+  doc.text(schName,105,23,{align:'center'});
+  doc.setFontSize(9);doc.setTextColor(230,225,200);doc.setFont('helvetica','normal');
+  doc.text(schAddr+'  |  '+schPh,105,30,{align:'center'});
+  doc.setFillColor(201,168,76);
+  doc.roundedRect(10,40,190,9,2,2,'F');
+  doc.setTextColor(13,92,58);doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text('DAILY STUDENT ATTENDANCE CARD',105,46.5,{align:'center'});
+
+  // ── Info strip ──
+  var y=56;
+  doc.setFillColor(240,247,255);
+  doc.roundedRect(10,y,190,16,3,3,'F');
+  doc.setDrawColor(200,210,230);doc.roundedRect(10,y,190,16,3,3,'S');
+  doc.setFontSize(8);doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');
+  doc.text('CLASS',20,y+6);doc.text('DATE',85,y+6);doc.text('TEACHER',145,y+6);
+  doc.setFontSize(11);doc.setTextColor(13,92,58);doc.setFont('helvetica','bold');
+  doc.text(d.cls,20,y+12);
+  doc.text(fmtDate(d.dt),85,y+12);
+  doc.text((currentTeacher?currentTeacher.name:'Admin'),145,y+12);
+
+  // ── Summary Pills ──
+  y+=24;
+  var tot=d.students.length;
+  var pills=[
+    {label:'PRESENT',val:d.p,color:[46,125,50],bg:[232,245,233]},
+    {label:'ABSENT',val:d.a,color:[198,40,40],bg:[255,235,238]},
+    {label:'LEAVE',val:d.l,color:[230,81,0],bg:[255,243,224]},
+    {label:'LATE',val:d.lt,color:[106,27,154],bg:[243,229,245]}
+  ];
+  var pw2=44,gap=3,startX=10;
+  pills.forEach(function(p2,i){
+    var x=startX+i*(pw2+gap);
+    doc.setFillColor(p2.bg[0],p2.bg[1],p2.bg[2]);
+    doc.roundedRect(x,y,pw2,20,3,3,'F');
+    doc.setDrawColor(p2.color[0],p2.color[1],p2.color[2]);
+    doc.setLineWidth(0.5);doc.roundedRect(x,y,pw2,20,3,3,'S');
+    doc.setTextColor(p2.color[0],p2.color[1],p2.color[2]);
+    doc.setFontSize(15);doc.setFont('helvetica','bold');
+    doc.text(String(p2.val),x+pw2/2,y+11,{align:'center'});
+    doc.setFontSize(6.5);
+    doc.text(p2.label,x+pw2/2,y+17,{align:'center'});
+  });
+
+  // ── Student Table ──
+  y+=28;
+  doc.setFillColor(13,92,58);
+  doc.rect(10,y,190,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(8.5);doc.setFont('helvetica','bold');
+  doc.text('Roll',18,y+5.5);
+  doc.text('Student Name',40,y+5.5);
+  doc.text('Status',165,y+5.5);
+  y+=8;
+
+  d.students.forEach(function(s,i){
+    if(y>275){
+      doc.addPage();y=15;
+      doc.setFillColor(13,92,58);doc.rect(10,y,190,8,'F');
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8.5);
+      doc.text('Roll',18,y+5.5);doc.text('Student Name',40,y+5.5);doc.text('Status',165,y+5.5);
+      y+=8;
+    }
+    var st=s.status||'present';
+    var rowBg=i%2===0?[255,255,255]:[247,250,248];
+    doc.setFillColor(rowBg[0],rowBg[1],rowBg[2]);
+    doc.rect(10,y,190,7,'F');
+    doc.setDrawColor(225,225,225);doc.rect(10,y,190,7,'S');
+    doc.setTextColor(70,70,70);doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+    doc.text(String(s.roll),18,y+4.8);
+    doc.setFont('helvetica','bold');
+    doc.text(s.name,40,y+4.8);
+    var stColor2=st==='present'?[46,125,50]:st==='absent'?[198,40,40]:st==='leave'?[230,81,0]:[106,27,154];
+    var stText=st==='present'?'Present':st==='absent'?'Absent':st==='leave'?'Leave':'Late';
+    doc.setTextColor(stColor2[0],stColor2[1],stColor2[2]);
+    doc.text(stText,165,y+4.8);
+    doc.setTextColor(0,0,0);
+    y+=7;
+  });
+
+  // ── Footer ──
+  y+=10;
+  if(y>270){doc.addPage();y=15;}
+  doc.setDrawColor(201,168,76);doc.setLineWidth(0.6);doc.line(10,y,200,y);
+  y+=7;
+  doc.setFontSize(7.5);doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');
+  doc.text('Generated by Al-Fareed School Management System  |  '+fmtDate(today()),12,y);
+  y+=12;
+  doc.text('_______________________',135,y);y+=5;
+  doc.setFont('helvetica','bold');doc.setTextColor(13,92,58);doc.setFontSize(9);
+  doc.text(schPrinc,135,y);y+=4;
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(120,120,120);
+  doc.text('Principal',135,y);
+
+  var fname='Attendance_'+d.cls.replace(/[^a-zA-Z0-9]/g,'_')+'_'+d.dt+'.pdf';
+  doc.save(fname);
+  toast('Attendance PDF download ho gayi! \u2705');
+  logActivity('stud_att','Daily Attendance PDF Generated',d.cls+' \u2014 '+fmtDate(d.dt),currentTeacher?currentTeacher.name:'Admin');
+}
+function shareDailyAttWhatsApp(){
+  if(!lastDailyAtt){toast('Pehle attendance save karo!');return;}
+  var d=lastDailyAtt;
+  var txt='*\uD83D\uDCDA AL-FAREED PUBLIC SCHOOL*\n*Daily Attendance \u2014 '+d.cls+'*\nDate: '+fmtDate(d.dt)+'\nTeacher: '+(currentTeacher?currentTeacher.name:'Admin')+'\n================================\n\n';
+  d.students.forEach(function(s,i){
+    var st=s.status||'present';
+    var icon=st==='present'?'\u2705':st==='absent'?'\u274C':st==='leave'?'\uD83D\uDD50':'\u23F0';
+    txt+=(i+1)+'. '+s.name+' (Roll:'+s.roll+') '+icon+' '+(st==='present'?'Present':st==='absent'?'Absent':st==='leave'?'Leave':'Late')+'\n';
+  });
+  txt+='\n================================\n';
+  txt+='\u2705 Present: '+d.p+'  \u274C Absent: '+d.a+'  \uD83D\uDD50 Leave: '+d.l+(d.lt?'  \u23F0 Late: '+d.lt:'')+'\n';
+  txt+='Total Students: '+d.students.length+'\n\n';
+  txt+='\u2139\uFE0F Detailed PDF card bhi download ho sakti hai.\n';
+  txt+='*Principal: Sir Ghulam Hussain*';
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
 }
 
 // ─── Teacher Attendance ───
@@ -3943,6 +4211,64 @@ function updateDashboard(){
   try{renderDashAct();renderNotifBadge();}catch(e){}
   // New features
   try{renderHolidays();renderBirthdays();initWeather();}catch(e){}
+  // Role-based visibility (security)
+  try{applyDashboardRoleVisibility();}catch(e){}
+}
+
+// ═══════════════════════════════════════════
+//  ROLE-BASED DASHBOARD VISIBILITY (SECURITY)
+// ═══════════════════════════════════════════
+function applyDashboardRoleVisibility(){
+  var show=function(id,disp){var el=document.getElementById(id);if(el)el.style.display=disp;};
+
+  if(currentRole==='admin'){
+    // Admin sees EVERYTHING
+    show('statTeachers','flex');
+    show('statStudents','flex');
+    show('statAtt','flex');
+    show('statHW','flex');
+    show('cardAttSummary','block');
+    show('cardArrSummary','block');
+    show('cardDWSummary','block');
+    show('holMgrBtn','inline-block');
+    show('wtToggleWrap','flex');
+    var actCard=document.getElementById('dashActCard');
+    if(actCard)actCard.style.display='block';
+    var bell=document.getElementById('notifBell');if(bell)bell.style.display='block';
+    var navFees=document.getElementById('navFees');if(navFees)navFees.style.display='';
+
+  }else if(currentRole==='teacher'){
+    // Teacher: operational info yes, admin-sensitive stats/logs no
+    show('statTeachers','none');      // total teacher count = admin info
+    show('statStudents','flex');
+    show('statAtt','flex');
+    show('statHW','flex');
+    show('cardAttSummary','block');    // useful for teacher to see today's attendance
+    show('cardArrSummary','block');    // teacher can see arrival times (transparency)
+    show('cardDWSummary','block');     // daily work reports relevant to teacher
+    show('holMgrBtn','none');          // can't manage holidays
+    show('wtToggleWrap','none');       // can't toggle weather settings
+    var actCard2=document.getElementById('dashActCard');
+    if(actCard2)actCard2.style.display='none'; // activity log = admin only
+    var bell2=document.getElementById('notifBell');if(bell2)bell2.style.display='none';
+    var navFees2=document.getElementById('navFees');if(navFees2)navFees2.style.display='';
+
+  }else if(currentRole==='parent'){
+    // Parent: only what's relevant to their child — no admin/teacher management info
+    show('statTeachers','none');       // teacher count = irrelevant/admin info
+    show('statStudents','none');       // total student count = irrelevant
+    show('statAtt','flex');            // today's overall attendance = ok (general info)
+    show('statHW','flex');             // today's HW count = useful
+    show('cardAttSummary','block');    // attendance summary = relevant
+    show('cardArrSummary','none');     // teacher arrival times = NOT parent's business
+    show('cardDWSummary','none');      // teacher daily work reports = NOT for parents
+    show('holMgrBtn','none');
+    show('wtToggleWrap','none');
+    var actCard3=document.getElementById('dashActCard');
+    if(actCard3)actCard3.style.display='none'; // activity log = never for parent
+    var bell3=document.getElementById('notifBell');if(bell3)bell3.style.display='none';
+    var navFees3=document.getElementById('navFees');if(navFees3)navFees3.style.display='none'; // fees mgmt = admin/teacher only
+  }
 }
 
 function renderDashHW(){
