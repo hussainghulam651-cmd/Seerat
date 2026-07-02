@@ -286,7 +286,7 @@ textarea{min-height:68px;resize:vertical;}
     <div class="app-sub">Tando Jam, Sindh &bull; Sir Ghulam Hussain</div>
   </div>
   <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
-    <span id="syncBadge" onclick="if(JB_KEY&&JB_BIN)jbPull()" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);cursor:pointer;white-space:nowrap">Offline</span>
+    <span id="syncBadge" onclick="try{if(JB_KEY&&JB_BIN)jbPull();}catch(e){}" style="font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);cursor:pointer;white-space:nowrap">Offline</span>
     <!-- Notification Bell (Admin only) -->
     <div class="notif-bell" id="notifBell" onclick="toggleNotifPanel()" style="display:none">
       <span style="font-size:20px;line-height:1">🔔</span>
@@ -325,6 +325,7 @@ textarea{min-height:68px;resize:vertical;}
   <button class="nav-btn" onclick="sTab(7)">📅 Schedule</button>
   <button class="nav-btn" onclick="sTab(8)">📋 Syllabus</button>
   <button class="nav-btn" onclick="sTab(9)" id="navFees">💰 Fees</button>
+  <button class="nav-btn" onclick="sTab(10)" id="navLedger">📊 Income/Exp</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -427,6 +428,16 @@ textarea{min-height:68px;resize:vertical;}
   </div>
   <div id="dashActList">
     <div style="text-align:center;padding:16px;color:#aaa;font-size:12px">Koi activity nahi</div>
+  </div>
+</div>
+
+<!-- Monthly Income/Expense Summary (Admin only) -->
+<div class="card" id="dashLedgerCard" style="display:none;border:2px solid #0d5c3a">
+  <div class="card-title" style="color:#0d5c3a">📊 This Month: Income &amp; Expenses
+    <button onclick="sTab(10)" style="margin-left:auto;padding:4px 9px;background:#0d5c3a;color:#c9a84c;border:none;border-radius:6px;font-size:10px;cursor:pointer;font-weight:700">Full Ledger →</button>
+  </div>
+  <div id="dashLedgerBody">
+    <div style="text-align:center;padding:12px;color:#aaa;font-size:12px">Koi entry nahi</div>
   </div>
 </div>
 </div>
@@ -1791,6 +1802,130 @@ textarea{min-height:68px;resize:vertical;}
 </div>
 </div>
 
+<!-- ══════════════════════════════
+  TAB 10 — INCOME & EXPENSES
+══════════════════════════════ -->
+<div class="sec" id="s10" style="display:none">
+<div class="page-title">📊 Income &amp; Expenses Ledger</div>
+
+<!-- Month/Year Filter -->
+<div class="card" style="background:linear-gradient(135deg,#0d5c3a,#1a7a4f);border:none">
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <select id="ledMonth" onchange="renderLedger()" style="flex:1;padding:9px;border:2px solid rgba(255,255,255,.3);border-radius:8px;font-size:13px;font-weight:700;background:rgba(255,255,255,.1);color:#fff">
+      <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+      <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+      <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+      <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+    </select>
+    <select id="ledYear" onchange="renderLedger()" style="flex:1;padding:9px;border:2px solid rgba(255,255,255,.3);border-radius:8px;font-size:13px;font-weight:700;background:rgba(255,255,255,.1);color:#fff">
+      <option value="2024">2024</option><option value="2025">2025</option>
+      <option value="2026" selected>2026</option><option value="2027">2027</option>
+    </select>
+    <button onclick="generateLedgerPDF()" style="padding:9px 14px;background:#c9a84c;color:#0d5c3a;border:none;border-radius:8px;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap">&#128196; PDF</button>
+  </div>
+</div>
+
+<!-- Summary Cards -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:11px" id="ledSummary">
+  <div style="background:#e8f5e9;border-radius:11px;padding:12px;text-align:center;border-top:4px solid #2e7d32">
+    <div style="font-size:10px;font-weight:700;color:#555">INCOME</div>
+    <div style="font-size:18px;font-weight:900;color:#2e7d32" id="ledTotInc">Rs. 0</div>
+  </div>
+  <div style="background:#ffebee;border-radius:11px;padding:12px;text-align:center;border-top:4px solid #c62828">
+    <div style="font-size:10px;font-weight:700;color:#555">EXPENSES</div>
+    <div style="font-size:18px;font-weight:900;color:#c62828" id="ledTotExp">Rs. 0</div>
+  </div>
+  <div style="background:#e3f2fd;border-radius:11px;padding:12px;text-align:center;border-top:4px solid #1565c0">
+    <div style="font-size:10px;font-weight:700;color:#555">BALANCE</div>
+    <div style="font-size:18px;font-weight:900" id="ledBalance" style="color:#1565c0">Rs. 0</div>
+  </div>
+</div>
+
+<!-- Bar Chart -->
+<div class="card">
+  <div class="card-title">📈 Monthly Overview</div>
+  <div style="display:flex;justify-content:center">
+    <canvas id="ledBarChart" width="320" height="160"></canvas>
+  </div>
+  <div style="display:flex;justify-content:center;gap:16px;margin-top:8px">
+    <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:#2e7d32;border-radius:3px"></div><span style="font-size:11px;font-weight:700">Income</span></div>
+    <div style="display:flex;align-items:center;gap:5px"><div style="width:12px;height:12px;background:#c62828;border-radius:3px"></div><span style="font-size:11px;font-weight:700">Expense</span></div>
+  </div>
+</div>
+
+<!-- Tabs: Add Entry / Records -->
+<div style="display:flex;gap:8px;margin-bottom:10px">
+  <button id="ledTabAdd" onclick="ledSwitch(0)" style="flex:1;padding:10px;background:var(--g);color:var(--gold);border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">➕ Entry Add</button>
+  <button id="ledTabRec" onclick="ledSwitch(1)" style="flex:1;padding:10px;background:#fff;color:var(--g);border:2px solid var(--g);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📋 Records</button>
+  <button id="ledTabAnn" onclick="ledSwitch(2)" style="flex:1;padding:10px;background:#fff;color:#6a1b9a;border:2px solid #6a1b9a;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer">📅 Annual</button>
+</div>
+
+<!-- ADD ENTRY -->
+<div id="ledAddSec">
+<div class="card">
+  <div class="card-title">➕ Nai Entry Add Karen</div>
+  <div class="r2">
+    <div><label>Type</label>
+      <select id="entType" onchange="ledEntTypeChange()">
+        <option value="income">💚 Income</option>
+        <option value="expense">❤️ Expense</option>
+      </select>
+    </div>
+    <div><label>Category</label>
+      <select id="entCat">
+        <option value="fees">School Fees</option>
+        <option value="salary">Staff Salary</option>
+        <option value="utility">Utility Bills</option>
+        <option value="stationary">Stationary</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="events">Events</option>
+        <option value="donation">Donation</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+  <div><label>Description</label><input type="text" id="entDesc" placeholder="e.g. June fees collection, Class 5..."></div>
+  <div class="r2">
+    <div><label>Amount (Rs.)</label><input type="number" id="entAmt" placeholder="5000"></div>
+    <div><label>Date</label><input type="date" id="entDate"></div>
+  </div>
+  <div><label>Note (optional)</label><input type="text" id="entNote" placeholder="Extra details..."></div>
+  <button class="btn-g btn-full" onclick="addLedgerEntry()" style="margin-top:4px">✅ Save Entry</button>
+</div>
+</div>
+
+<!-- RECORDS -->
+<div id="ledRecSec" style="display:none">
+<div class="card">
+  <div class="card-title">📋 Monthly Records
+    <select id="ledFilterType" onchange="renderLedgerRecords()" style="margin-left:auto;width:auto;padding:4px 8px;font-size:11px;margin-bottom:0">
+      <option value="">Sab</option>
+      <option value="income">Income</option>
+      <option value="expense">Expense</option>
+    </select>
+  </div>
+  <div id="ledRecBody"></div>
+</div>
+</div>
+
+<!-- ANNUAL REPORT -->
+<div id="ledAnnSec" style="display:none">
+<div class="card">
+  <div class="card-title">📅 Annual Summary
+    <select id="ledAnnYear" onchange="renderAnnualReport()" style="margin-left:auto;width:auto;padding:4px 8px;font-size:11px;margin-bottom:0">
+      <option value="2024">2024</option><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+    </select>
+  </div>
+  <div style="display:flex;justify-content:center;margin:10px 0">
+    <canvas id="annBarChart" width="320" height="200"></canvas>
+  </div>
+  <div id="annTableBody"></div>
+  <button onclick="generateAnnualPDF()" style="width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#1a7a4f,#0d5c3a);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer">📄 Annual Report PDF</button>
+</div>
+</div>
+
+</div><!-- /s10 -->
+
 </div><!-- end mainApp -->
 
 <!-- OVERLAY -->
@@ -1826,7 +1961,8 @@ var SK={
   BIRTHDAYS:'af_birthdays',
   WEATHER_LOC:'af_weather_loc',
   WEATHER_ON:'af_weather_on',
-  FEES:'af_fees'
+  FEES:'af_fees',
+  LEDGER:'af_ledger'
 };
 
 // ═══════════════════════════════════════════
@@ -2030,26 +2166,38 @@ function initWeather(){
   fetchWeather(loc.lat,loc.lon);
 }
 function fetchWeather(lat,lon){
-  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto';
-  var xhr=new XMLHttpRequest();
-  xhr.open('GET',url,true);
-  xhr.onreadystatechange=function(){
-    if(xhr.readyState===4){
-      var body=document.getElementById('weatherBody');
-      if(!body)return;
-      if(xhr.status===200){
-        try{
-          var data=JSON.parse(xhr.responseText);
-          renderWeather(data);
-        }catch(e){
-          body.innerHTML='<div style="text-align:center;padding:16px;color:#c62828;font-size:12px">Weather data load nahi hui</div>';
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=Asia%2FKarachi&forecast_days=5';
+  var body=document.getElementById('weatherBody');
+  if(body)body.innerHTML='<div style="text-align:center;padding:12px;color:#aaa;font-size:11px">Loading weather...</div>';
+  try{
+    var xhr=new XMLHttpRequest();
+    xhr.open('GET',url,true);
+    xhr.timeout=8000;
+    xhr.ontimeout=function(){
+      if(body)body.innerHTML='<div style="text-align:center;padding:12px;color:#e65100;font-size:11px">&#9203; Weather timeout. Internet slow hai ya VPN use karen.</div>';
+    };
+    xhr.onreadystatechange=function(){
+      if(xhr.readyState===4){
+        if(!body)return;
+        if(xhr.status===200){
+          try{
+            var data=JSON.parse(xhr.responseText);
+            renderWeather(data);
+          }catch(e){
+            body.innerHTML='<div style="text-align:center;padding:12px;color:#c62828;font-size:11px">Weather parse error. Dobara try karen.</div>';
+          }
+        }else{
+          body.innerHTML='<div style="text-align:center;padding:12px;color:#c62828;font-size:11px">Weather load nahi hua (internet check karen ya WiFi use karen)</div>';
         }
-      }else{
-        body.innerHTML='<div style="text-align:center;padding:16px;color:#c62828;font-size:12px">Weather load nahi hua (internet check karen)</div>';
       }
-    }
-  };
-  xhr.send();
+    };
+    xhr.onerror=function(){
+      if(body)body.innerHTML='<div style="text-align:center;padding:12px;color:#c62828;font-size:11px">Weather load nahi hua. Internet ya WiFi check karen.</div>';
+    };
+    xhr.send();
+  }catch(e){
+    if(body)body.innerHTML='<div style="text-align:center;padding:12px;color:#c62828;font-size:11px">Weather feature internet ke baghair kaam nahi karta.</div>';
+  }
 }
 function renderWeather(data){
   var body=document.getElementById('weatherBody');
@@ -3112,22 +3260,466 @@ function shareFeeOnWhatsApp(wa,name,month,amount,due){
 }
 
 // ═══════════════════════════════════════════
-var JB_KEY = ''; // JSONBin Master Key (Admin Panel se set hota hai)
+//  INCOME & EXPENSES LEDGER
+// ═══════════════════════════════════════════
+var catIcons={fees:'\uD83C\uDFEB',salary:'\uD83D\uDCB8',utility:'\uD83D\uDCA1',stationary:'\uD83D\uDCD3',maintenance:'\uD83D\uDD27',events:'\uD83C\uDF89',donation:'\uD83E\uDD0D',other:'\uD83D\uDCCC'};
+var incomeCategories=['fees','donation','other'];
+var expenseCategories=['salary','utility','stationary','maintenance','events','other'];
+
+function initLedger(){
+  var now=new Date();
+  var mEl=document.getElementById('ledMonth');
+  var yEl=document.getElementById('ledYear');
+  var entDate=document.getElementById('entDate');
+  if(mEl&&!mEl.getAttribute('data-init')){mEl.value=String(now.getMonth());mEl.setAttribute('data-init','1');}
+  if(yEl&&!yEl.getAttribute('data-init')){yEl.value=String(now.getFullYear());yEl.setAttribute('data-init','1');}
+  if(entDate&&!entDate.value)entDate.value=today();
+  ledEntTypeChange();
+  renderLedger();
+}
+
+function ledEntTypeChange(){
+  var type=document.getElementById('entType').value;
+  var catSel=document.getElementById('entCat');
+  if(!catSel)return;
+  var incOpts='<option value="fees">\uD83C\uDFEB School Fees</option><option value="donation">\uD83E\uDD0D Donation</option><option value="other">\uD83D\uDCCC Other Income</option>';
+  var expOpts='<option value="salary">\uD83D\uDCB8 Staff Salary</option><option value="utility">\uD83D\uDCA1 Utility Bills</option><option value="stationary">\uD83D\uDCD3 Stationary</option><option value="maintenance">\uD83D\uDD27 Maintenance</option><option value="events">\uD83C\uDF89 Events</option><option value="other">\uD83D\uDCCC Other Expense</option>';
+  catSel.innerHTML=type==='income'?incOpts:expOpts;
+}
+
+function addLedgerEntry(){
+  var type=document.getElementById('entType').value;
+  var cat=document.getElementById('entCat').value;
+  var desc=document.getElementById('entDesc').value.trim();
+  var amt=parseFloat(document.getElementById('entAmt').value)||0;
+  var dt=document.getElementById('entDate').value;
+  var note=document.getElementById('entNote').value.trim();
+  if(!desc){toast('Description likhein!');return;}
+  if(!amt||amt<=0){toast('Valid amount dalen!');return;}
+  if(!dt){toast('Date select karen!');return;}
+  var ledger=ls_get(SK.LEDGER)||[];
+  ledger.push({id:'led_'+Date.now(),type:type,cat:cat,desc:desc,amt:amt,date:dt,note:note});
+  ls_set(SK.LEDGER,ledger);
+  document.getElementById('entDesc').value='';
+  document.getElementById('entAmt').value='';
+  document.getElementById('entNote').value='';
+  logActivity('fee',(type==='income'?'Income':'Expense')+' Entry: '+desc,'Rs. '+amt,'Admin');
+  toast('Entry save ho gayi! \u2705');
+  renderLedger();
+}
+
+function getLedgerForMonth(month,year){
+  var ledger=ls_get(SK.LEDGER)||[];
+  return ledger.filter(function(e){
+    var d=new Date(e.date);
+    return d.getMonth()===month&&d.getFullYear()===year;
+  });
+}
+
+function renderLedger(){
+  var month=parseInt(document.getElementById('ledMonth').value);
+  var year=parseInt(document.getElementById('ledYear').value);
+  var entries=getLedgerForMonth(month,year);
+  var totInc=0,totExp=0;
+  entries.forEach(function(e){if(e.type==='income')totInc+=e.amt;else totExp+=e.amt;});
+  var balance=totInc-totExp;
+  document.getElementById('ledTotInc').textContent='Rs. '+totInc.toLocaleString();
+  document.getElementById('ledTotExp').textContent='Rs. '+totExp.toLocaleString();
+  var balEl=document.getElementById('ledBalance');
+  balEl.textContent='Rs. '+Math.abs(balance).toLocaleString()+(balance<0?' (Loss)':' (Profit)');
+  balEl.style.color=balance>=0?'#1565c0':'#c62828';
+  drawLedgerBarChart(totInc,totExp);
+  renderLedgerRecords();
+}
+
+function drawLedgerBarChart(inc,exp){
+  var canvas=document.getElementById('ledBarChart');if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,320,160);
+  var max=Math.max(inc,exp,1);
+  var barW=70,gap=40,startX=60,baseY=130,maxH=100;
+  // Grid lines
+  for(var g=0;g<=4;g++){
+    var gy=baseY-g*(maxH/4);
+    ctx.strokeStyle='#eee';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(40,gy);ctx.lineTo(300,gy);ctx.stroke();
+    ctx.fillStyle='#aaa';ctx.font='9px Arial';ctx.textAlign='right';
+    ctx.fillText('Rs.'+Math.round(max*g/4/1000)+'k',38,gy+3);
+  }
+  // Income bar
+  var incH=inc>0?Math.max((inc/max)*maxH,4):0;
+  ctx.fillStyle='#2e7d32';
+  ctx.beginPath();ctx.roundRect(startX,baseY-incH,barW,incH,4);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 11px Arial';ctx.textAlign='center';
+  if(incH>18)ctx.fillText('Rs.'+Math.round(inc/1000)+'k',startX+barW/2,baseY-incH+15);
+  ctx.fillStyle='#2e7d32';ctx.font='bold 11px Arial';
+  ctx.fillText('Income',startX+barW/2,baseY+14);
+  // Expense bar
+  var expH=exp>0?Math.max((exp/max)*maxH,4):0;
+  var expX=startX+barW+gap;
+  ctx.fillStyle='#c62828';
+  ctx.beginPath();ctx.roundRect(expX,baseY-expH,barW,expH,4);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 11px Arial';
+  if(expH>18)ctx.fillText('Rs.'+Math.round(exp/1000)+'k',expX+barW/2,baseY-expH+15);
+  ctx.fillStyle='#c62828';ctx.font='bold 11px Arial';
+  ctx.fillText('Expense',expX+barW/2,baseY+14);
+  // Balance line indicator
+  ctx.setLineDash([4,3]);ctx.strokeStyle='#1565c0';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(40,baseY-0.5);ctx.lineTo(300,baseY-0.5);ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function ledSwitch(n){
+  document.getElementById('ledAddSec').style.display=n===0?'block':'none';
+  document.getElementById('ledRecSec').style.display=n===1?'block':'none';
+  document.getElementById('ledAnnSec').style.display=n===2?'block':'none';
+  var tabs=['ledTabAdd','ledTabRec','ledTabAnn'];
+  var colors=['var(--g)','var(--g)','#6a1b9a'];
+  tabs.forEach(function(id,i){
+    var el=document.getElementById(id);if(!el)return;
+    if(i===n){el.style.background=colors[i];el.style.color=i===2?'#fff':'var(--gold)';el.style.border='none';}
+    else{el.style.background='#fff';el.style.color=colors[i];el.style.border='2px solid '+colors[i];}
+  });
+  if(n===1)renderLedgerRecords();
+  if(n===2)renderAnnualReport();
+}
+
+function renderLedgerRecords(){
+  var el=document.getElementById('ledRecBody');if(!el)return;
+  var month=parseInt(document.getElementById('ledMonth').value);
+  var year=parseInt(document.getElementById('ledYear').value);
+  var filterType=document.getElementById('ledFilterType')?document.getElementById('ledFilterType').value:'';
+  var entries=getLedgerForMonth(month,year);
+  if(filterType)entries=entries.filter(function(e){return e.type===filterType;});
+  entries=entries.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
+  if(!entries.length){el.innerHTML='<div style="text-align:center;padding:18px;color:#aaa;font-size:12px">Koi entry nahi</div>';return;}
+  var h='';
+  entries.forEach(function(e){
+    var isInc=e.type==='income';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;background:'+(isInc?'#f0faf4':'#fff8f8')+';border-radius:9px;padding:10px 12px;margin-bottom:7px;border-left:4px solid '+(isInc?'#2e7d32':'#c62828')+'">'+
+      '<div style="flex:1">'+
+      '<div style="display:flex;align-items:center;gap:6px">'+
+      '<span style="font-size:16px">'+(catIcons[e.cat]||'\uD83D\uDCCC')+'</span>'+
+      '<div>'+
+      '<div style="font-size:12px;font-weight:700;color:#333">'+e.desc+'</div>'+
+      '<div style="font-size:10px;color:#888">'+(isInc?'Income':'Expense')+' \u2022 '+e.cat+' \u2022 '+fmtDate(e.date)+'</div>'+
+      (e.note?'<div style="font-size:10px;color:#aaa;margin-top:1px">'+e.note+'</div>':'')+
+      '</div></div></div>'+
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
+      '<div style="font-size:14px;font-weight:900;color:'+(isInc?'#2e7d32':'#c62828')+'">Rs. '+e.amt.toLocaleString()+'</div>'+
+      '<button onclick="deleteLedgerEntry(\''+e.id+'\')" style="padding:3px 9px;background:#e0e0e0;color:#555;border:none;border-radius:5px;font-size:10px;cursor:pointer">\uD83D\uDDD1\uFE0F Del</button>'+
+      '</div></div>';
+  });
+  el.innerHTML=h;
+}
+
+function deleteLedgerEntry(id){
+  if(!confirm('Yeh entry delete karen?'))return;
+  var ledger=(ls_get(SK.LEDGER)||[]).filter(function(e){return e.id!==id;});
+  ls_set(SK.LEDGER,ledger);
+  renderLedger();
+  toast('Entry delete ho gayi!');
+}
+
+function renderAnnualReport(){
+  var year=parseInt(document.getElementById('ledAnnYear').value);
+  var ledger=ls_get(SK.LEDGER)||[];
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var monthData=[];
+  for(var m=0;m<12;m++){
+    var mEntries=ledger.filter(function(e){var d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===year;});
+    var inc=0,exp=0;
+    mEntries.forEach(function(e){if(e.type==='income')inc+=e.amt;else exp+=e.amt;});
+    monthData.push({name:monthNames[m],inc:inc,exp:exp,bal:inc-exp});
+  }
+  var totInc=0,totExp=0;
+  monthData.forEach(function(d){totInc+=d.inc;totExp+=d.exp;});
+  // Draw annual bar chart
+  drawAnnualChart(monthData);
+  // Table
+  var h='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;margin-top:8px">'+
+    '<thead><tr style="background:#0d5c3a;color:#fff">'+
+    '<th style="padding:8px 7px;border:1px solid #ccc;text-align:left">Month</th>'+
+    '<th style="padding:8px 7px;border:1px solid #ccc;color:#90ee90">Income</th>'+
+    '<th style="padding:8px 7px;border:1px solid #ccc;color:#ffb3b3">Expense</th>'+
+    '<th style="padding:8px 7px;border:1px solid #ccc">Balance</th>'+
+    '</tr></thead><tbody>';
+  monthData.forEach(function(d,i){
+    var bal=d.bal;
+    h+='<tr style="background:'+(i%2?'#f9f9f9':'#fff')+'">'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-weight:700">'+d.name+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;color:#2e7d32;font-weight:700">'+(d.inc?'Rs.'+d.inc.toLocaleString():'-')+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;color:#c62828;font-weight:700">'+(d.exp?'Rs.'+d.exp.toLocaleString():'-')+'</td>'+
+      '<td style="padding:7px 8px;border:1px solid #ddd;font-weight:900;color:'+(bal>=0?'#1565c0':'#c62828')+'">Rs.'+Math.abs(bal).toLocaleString()+(bal<0?' (L)':'')+'</td>'+
+      '</tr>';
+  });
+  h+='<tr style="background:#e8f5e9;font-weight:900">'+
+    '<td style="padding:8px;border:2px solid #0d5c3a;font-weight:900">TOTAL</td>'+
+    '<td style="padding:8px;border:2px solid #0d5c3a;color:#2e7d32">Rs.'+totInc.toLocaleString()+'</td>'+
+    '<td style="padding:8px;border:2px solid #0d5c3a;color:#c62828">Rs.'+totExp.toLocaleString()+'</td>'+
+    '<td style="padding:8px;border:2px solid #0d5c3a;color:'+(totInc-totExp>=0?'#1565c0':'#c62828')+'">Rs.'+Math.abs(totInc-totExp).toLocaleString()+(totInc-totExp<0?' (Loss)':' (Profit)')+'</td>'+
+    '</tr></tbody></table></div>';
+  document.getElementById('annTableBody').innerHTML=h;
+}
+
+function drawAnnualChart(data){
+  var canvas=document.getElementById('annBarChart');if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,320,200);
+  var max=0;data.forEach(function(d){max=Math.max(max,d.inc,d.exp,1);});
+  var barW=10,gap=4,groupW=barW*2+gap+4,startX=26,baseY=165,maxH=130;
+  // Grid
+  for(var g=0;g<=4;g++){
+    var gy=baseY-g*(maxH/4);
+    ctx.strokeStyle='#eee';ctx.lineWidth=0.8;
+    ctx.beginPath();ctx.moveTo(22,gy);ctx.lineTo(318,gy);ctx.stroke();
+    ctx.fillStyle='#bbb';ctx.font='8px Arial';ctx.textAlign='right';
+    ctx.fillText(Math.round(max*g/4/1000)+'k',20,gy+3);
+  }
+  data.forEach(function(d,i){
+    var x=startX+i*groupW;
+    // Income bar
+    var incH=d.inc>0?Math.max((d.inc/max)*maxH,2):0;
+    ctx.fillStyle='#2e7d32';
+    if(incH>0){ctx.beginPath();ctx.roundRect(x,baseY-incH,barW,incH,2);ctx.fill();}
+    // Expense bar
+    var expH=d.exp>0?Math.max((d.exp/max)*maxH,2):0;
+    ctx.fillStyle='#c62828';
+    if(expH>0){ctx.beginPath();ctx.roundRect(x+barW+gap,baseY-expH,barW,expH,2);ctx.fill();}
+    // Month label
+    ctx.fillStyle='#888';ctx.font='7.5px Arial';ctx.textAlign='center';
+    ctx.fillText(d.name,x+barW,baseY+10);
+  });
+  // Legend
+  ctx.fillStyle='#2e7d32';ctx.fillRect(60,185,10,8);
+  ctx.fillStyle='#555';ctx.font='9px Arial';ctx.textAlign='left';ctx.fillText('Income',73,192);
+  ctx.fillStyle='#c62828';ctx.fillRect(130,185,10,8);
+  ctx.fillStyle='#555';ctx.fillText('Expense',143,192);
+}
+
+function generateLedgerPDF(){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui. Internet check karen.');return;}
+  var month=parseInt(document.getElementById('ledMonth').value);
+  var year=parseInt(document.getElementById('ledYear').value);
+  var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var mName=monthNames[month];
+  var entries=getLedgerForMonth(month,year);
+  if(!entries.length){toast('Is month mein koi entry nahi!');return;}
+  var totInc=0,totExp=0;
+  entries.forEach(function(e){if(e.type==='income')totInc+=e.amt;else totExp+=e.amt;});
+  var balance=totInc-totExp;
+  var sorted=entries.slice().sort(function(a,b){return a.date.localeCompare(b.date);});
+
+  var jsPDFLib=window.jspdf.jsPDF;
+  var doc=new jsPDFLib();
+  var schName='AL-FAREED PUBLIC SCHOOL';
+
+  // Header
+  doc.setFillColor(13,92,58);doc.rect(0,0,210,38,'F');
+  doc.setTextColor(201,168,76);doc.setFontSize(17);doc.setFont('helvetica','bold');
+  doc.text(schName,105,14,{align:'center'});
+  doc.setFontSize(9);doc.setTextColor(220,220,200);doc.setFont('helvetica','normal');
+  doc.text('Tando Jam, Sindh  |  Tel: 03435272484',105,21,{align:'center'});
+  doc.setFillColor(201,168,76);doc.rect(0,28,210,10,'F');
+  doc.setTextColor(13,92,58);doc.setFontSize(12);doc.setFont('helvetica','bold');
+  doc.text('MONTHLY INCOME & EXPENSES LEDGER \u2014 '+mName.toUpperCase()+' '+year,105,35,{align:'center'});
+
+  // Summary pills
+  var y=46;
+  var pills2=[
+    {label:'TOTAL INCOME',val:'Rs. '+totInc.toLocaleString(),bg:[232,245,233],border:[46,125,50],tc:[46,125,50]},
+    {label:'TOTAL EXPENSE',val:'Rs. '+totExp.toLocaleString(),bg:[255,235,238],border:[198,40,40],tc:[198,40,40]},
+    {label:balance>=0?'NET PROFIT':'NET LOSS',val:'Rs. '+Math.abs(balance).toLocaleString(),bg:balance>=0?[227,242,253]:[255,235,238],border:balance>=0?[21,101,192]:[198,40,40],tc:balance>=0?[21,101,192]:[198,40,40]}
+  ];
+  var pw3=60,pgap=3,psx=15;
+  pills2.forEach(function(p2,pi){
+    var px=psx+pi*(pw3+pgap);
+    doc.setFillColor(p2.bg[0],p2.bg[1],p2.bg[2]);
+    doc.roundedRect(px,y,pw3,18,3,3,'F');
+    doc.setDrawColor(p2.border[0],p2.border[1],p2.border[2]);
+    doc.setLineWidth(0.7);doc.roundedRect(px,y,pw3,18,3,3,'S');
+    doc.setTextColor(p2.tc[0],p2.tc[1],p2.tc[2]);
+    doc.setFontSize(12);doc.setFont('helvetica','bold');
+    doc.text(p2.val,px+pw3/2,y+10,{align:'center'});
+    doc.setFontSize(6.5);doc.setFont('helvetica','normal');
+    doc.text(p2.label,px+pw3/2,y+16,{align:'center'});
+  });
+
+  // Income section
+  y+=25;
+  doc.setFillColor(46,125,50);doc.rect(12,y,186,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+  doc.text('INCOME ENTRIES',105,y+5.5,{align:'center'});
+  y+=8;
+  var incEntries=sorted.filter(function(e){return e.type==='income';});
+  incEntries.forEach(function(e,i){
+    if(y>270){doc.addPage();y=15;}
+    doc.setFillColor(i%2?248:255,i%2?252:255,i%2?248:255);
+    doc.rect(12,y,186,7,'F');
+    doc.setDrawColor(220,240,225);doc.rect(12,y,186,7,'S');
+    doc.setTextColor(50,50,50);doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+    doc.text(fmtDate(e.date),16,y+4.8);
+    doc.setFont('helvetica','bold');doc.text(e.desc,55,y+4.8);doc.setFont('helvetica','normal');
+    if(e.note)doc.text(e.note,55,y+4.8+4);
+    doc.setTextColor(46,125,50);doc.setFont('helvetica','bold');
+    doc.text('Rs. '+e.amt.toLocaleString(),195,y+4.8,{align:'right'});
+    y+=7;
+  });
+  if(!incEntries.length){doc.setTextColor(150,150,150);doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.text('Koi income entry nahi',105,y+5,{align:'center'});y+=8;}
+
+  // Income subtotal
+  if(y>270){doc.addPage();y=15;}
+  doc.setFillColor(200,235,200);doc.rect(12,y,186,7,'F');
+  doc.setTextColor(46,125,50);doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.text('TOTAL INCOME',16,y+4.8);
+  doc.text('Rs. '+totInc.toLocaleString(),195,y+4.8,{align:'right'});
+  y+=12;
+
+  // Expense section
+  if(y>255){doc.addPage();y=15;}
+  doc.setFillColor(198,40,40);doc.rect(12,y,186,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');
+  doc.text('EXPENSE ENTRIES',105,y+5.5,{align:'center'});
+  y+=8;
+  var expEntries=sorted.filter(function(e){return e.type==='expense';});
+  expEntries.forEach(function(e,i){
+    if(y>270){doc.addPage();y=15;}
+    doc.setFillColor(i%2?255:255,i%2?248:255,i%2?248:255);
+    doc.rect(12,y,186,7,'F');
+    doc.setDrawColor(245,220,220);doc.rect(12,y,186,7,'S');
+    doc.setTextColor(50,50,50);doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+    doc.text(fmtDate(e.date),16,y+4.8);
+    doc.setFont('helvetica','bold');doc.text(e.desc,55,y+4.8);doc.setFont('helvetica','normal');
+    doc.setTextColor(198,40,40);doc.setFont('helvetica','bold');
+    doc.text('Rs. '+e.amt.toLocaleString(),195,y+4.8,{align:'right'});
+    y+=7;
+  });
+  if(!expEntries.length){doc.setTextColor(150,150,150);doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.text('Koi expense entry nahi',105,y+5,{align:'center'});y+=8;}
+
+  // Expense subtotal
+  if(y>270){doc.addPage();y=15;}
+  doc.setFillColor(250,215,215);doc.rect(12,y,186,7,'F');
+  doc.setTextColor(198,40,40);doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.text('TOTAL EXPENSE',16,y+4.8);
+  doc.text('Rs. '+totExp.toLocaleString(),195,y+4.8,{align:'right'});
+  y+=12;
+
+  // Net balance
+  if(y>265){doc.addPage();y=15;}
+  var balColor=balance>=0?[21,101,192]:[198,40,40];
+  var balBg=balance>=0?[227,242,253]:[255,235,238];
+  doc.setFillColor(balBg[0],balBg[1],balBg[2]);
+  doc.roundedRect(12,y,186,12,3,3,'F');
+  doc.setDrawColor(balColor[0],balColor[1],balColor[2]);
+  doc.setLineWidth(1);doc.roundedRect(12,y,186,12,3,3,'S');
+  doc.setTextColor(balColor[0],balColor[1],balColor[2]);
+  doc.setFontSize(11);doc.setFont('helvetica','bold');
+  doc.text((balance>=0?'NET PROFIT':'NET LOSS')+': Rs. '+Math.abs(balance).toLocaleString(),105,y+8,{align:'center'});
+  y+=20;
+
+  // Footer
+  if(y>270){doc.addPage();y=15;}
+  doc.setDrawColor(201,168,76);doc.setLineWidth(0.5);doc.line(12,y,198,y);
+  y+=6;
+  doc.setFontSize(7.5);doc.setTextColor(130,130,130);doc.setFont('helvetica','normal');
+  doc.text('Generated: '+fmtDate(today())+'  |  Al-Fareed Public School Management System',12,y);
+  y+=10;
+  doc.text('_______________________',135,y+6);y+=10;
+  doc.setFont('helvetica','bold');doc.setTextColor(13,92,58);doc.setFontSize(9);
+  doc.text('Sir Ghulam Hussain',135,y);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(130,130,130);
+  doc.text('Principal',135,y+4);
+
+  doc.save('Ledger_'+mName+'_'+year+'.pdf');
+  toast('Ledger PDF download ho gayi! \u2705');
+  logActivity('fee','Monthly Ledger PDF: '+mName+' '+year,'Income: Rs.'+totInc+' | Exp: Rs.'+totExp,'Admin');
+}
+
+function generateAnnualPDF(){
+  if(typeof window.jspdf==='undefined'){toast('PDF library load nahi hui.');return;}
+  var year=parseInt(document.getElementById('ledAnnYear').value);
+  var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var ledger=ls_get(SK.LEDGER)||[];
+  var jsPDFLib=window.jspdf.jsPDF;
+  var doc=new jsPDFLib();
+
+  doc.setFillColor(13,92,58);doc.rect(0,0,210,38,'F');
+  doc.setTextColor(201,168,76);doc.setFontSize(17);doc.setFont('helvetica','bold');
+  doc.text('AL-FAREED PUBLIC SCHOOL',105,14,{align:'center'});
+  doc.setFontSize(9);doc.setTextColor(220,220,200);doc.setFont('helvetica','normal');
+  doc.text('Tando Jam, Sindh  |  Tel: 03435272484',105,21,{align:'center'});
+  doc.setFillColor(201,168,76);doc.rect(0,28,210,10,'F');
+  doc.setTextColor(13,92,58);doc.setFontSize(12);doc.setFont('helvetica','bold');
+  doc.text('ANNUAL INCOME & EXPENSES REPORT \u2014 '+year,105,35,{align:'center'});
+
+  var y=46;
+  doc.setFillColor(13,92,58);doc.rect(12,y,186,8,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(8.5);doc.setFont('helvetica','bold');
+  doc.text('Month',20,y+5.5);doc.text('Income',75,y+5.5);doc.text('Expense',115,y+5.5);doc.text('Balance',155,y+5.5);doc.text('Status',185,y+5.5);
+  y+=8;
+
+  var totInc2=0,totExp2=0;
+  for(var m2=0;m2<12;m2++){
+    var mE=ledger.filter(function(e){var d=new Date(e.date);return d.getMonth()===m2&&d.getFullYear()===year;});
+    var mI=0,mX=0;mE.forEach(function(e){if(e.type==='income')mI+=e.amt;else mX+=e.amt;});
+    totInc2+=mI;totExp2+=mX;
+    var mBal=mI-mX;
+    doc.setFillColor(m2%2?249:255,m2%2?249:255,m2%2?249:255);
+    doc.rect(12,y,186,7,'F');
+    doc.setDrawColor(220,220,220);doc.rect(12,y,186,7,'S');
+    doc.setTextColor(50,50,50);doc.setFont('helvetica','bold');doc.setFontSize(8.5);
+    doc.text(monthNames[m2],20,y+4.8);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(46,125,50);doc.text(mI?'Rs.'+mI.toLocaleString():'-',75,y+4.8);
+    doc.setTextColor(198,40,40);doc.text(mX?'Rs.'+mX.toLocaleString():'-',115,y+4.8);
+    var bc=mBal>=0?[21,101,192]:[198,40,40];
+    doc.setTextColor(bc[0],bc[1],bc[2]);doc.setFont('helvetica','bold');
+    doc.text('Rs.'+Math.abs(mBal).toLocaleString(),155,y+4.8);
+    doc.text(mBal>=0?(mI||mX?'Profit':'-'):'Loss',185,y+4.8);
+    y+=7;
+  }
+  // Total row
+  var totalBal=totInc2-totExp2;
+  doc.setFillColor(13,92,58);doc.rect(12,y,186,8,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);
+  doc.text('ANNUAL TOTAL',20,y+5.5);
+  doc.text('Rs.'+totInc2.toLocaleString(),75,y+5.5);
+  doc.text('Rs.'+totExp2.toLocaleString(),115,y+5.5);
+  doc.setTextColor(201,168,76);doc.text('Rs.'+Math.abs(totalBal).toLocaleString(),155,y+5.5);
+  doc.text(totalBal>=0?'PROFIT':'LOSS',185,y+5.5);
+  y+=16;
+
+  doc.setDrawColor(201,168,76);doc.line(12,y,198,y);y+=6;
+  doc.setFontSize(7.5);doc.setTextColor(130,130,130);doc.setFont('helvetica','normal');
+  doc.text('Generated: '+fmtDate(today())+'  |  Al-Fareed Public School Management System',12,y);
+  y+=10;
+  doc.setFont('helvetica','bold');doc.setTextColor(13,92,58);doc.setFontSize(9);
+  doc.text('_______________________',135,y+5);
+  doc.text('Sir Ghulam Hussain',135,y+10);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(130,130,130);
+  doc.text('Principal',135,y+14);
+
+  doc.save('Annual_Ledger_'+year+'.pdf');
+  toast('Annual report PDF download ho gayi! \u2705');
+}
+var JB_KEY = ''; // JSONBin Master Key
 var JB_BIN = ''; // JSONBin Bin ID
 var JB_BASE = 'https://api.jsonbin.io/v3/b';
 var JB_SYNCING = false;
-var JB_QUEUE = {}; // pending writes
-var SHARED_KEYS = ['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students','af_activity_log','af_holidays','af_birthdays','af_fees'];
+var JB_QUEUE = {};
+var SHARED_KEYS = ['af_hw','af_dw','af_stud_att','af_teach_att','af_arrival','af_teachers','af_students','af_activity_log','af_holidays','af_birthdays','af_fees','af_ledger'];
 
 function ls_get(k){
   try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}
 }
 function ls_set(k,v){
   try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}
-  if(SHARED_KEYS.indexOf(k)>=0 && JB_KEY && JB_BIN){
-    JB_QUEUE[k]=v;
-    jbPushDebounced();
-  }
+  try{
+    if(SHARED_KEYS.indexOf(k)>=0 && typeof JB_KEY!=='undefined' && JB_KEY && JB_BIN){
+      JB_QUEUE[k]=v;
+      jbPushDebounced();
+    }
+  }catch(e){}
 }
 
 // ─── Debounce writes (500ms) ───
@@ -3477,7 +4069,7 @@ function loadTeacherDropdown(){
 function sTab(n){
   var i,el,btns,b;
   // Hide all sections
-  for(i=0;i<=9;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
+  for(i=0;i<=10;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
   // Show target
   el=document.getElementById('s'+n);if(el)el.style.display='block';
   // Nav highlight
@@ -3497,6 +4089,7 @@ function sTab(n){
   try{if(n===7){etInit();initSchDefaults();}}catch(e){}
   try{if(n===8){sylInitRows();initSchemeDefaults();}}catch(e){}
   try{if(n===9){loadFeeClassDropdown();renderFeeList();}}catch(e){}
+  try{if(n===10){initLedger();}}catch(e){}
 }
 
 // ═══════════════════════════════════════════
@@ -4158,7 +4751,7 @@ function saveTeachAtt(){
 function setupDashboard(){
   // Show dashboard tab
   var i,el;
-  for(i=0;i<=9;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
+  for(i=0;i<=10;i++){el=document.getElementById('s'+i);if(el)el.style.display='none';}
   el=document.getElementById('s0');if(el)el.style.display='block';
   try{updateDashboard();}catch(e){}
   try{updateStudentStats();}catch(e){}
@@ -4213,6 +4806,8 @@ function updateDashboard(){
   try{renderHolidays();renderBirthdays();initWeather();}catch(e){}
   // Role-based visibility (security)
   try{applyDashboardRoleVisibility();}catch(e){}
+  // Ledger summary (admin only)
+  try{if(currentRole==='admin')renderDashLedger();}catch(e){}
 }
 
 // ═══════════════════════════════════════════
@@ -4236,6 +4831,8 @@ function applyDashboardRoleVisibility(){
     if(actCard)actCard.style.display='block';
     var bell=document.getElementById('notifBell');if(bell)bell.style.display='block';
     var navFees=document.getElementById('navFees');if(navFees)navFees.style.display='';
+    var navLedger=document.getElementById('navLedger');if(navLedger)navLedger.style.display='';
+    var dlCard=document.getElementById('dashLedgerCard');if(dlCard)dlCard.style.display='block';
 
   }else if(currentRole==='teacher'){
     // Teacher: operational info yes, admin-sensitive stats/logs no
@@ -4252,6 +4849,8 @@ function applyDashboardRoleVisibility(){
     if(actCard2)actCard2.style.display='none'; // activity log = admin only
     var bell2=document.getElementById('notifBell');if(bell2)bell2.style.display='none';
     var navFees2=document.getElementById('navFees');if(navFees2)navFees2.style.display='';
+    var navLedger2=document.getElementById('navLedger');if(navLedger2)navLedger2.style.display='none';
+    var dlCard2=document.getElementById('dashLedgerCard');if(dlCard2)dlCard2.style.display='none';
 
   }else if(currentRole==='parent'){
     // Parent: only what's relevant to their child — no admin/teacher management info
@@ -4267,8 +4866,40 @@ function applyDashboardRoleVisibility(){
     var actCard3=document.getElementById('dashActCard');
     if(actCard3)actCard3.style.display='none'; // activity log = never for parent
     var bell3=document.getElementById('notifBell');if(bell3)bell3.style.display='none';
-    var navFees3=document.getElementById('navFees');if(navFees3)navFees3.style.display='none'; // fees mgmt = admin/teacher only
+    var navFees3=document.getElementById('navFees');if(navFees3)navFees3.style.display='none';
+    var navLedger3=document.getElementById('navLedger');if(navLedger3)navLedger3.style.display='none';
+    var dlCard3=document.getElementById('dashLedgerCard');if(dlCard3)dlCard3.style.display='none';
   }
+}
+
+function renderDashLedger(){
+  var el=document.getElementById('dashLedgerBody');
+  if(!el)return;
+  var now=new Date();
+  var month=now.getMonth();var year=now.getFullYear();
+  var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var ledger=ls_get(SK.LEDGER)||[];
+  var entries=ledger.filter(function(e){var d=new Date(e.date);return d.getMonth()===month&&d.getFullYear()===year;});
+  var totInc=0,totExp=0;
+  entries.forEach(function(e){if(e.type==='income')totInc+=e.amt;else totExp+=e.amt;});
+  var balance=totInc-totExp;
+  if(!entries.length){
+    el.innerHTML='<div style="text-align:center;padding:12px;color:#aaa;font-size:12px">'+monthNames[month]+' mein koi entry nahi. <span onclick="sTab(10)" style="color:var(--g);font-weight:700;cursor:pointer">Entry add karen \u2192</span></div>';
+    return;
+  }
+  var h='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px">';
+  h+='<div style="background:#e8f5e9;border-radius:8px;padding:9px;text-align:center;border-top:3px solid #2e7d32"><div style="font-size:9px;font-weight:700;color:#555">INCOME</div><div style="font-size:14px;font-weight:900;color:#2e7d32">Rs.'+totInc.toLocaleString()+'</div></div>';
+  h+='<div style="background:#ffebee;border-radius:8px;padding:9px;text-align:center;border-top:3px solid #c62828"><div style="font-size:9px;font-weight:700;color:#555">EXPENSE</div><div style="font-size:14px;font-weight:900;color:#c62828">Rs.'+totExp.toLocaleString()+'</div></div>';
+  h+='<div style="background:'+(balance>=0?'#e3f2fd':'#ffebee')+';border-radius:8px;padding:9px;text-align:center;border-top:3px solid '+(balance>=0?'#1565c0':'#c62828')+'"><div style="font-size:9px;font-weight:700;color:#555">'+(balance>=0?'PROFIT':'LOSS')+'</div><div style="font-size:14px;font-weight:900;color:'+(balance>=0?'#1565c0':'#c62828')+'">Rs.'+Math.abs(balance).toLocaleString()+'</div></div>';
+  h+='</div>';
+  entries.slice().reverse().slice(0,3).forEach(function(e){
+    var isInc=e.type==='income';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:'+(isInc?'#f0faf4':'#fff8f8')+';border-radius:7px;margin-bottom:5px;border-left:3px solid '+(isInc?'#2e7d32':'#c62828')+'">'+
+      '<div style="font-size:11px;font-weight:700;color:#333">'+e.desc+'</div>'+
+      '<div style="font-size:12px;font-weight:900;color:'+(isInc?'#2e7d32':'#c62828')+'">Rs.'+e.amt.toLocaleString()+'</div></div>';
+  });
+  if(entries.length>3)h+='<div style="text-align:center;font-size:10px;color:#888;margin-top:4px">+ '+(entries.length-3)+' aur entries...</div>';
+  el.innerHTML=h;
 }
 
 function renderDashHW(){
