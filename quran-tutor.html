@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>قرآن ٹیوٹر</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f7f2;--ink:#1d2b24;--card:#fff;--line:#d5e0d6;--g:#1f7a4d;--bad:#c62828;--ok:#1f8f4a;--mute:#6b7c72}
+@media(prefers-color-scheme:dark){:root{--bg:#10201a;--ink:#e6efe9;--card:#18302a;--line:#2b4a3f;--g:#5fd39a;--bad:#ff7b72;--ok:#5fd39a;--mute:#9db3a8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Nastaliq Urdu',system-ui,sans-serif;line-height:2}
+header{padding:14px 16px;background:var(--g);color:#fff;font-size:20px;position:sticky;top:0;z-index:5}
+.bar{display:flex;gap:8px;padding:10px 12px}
+select,button{font:inherit;font-size:15px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+select{flex:1;min-width:0}
+button{cursor:pointer}button.p{background:var(--g);color:#fff;border-color:var(--g)}
+.ayah{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:10px 12px;padding:12px 14px}
+.no{font-size:13px;color:var(--mute)}
+.ar{font-family:'Amiri Quran','Scheherazade New',serif;font-size:30px;line-height:2.4;direction:rtl;text-align:right}
+.w{cursor:pointer;padding:0 3px;border-radius:6px;display:inline-block}
+.w.good{background:rgba(31,143,74,.18);outline:2px solid var(--ok)}
+.w.bad{background:rgba(198,40,40,.15);outline:2px solid var(--bad)}
+.w.miss{outline:2px dashed var(--bad)}
+.ur{font-size:17px;color:var(--ink);margin:4px 0}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tip{background:rgba(31,122,77,.1);border-radius:10px;padding:6px 10px;font-size:15px;margin-top:8px}
+.tip b{color:var(--g)}
+.fb{margin-top:8px;font-size:15px}
+.fb .x{color:var(--bad)}.fb .k{color:var(--ok)}
+.taf{font-size:15px;white-space:pre-wrap;margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+#msg{text-align:center;color:var(--mute);padding:20px}
+.fz{background:rgba(185,119,14,.12);border-right:4px solid #b9770e;border-radius:10px;padding:6px 10px;font-size:15px;margin-top:8px}
+#rqp{margin:0 12px 6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px}
+#rqp h3{margin:6px 0;color:var(--g);font-size:17px}
+#rqp li{margin-bottom:6px}
+#rqp .w2{color:var(--bad)}
+</style>
+</head>
+<body>
+<header>📖 قرآن ٹیوٹر — رنگین الفاظ، ترجمہ، تلفظ</header>
+<div class="bar"><select id="sura"></select><button class="p" id="load">کھولیں</button><button id="rq">🛡️ رقیہ</button></div>
+<div id="rqp" hidden>
+<h3>روحانی فائدہ اور رقیہ (صرف صحیح احادیث سے)</h3>
+<ul>
+<li><b>سورۃ الفاتحہ:</b> صحابی نے بچھو کے ڈسے ہوئے پر دم کیا اور نبی ﷺ نے اسے درست رکھا (بخاری، مسلم)۔</li>
+<li><b>آیت الکرسی (2:255):</b> سونے سے پہلے پڑھیں تو اللہ کی طرف سے نگہبان رہتا ہے اور صبح تک شیطان قریب نہیں آتا (بخاری)۔</li>
+<li><b>سورۃ البقرہ:</b> پڑھنے سے شیطان گھر سے بھاگتا ہے (مسلم)۔ آخری دو آیات (285-286) رات کو پڑھ لیں تو کافی ہیں (بخاری، مسلم)۔</li>
+<li><b>اخلاص، فلق، ناس (112-114):</b> سونے سے پہلے تین بار پڑھ کر ہتھیلیوں پر پھونکیں اور جسم پر ہاتھ پھیریں۔ بیماری میں بھی نبی ﷺ ایسا کرتے تھے (بخاری)۔</li>
+</ul>
+<h3>پڑھنے کا طریقہ</h3>
+<ul>
+<li>یقین رکھیں کہ شفا اللہ کی طرف سے ہے۔ وضو میں ہوں تو بہتر ہے اور مطلب سمجھ کر پڑھیں۔</li>
+<li>پڑھ کر اپنے یا مریض پر ہلکا پھونک دیں۔ صبح شام معمول بنائیں۔</li>
+<li>نظر بد برحق ہے (مسلم)۔ اس کے لیے بھی یہی آیات اور مسنون دعائیں پڑھیں۔</li>
+</ul>
+<p class="w2">⚠️ ہر آیت کا الگ الگ بیماری، جادو یا جنات کے لیے مخصوص فائدہ قرآن و صحیح حدیث سے ثابت نہیں۔ ایسے دعووں، عجیب ناموں والے تعویذ یا عاملوں سے بچیں۔ رقیہ علاج کا متبادل نہیں، بیماری میں ڈاکٹر سے ضرور ملیں اور کسی مستند عالم سے رہنمائی لیں۔</p>
+</div>
+<div id="msg">سورت چنیں اور "کھولیں" دبائیں</div>
+<main id="list"></main>
+<script>
+const COLORS=['#c0392b','#1f7a4d','#2471a3','#b9770e','#8e44ad','#117a8b','#d35400','#566573'];
+const $=s=>document.querySelector(s);
+const norm=s=>s.replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640\u08D3-\u08FF]/g,'')
+ .replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[^\u0621-\u064A ]/g,'').replace(/\s+/g,' ').trim();
+function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i]);for(let j=1;j<=n;j++)d[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]==b[j-1]?0:1));return d[m][n]}
+const sim=(a,b)=>{const L=Math.max(a.length,b.length)||1;return 1-lev(a,b)/L};
+// alignment of expected words vs heard words
+function align(exp,hear){const m=exp.length,n=hear.length,S=(i,j)=>sim(exp[i],hear[j]);
+ const d=Array.from({length:m+1},()=>Array(n+1).fill(0));
+ for(let i=1;i<=m;i++)d[i][0]=i;for(let j=1;j<=n;j++)d[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(1-S(i-1,j-1))*1.2);
+ const res=Array(m).fill(null);let i=m,j=n;
+ while(i>0&&j>0){const c=d[i-1][j-1]+(1-S(i-1,j-1))*1.2;
+  if(Math.abs(d[i][j]-c)<1e-9){res[i-1]=hear[j-1];i--;j--}else if(d[i][j]==d[i-1][j]+1)i--;else j--}
+ return res}
+const RULES=[
+ [/[قطبجد]\u0652|[قطبجد]ْ/,'قلقلہ: ق ط ب ج د ساکن ہوں تو آواز ہلکی سی اچھلتی ہے۔'],
+ [/[نم]ّ/,'غنہ: نّ اور مّ میں ناک سے آواز روک کر پڑھیں۔'],
+ [/[آاى]ٓ|ٓ/,'مدّ: اس جگہ آواز کو کھینچ کر لمبا پڑھیں۔'],
+ [/ن\u0652?\s*[يرملونب]|ً|ٍ|ٌ/,'نون ساکن/تنوین کے قاعدے (اخفاء، ادغام، اظہار) کا خیال رکھیں۔']];
+function tipFor(w){for(const[r,t]of RULES)if(r.test(w))return t;return''}
+let data=[],audioBase='https://everyayah.com/data/Alafasy_128kbps/';
+const pad=(n,l=3)=>String(n).padStart(l,'0');
+async function init(){
+ try{const r=await fetch('https://api.quran.com/api/v4/chapters?language=ur');const j=await r.json();
+  $('#sura').innerHTML=j.chapters.map(c=>`<option value="${c.id}">${c.id}. ${c.name_arabic} — ${c.translated_name.name}</option>`).join('')}
+ catch(e){$('#msg').textContent='انٹرنیٹ درکار ہے۔ دوبارہ کوشش کریں۔'}}
+$('#load').onclick=async()=>{
+ const id=$('#sura').value;$('#msg').textContent='لوڈ ہو رہا ہے…';$('#list').innerHTML='';
+ try{const r=await fetch(`https://api.quran.com/api/v4/verses/by_chapter/${id}?language=ur&words=true&word_fields=text_uthmani&translations=234&per_page=300`);
+  const j=await r.json();data=j.verses;$('#msg').textContent='';render(id)}
+ catch(e){$('#msg').textContent='لوڈ نہیں ہو سکا۔ انٹرنیٹ چیک کریں۔'}};
+function render(sid){
+ $('#list').innerHTML=data.map((v,i)=>{
+  const ws=v.words.filter(w=>w.char_type_name=='word');
+  const tr=(v.translations[0]?.text||'').replace(/<[^>]+>/g,'');
+  return `<div class="ayah" id="a${i}"><div class="no">آیت ${v.verse_number}</div>
+  <div class="ar">${ws.map((w,k)=>`<span class="w" style="color:${COLORS[k%8]}" data-i="${i}" data-k="${k}">${w.text_uthmani}</span>`).join(' ')}</div>
+  <div class="ur">${tr}</div>${fz(sid,v.verse_number)}<div class="tip" hidden></div>
+  <div class="row"><button onclick="play(${sid},${v.verse_number})">🔊 سنیں</button>
+  <button class="p" onclick="rec(${i})">🎤 پڑھ کر چیک کریں</button>
+  <button onclick="taf(${sid},${v.verse_number},${i})">📚 تفسیر</button></div>
+  <div class="fb"></div><div class="taf" hidden></div></div>`}).join('')}
+$('#list').onclick=e=>{const w=e.target.closest('.w');if(!w)return;
+ const v=data[w.dataset.i],ws=v.words.filter(x=>x.char_type_name=='word'),x=ws[w.dataset.k];
+ const t=$('#a'+w.dataset.i+' .tip');t.hidden=false;
+ t.innerHTML=`<b>${x.text_uthmani}</b> = ${x.translation?.text||''}${tipFor(x.text_uthmani)?'<br>💡 '+tipFor(x.text_uthmani):''}`};
+let au;function play(s,a){if(au)au.pause();au=new Audio(audioBase+pad(s)+pad(a)+'.mp3');au.play().catch(()=>alert('آڈیو نہیں چلی'))}
+async function taf(s,a,i){const box=$('#a'+i+' .taf');box.hidden=false;box.textContent='لوڈ ہو رہا ہے…';
+ try{const r=await fetch(`https://api.quran.com/api/v4/tafsirs/160/by_ayah/${s}:${a}`);const j=await r.json();
+  const d=document.createElement('div');d.innerHTML=j.tafsir.text;box.textContent=(j.tafsir.resource_name?'['+j.tafsir.resource_name+']\n':'')+d.textContent.trim()}
+ catch(e){box.textContent='تفسیر لوڈ نہیں ہو سکی۔'}}
+function rec(i){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){alert('اس براؤزر میں آواز پہچاننے کی سہولت نہیں۔ Android پر Chrome استعمال کریں۔');return}
+ const box=$('#a'+i+' .fb');box.textContent='🎙️ سن رہا ہوں… آیت پڑھیں';
+ const r=new SR();r.lang='ar-SA';r.interimResults=false;r.maxAlternatives=3;
+ r.onerror=e=>box.textContent='مائیک کی اجازت دیں یا دوبارہ کوشش کریں ('+e.error+')';
+ r.onresult=ev=>{
+  const alts=[...ev.results[0]].map(a=>norm(a.transcript).split(' ').filter(Boolean));
+  const v=data[i],ws=v.words.filter(w=>w.char_type_name=='word'),exp=ws.map(w=>norm(w.text_uthmani));
+  let best=null,bs=-1;
+  for(const h of alts){const m=align(exp,h);const sc=m.reduce((s,x,k)=>s+(x?sim(exp[k],x):0),0);if(sc>bs){bs=sc;best={h,m}}}
+  const els=document.querySelectorAll('#a'+i+' .w');let ok=0,bad=[];
+  best.m.forEach((h,k)=>{els[k].className='w';const s=h?sim(exp[k],h):0;
+   if(s>=0.8){els[k].classList.add('good');ok++}
+   else{els[k].classList.add(h?'bad':'miss');bad.push({k,h,w:ws[k]})}});
+  const pct=Math.round(ok/exp.length*100);
+  let html=`<b>${pct>=90?'ماشاء اللہ! 🌟':pct>=60?'اچھی کوشش 👍':'دوبارہ کوشش کریں 💪'}</b> — ${ok}/${exp.length} الفاظ درست<br>`;
+  bad.forEach(b=>{html+=`<div class="x">❌ <b>${b.w.text_uthmani}</b> (${b.w.translation?.text||''}) — ${b.h?'آپ نے پڑھا: '+b.h:'یہ لفظ چھوٹ گیا'}</div>${tipFor(b.w.text_uthmani)?'<div>💡 '+tipFor(b.w.text_uthmani)+'</div>':''}`});
+  if(bad.length)html+='<div>درست تلفظ کے لیے "🔊 سنیں" دبائیں، پھر دہرائیں۔</div>';else html+='<div class="k">پوری آیت درست پڑھی گئی ✅</div>';
+  box.innerHTML=html};
+ r.start()}
+$('#rq').onclick=()=>{const p=$('#rqp');p.hidden=!p.hidden};
+function fz(s,a){s=+s;let t='';
+ if(s==1)t='سورۃ الفاتحہ سے دم کرنا صحیح حدیث سے ثابت ہے (بخاری، مسلم)۔';
+ else if(s==2&&a==255)t='آیت الکرسی: سونے سے پہلے پڑھنے پر اللہ کی طرف سے نگہبان رہتا ہے (بخاری)۔';
+ else if(s==2&&(a==285||a==286))t='رات کو یہ دو آیات پڑھ لیں تو کافی ہیں (بخاری، مسلم)۔';
+ else if(s>=112&&s<=114)t='سونے سے پہلے تین بار پڑھ کر ہتھیلیوں پر پھونکیں اور جسم پر ہاتھ پھیریں (بخاری)۔';
+ return t?`<div class="fz">🛡️ ${t}</div>`:''}
+init();
+</script>
+</body>
+</html>
